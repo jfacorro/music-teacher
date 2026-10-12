@@ -1,0 +1,70 @@
+{
+  "home": {
+    "title": "Your learning path",
+    "intro": "Lessons will appear here soon. First, connect your keyboard and check that every key is detected.",
+    "checkKeyboard": "Check your keyboard"
+  },
+  "freePlay": {
+    "title": "Free play",
+    "intro": "Play anything and see the names of the notes and chords you play. Coming soon."
+  },
+  "progress": {
+    "title": "Progress",
+    "intro": "Your practice streak, practice time and completed lessons will appear here. Coming soon."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "heading": "Language and notation",
+      "language": "Language",
+      "auto": "Automatic ({language})",
+      "namingSystem": "Note names",
+      "namingAuto": "Default for this language ({example})",
+      "namingOption": "{name} ({example})",
+      "naming": {
+        "english": "English letters",
+        "german": "German letters",
+        "solfege": "Solfège"
+      },
+      "showOctave": "Show octave numbers",
+      "preview": "Example: {notes}"
+    },
+    "midi": {
+      "heading": "MIDI keyboard",
+      "intro": "Connect your digital piano to the computer with a USB cable, then enable MIDI.",
+      "enable": "Enable MIDI",
+      "requesting": "Waiting for permission…",
+      "denied": "MIDI access was blocked. Allow MIDI for this site in the browser’s site settings, then try again.",
+      "unsupported": "This browser doesn’t support MIDI. Use Chrome or Edge.",
+      "device": "Device",
+      "disconnectedOption": "{device} (disconnected)",
+      "noDevices": "No MIDI devices found. Check the USB cable and that the keyboard is turned on.",
+      "connecting": "Connecting to {device}…",
+      "connected": "Connected to {device}.",
+      "busy": "Couldn’t open {device}. Another app may be using it: close other music software and try again.",
+      "disconnected": "{device} is disconnected. It will reconnect automatically when it’s plugged back in.",
+      "retry": "Try again",
+      "sustain": "Sustain pedal: {state, select, down {pressed} other {released}}"
+    },
+    "devKeyboard": {
+      "heading": "Computer keyboard",
+      "enable": "Use the computer keyboard as a piano",
+      "help": "Keys A W S E D F T G Y H U J K play one octave, from {note} to the next {note}. Z and X change the octave.",
+      "octave": "Octave: {octave}",
+      "octaveDown": "Octave down",
+      "octaveUp": "Octave up"
+    },
+    "liveTest": {
+      "heading": "Live test",
+      "intro": "Press keys on your piano. Each one should appear here, with the right name.",
+      "held": "Keys down",
+      "none": "No keys pressed",
+      "velocity": "Velocity {velocity}",
+      "recent": "Recent events",
+      "event": "Event",
+      "note": "Note",
+      "source": "Source",
+      "type": "{type, select, on {Down} other {Up}}"
+    }
+  }
+}

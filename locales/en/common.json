@@ -1,0 +1,24 @@
+{
+  "appTitle": "Piano Teacher",
+  "nav": {
+    "label": "Main",
+    "home": "Learn",
+    "freePlay": "Free play",
+    "progress": "Progress",
+    "settings": "Settings"
+  },
+  "midiBadge": {
+    "label": "MIDI keyboard: {status}",
+    "connecting": "Connecting…",
+    "disconnected": "Keyboard disconnected",
+    "busy": "Keyboard busy",
+    "none": "No keyboard found",
+    "off": "MIDI off",
+    "unsupported": "MIDI not supported"
+  },
+  "sources": {
+    "midi": "MIDI",
+    "mic": "Microphone",
+    "dev": "Computer keyboard"
+  }
+}

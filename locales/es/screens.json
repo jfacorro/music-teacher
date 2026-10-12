@@ -1,0 +1,70 @@
+{
+  "home": {
+    "title": "Tu camino de aprendizaje",
+    "intro": "Pronto aparecerán aquí las lecciones. Primero, conecta tu teclado y comprueba que se detectan todas las teclas.",
+    "checkKeyboard": "Comprobar el teclado"
+  },
+  "freePlay": {
+    "title": "Práctica libre",
+    "intro": "Toca lo que quieras y mira los nombres de las notas y acordes que tocas. Próximamente."
+  },
+  "progress": {
+    "title": "Progreso",
+    "intro": "Aquí aparecerán tu racha de práctica, tu tiempo de práctica y las lecciones completadas. Próximamente."
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": {
+      "heading": "Idioma y notación",
+      "language": "Idioma",
+      "auto": "Automático ({language})",
+      "namingSystem": "Nombres de las notas",
+      "namingAuto": "Según el idioma ({example})",
+      "namingOption": "{name} ({example})",
+      "naming": {
+        "english": "Letras inglesas",
+        "german": "Letras alemanas",
+        "solfege": "Solfeo"
+      },
+      "showOctave": "Mostrar el número de octava",
+      "preview": "Ejemplo: {notes}"
+    },
+    "midi": {
+      "heading": "Teclado MIDI",
+      "intro": "Conecta tu piano digital a la computadora con un cable USB y activa MIDI.",
+      "enable": "Activar MIDI",
+      "requesting": "Esperando permiso…",
+      "denied": "Se bloqueó el acceso a MIDI. Permite MIDI para este sitio en la configuración del navegador y vuelve a intentarlo.",
+      "unsupported": "Este navegador no es compatible con MIDI. Usa Chrome o Edge.",
+      "device": "Dispositivo",
+      "disconnectedOption": "{device} (desconectado)",
+      "noDevices": "No se encontraron dispositivos MIDI. Revisa el cable USB y que el teclado esté encendido.",
+      "connecting": "Conectando con {device}…",
+      "connected": "Conectado a {device}.",
+      "busy": "No se pudo abrir {device}. Puede que otra aplicación lo esté usando: cierra otros programas de música y vuelve a intentarlo.",
+      "disconnected": "{device} está desconectado. Se volverá a conectar automáticamente cuando lo enchufes.",
+      "retry": "Reintentar",
+      "sustain": "Pedal de resonancia: {state, select, down {pisado} other {suelto}}"
+    },
+    "devKeyboard": {
+      "heading": "Teclado de la computadora",
+      "enable": "Usar el teclado de la computadora como piano",
+      "help": "Las teclas A W S E D F T G Y H U J K tocan una octava, desde {note} hasta el siguiente {note}. Z y X cambian de octava.",
+      "octave": "Octava: {octave}",
+      "octaveDown": "Bajar una octava",
+      "octaveUp": "Subir una octava"
+    },
+    "liveTest": {
+      "heading": "Prueba en vivo",
+      "intro": "Pulsa teclas en tu piano. Cada una debería aparecer aquí, con el nombre correcto.",
+      "held": "Teclas pulsadas",
+      "none": "No hay teclas pulsadas",
+      "velocity": "Velocidad {velocity}",
+      "recent": "Eventos recientes",
+      "event": "Evento",
+      "note": "Nota",
+      "source": "Origen",
+      "type": "{type, select, on {Pulsada} other {Soltada}}"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "appTitle": "Profesor de piano",
+  "nav": {
+    "label": "Principal",
+    "home": "Aprender",
+    "freePlay": "Práctica libre",
+    "progress": "Progreso",
+    "settings": "Configuración"
+  },
+  "midiBadge": {
+    "label": "Teclado MIDI: {status}",
+    "connecting": "Conectando…",
+    "disconnected": "Teclado desconectado",
+    "busy": "Teclado ocupado",
+    "none": "No se encontró ningún teclado",
+    "off": "MIDI desactivado",
+    "unsupported": "MIDI no compatible"
+  },
+  "sources": {
+    "midi": "MIDI",
+    "mic": "Micrófono",
+    "dev": "Teclado de la computadora"
+  }
+}
