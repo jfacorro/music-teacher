@@ -1,0 +1,24 @@
+{
+  "units": {
+    "u1": {
+      "title": "Orientarse en el teclado",
+      "description": "El teclado, el {c} central, los números de los dedos y tus primeras melodías."
+    },
+    "u2": {
+      "title": "Ritmo con notas reales",
+      "description": "Negras, blancas y redondas, silencios y corcheas."
+    }
+  },
+  "lessons": {
+    "u1-l1": "Conoce el teclado",
+    "u1-l2": "El {c} central y sus vecinas",
+    "u1-l3": "Mano derecha: posición de cinco dedos",
+    "u1-l4": "Tu primera melodía",
+    "u1-l5": "Mano izquierda: posición de cinco dedos",
+    "u1-l6": "Una melodía para la mano izquierda",
+    "u2-l1": "Negras y blancas",
+    "u2-l2": "Redondas y silencios",
+    "u2-l3": "Corcheas",
+    "u2-l4": "Canción: When the Saints Go Marching In"
+  }
+}

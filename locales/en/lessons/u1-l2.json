@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "cde": "To the right of {c} come {d} and {e}: the three white keys around the group of two black keys.",
+    "findCde": "Play {c}, {d} and {e}.",
+    "playCde": "Play the notes as they reach the keyboard. The music waits for you.",
+    "fgab": "Around the group of three black keys are {f}, {g}, {a} and {b}. After {b}, the next {c} starts the pattern again.",
+    "findFgab": "Play {f}, {g}, {a} and {b}.",
+    "walkUpDown": "Walk up the white keys from middle {c} to the next {c}, then back down."
+  }
+}

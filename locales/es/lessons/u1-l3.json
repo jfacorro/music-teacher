@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "fingerNumbers": "Tus dedos tienen números: el pulgar es el 1, luego el 2 es el índice, el 3 el medio, el 4 el anular y el 5 el meñique. Las dos manos usan los mismos números.",
+    "position": "Coloca el pulgar derecho en el {c} central y cada dedo en la siguiente tecla blanca: 1 en {c}, 2 en {d}, 3 en {e}, 4 en {f} y 5 en {g}. Mantén los dedos curvados, como si sostuvieras una pelota.",
+    "up": "Sube nota a nota, del dedo 1 al 5.",
+    "down": "Ahora baja, del dedo 5 al 1.",
+    "withMetronome": "Ahora con el metrónomo: sube y baja, una nota por cada clic."
+  }
+}

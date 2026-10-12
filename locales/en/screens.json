@@ -1,9 +1,11 @@
 {
   "home": {
     "title": "Your learning path",
-    "intro": "Lessons will appear here soon. First, connect your keyboard and check that every key is detected.",
+    "intro": "Work through the lessons in order; each takes a few minutes. Start by checking that your keyboard is detected.",
     "checkKeyboard": "Check your keyboard",
-    "tryDemo": "Try a song"
+    "unit": "Unit {number}: {title}",
+    "songs": "Songs",
+    "songsIntro": "Practice whole songs any time, in wait or play-along mode."
   },
   "freePlay": {
     "title": "Free play",
@@ -170,5 +172,22 @@
       "retry": "Try again"
     },
     "songInfo": "{composer} · {bpm} BPM"
+  },
+  "lesson": {
+    "notFound": "This lesson doesn’t exist.",
+    "loadError": "Couldn’t load this lesson.",
+    "backHome": "Back to lessons",
+    "progress": "Lesson progress",
+    "step": "Step {current} of {total}",
+    "back": "Back",
+    "continue": "Continue",
+    "skip": "Skip",
+    "findProgress": "{found} of {total} found",
+    "allFound": "Well done! You found them all.",
+    "passRule": "{stars, plural, one {Earn # star to pass} other {Earn # stars to pass}}",
+    "complete": "Lesson complete!",
+    "noStars": "Finish every step without skipping to earn stars.",
+    "restart": "Start the lesson again",
+    "next": "Next lesson"
   }
 }

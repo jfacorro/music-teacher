@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Summary } from '../../../engine/scoring';
 import type { PracticeMode } from '../../../engine/session';
@@ -10,9 +11,11 @@ interface ResultsCardProps {
   summary: Summary;
   mode: PracticeMode;
   onRetry: () => void;
+  /** Extra actions next to Try again. */
+  children?: ReactNode;
 }
 
-export function ResultsCard({ summary, mode, onRetry }: ResultsCardProps) {
+export function ResultsCard({ summary, mode, onRetry, children }: ResultsCardProps) {
   const { t, i18n } = useTranslation('screens');
 
   const counts =
@@ -41,9 +44,16 @@ export function ResultsCard({ summary, mode, onRetry }: ResultsCardProps) {
           </div>
         ))}
       </dl>
-      <button type="button" className="button button--primary" onClick={onRetry}>
-        {t('practice.results.retry')}
-      </button>
+      <div className="button-row results__actions">
+        <button
+          type="button"
+          className={children ? 'button' : 'button button--primary'}
+          onClick={onRetry}
+        >
+          {t('practice.results.retry')}
+        </button>
+        {children}
+      </div>
     </section>
   );
 }

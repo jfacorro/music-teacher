@@ -1,0 +1,235 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "cde",
+      "textVars": {
+        "c": "C4",
+        "d": "D4",
+        "e": "E4"
+      },
+      "keys": [
+        {
+          "note": "C4"
+        },
+        {
+          "note": "D4"
+        },
+        {
+          "note": "E4"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "find",
+      "text": "findCde",
+      "textVars": {
+        "c": "C4",
+        "d": "D4",
+        "e": "E4"
+      },
+      "notes": ["C4", "D4", "E4"],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "exercise",
+      "text": "playCde",
+      "mode": "wait",
+      "hands": "R",
+      "pass": {
+        "minStars": 1
+      },
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      }
+    },
+    {
+      "type": "explain",
+      "text": "fgab",
+      "textVars": {
+        "f": "F4",
+        "g": "G4",
+        "a": "A4",
+        "b": "B4",
+        "c": "C4"
+      },
+      "keys": [
+        {
+          "note": "F4"
+        },
+        {
+          "note": "G4"
+        },
+        {
+          "note": "A4"
+        },
+        {
+          "note": "B4"
+        },
+        {
+          "note": "C5"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "find",
+      "text": "findFgab",
+      "textVars": {
+        "f": "F4",
+        "g": "G4",
+        "a": "A4",
+        "b": "B4"
+      },
+      "notes": ["F4", "G4", "A4", "B4"],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "exercise",
+      "text": "walkUpDown",
+      "textVars": {
+        "c": "C4"
+      },
+      "mode": "wait",
+      "hands": "R",
+      "pass": {
+        "minStars": 1
+      },
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "F4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "G4",
+            "start": 4,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "A4",
+            "start": 5,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "B4",
+            "start": 6,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "C5",
+            "start": 7,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "B4",
+            "start": 8,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "A4",
+            "start": 9,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "G4",
+            "start": 10,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "F4",
+            "start": 11,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "E4",
+            "start": 12,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "D4",
+            "start": 13,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "C4",
+            "start": 14,
+            "duration": 1,
+            "hand": "R"
+          }
+        ]
+      }
+    }
+  ]
+}

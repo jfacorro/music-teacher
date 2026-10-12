@@ -1,0 +1,24 @@
+{
+  "units": {
+    "u1": {
+      "title": "Finding your way",
+      "description": "The keyboard, middle {c}, finger numbers and your first melodies."
+    },
+    "u2": {
+      "title": "Rhythm with real notes",
+      "description": "Quarter, half and whole notes, rests and eighth notes."
+    }
+  },
+  "lessons": {
+    "u1-l1": "Meet the keyboard",
+    "u1-l2": "Middle {c} and its neighbors",
+    "u1-l3": "Right hand: five-finger position",
+    "u1-l4": "Your first melody",
+    "u1-l5": "Left hand: five-finger position",
+    "u1-l6": "A left-hand melody",
+    "u2-l1": "Quarter and half notes",
+    "u2-l2": "Whole notes and rests",
+    "u2-l3": "Eighth notes",
+    "u2-l4": "Song: When the Saints Go Marching In"
+  }
+}

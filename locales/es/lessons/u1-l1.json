@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "blackKeys": "Mira las teclas negras: van en grupos de dos y grupos de tres, a lo largo de todo el teclado. Esos grupos son tu mapa.",
+    "whereIsC": "{c} es la tecla blanca justo a la izquierda de cada grupo de dos teclas negras. Hay uno en cada grupo.",
+    "findCs": "Toca cada {c} del teclado de la pantalla, del más grave al más agudo.",
+    "middleC": "El {c} más cercano al centro del piano se llama {c} central. Es tu punto de partida: casi todas tus primeras canciones empiezan cerca de él.",
+    "findMiddleC": "Toca el {c} central."
+  }
+}

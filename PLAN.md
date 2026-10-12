@@ -495,10 +495,11 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Mic-specific timing windows in the scorer.
 - ✅ *Checkpoint: test the mic against the Casio's speakers, comparing mic detections with MIDI ground truth for the same keys.* Tool: Settings → "Microphone check" (needs MIDI and the microphone on).
 
-**1.6 Content: Units 1–2 (~10 lessons)**
+**1.6 Content: Units 1–2 (~10 lessons)** — ✔ done
 - Unit 1: meet the keyboard; middle C & neighbors; RH five-finger position; first RH melody; LH five-finger position; first LH melody.
 - Unit 2: quarter & half notes; whole notes & rests; eighth notes; first song in tempo mode.
-- `courses.json` with unlock rules.
+- `courses.json` with unlock rules (enforced with saved progress in 1.7).
+- Lesson player: explain, find-the-keys and exercise steps; pass rules; lesson stars = weakest graded step.
 - All lesson, course and song text written as translation files in every supported language.
 - `locales/glossary.md` started with Unit 1–2 terminology.
 

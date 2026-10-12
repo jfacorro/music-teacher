@@ -7,6 +7,7 @@ import { parseInlineScore } from '../loaders/inlineScore';
 
 const loaders = {
   'ode-to-joy': () => import('./ode-to-joy.json'),
+  'when-the-saints': () => import('./when-the-saints.json'),
 } satisfies Record<string, () => Promise<{ default: unknown }>>;
 
 export type SongId = keyof typeof loaders;

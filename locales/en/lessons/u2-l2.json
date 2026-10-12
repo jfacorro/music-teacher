@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "wholeAndRests": "A whole note lasts four beats: a whole bar in this music. A rest is a beat of silence: don’t play anything until the next note arrives.",
+    "wholeNotes": "Hold each whole note for four clicks.",
+    "rests": "The gaps between notes are rests. Stay silent during them."
+  }
+}

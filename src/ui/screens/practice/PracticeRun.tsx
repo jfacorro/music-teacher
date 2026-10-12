@@ -1,8 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { audioIfReady, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
 import { beatsPerMeasure, type Score, type ScoreNote } from '../../../engine/score';
+import type { Summary } from '../../../engine/scoring';
 import { PracticeSession, type HandFilter, type PracticeMode } from '../../../engine/session';
 import { Transport } from '../../../engine/transport';
 import { useNoteNames } from '../../../i18n/useNoteNames';
@@ -26,10 +35,24 @@ interface PracticeRunProps {
   mode: PracticeMode;
   hands: HandFilter;
   metronome: boolean;
+  /** Instruction shown next to the controls (defaults to a tip for the mode). */
+  hint?: string;
+  /** Called once when the run ends, with its results. */
+  onFinish?: (summary: Summary) => void;
+  /** Extra buttons on the results card (e.g. Continue in a lesson). */
+  resultsActions?: (summary: Summary) => ReactNode;
 }
 
 /** One practice run: session, transport, input, metronome and the stage. */
-export function PracticeRun({ score, mode, hands, metronome }: PracticeRunProps) {
+export function PracticeRun({
+  score,
+  mode,
+  hands,
+  metronome,
+  hint,
+  onFinish,
+  resultsActions,
+}: PracticeRunProps) {
   const { t } = useTranslation('screens');
   const names = useNoteNames();
 
@@ -50,6 +73,23 @@ export function PracticeRun({ score, mode, hands, metronome }: PracticeRunProps)
   useEffect(() => subscribeNotes((event) => session.handleNote(event)), [session]);
   useEffect(() => () => session.pause(), [session]);
   useAnimationFrame(() => session.tick());
+  // Hidden pages get no animation frames, so nothing would be checked: pause instead of
+  // piling up missed notes while the user is away.
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') session.pause();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, [session]);
+
+  const finished = useRef(onFinish);
+  useEffect(() => {
+    finished.current = onFinish;
+  });
+  useEffect(() => {
+    if (state.summary) finished.current?.(state.summary);
+  }, [state.summary]);
 
   // The metronome reads the latest choice without restarting.
   const metronomeOn = useRef(metronome);
@@ -127,7 +167,9 @@ export function PracticeRun({ score, mode, hands, metronome }: PracticeRunProps)
         <button type="button" className="button" onClick={() => session.restart()}>
           {t('practice.restart')}
         </button>
-        <p className="muted">{mode === 'wait' ? t('practice.hintWait') : t('practice.hint')}</p>
+        <p className="muted">
+          {hint ?? (mode === 'wait' ? t('practice.hintWait') : t('practice.hint'))}
+        </p>
       </div>
 
       <div className="practice__stage">
@@ -165,7 +207,9 @@ export function PracticeRun({ score, mode, hands, metronome }: PracticeRunProps)
               session.restart();
               void togglePlay();
             }}
-          />
+          >
+            {resultsActions?.(state.summary)}
+          </ResultsCard>
         )}
       </div>
     </>

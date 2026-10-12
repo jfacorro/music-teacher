@@ -1,0 +1,76 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "blackKeys",
+      "keys": [
+        {
+          "note": "C#4"
+        },
+        {
+          "note": "D#4"
+        },
+        {
+          "note": "F#4"
+        },
+        {
+          "note": "G#4"
+        },
+        {
+          "note": "A#4"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "explain",
+      "text": "whereIsC",
+      "textVars": {
+        "c": "C4"
+      },
+      "keys": [
+        {
+          "note": "C3"
+        },
+        {
+          "note": "C4"
+        },
+        {
+          "note": "C5"
+        }
+      ],
+      "range": ["C3", "C5"]
+    },
+    {
+      "type": "find",
+      "text": "findCs",
+      "textVars": {
+        "c": "C4"
+      },
+      "notes": ["C3", "C4", "C5"],
+      "range": ["C3", "C5"]
+    },
+    {
+      "type": "explain",
+      "text": "middleC",
+      "textVars": {
+        "c": "C4"
+      },
+      "keys": [
+        {
+          "note": "C4"
+        }
+      ],
+      "range": ["C3", "C5"]
+    },
+    {
+      "type": "find",
+      "text": "findMiddleC",
+      "textVars": {
+        "c": "C4"
+      },
+      "notes": ["C4"],
+      "range": ["C3", "C5"]
+    }
+  ]
+}

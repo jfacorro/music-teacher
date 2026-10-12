@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "blackKeys": "Look at the black keys: they come in groups of two and groups of three, all along the keyboard. These groups are your map.",
+    "whereIsC": "{c} is the white key just to the left of each group of two black keys. There is one in every group.",
+    "findCs": "Play every {c} on the screen keyboard, from the lowest to the highest.",
+    "middleC": "The {c} closest to the middle of the piano is called middle {c}. It’s your home base: most of your first songs start around it.",
+    "findMiddleC": "Play middle {c}."
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "position",
+      "textVars": {
+        "c": "C4",
+        "g": "G3"
+      },
+      "hand": "L",
+      "keys": [
+        {
+          "note": "C3",
+          "finger": 5
+        },
+        {
+          "note": "D3",
+          "finger": 4
+        },
+        {
+          "note": "E3",
+          "finger": 3
+        },
+        {
+          "note": "F3",
+          "finger": 2
+        },
+        {
+          "note": "G3",
+          "finger": 1
+        }
+      ],
+      "range": ["C3", "C4"]
+    },
+    {
+      "type": "exercise",
+      "text": "up",
+      "mode": "wait",
+      "hands": "L",
+      "pass": {
+        "minStars": 1
+      },
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C3",
+            "start": 0,
+            "duration": 1,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "D3",
+            "start": 1,
+            "duration": 1,
+            "hand": "L",
+            "finger": 4
+          },
+          {
+            "note": "E3",
+            "start": 2,
+            "duration": 1,
+            "hand": "L",
+            "finger": 3
+          },
+          {
+            "note": "F3",
+            "start": 3,
+            "duration": 1,
+            "hand": "L",
+            "finger": 2
+          },
+          {
+            "note": "G3",
+            "start": 4,
+            "duration": 1,
+            "hand": "L",
+            "finger": 1
+          }
+        ]
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "down",
+      "mode": "wait",
+      "hands": "L",
+      "pass": {
+        "minStars": 1
+      },
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "G3",
+            "start": 0,
+            "duration": 1,
+            "hand": "L",
+            "finger": 1
+          },
+          {
+            "note": "F3",
+            "start": 1,
+            "duration": 1,
+            "hand": "L",
+            "finger": 2
+          },
+          {
+            "note": "E3",
+            "start": 2,
+            "duration": 1,
+            "hand": "L",
+            "finger": 3
+          },
+          {
+            "note": "D3",
+            "start": 3,
+            "duration": 1,
+            "hand": "L",
+            "finger": 4
+          },
+          {
+            "note": "C3",
+            "start": 4,
+            "duration": 1,
+            "hand": "L",
+            "finger": 5
+          }
+        ]
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "withMetronome",
+      "mode": "tempo",
+      "hands": "L",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      },
+      "score": {
+        "tempo": 60,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C3",
+            "start": 0,
+            "duration": 1,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "D3",
+            "start": 1,
+            "duration": 1,
+            "hand": "L",
+            "finger": 4
+          },
+          {
+            "note": "E3",
+            "start": 2,
+            "duration": 1,
+            "hand": "L",
+            "finger": 3
+          },
+          {
+            "note": "F3",
+            "start": 3,
+            "duration": 1,
+            "hand": "L",
+            "finger": 2
+          },
+          {
+            "note": "G3",
+            "start": 4,
+            "duration": 1,
+            "hand": "L",
+            "finger": 1
+          },
+          {
+            "note": "F3",
+            "start": 5,
+            "duration": 1,
+            "hand": "L",
+            "finger": 2
+          },
+          {
+            "note": "E3",
+            "start": 6,
+            "duration": 1,
+            "hand": "L",
+            "finger": 3
+          },
+          {
+            "note": "D3",
+            "start": 7,
+            "duration": 1,
+            "hand": "L",
+            "finger": 4
+          },
+          {
+            "note": "C3",
+            "start": 8,
+            "duration": 4,
+            "hand": "L",
+            "finger": 5
+          }
+        ]
+      }
+    }
+  ]
+}

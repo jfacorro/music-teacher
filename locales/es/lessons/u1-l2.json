@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "cde": "A la derecha de {c} vienen {d} y {e}: las tres teclas blancas alrededor del grupo de dos teclas negras.",
+    "findCde": "Toca {c}, {d} y {e}.",
+    "playCde": "Toca las notas cuando lleguen al teclado. La música te espera.",
+    "fgab": "Alrededor del grupo de tres teclas negras están {f}, {g}, {a} y {b}. Después de {b}, el siguiente {c} vuelve a empezar el patrón.",
+    "findFgab": "Toca {f}, {g}, {a} y {b}.",
+    "walkUpDown": "Sube por las teclas blancas desde el {c} central hasta el siguiente {c} y vuelve a bajar."
+  }
+}

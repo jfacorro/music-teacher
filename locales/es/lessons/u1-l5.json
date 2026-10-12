@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "position": "Ahora la mano izquierda. Pon el meñique (5) en el {c} que está debajo del {c} central y cada dedo en la siguiente tecla blanca. El pulgar (1) queda en {g}.",
+    "up": "Sube del dedo 5 al dedo 1.",
+    "down": "Y vuelve a bajar, del pulgar al meñique.",
+    "withMetronome": "Ahora con el metrónomo: sube y baja."
+  }
+}

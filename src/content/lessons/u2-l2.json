@@ -1,0 +1,110 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "wholeAndRests"
+    },
+    {
+      "type": "exercise",
+      "text": "wholeNotes",
+      "mode": "tempo",
+      "hands": "R",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      },
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 8,
+            "duration": 4,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "rests",
+      "mode": "tempo",
+      "hands": "R",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      },
+      "score": {
+        "tempo": 70,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 4,
+            "duration": 2,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "E4",
+            "start": 8,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 10,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 2,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      }
+    }
+  ]
+}

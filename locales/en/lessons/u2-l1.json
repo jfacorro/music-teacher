@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "beats": "Music moves to a steady beat, like the metronome’s click. A quarter note lasts one beat. A half note lasts two beats: keep the key down for both clicks.",
+    "quartersAndHalves": "Play along with the metronome. The short bars are quarter notes; the longer ones are half notes.",
+    "mixed": "Now quarter and half notes mixed together."
+  }
+}

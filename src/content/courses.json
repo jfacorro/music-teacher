@@ -1,0 +1,53 @@
+{
+  "units": [
+    {
+      "id": "u1",
+      "textVars": {
+        "c": "C4"
+      },
+      "lessons": [
+        {
+          "id": "u1-l1"
+        },
+        {
+          "id": "u1-l2",
+          "titleVars": {
+            "c": "C4"
+          }
+        },
+        {
+          "id": "u1-l3"
+        },
+        {
+          "id": "u1-l4"
+        },
+        {
+          "id": "u1-l5"
+        },
+        {
+          "id": "u1-l6"
+        }
+      ]
+    },
+    {
+      "id": "u2",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u2-l1"
+        },
+        {
+          "id": "u2-l2"
+        },
+        {
+          "id": "u2-l3"
+        },
+        {
+          "id": "u2-l4"
+        }
+      ]
+    }
+  ]
+}

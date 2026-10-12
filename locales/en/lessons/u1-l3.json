@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "fingerNumbers": "Your fingers have numbers: the thumb is 1, then 2 for the index finger, 3 for the middle finger, 4 for the ring finger and 5 for the little finger. Both hands use the same numbers.",
+    "position": "Place your right thumb on middle {c}, and each finger on the next white key: 1 on {c}, 2 on {d}, 3 on {e}, 4 on {f} and 5 on {g}. Keep your fingers curved, as if holding a ball.",
+    "up": "Play up, one finger at a time, from 1 to 5.",
+    "down": "Now play back down, from 5 to 1.",
+    "withMetronome": "Now with the metronome: up and back down, one note per click."
+  }
+}

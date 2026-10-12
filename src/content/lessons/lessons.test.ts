@@ -1,0 +1,158 @@
+import { describe, expect, it } from 'vitest';
+import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
+import { LESSON_ORDER, UNITS, findLesson, nextLessonId } from '../courses';
+import { lessonExists, loadLesson } from '.';
+import { LessonError, parseLesson } from './lesson';
+
+type LessonText = { steps?: Record<string, string> };
+const lessonTexts = import.meta.glob<LessonText>('/locales/*/lessons/*.json', {
+  eager: true,
+  import: 'default',
+});
+const courseTexts = import.meta.glob<{
+  units: Record<string, { title?: string; description?: string }>;
+  lessons: Record<string, string>;
+}>('/locales/*/courses.json', { eager: true, import: 'default' });
+const lessonFiles = import.meta.glob('./*.json');
+
+/** ICU argument names in a message, e.g. "Play {c} and {d}" → c, d. */
+const argumentsOf = (message: string) =>
+  [...message.matchAll(/\{(\w+)\}/g)].map((match) => match[1]!).sort();
+
+describe('courses', () => {
+  it('lists every lesson file exactly once', () => {
+    const files = Object.keys(lessonFiles).map((path) => path.slice(2, -5));
+    expect([...LESSON_ORDER].sort()).toEqual(files.sort());
+    expect(new Set(LESSON_ORDER).size).toBe(LESSON_ORDER.length);
+    for (const id of LESSON_ORDER) expect(lessonExists(id)).toBe(true);
+  });
+
+  it('finds lessons and what comes next', () => {
+    expect(findLesson('u1-l2')).toMatchObject({ unit: { id: 'u1' }, index: 1 });
+    expect(nextLessonId('u1-l6')).toBe('u2-l1');
+    expect(nextLessonId(LESSON_ORDER.at(-1)!)).toBeNull();
+    expect(findLesson('nope')).toBeNull();
+  });
+
+  describe.each(TRANSLATED_LANGUAGES)('%s', (language) => {
+    const texts = courseTexts[`/locales/${language}/courses.json`];
+
+    it('has a title for every unit and lesson, using only the provided note variables', () => {
+      for (const unit of UNITS) {
+        const unitText = texts?.units[unit.id];
+        expect(unitText?.title, unit.id).toBeTruthy();
+        for (const text of [unitText?.title ?? '', unitText?.description ?? '']) {
+          for (const name of argumentsOf(text)) {
+            expect(unit.textVars, `${unit.id} uses {${name}}`).toHaveProperty(name);
+          }
+        }
+        for (const lesson of unit.lessons) {
+          const title = texts?.lessons[lesson.id];
+          expect(title, lesson.id).toBeTruthy();
+          for (const name of argumentsOf(title ?? '')) {
+            expect(lesson.titleVars, `${lesson.id} uses {${name}}`).toHaveProperty(name);
+          }
+        }
+      }
+    });
+  });
+});
+
+describe('lessons', () => {
+  // Every lesson is parsed here, so a typo in a note or a step fails the test run.
+  describe.each(LESSON_ORDER)('%s', (id) => {
+    it('loads and validates', async () => {
+      const lesson = await loadLesson(id);
+      expect(lesson.steps.length).toBeGreaterThan(0);
+    });
+
+    it.each(TRANSLATED_LANGUAGES)(
+      'has text for every step in %s, with its note variables',
+      async (language) => {
+        const lesson = await loadLesson(id);
+        const steps = lessonTexts[`/locales/${language}/lessons/${id}.json`]?.steps ?? {};
+        for (const step of lesson.steps) {
+          const text = steps[step.text];
+          expect(text, `${id} › ${step.text}`).toBeTruthy();
+          for (const name of argumentsOf(text ?? '')) {
+            expect(step.textVars, `${id} › ${step.text} uses {${name}}`).toHaveProperty(name);
+          }
+        }
+        // No leftover text for steps that don't exist.
+        expect(Object.keys(steps).sort()).toEqual(
+          [...new Set(lesson.steps.map((s) => s.text))].sort(),
+        );
+      },
+    );
+  });
+});
+
+describe('parseLesson', () => {
+  const exercise = {
+    type: 'exercise',
+    text: 'play',
+    mode: 'wait',
+    score: {
+      tempo: 60,
+      timeSignature: [4, 4],
+      notes: [{ note: 'C4', start: 0, duration: 1, hand: 'R' }],
+    },
+  };
+
+  it('parses every step type', async () => {
+    const lesson = await parseLesson('x', {
+      steps: [
+        {
+          type: 'explain',
+          text: 'a',
+          textVars: { c: 'C4' },
+          keys: [{ note: 'C4', finger: 1 }],
+          range: ['C3', 'C5'],
+        },
+        { type: 'find', text: 'b', notes: ['C4', 'E4'] },
+        { ...exercise, hands: 'R', pass: { minStars: 2 }, metronome: true },
+        { type: 'exercise', text: 'song', mode: 'tempo', song: 'ode-to-joy', tempo: 80 },
+      ],
+    });
+    expect(lesson.steps.map((s) => s.type)).toEqual(['explain', 'find', 'exercise', 'exercise']);
+    expect(lesson.steps[0]).toMatchObject({
+      keys: [{ pitch: { midi: 60 }, finger: 1 }],
+      range: [48, 72],
+      hand: 'R',
+    });
+    expect(lesson.steps[2]).toMatchObject({
+      hands: 'R',
+      pass: { minStars: 2 },
+      metronome: true,
+      song: null,
+    });
+    expect(lesson.steps[3]).toMatchObject({
+      song: 'ode-to-joy',
+      score: { tempo: 80 },
+      hands: 'both',
+    });
+  });
+
+  it.each([
+    ['an unknown step type', { type: 'dance', text: 'x' }, 'steps[0] › type'],
+    ['a missing text key', { type: 'find', notes: ['C4'] }, 'steps[0] › text'],
+    [
+      'a bad note',
+      { type: 'find', text: 'x', notes: ['H4'] },
+      'steps[0] › notes[0]: Invalid note "H4"',
+    ],
+    ['a bad note variable', { type: 'explain', text: 'x', textVars: { c: 'C' } }, 'textVars › c'],
+    ['an unknown song', { ...exercise, score: undefined, song: 'nope' }, 'song'],
+    [
+      'a bad score',
+      { ...exercise, score: { tempo: 60, timeSignature: [4, 4], notes: [] } },
+      'score › notes',
+    ],
+    ['a bad mode', { ...exercise, mode: 'fast' }, 'mode'],
+    ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
+    ['a backwards range', { type: 'find', text: 'x', notes: ['C4'], range: ['C5', 'C3'] }, 'range'],
+  ])('rejects %s with its location', async (_, step, message) => {
+    await expect(parseLesson('x', { steps: [step] })).rejects.toThrow(LessonError);
+    await expect(parseLesson('x', { steps: [step] })).rejects.toThrow(message);
+  });
+});

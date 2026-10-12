@@ -1,9 +1,11 @@
 {
   "home": {
     "title": "Tu camino de aprendizaje",
-    "intro": "Pronto aparecerán aquí las lecciones. Primero, conecta tu teclado y comprueba que se detectan todas las teclas.",
+    "intro": "Haz las lecciones en orden; cada una lleva unos minutos. Empieza comprobando que se detecta tu teclado.",
     "checkKeyboard": "Comprobar el teclado",
-    "tryDemo": "Probar una canción"
+    "unit": "Unidad {number}: {title}",
+    "songs": "Canciones",
+    "songsIntro": "Practica canciones completas cuando quieras, en modo espera o a tempo."
   },
   "freePlay": {
     "title": "Práctica libre",
@@ -170,5 +172,22 @@
       "retry": "Intentar de nuevo"
     },
     "songInfo": "{composer} · {bpm} BPM"
+  },
+  "lesson": {
+    "notFound": "Esta lección no existe.",
+    "loadError": "No se pudo cargar esta lección.",
+    "backHome": "Volver a las lecciones",
+    "progress": "Progreso de la lección",
+    "step": "Paso {current} de {total}",
+    "back": "Atrás",
+    "continue": "Continuar",
+    "skip": "Saltar",
+    "findProgress": "{found} de {total} encontradas",
+    "allFound": "¡Muy bien! Las encontraste todas.",
+    "passRule": "{stars, plural, one {Consigue # estrella para aprobar} other {Consigue # estrellas para aprobar}}",
+    "complete": "¡Lección completada!",
+    "noStars": "Completa todos los pasos sin saltarte ninguno para conseguir estrellas.",
+    "restart": "Empezar la lección de nuevo",
+    "next": "Siguiente lección"
   }
 }

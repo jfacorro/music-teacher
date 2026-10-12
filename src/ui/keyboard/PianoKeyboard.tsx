@@ -27,6 +27,8 @@ interface PianoKeyboardProps {
   expected?: ReadonlyMap<number, ExpectedKey>;
   /** Whether each held key was right or wrong; unmarked held keys use the neutral color. */
   marks?: ReadonlyMap<number, KeyMark>;
+  /** Keys already done (e.g. found in a "find the keys" step), shown in the correct color. */
+  completed?: ReadonlySet<number>;
   labels?: KeyLabels;
   labelFor: (midi: number) => string;
   onKeyDown?: (midi: number, time: number) => void;
@@ -57,6 +59,7 @@ export function PianoKeyboard({
   pressed,
   expected,
   marks,
+  completed,
   labels = 'none',
   labelFor,
   onKeyDown,
@@ -82,11 +85,12 @@ export function PianoKeyboard({
       pressed,
       expected,
       marks,
+      completed,
       labels,
       labelFor,
       colors,
     });
-  }, [width, height, layout, pressed, expected, marks, labels, labelFor, scheme]);
+  }, [width, height, layout, pressed, expected, marks, completed, labels, labelFor, scheme]);
 
   // Pointer input: one key per pointer, so several fingers can play on a touch screen,
   // and sliding across keys plays each one (glissando).
@@ -145,6 +149,7 @@ interface DrawState {
   pressed: ReadonlySet<number>;
   expected?: ReadonlyMap<number, ExpectedKey>;
   marks?: ReadonlyMap<number, KeyMark>;
+  completed?: ReadonlySet<number>;
   labels: KeyLabels;
   labelFor: (midi: number) => string;
   colors: Colors;
@@ -154,7 +159,7 @@ function drawKeyboard(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  { layout, pressed, expected, marks, labels, labelFor, colors }: DrawState,
+  { layout, pressed, expected, marks, completed, labels, labelFor, colors }: DrawState,
 ): void {
   const unit = width / layout.whiteCount;
   const blackHeight = height * BLACK_KEY_HEIGHT;
@@ -179,9 +184,9 @@ function drawKeyboard(
     roundedRect(ctx, x + 0.5, 0, unit - 1, height - 0.5, Math.min(6, unit * 0.15));
     ctx.fillStyle = colors.white;
     ctx.fill();
-    if (want) {
+    if (want || completed?.has(key.midi)) {
       ctx.globalAlpha = 0.35;
-      ctx.fillStyle = handColor(key);
+      ctx.fillStyle = want ? handColor(key) : colors.correct;
       ctx.fill();
       ctx.globalAlpha = 1;
     }
@@ -214,7 +219,13 @@ function drawKeyboard(
     const want = expected?.get(key.midi);
 
     roundedRect(ctx, x, 0, w, blackHeight, Math.min(4, w * 0.15));
-    ctx.fillStyle = isPressed ? pressedColor(key) : want ? handColor(key) : colors.black;
+    ctx.fillStyle = isPressed
+      ? pressedColor(key)
+      : want
+        ? handColor(key)
+        : completed?.has(key.midi)
+          ? colors.correct
+          : colors.black;
     ctx.fill();
     if (want && isPressed) {
       ctx.lineWidth = 3;

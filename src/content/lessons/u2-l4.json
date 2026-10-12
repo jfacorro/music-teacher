@@ -1,0 +1,59 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "intro",
+      "textVars": {
+        "c": "C4",
+        "d": "D4",
+        "e": "E4",
+        "f": "F4",
+        "g": "G4"
+      },
+      "keys": [
+        {
+          "note": "C4",
+          "finger": 1
+        },
+        {
+          "note": "D4",
+          "finger": 2
+        },
+        {
+          "note": "E4",
+          "finger": 3
+        },
+        {
+          "note": "F4",
+          "finger": 4
+        },
+        {
+          "note": "G4",
+          "finger": 5
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "exercise",
+      "text": "learn",
+      "mode": "wait",
+      "hands": "R",
+      "song": "when-the-saints",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "inTime",
+      "mode": "tempo",
+      "hands": "R",
+      "song": "when-the-saints",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

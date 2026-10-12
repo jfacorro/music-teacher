@@ -50,7 +50,7 @@ src/
   theory/     Pitch type and note-string parsing ("C4", "F#3", "Db4")
   engine/     Score model, transport, matching (wait/tempo modes), scoring, practice session
   audio/      Tone.js output and the look-ahead metronome
-  content/    Songs (inline JSON scores) and their loaders
+  content/    Lessons, courses (units, order, unlock rules), songs, and their loaders
   i18n/       i18next setup, note-naming systems, Intl formatting, pseudo-locale
   storage/    IndexedDB (Dexie) and settings
   ui/         Layout, components and screens
@@ -76,6 +76,15 @@ compares MIDI numbers.
 **Pseudo-locale.** In development, pick "English (Pseudo-Accents)" in Settings. Every
 translated string shows accented and ~40% longer, so anything still plain English is
 hard-coded and any clipped text is a layout bug.
+
+### Adding a lesson
+
+1. Write `src/content/lessons/<id>.json`: a list of steps (`explain`, `find` or
+   `exercise`), each with a `text` key and its note variables in `textVars`.
+2. Write its text in `locales/<lang>/lessons/<id>.json` under `steps`, for every language.
+3. Add the id to a unit in `src/content/courses.json` and its title to
+   `locales/<lang>/courses.json`.
+4. Run `npm test`: every lesson is loaded and checked against its translations.
 
 ### Adding a language
 
