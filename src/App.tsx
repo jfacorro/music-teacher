@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router/dom';
 import { AppLayout } from './ui/AppLayout';
 import { FreePlayScreen } from './ui/screens/FreePlayScreen';
 import { HomeScreen } from './ui/screens/HomeScreen';
+import { PracticeScreen } from './ui/screens/practice/PracticeScreen';
 import { ProgressScreen } from './ui/screens/ProgressScreen';
 import { SettingsScreen } from './ui/screens/settings/SettingsScreen';
 
@@ -12,6 +13,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomeScreen /> },
       { path: 'free-play', element: <FreePlayScreen /> },
+      { path: 'practice/:songId', element: <PracticeScreen /> },
       { path: 'progress', element: <ProgressScreen /> },
       { path: 'settings', element: <SettingsScreen /> },
     ],

@@ -4,7 +4,7 @@ import { initReactI18next } from 'react-i18next';
 import { LANGUAGES, PSEUDO_LANGUAGE, SOURCE_LANGUAGE } from './languages';
 import { pseudoLocalizeResource, type Resource } from './pseudo';
 
-export const NAMESPACES = ['common', 'screens'] as const;
+export const NAMESPACES = ['common', 'screens', 'songs'] as const;
 
 // Lazy: each language/namespace file is its own chunk, loaded on first use.
 const loaders = import.meta.glob<Resource>('/locales/*/*.json', { import: 'default' });

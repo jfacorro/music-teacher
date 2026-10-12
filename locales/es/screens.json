@@ -2,11 +2,12 @@
   "home": {
     "title": "Tu camino de aprendizaje",
     "intro": "Pronto aparecerán aquí las lecciones. Primero, conecta tu teclado y comprueba que se detectan todas las teclas.",
-    "checkKeyboard": "Comprobar el teclado"
+    "checkKeyboard": "Comprobar el teclado",
+    "tryDemo": "Probar una canción"
   },
   "freePlay": {
     "title": "Práctica libre",
-    "intro": "Toca lo que quieras y mira los nombres de las notas y acordes que tocas. Próximamente."
+    "intro": "Toca lo que quieras: las teclas se iluminan con sus nombres. Los nombres de los acordes llegarán pronto."
   },
   "progress": {
     "title": "Progreso",
@@ -58,13 +59,20 @@
       "heading": "Prueba en vivo",
       "intro": "Pulsa teclas en tu piano. Cada una debería aparecer aquí, con el nombre correcto.",
       "held": "Teclas pulsadas",
-      "none": "No hay teclas pulsadas",
-      "velocity": "Velocidad {velocity}",
       "recent": "Eventos recientes",
       "event": "Evento",
       "note": "Nota",
       "source": "Origen",
       "type": "{type, select, on {Pulsada} other {Soltada}}"
     }
+  },
+  "practice": {
+    "hint": "Mira cómo caen las notas y toca cada una cuando llegue al teclado.",
+    "play": "Tocar",
+    "pause": "Pausa",
+    "restart": "Volver a empezar",
+    "notFound": "Esta canción no existe.",
+    "loadError": "No se pudo cargar esta canción.",
+    "backHome": "Volver a Aprender"
   }
 }

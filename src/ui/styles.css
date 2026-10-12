@@ -13,6 +13,21 @@
   --pending: #e67700;
   --radius: 10px;
 
+  /* Keyboard and falling notes (read by the canvases) */
+  --key-white: #ffffff;
+  --key-black: #1f1e1c;
+  --key-border: #b9b5ad;
+  --key-label: #6b6862;
+  --key-pressed: #7950f2;
+  --hand-right: #3b5bdb;
+  --hand-left: #e8590c;
+  --badge-text: #ffffff;
+  --lane-bg: #efede8;
+  --lane-octave: #dcd8cf;
+  --grid-beat: #e3e0d9;
+  --grid-measure: #c8c3b8;
+  --hit-line: #7950f2;
+
   color-scheme: light dark;
   font-family:
     system-ui,
@@ -39,6 +54,20 @@
     --problem: #ff8787;
     --problem-bg: #2e1d1d;
     --pending: #ffa94d;
+
+    --key-white: #e6e3dc;
+    --key-black: #0f0f0e;
+    --key-border: #57534d;
+    --key-label: #57534d;
+    --key-pressed: #9775fa;
+    --hand-right: #5c7cfa;
+    --hand-left: #ff922b;
+    --badge-text: #ffffff;
+    --lane-bg: #1b1a18;
+    --lane-octave: #2c2a27;
+    --grid-beat: #262422;
+    --grid-measure: #3d3a36;
+    --hit-line: #9775fa;
   }
 }
 
@@ -301,4 +330,59 @@ select {
 .events th {
   color: var(--muted);
   font-weight: 600;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Keyboard and practice */
+
+.piano-keyboard {
+  width: 100%;
+  margin-block-start: 1rem;
+  user-select: none;
+}
+
+.piano-keyboard canvas {
+  display: block;
+}
+
+.practice__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.practice__header h1 {
+  margin-block-end: 0.25rem;
+}
+
+.practice__header p {
+  margin-block: 0;
+}
+
+.practice__controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.practice__stage {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.practice__stage .piano-keyboard {
+  margin-block-start: 0;
+}
+
+/* Fill the viewport so the keyboard stays visible (~470px: header, title, keyboard). */
+.falling-notes {
+  height: clamp(180px, calc(100dvh - 470px), 560px);
 }

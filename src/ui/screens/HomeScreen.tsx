@@ -7,9 +7,14 @@ export function HomeScreen() {
     <section className="screen">
       <h1>{t('home.title')}</h1>
       <p>{t('home.intro')}</p>
-      <Link className="button button--primary" to="/settings">
-        {t('home.checkKeyboard')}
-      </Link>
+      <div className="button-row">
+        <Link className="button button--primary" to="/practice/ode-to-joy">
+          {t('home.tryDemo')}
+        </Link>
+        <Link className="button" to="/settings">
+          {t('home.checkKeyboard')}
+        </Link>
+      </div>
     </section>
   );
 }

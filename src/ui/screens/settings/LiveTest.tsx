@@ -2,12 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { useLiveInput } from '../../../input/liveStore';
 import { pitchFromMidi } from '../../../theory/pitch';
+import { HeldNotesDisplay } from '../../components/HeldNotesDisplay';
 
 /** Shows every key as it's pressed: the checkpoint for "is the keyboard detected?". */
 export function LiveTest() {
   const { t } = useTranslation('screens');
   const { t: tc } = useTranslation('common');
-  const held = useLiveInput((s) => s.held);
   const recent = useLiveInput((s) => s.recent);
   const names = useNoteNames();
 
@@ -19,20 +19,7 @@ export function LiveTest() {
       <p className="muted">{t('settings.liveTest.intro')}</p>
 
       <h3>{t('settings.liveTest.held')}</h3>
-      <div className="held-notes" aria-live="polite">
-        {held.length === 0 ? (
-          <span className="muted">{t('settings.liveTest.none')}</span>
-        ) : (
-          held.map((note) => (
-            <span key={note.pitch} className="held-note">
-              <span className="held-note__name">{label(note.pitch)}</span>
-              <span className="held-note__detail">
-                {t('settings.liveTest.velocity', { velocity: note.velocity })}
-              </span>
-            </span>
-          ))
-        )}
-      </div>
+      <HeldNotesDisplay showVelocity />
 
       {recent.length > 0 && (
         <>

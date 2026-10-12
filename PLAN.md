@@ -454,12 +454,12 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Milestones
 
-**1.1 Project setup**
+**1.1 Project setup** — ✔ done
 - Vite + React + TypeScript scaffold, ESLint/Prettier, Vitest.
 - App shell with routing between screens (placeholders).
 - `git init`, README with how to run.
 
-**1.1b Localization foundation** (before any real UI text is written)
+**1.1b Localization foundation** (before any real UI text is written) — ✔ done (English + Spanish)
 - i18next + react-i18next + ICU setup; namespaces; lazy loading; English fallback.
 - Language detection from the browser + switcher in Settings, persisted.
 - `i18n/naming.ts`: English, German and fixed-do solfège naming systems, with accidentals and optional octave numbers; naming-system setting.
@@ -469,20 +469,21 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Pseudo-locale (`en-XA`: accented, ~40% longer text) to spot untranslated strings and layout overflow.
 - English + one second language set up from the start to prove the pipeline.
 
-**1.2 MIDI input**
+**1.2 MIDI input** — ✔ done
 - `MidiInput` adapter: device list, selection, hot-plug, Note On/Off parsing.
 - Settings screen: device picker + "press any key" live test.
-- Dev input (computer keyboard + on-screen clicks).
-- ✅ *Checkpoint: Casio CDP-S110 is detected and key presses show up live.*
+- Dev input: computer keyboard (on-screen clicks moved to 1.3, with the on-screen keyboard).
+- ✅ *Checkpoint passed (2026-10-12): Casio CDP-S110 is detected and key presses show up live.*
 
-**1.3 Keyboard & falling notes**
-- Canvas on-screen keyboard (configurable range, highlights, note labels, finger numbers).
-- Falling-notes renderer driven by the transport clock; notes colored by hand.
-- `theory/pitch.ts`: `Pitch` type, `parseNote` / `formatNote`, MIDI ↔ `Pitch`, default spelling — with exhaustive unit tests.
+**1.3 Keyboard & falling notes** — ✔ done
+- Canvas on-screen keyboard (configurable range, highlights, note labels, finger numbers); clicking/touching keys plays notes (dev input).
+- Falling-notes renderer driven by a basic transport (play/pause/seek at the score tempo); notes colored by hand, aligned with the keyboard lanes.
+- `theory/pitch.ts`: `Pitch` type, `parseNote` / `formatNote`, MIDI ↔ `Pitch`, default spelling — with exhaustive unit tests. ✔ done early, in 1.1b (note naming needed it).
 - Score model + inline JSON score loader (parses note strings, reports invalid ones with lesson/step location).
+- Demo practice screen (falling notes + keyboard + play/pause) with a public-domain song; free play shows the keyboard and held notes.
 
 **1.4 Engine**
-- Transport clock (tempo, count-in, metronome via Tone.js).
+- Transport clock: extend the 1.3 transport with count-in and metronome (Tone.js).
 - Wait mode and tempo mode.
 - Matcher + scorer (timing grades, accuracy, stars).
 - Unit tests driven by scripted `NoteEvent` streams.
@@ -509,7 +510,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - First-launch flow: language, naming system, input.
 
 #### Phase 1 done when
-- [ ] Casio connects over USB and every key is detected correctly.
+- [x] Casio connects over USB and every key is detected correctly. (verified 2026-10-12)
 - [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration.
 - [ ] All Unit 1–2 lessons are playable in wait and tempo modes, with either input.
 - [ ] Scores and stars persist across browser restarts.

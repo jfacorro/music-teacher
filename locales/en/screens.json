@@ -2,11 +2,12 @@
   "home": {
     "title": "Your learning path",
     "intro": "Lessons will appear here soon. First, connect your keyboard and check that every key is detected.",
-    "checkKeyboard": "Check your keyboard"
+    "checkKeyboard": "Check your keyboard",
+    "tryDemo": "Try a song"
   },
   "freePlay": {
     "title": "Free play",
-    "intro": "Play anything and see the names of the notes and chords you play. Coming soon."
+    "intro": "Play anything: the keys light up with their names. Chord names are coming soon."
   },
   "progress": {
     "title": "Progress",
@@ -58,13 +59,20 @@
       "heading": "Live test",
       "intro": "Press keys on your piano. Each one should appear here, with the right name.",
       "held": "Keys down",
-      "none": "No keys pressed",
-      "velocity": "Velocity {velocity}",
       "recent": "Recent events",
       "event": "Event",
       "note": "Note",
       "source": "Source",
       "type": "{type, select, on {Down} other {Up}}"
     }
+  },
+  "practice": {
+    "hint": "Watch the notes fall and play each one when it reaches the keyboard.",
+    "play": "Play",
+    "pause": "Pause",
+    "restart": "Start over",
+    "notFound": "This song doesn’t exist.",
+    "loadError": "Couldn’t load this song.",
+    "backHome": "Back to Learn"
   }
 }

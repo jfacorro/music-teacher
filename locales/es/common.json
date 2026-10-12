@@ -19,6 +19,17 @@
   "sources": {
     "midi": "MIDI",
     "mic": "Micrófono",
-    "dev": "Teclado de la computadora"
+    "dev": "Teclado de la computadora",
+    "screen": "Teclado en pantalla"
+  },
+  "heldNotes": {
+    "none": "No hay teclas pulsadas",
+    "velocity": "Velocidad {velocity}"
+  },
+  "keyboard": {
+    "label": "Teclado de piano"
+  },
+  "fallingNotes": {
+    "label": "Notas que caen: cada nota llega al teclado cuando hay que tocarla"
   }
 }

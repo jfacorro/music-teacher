@@ -19,6 +19,17 @@
   "sources": {
     "midi": "MIDI",
     "mic": "Microphone",
-    "dev": "Computer keyboard"
+    "dev": "Computer keyboard",
+    "screen": "On-screen keyboard"
+  },
+  "heldNotes": {
+    "none": "No keys pressed",
+    "velocity": "Velocity {velocity}"
+  },
+  "keyboard": {
+    "label": "Piano keyboard"
+  },
+  "fallingNotes": {
+    "label": "Falling notes: each note reaches the keyboard when it’s time to play it"
   }
 }

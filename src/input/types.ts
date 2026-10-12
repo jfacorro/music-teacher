@@ -1,4 +1,5 @@
-export type InputSourceKind = 'midi' | 'mic' | 'dev';
+/** `dev`: computer keyboard; `screen`: clicking/touching the on-screen keyboard. */
+export type InputSourceKind = 'midi' | 'mic' | 'dev' | 'screen';
 
 /** The one event every input source emits (PLAN.md §4). */
 export interface NoteEvent {
