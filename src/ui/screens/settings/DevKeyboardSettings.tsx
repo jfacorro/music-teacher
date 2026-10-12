@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { SoundDelay } from '../../components/SoundDelay';
 import {
   DEV_OCTAVE_MAX,
   DEV_OCTAVE_MIN,
@@ -7,6 +8,7 @@ import {
 } from '../../../input/dev/devInput';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { setDevKeyboardPreference } from '../../../preferences';
+import { updateSettings, useSettings } from '../../../storage/settings';
 import { MIDDLE_C, pitchFromMidi } from '../../../theory/pitch';
 
 const MINUS_SIGN = '−';
@@ -15,6 +17,7 @@ export function DevKeyboardSettings() {
   const { t } = useTranslation('screens');
   const enabled = useDevInput((s) => s.enabled);
   const octave = useDevInput((s) => s.octave);
+  const keySound = useSettings((s) => s.keySound);
   const names = useNoteNames();
 
   return (
@@ -28,6 +31,15 @@ export function DevKeyboardSettings() {
         />
         {t('settings.devKeyboard.enable')}
       </label>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={keySound}
+          onChange={(e) => updateSettings({ keySound: e.target.checked })}
+        />
+        {t('settings.devKeyboard.sound')}
+      </label>
+      {keySound && <SoundDelay />}
       {enabled && (
         <>
           <p className="muted">

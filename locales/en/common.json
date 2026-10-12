@@ -31,5 +31,10 @@
   },
   "fallingNotes": {
     "label": "Falling notes: each note reaches the keyboard when it’s time to play it"
+  },
+  "micBadge": {
+    "label": "Microphone: {status}",
+    "on": "Microphone",
+    "off": "Microphone off"
   }
 }

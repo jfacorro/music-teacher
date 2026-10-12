@@ -25,6 +25,10 @@ Press keys on the piano: they appear under **Live test** with their names.
 If the keyboard isn't listed, check the USB cable and that the piano is on. On Windows,
 only one app can use a MIDI device at a time, so close any other music software.
 
+For an acoustic piano, turn on the **Microphone** in Settings, then measure the background
+noise and the delay. With a MIDI keyboard you can also run the **Microphone check**: play with
+both on, and MIDI tells you how accurately the microphone hears each key.
+
 ## Scripts
 
 | Command              | What it does                                       |
@@ -41,7 +45,8 @@ only one app can use a MIDI device at a time, so close any other music software.
 
 ```
 src/
-  input/      MIDI, computer-keyboard and on-screen input; every source emits the same NoteEvent
+  input/      MIDI, microphone (note detection + calibration), computer-keyboard and on-screen
+              input; every source emits the same NoteEvent, routed by the "Listen to" setting
   theory/     Pitch type and note-string parsing ("C4", "F#3", "Db4")
   engine/     Score model, transport, matching (wait/tempo modes), scoring, practice session
   audio/      Tone.js output and the look-ahead metronome

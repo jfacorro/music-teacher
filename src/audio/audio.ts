@@ -10,6 +10,11 @@
 export interface AudioEngine {
   /** Metronome click heard at `time` (performance.now() ms). */
   click(time: number, accent: boolean): void;
+  /** Piano-like note, right now. */
+  noteOn(midi: number, velocity: number): void;
+  noteOff(midi: number): void;
+  /** Time from playing a sound to hearing it, as reported by the browser, ms. */
+  outputDelayMs(): number;
 }
 
 const MAX_LATE_S = 0.03;
@@ -46,8 +51,25 @@ async function createEngine(): Promise<AudioEngine> {
     volume: -8,
   }).toDestination();
 
+  // A simple synthesized piano: bright attack, decaying tone. (Sampled piano: later.)
+  const piano = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: 'custom', partials: [1, 0.45, 0.25, 0.12, 0.08] },
+    envelope: { attack: 0.004, decay: 1.6, sustain: 0.08, release: 0.6 },
+    volume: -12,
+  }).toDestination();
+  const noteName = (midi: number) => Tone.Frequency(midi, 'midi').toNote();
+
   let lastClick = 0;
   return {
+    outputDelayMs() {
+      return (context.baseLatency + (context.outputLatency || 0)) * 1000;
+    },
+    noteOn(midi, velocity) {
+      piano.triggerAttack(noteName(midi), context.currentTime, velocity / 127);
+    },
+    noteOff(midi) {
+      piano.triggerRelease(noteName(midi), context.currentTime);
+    },
     click(time, accent) {
       const target = audioTimeFor(context, time);
       // A click that's already noticeably late (e.g. timers throttled in a background tab)

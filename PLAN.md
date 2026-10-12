@@ -488,12 +488,12 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Matcher + scorer (timing grades, accuracy, stars).
 - Unit tests driven by scripted `NoteEvent` streams.
 
-**1.5 Microphone input (single notes)**
+**1.5 Microphone input (single notes)** — ✔ done (checkpoint pending)
 - Audio capture with processing disabled; onset detection; `pitchy` pitch detection; stabilizer; note-off detection.
 - Calibration: noise floor, latency tap-along, sensitivity slider, level meter, live note display.
 - Input selector: MIDI / Mic / Auto.
 - Mic-specific timing windows in the scorer.
-- ✅ *Checkpoint: test the mic against the Casio's speakers, comparing mic detections with MIDI ground truth for the same keys.*
+- ✅ *Checkpoint: test the mic against the Casio's speakers, comparing mic detections with MIDI ground truth for the same keys.* Tool: Settings → "Microphone check" (needs MIDI and the microphone on).
 
 **1.6 Content: Units 1–2 (~10 lessons)**
 - Unit 1: meet the keyboard; middle C & neighbors; RH five-finger position; first RH melody; LH five-finger position; first LH melody.

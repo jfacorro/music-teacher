@@ -39,6 +39,12 @@ system setting (`src/i18n/naming.ts`).
 | Wrong key                        | wrong key          | tecla incorrecta          |
 | Missed note                      | missed             | perdida                   |
 | Notes in a row (streak)          | in a row           | seguidas                  |
+| Microphone                       | microphone         | micrófono                 |
+| Background noise                 | background noise   | ruido de fondo            |
+| Threshold (mic gate)             | threshold          | umbral                    |
+| Delay (latency)                  | delay              | retraso                   |
+| Calibration                      | calibration        | calibración               |
+| Listen to (input choice)         | listen to          | escuchar                  |
 
 Spanish uses neutral Latin American vocabulary ("computadora", not "ordenador") and the
 informal "tú".

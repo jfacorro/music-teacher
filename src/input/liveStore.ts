@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { subscribeNotes } from './bus';
-import type { NoteEvent } from './types';
+import type { InputSourceKind, NoteEvent } from './types';
 
 const RECENT_LIMIT = 12;
 
@@ -12,6 +12,11 @@ interface LiveInputState {
 }
 
 export const useLiveInput = create<LiveInputState>(() => ({ held: [], recent: [] }));
+
+/** Forgets held keys from sources that stopped being active, so none stay stuck. */
+export function pruneHeld(isActive: (source: InputSourceKind) => boolean): void {
+  useLiveInput.setState((state) => ({ held: state.held.filter((note) => isActive(note.source)) }));
+}
 
 export function startLiveTracking(): () => void {
   return subscribeNotes((event) => {

@@ -8,6 +8,7 @@ import { Transport } from '../../../engine/transport';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { subscribeNotes } from '../../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
+import { useInstrument } from '../../../input/routing';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { useActiveNotes, useAnimationFrame, usePressedKeys } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
@@ -39,6 +40,8 @@ export function PracticeRun({ score, mode, hands, metronome }: PracticeRunProps)
         mode,
         hands,
         leadIn: (LEAD_IN_SCREENS * SECONDS_VISIBLE * score.tempo) / 60,
+        // Timing windows before the first note arrives: wider for the microphone.
+        defaultSource: useInstrument.getState().instrument === 'mic' ? 'mic' : 'midi',
       }),
   );
   const state = useSyncExternalStore(session.subscribe, session.getState);

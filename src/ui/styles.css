@@ -565,3 +565,57 @@ select {
 .falling-notes {
   height: clamp(180px, calc(100dvh - 560px), 560px);
 }
+
+/* Microphone meter */
+
+.mic-meter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-block-end: 1rem;
+}
+
+.mic-meter__bar {
+  position: relative;
+  flex: 1;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.mic-meter__fill {
+  height: 100%;
+  background: var(--muted);
+  transition: width 60ms linear;
+}
+
+.mic-meter__fill.is-loud {
+  background: var(--key-correct);
+}
+
+.mic-meter__mark {
+  position: absolute;
+  inset-block: 0;
+  width: 2px;
+}
+
+.mic-meter__mark--floor {
+  background: var(--muted);
+}
+
+.mic-meter__mark--gate {
+  background: var(--key-wrong);
+}
+
+.mic-meter__note {
+  min-width: 3.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+input[type='range'] {
+  width: 100%;
+}

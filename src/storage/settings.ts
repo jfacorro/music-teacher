@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { NamingSystem } from '../i18n/naming';
+import type { InputMode } from '../input/routing';
 import { db } from './db';
 
 export interface Settings {
@@ -9,8 +10,20 @@ export interface Settings {
   namingSystem: NamingSystem | null;
   showOctave: boolean;
   devKeyboard: boolean;
+  /** Piano sound for the computer and on-screen keyboards. */
+  keySound: boolean;
   midiInputId: string | null;
   midiInputName: string | null;
+  /** Which instrument the app listens to (PLAN.md §8 Settings). */
+  inputMode: InputMode;
+  micEnabled: boolean;
+  micDeviceId: string | null;
+  /** Measured background level, dBFS. */
+  micNoiseFloorDb: number;
+  /** How far above the noise a sound must be to count, dB. */
+  micSensitivityDb: number;
+  /** Extra delay to subtract from microphone notes, from calibration, ms. */
+  micLatencyMs: number;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -18,8 +31,15 @@ export const DEFAULT_SETTINGS: Settings = {
   namingSystem: null,
   showOctave: false,
   devKeyboard: true,
+  keySound: true,
   midiInputId: null,
   midiInputName: null,
+  inputMode: 'auto',
+  micEnabled: false,
+  micDeviceId: null,
+  micNoiseFloorDb: -65,
+  micSensitivityDb: 15,
+  micLatencyMs: 0,
 };
 
 const SETTINGS_KEY = 'app';

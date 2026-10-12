@@ -31,5 +31,10 @@
   },
   "fallingNotes": {
     "label": "Notas que caen: cada nota llega al teclado cuando hay que tocarla"
+  },
+  "micBadge": {
+    "label": "Micrófono: {status}",
+    "on": "Micrófono",
+    "off": "Micrófono apagado"
   }
 }

@@ -53,7 +53,10 @@
       "help": "Las teclas A W S E D F T G Y H U J K tocan una octava, desde {note} hasta el siguiente {note}. Z y X cambian de octava.",
       "octave": "Octava: {octave}",
       "octaveDown": "Bajar una octava",
-      "octaveUp": "Subir una octava"
+      "octaveUp": "Subir una octava",
+      "sound": "Tocar un sonido de piano con el teclado de la computadora y el teclado en pantalla",
+      "delay": "Retraso del sonido: {ms} ms",
+      "slowOutput": "Es un retraso notable, normalmente causado por auriculares o altavoces Bluetooth. Los auriculares o altavoces con cable responden mucho más rápido."
     },
     "liveTest": {
       "heading": "Prueba en vivo",
@@ -64,6 +67,73 @@
       "note": "Nota",
       "source": "Origen",
       "type": "{type, select, on {Pulsada} other {Soltada}}"
+    },
+    "input": {
+      "heading": "Escuchar",
+      "modes": {
+        "auto": "Automático",
+        "midi": "Teclado MIDI",
+        "mic": "Micrófono"
+      },
+      "hints": {
+        "auto": "Usa el teclado MIDI cuando está conectado y, si no, el micrófono.",
+        "midi": "Solo cuentan las notas del teclado MIDI.",
+        "mic": "Solo cuentan las notas que oye el micrófono. Úsalo con un piano acústico."
+      },
+      "listening": {
+        "midi": "Escuchando {device}.",
+        "mic": "Escuchando el micrófono.",
+        "none": "Todavía no se escucha ningún instrumento: conecta un teclado MIDI o enciende el micrófono.",
+        "midiOff": "El teclado MIDI no está conectado. Activa MIDI más abajo.",
+        "micOff": "El micrófono está apagado. Enciéndelo más abajo."
+      }
+    },
+    "mic": {
+      "heading": "Micrófono",
+      "intro": "Coloca el micrófono cerca del piano. Oye una nota a la vez; los acordes llegarán más adelante.",
+      "unsupported": "Este navegador no puede usar el micrófono. Usa Chrome o Edge.",
+      "denied": "Se bloqueó el acceso al micrófono. Permítelo para este sitio en la configuración del navegador y vuelve a intentarlo.",
+      "error": "No se pudo iniciar el micrófono. Revisa que esté conectado y que no lo use otra aplicación.",
+      "enable": "Encender el micrófono",
+      "starting": "Iniciando…",
+      "disable": "Apagar el micrófono",
+      "device": "Dispositivo",
+      "unnamedDevice": "Micrófono",
+      "level": "Nivel del micrófono",
+      "floorMark": "Ruido de fondo",
+      "gateMark": "Umbral: se ignoran los sonidos más suaves",
+      "threshold": "Umbral: {db} dB por encima del ruido de fondo",
+      "thresholdHint": "Bájalo si se pierden notas suaves; súbelo si el ruido se detecta como notas.",
+      "calibration": "Calibración",
+      "summary": "Ruido de fondo: {noise} dB · Corrección del retraso: {delay} ms",
+      "measureNoise": "Medir el ruido de fondo",
+      "measureDelay": "Medir el retraso",
+      "resetDelay": "Restablecer el retraso",
+      "headphones": "Para medir el retraso, toca cualquier tecla en cada clic. Los auriculares ayudan, para que el micrófono no oiga los clics.",
+      "noiseRunning": "Midiendo… quédate en silencio 3 segundos.",
+      "delayCountIn": "Prepárate… {beat}",
+      "delayRunning": "Toca una tecla en cada clic: {beat} de {total}",
+      "noiseDone": "Ruido de fondo medido: {db} dB.",
+      "delayDone": "Corrección del retraso: {ms} ms ({taps} de {total} clics oídos).",
+      "failed": "No funcionó: no se oyó lo suficiente. Vuelve a intentarlo tocando un poco más fuerte."
+    },
+    "micCheck": {
+      "heading": "Prueba del micrófono",
+      "intro": "Con el cable MIDI y el micrófono encendidos, toca notas en todo el teclado. MIDI indica qué teclas tocaste de verdad, así que esto muestra qué tan bien las oye el micrófono.",
+      "start": "Empezar la prueba",
+      "stop": "Detener",
+      "played": "Notas tocadas (MIDI)",
+      "correct": "Oídas correctamente",
+      "correctValue": "{count} ({percent})",
+      "octaveErrors": "Nota correcta, octava incorrecta",
+      "wrongPitch": "Nota incorrecta",
+      "missed": "No oídas",
+      "extra": "Detecciones de más",
+      "delay": "Retraso del micrófono",
+      "spread": "Variación del tiempo",
+      "noValue": "—",
+      "ms": "{ms} ms",
+      "useDelay": "Corregir el retraso en {ms} ms"
     }
   },
   "practice": {

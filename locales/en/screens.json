@@ -53,7 +53,10 @@
       "help": "Keys A W S E D F T G Y H U J K play one octave, from {note} to the next {note}. Z and X change the octave.",
       "octave": "Octave: {octave}",
       "octaveDown": "Octave down",
-      "octaveUp": "Octave up"
+      "octaveUp": "Octave up",
+      "sound": "Play a piano sound for the computer and on-screen keyboards",
+      "delay": "Sound delay: {ms} ms",
+      "slowOutput": "That’s a noticeable delay, usually caused by Bluetooth headphones or speakers. Wired headphones or speakers respond much faster."
     },
     "liveTest": {
       "heading": "Live test",
@@ -64,6 +67,73 @@
       "note": "Note",
       "source": "Source",
       "type": "{type, select, on {Down} other {Up}}"
+    },
+    "input": {
+      "heading": "Listen to",
+      "modes": {
+        "auto": "Automatic",
+        "midi": "MIDI keyboard",
+        "mic": "Microphone"
+      },
+      "hints": {
+        "auto": "Uses the MIDI keyboard when it’s connected, otherwise the microphone.",
+        "midi": "Only notes from the MIDI keyboard count.",
+        "mic": "Only notes the microphone hears count. Use this for an acoustic piano."
+      },
+      "listening": {
+        "midi": "Listening to {device}.",
+        "mic": "Listening to the microphone.",
+        "none": "Not listening to an instrument yet: connect a MIDI keyboard or turn on the microphone.",
+        "midiOff": "The MIDI keyboard isn’t connected. Enable MIDI below.",
+        "micOff": "The microphone is off. Turn it on below."
+      }
+    },
+    "mic": {
+      "heading": "Microphone",
+      "intro": "Place the microphone near the piano. It hears one note at a time; chords come later.",
+      "unsupported": "This browser can’t use the microphone. Use Chrome or Edge.",
+      "denied": "Microphone access was blocked. Allow it for this site in the browser’s site settings, then try again.",
+      "error": "The microphone couldn’t start. Check that it’s connected and not used by another app.",
+      "enable": "Turn on microphone",
+      "starting": "Starting…",
+      "disable": "Turn off microphone",
+      "device": "Device",
+      "unnamedDevice": "Microphone",
+      "level": "Microphone level",
+      "floorMark": "Background noise",
+      "gateMark": "Threshold: quieter sounds are ignored",
+      "threshold": "Threshold: {db} dB above background noise",
+      "thresholdHint": "Lower it if soft notes are missed; raise it if noise is detected as notes.",
+      "calibration": "Calibration",
+      "summary": "Background noise: {noise} dB · Delay correction: {delay} ms",
+      "measureNoise": "Measure background noise",
+      "measureDelay": "Measure delay",
+      "resetDelay": "Reset delay",
+      "headphones": "To measure the delay, play any key on each click. Headphones help, so the microphone doesn’t hear the clicks.",
+      "noiseRunning": "Measuring… stay quiet for 3 seconds.",
+      "delayCountIn": "Get ready… {beat}",
+      "delayRunning": "Play a key on each click: {beat} of {total}",
+      "noiseDone": "Background noise measured: {db} dB.",
+      "delayDone": "Delay correction set to {ms} ms ({taps} of {total} clicks heard).",
+      "failed": "That didn’t work: not enough was heard. Try again, playing a little louder."
+    },
+    "micCheck": {
+      "heading": "Microphone check",
+      "intro": "With both the MIDI cable and the microphone on, play notes across the keyboard. MIDI says which keys you really played, so this shows how well the microphone hears them.",
+      "start": "Start check",
+      "stop": "Stop",
+      "played": "Notes played (MIDI)",
+      "correct": "Heard correctly",
+      "correctValue": "{count} ({percent})",
+      "octaveErrors": "Right note, wrong octave",
+      "wrongPitch": "Wrong note",
+      "missed": "Not heard",
+      "extra": "Extra detections",
+      "delay": "Microphone delay",
+      "spread": "Timing spread",
+      "noValue": "—",
+      "ms": "{ms} ms",
+      "useDelay": "Correct the delay by {ms} ms"
     }
   },
   "practice": {
