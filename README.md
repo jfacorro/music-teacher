@@ -43,7 +43,8 @@ only one app can use a MIDI device at a time, so close any other music software.
 src/
   input/      MIDI, computer-keyboard and on-screen input; every source emits the same NoteEvent
   theory/     Pitch type and note-string parsing ("C4", "F#3", "Db4")
-  engine/     Score model and transport (playback position in beats)
+  engine/     Score model, transport, matching (wait/tempo modes), scoring, practice session
+  audio/      Tone.js output and the look-ahead metronome
   content/    Songs (inline JSON scores) and their loaders
   i18n/       i18next setup, note-naming systems, Intl formatting, pseudo-locale
   storage/    IndexedDB (Dexie) and settings

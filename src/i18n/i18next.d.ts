@@ -1,5 +1,6 @@
 import 'i18next';
 import type common from '../../locales/en/common.json';
+import type feedback from '../../locales/en/feedback.json';
 import type screens from '../../locales/en/screens.json';
 import type songs from '../../locales/en/songs.json';
 
@@ -11,6 +12,7 @@ declare module 'i18next' {
       common: typeof common;
       screens: typeof screens;
       songs: typeof songs;
+      feedback: typeof feedback;
     };
   }
 }

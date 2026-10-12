@@ -54,6 +54,16 @@ describe('Transport', () => {
     expect(transport.position()).toBe(4);
   });
 
+  it('maps clock times to positions and back', () => {
+    const { transport, advance } = setup(120);
+    transport.play();
+    advance(1000); // now at beat 2, clock 2000
+    expect(transport.positionAt(1500)).toBe(1); // a key pressed half a second ago
+    expect(transport.timeAt(4)).toBe(3000);
+    transport.pause();
+    expect(transport.positionAt(9999)).toBe(2);
+  });
+
   it('notifies subscribers with a new state snapshot', () => {
     const { transport } = setup();
     const listener = vi.fn();

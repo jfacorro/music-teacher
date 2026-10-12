@@ -67,12 +67,38 @@
     }
   },
   "practice": {
-    "hint": "Watch the notes fall and play each one when it reaches the keyboard.",
+    "hint": "Play each note when it reaches the keyboard. The metronome counts you in.",
     "play": "Play",
     "pause": "Pause",
     "restart": "Start over",
     "notFound": "This song doesn’t exist.",
     "loadError": "Couldn’t load this song.",
-    "backHome": "Back to Learn"
+    "backHome": "Back to Learn",
+    "hintWait": "The music waits for you: play the highlighted keys to continue.",
+    "mode": {
+      "label": "Mode",
+      "wait": "Wait for me",
+      "tempo": "Play along"
+    },
+    "hands": {
+      "label": "Hands",
+      "both": "Both hands",
+      "R": "Right hand",
+      "L": "Left hand"
+    },
+    "metronome": "Metronome",
+    "results": {
+      "heading": "Results",
+      "accuracy": "Accuracy",
+      "stars": "{stars, plural, =0 {No stars} one {# star out of 3} other {# stars out of 3}}",
+      "perfect": "Perfect",
+      "good": "Good",
+      "ok": "OK",
+      "correct": "Correct",
+      "missed": "Missed",
+      "wrong": "Wrong keys",
+      "retry": "Try again"
+    },
+    "songInfo": "{composer} · {bpm} BPM"
   }
 }

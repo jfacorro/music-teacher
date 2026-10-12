@@ -27,6 +27,10 @@
   --grid-beat: #e3e0d9;
   --grid-measure: #c8c3b8;
   --hit-line: #7950f2;
+  --key-correct: #2f9e44;
+  --key-wrong: #e03131;
+  --note-played: #37b24d;
+  --note-missed: #868e96;
 
   color-scheme: light dark;
   font-family:
@@ -68,6 +72,10 @@
     --grid-beat: #262422;
     --grid-measure: #3d3a36;
     --hit-line: #9775fa;
+    --key-correct: #40c057;
+    --key-wrong: #fa5252;
+    --note-played: #51cf66;
+    --note-missed: #5c5f66;
   }
 }
 
@@ -366,12 +374,183 @@ select {
   margin-block: 0;
 }
 
+.practice__options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-block: 1rem;
+}
+
+.practice__options .checkbox {
+  margin: 0;
+}
+
 .practice__controls {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-block-end: 0.75rem;
+}
+
+.practice__controls p {
+  margin: 0;
+}
+
+.practice__notes {
+  position: relative;
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.segmented__option {
+  font: inherit;
+  padding: 0.45rem 0.9rem;
+  border: 0;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.segmented__option + .segmented__option {
+  border-inline-start: 1px solid var(--border);
+}
+
+.segmented__option.is-selected {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.inline-field {
+  display: inline-flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
+/* Live feedback over the falling notes */
+
+.feedback {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  pointer-events: none;
+}
+
+.feedback__badge {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #fff;
+  animation: feedback-pop 0.25s ease-out;
+}
+
+.feedback__badge--good {
+  background: var(--key-correct);
+}
+
+.feedback__badge--okay {
+  background: var(--pending);
+}
+
+.feedback__badge--bad {
+  background: var(--key-wrong);
+}
+
+.feedback__streak {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+@keyframes feedback-pop {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+}
+
+.count-in {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(3rem, 12vh, 7rem);
+  font-weight: 800;
+  color: var(--text);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.results {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  min-width: min(320px, 90%);
+  max-height: 95%;
+  overflow: auto;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
+  text-align: center;
+}
+
+.results h2 {
+  margin-block-end: 0.25rem;
+}
+
+.results__stars {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 0.15em;
+  color: #f59f00;
+}
+
+.results__accuracy {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-block: 0.25rem 0.75rem;
+}
+
+.results__accuracy strong {
+  font-size: 1.5rem;
+}
+
+.results__counts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.25rem;
+  margin-block: 0 1rem;
+}
+
+.results__counts dt {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.results__counts dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
 .practice__stage {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
@@ -382,7 +561,7 @@ select {
   margin-block-start: 0;
 }
 
-/* Fill the viewport so the keyboard stays visible (~470px: header, title, keyboard). */
+/* Fill the viewport so the keyboard stays visible (~560px: header, title, options, keyboard). */
 .falling-notes {
-  height: clamp(180px, calc(100dvh - 470px), 560px);
+  height: clamp(180px, calc(100dvh - 560px), 560px);
 }

@@ -482,9 +482,9 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Score model + inline JSON score loader (parses note strings, reports invalid ones with lesson/step location).
 - Demo practice screen (falling notes + keyboard + play/pause) with a public-domain song; free play shows the keyboard and held notes.
 
-**1.4 Engine**
+**1.4 Engine** — ✔ done
 - Transport clock: extend the 1.3 transport with count-in and metronome (Tone.js).
-- Wait mode and tempo mode.
+- Wait mode and tempo mode (plus hand selection: right / left / both).
 - Matcher + scorer (timing grades, accuracy, stars).
 - Unit tests driven by scripted `NoteEvent` streams.
 

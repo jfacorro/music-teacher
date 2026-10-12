@@ -19,7 +19,12 @@ interface FallingNotesProps {
   /** How many seconds of music fit between the top and the keyboard. */
   secondsVisible: number;
   labelFor: (note: ScoreNote) => string;
+  /** How each note went; read every frame, so keep the function stable. */
+  styleOf?: (note: ScoreNote) => NoteStyle;
 }
+
+/** played: right in time · missed: never played · muted: not graded (other hand). */
+export type NoteStyle = 'played' | 'missed' | 'muted' | undefined;
 
 const COLORS = {
   background: '--lane-bg',
@@ -29,6 +34,8 @@ const COLORS = {
   hitLine: '--hit-line',
   right: '--hand-right',
   left: '--hand-left',
+  played: '--note-played',
+  missed: '--note-missed',
   noteText: '--badge-text',
 };
 type Colors = Record<keyof typeof COLORS, string>;
@@ -43,6 +50,7 @@ export function FallingNotes({
   layout,
   secondsVisible,
   labelFor,
+  styleOf,
 }: FallingNotesProps) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -65,13 +73,14 @@ export function FallingNotes({
         position: transport.position(),
         visibleBeats: (secondsVisible * transport.tempo) / 60,
         labelFor,
+        styleOf,
         colors,
       });
       frame = requestAnimationFrame(draw);
     };
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [size, score, transport, layout, secondsVisible, labelFor, scheme]);
+  }, [size, score, transport, layout, secondsVisible, labelFor, styleOf, scheme]);
 
   return (
     <div ref={containerRef} className="falling-notes">
@@ -91,6 +100,7 @@ interface FrameState {
   position: number;
   visibleBeats: number;
   labelFor: (note: ScoreNote) => string;
+  styleOf?: (note: ScoreNote) => NoteStyle;
   colors: Colors;
 }
 
@@ -98,7 +108,7 @@ function drawFrame(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  { score, layout, position, visibleBeats, labelFor, colors }: FrameState,
+  { score, layout, position, visibleBeats, labelFor, styleOf, colors }: FrameState,
 ): void {
   const unit = width / layout.whiteCount;
   const pxPerBeat = height / visibleBeats;
@@ -135,12 +145,21 @@ function drawFrame(
     const top = yFor(note.start + note.duration);
     const bottom = yFor(note.start);
     const active = note.start <= position;
+    const style = styleOf?.(note);
 
     roundedRect(ctx, x, top + 1, w, bottom - top - 2, Math.min(6, w * 0.3));
-    ctx.fillStyle = note.hand === 'L' ? colors.left : colors.right;
-    ctx.globalAlpha = active ? 1 : 0.85;
-    ctx.shadowColor = active ? ctx.fillStyle : 'transparent';
-    ctx.shadowBlur = active ? 12 : 0;
+    ctx.fillStyle =
+      style === 'played'
+        ? colors.played
+        : style === 'missed'
+          ? colors.missed
+          : note.hand === 'L'
+            ? colors.left
+            : colors.right;
+    ctx.globalAlpha = style === 'muted' ? 0.3 : active ? 1 : 0.85;
+    const glow = active && style !== 'muted' && style !== 'missed';
+    ctx.shadowColor = glow ? ctx.fillStyle : 'transparent';
+    ctx.shadowBlur = glow ? 12 : 0;
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.globalAlpha = 1;

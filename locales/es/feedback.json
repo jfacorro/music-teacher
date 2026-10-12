@@ -1,0 +1,12 @@
+{
+  "perfect": "¡Perfecto!",
+  "good": "Bien",
+  "ok": "Aceptable",
+  "withTiming": "{grade} · {timing}",
+  "early": "antes de tiempo",
+  "late": "tarde",
+  "correct": "Correcto",
+  "wrong": "Tecla incorrecta",
+  "missed": "Perdida",
+  "streak": "{count, plural, one {# nota seguida} other {# notas seguidas}}"
+}

@@ -1,0 +1,12 @@
+{
+  "perfect": "Perfect!",
+  "good": "Good",
+  "ok": "OK",
+  "withTiming": "{grade} · {timing}",
+  "early": "early",
+  "late": "late",
+  "correct": "Correct",
+  "wrong": "Wrong key",
+  "missed": "Missed",
+  "streak": "{count, plural, one {# note in a row} other {# notes in a row}}"
+}

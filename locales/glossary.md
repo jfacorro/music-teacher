@@ -30,6 +30,15 @@ system setting (`src/i18n/naming.ts`).
 | Song                             | song               | canción                   |
 | Play (start playback)            | play               | tocar                     |
 | Start over                       | start over         | volver a empezar          |
+| Wait mode                        | wait for me        | espérame                  |
+| Tempo mode                       | play along         | tocar a tempo             |
+| Metronome                        | metronome          | metrónomo                 |
+| Count-in                         | count-in           | entrada (del metrónomo)   |
+| Right / left hand                | right / left hand  | mano derecha / izquierda  |
+| Accuracy                         | accuracy           | precisión                 |
+| Wrong key                        | wrong key          | tecla incorrecta          |
+| Missed note                      | missed             | perdida                   |
+| Notes in a row (streak)          | in a row           | seguidas                  |
 
 Spanish uses neutral Latin American vocabulary ("computadora", not "ordenador") and the
 informal "tú".

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { notesAt, scoreEnd, type Score, type ScoreNote } from '../engine/score';
+import { notesAt, type ScoreNote } from '../engine/score';
 import type { Transport, TransportState } from '../engine/transport';
 import { useLiveInput } from '../input/liveStore';
 
@@ -13,30 +13,35 @@ export function useTransportState(transport: Transport): TransportState {
   return useSyncExternalStore(transport.subscribe, transport.getState);
 }
 
-/**
- * Follows playback every animation frame: returns the notes sounding now (re-rendering only
- * when that set changes) and pauses the transport once the score has ended.
- */
-export function useActiveNotes(score: Score, transport: Transport): ScoreNote[] {
-  const [active, setActive] = useState<ScoreNote[]>([]);
-  const current = useRef<ScoreNote[]>([]);
-
+/** Runs `callback` on every animation frame while mounted. */
+export function useAnimationFrame(callback: () => void): void {
+  const latest = useRef(callback);
   useEffect(() => {
-    const end = scoreEnd(score);
+    latest.current = callback;
+  });
+  useEffect(() => {
     let frame = 0;
     const tick = () => {
-      const position = transport.position();
-      if (transport.playing && position >= end) transport.pause();
-      const now = notesAt(score.notes, position);
-      if (now.length !== current.current.length || now.some((n, i) => n !== current.current[i])) {
-        current.current = now;
-        setActive(now);
-      }
+      latest.current();
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [score, transport]);
+  }, []);
+}
+
+/** The notes sounding now; re-renders only when that set changes. */
+export function useActiveNotes(notes: readonly ScoreNote[], transport: Transport): ScoreNote[] {
+  const [active, setActive] = useState<ScoreNote[]>([]);
+  const current = useRef<ScoreNote[]>([]);
+
+  useAnimationFrame(() => {
+    const now = notesAt(notes, transport.position());
+    if (now.length !== current.current.length || now.some((n, i) => n !== current.current[i])) {
+      current.current = now;
+      setActive(now);
+    }
+  });
 
   return active;
 }

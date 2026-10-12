@@ -1,6 +1,7 @@
 import { useEffect, useRef, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Finger, Hand } from '../../engine/score';
+import type { KeyMark } from '../../engine/session';
 import { pitchClass } from '../../theory/pitch';
 import {
   prepareCanvas,
@@ -24,6 +25,8 @@ interface PianoKeyboardProps {
   pressed: ReadonlySet<number>;
   /** Keys the music asks for right now. */
   expected?: ReadonlyMap<number, ExpectedKey>;
+  /** Whether each held key was right or wrong; unmarked held keys use the neutral color. */
+  marks?: ReadonlyMap<number, KeyMark>;
   labels?: KeyLabels;
   labelFor: (midi: number) => string;
   onKeyDown?: (midi: number, time: number) => void;
@@ -36,6 +39,8 @@ const COLORS = {
   border: '--key-border',
   label: '--key-label',
   pressed: '--key-pressed',
+  correct: '--key-correct',
+  wrong: '--key-wrong',
   right: '--hand-right',
   left: '--hand-left',
   badgeText: '--badge-text',
@@ -51,6 +56,7 @@ export function PianoKeyboard({
   layout,
   pressed,
   expected,
+  marks,
   labels = 'none',
   labelFor,
   onKeyDown,
@@ -71,8 +77,16 @@ export function PianoKeyboard({
     const ctx = prepareCanvas(canvas, { width, height });
     if (!ctx) return;
     const colors = readCssColors(canvas, COLORS);
-    drawKeyboard(ctx, width, height, { layout, pressed, expected, labels, labelFor, colors });
-  }, [width, height, layout, pressed, expected, labels, labelFor, scheme]);
+    drawKeyboard(ctx, width, height, {
+      layout,
+      pressed,
+      expected,
+      marks,
+      labels,
+      labelFor,
+      colors,
+    });
+  }, [width, height, layout, pressed, expected, marks, labels, labelFor, scheme]);
 
   // Pointer input: one key per pointer, so several fingers can play on a touch screen,
   // and sliding across keys plays each one (glissando).
@@ -130,6 +144,7 @@ interface DrawState {
   layout: KeyboardLayout;
   pressed: ReadonlySet<number>;
   expected?: ReadonlyMap<number, ExpectedKey>;
+  marks?: ReadonlyMap<number, KeyMark>;
   labels: KeyLabels;
   labelFor: (midi: number) => string;
   colors: Colors;
@@ -139,7 +154,7 @@ function drawKeyboard(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  { layout, pressed, expected, labels, labelFor, colors }: DrawState,
+  { layout, pressed, expected, marks, labels, labelFor, colors }: DrawState,
 ): void {
   const unit = width / layout.whiteCount;
   const blackHeight = height * BLACK_KEY_HEIGHT;
@@ -150,6 +165,10 @@ function drawKeyboard(
 
   const handColor = (key: KeyGeometry) =>
     expected?.get(key.midi)?.hand === 'L' ? colors.left : colors.right;
+  const pressedColor = (key: KeyGeometry) => {
+    const mark = marks?.get(key.midi);
+    return mark === 'correct' ? colors.correct : mark === 'wrong' ? colors.wrong : colors.pressed;
+  };
 
   for (const key of layout.keys) {
     if (key.black) continue;
@@ -167,7 +186,7 @@ function drawKeyboard(
       ctx.globalAlpha = 1;
     }
     if (isPressed) {
-      ctx.fillStyle = colors.pressed;
+      ctx.fillStyle = pressedColor(key);
       ctx.fill();
     }
     ctx.lineWidth = want && isPressed ? 3 : 1;
@@ -195,7 +214,7 @@ function drawKeyboard(
     const want = expected?.get(key.midi);
 
     roundedRect(ctx, x, 0, w, blackHeight, Math.min(4, w * 0.15));
-    ctx.fillStyle = isPressed ? colors.pressed : want ? handColor(key) : colors.black;
+    ctx.fillStyle = isPressed ? pressedColor(key) : want ? handColor(key) : colors.black;
     ctx.fill();
     if (want && isPressed) {
       ctx.lineWidth = 3;

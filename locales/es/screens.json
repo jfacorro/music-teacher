@@ -67,12 +67,38 @@
     }
   },
   "practice": {
-    "hint": "Mira cómo caen las notas y toca cada una cuando llegue al teclado.",
+    "hint": "Toca cada nota cuando llegue al teclado. El metrónomo marca la entrada.",
     "play": "Tocar",
     "pause": "Pausa",
     "restart": "Volver a empezar",
     "notFound": "Esta canción no existe.",
     "loadError": "No se pudo cargar esta canción.",
-    "backHome": "Volver a Aprender"
+    "backHome": "Volver a Aprender",
+    "hintWait": "La música te espera: toca las teclas resaltadas para continuar.",
+    "mode": {
+      "label": "Modo",
+      "wait": "Espérame",
+      "tempo": "Tocar a tempo"
+    },
+    "hands": {
+      "label": "Manos",
+      "both": "Ambas manos",
+      "R": "Mano derecha",
+      "L": "Mano izquierda"
+    },
+    "metronome": "Metrónomo",
+    "results": {
+      "heading": "Resultados",
+      "accuracy": "Precisión",
+      "stars": "{stars, plural, =0 {Sin estrellas} one {# estrella de 3} other {# estrellas de 3}}",
+      "perfect": "Perfectas",
+      "good": "Bien",
+      "ok": "Aceptables",
+      "correct": "Correctas",
+      "missed": "Perdidas",
+      "wrong": "Teclas incorrectas",
+      "retry": "Intentar de nuevo"
+    },
+    "songInfo": "{composer} · {bpm} BPM"
   }
 }

@@ -3,7 +3,7 @@
  * can read it every animation frame without any timer. Milestone 1.4 adds count-in and the
  * metronome on top of this.
  */
-import { msToBeats } from './score';
+import { beatsToMs, msToBeats } from './score';
 
 export type Clock = () => number;
 
@@ -33,8 +33,18 @@ export class Transport {
   }
 
   position(): number {
+    return this.positionAt(this.clock());
+  }
+
+  /** Where playback was (or will be) at `time` on the clock, e.g. a key press timestamp. */
+  positionAt(time: number): number {
     if (!this.state.playing) return this.anchorBeat;
-    return this.anchorBeat + msToBeats(this.clock() - this.anchorTime, this.state.tempo);
+    return this.anchorBeat + msToBeats(time - this.anchorTime, this.state.tempo);
+  }
+
+  /** Clock time at which playback reaches `beat`, if it keeps playing at this tempo. */
+  timeAt(beat: number): number {
+    return this.clock() + beatsToMs(beat - this.position(), this.state.tempo);
   }
 
   play(): void {
