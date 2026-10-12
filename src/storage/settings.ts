@@ -4,6 +4,8 @@ import type { InputMode } from '../input/routing';
 import { db } from './db';
 
 export interface Settings {
+  /** The first-launch setup was finished or skipped. */
+  firstLaunchDone: boolean;
   /** null = follow the browser's language. */
   language: string | null;
   /** null = the default for the current language. */
@@ -27,6 +29,7 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
+  firstLaunchDone: false,
   language: null,
   namingSystem: null,
   showOctave: false,

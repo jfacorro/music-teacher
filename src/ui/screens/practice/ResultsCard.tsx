@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { Summary } from '../../../engine/scoring';
 import type { PracticeMode } from '../../../engine/session';
 import { formatPercent } from '../../../i18n/format';
-
-const STAR = '★';
-const EMPTY_STAR = '☆';
+import { Stars } from '../../components/Stars';
 
 interface ResultsCardProps {
   summary: Summary;
@@ -26,12 +24,7 @@ export function ResultsCard({ summary, mode, onRetry, children }: ResultsCardPro
   return (
     <section className="results" aria-labelledby="results-heading">
       <h2 id="results-heading">{t('practice.results.heading')}</h2>
-      <p
-        className="results__stars"
-        aria-label={t('practice.results.stars', { stars: summary.stars })}
-      >
-        {STAR.repeat(summary.stars) + EMPTY_STAR.repeat(3 - summary.stars)}
-      </p>
+      <Stars stars={summary.stars} />
       <p className="results__accuracy">
         <span className="muted">{t('practice.results.accuracy')}</span>
         <strong>{formatPercent(summary.accuracy, i18n.language)}</strong>

@@ -36,5 +36,6 @@
     "label": "Microphone: {status}",
     "on": "Microphone",
     "off": "Microphone off"
-  }
+  },
+  "stars": "{stars, plural, =0 {No stars} one {# star out of 3} other {# stars out of 3}}"
 }

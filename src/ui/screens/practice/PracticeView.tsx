@@ -4,6 +4,7 @@ import { preloadAudio } from '../../../audio/audio';
 import type { SongId } from '../../../content/songs';
 import type { Score } from '../../../engine/score';
 import type { HandFilter, PracticeMode } from '../../../engine/session';
+import { recordResult } from '../../../storage/progress';
 import { PracticeRun } from './PracticeRun';
 
 const MODES: readonly PracticeMode[] = ['wait', 'tempo'];
@@ -81,6 +82,13 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
         mode={mode}
         hands={hands}
         metronome={metronome}
+        onFinish={(summary, durationMs) =>
+          void recordResult('song', songId, {
+            stars: summary.stars,
+            accuracy: summary.accuracy,
+            durationMs,
+          })
+        }
       />
     </section>
   );

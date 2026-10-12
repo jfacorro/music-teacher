@@ -1,19 +1,34 @@
 {
   "home": {
     "title": "Tu camino de aprendizaje",
-    "intro": "Haz las lecciones en orden; cada una lleva unos minutos. Empieza comprobando que se detecta tu teclado.",
     "checkKeyboard": "Comprobar el teclado",
     "unit": "Unidad {number}: {title}",
     "songs": "Canciones",
-    "songsIntro": "Practica canciones completas cuando quieras, en modo espera o a tempo."
+    "songsIntro": "Practica canciones completas cuando quieras, en modo espera o a tempo.",
+    "startLabel": "Empieza aquí",
+    "continueLabel": "Siguiente",
+    "start": "Empezar",
+    "continue": "Continuar",
+    "allDone": "¡Terminaste todas las lecciones disponibles! Repite lecciones para conseguir más estrellas o practica las canciones de abajo.",
+    "unitProgress": "{done} de {total} hechas",
+    "unitLocked": "{stars, plural, one {Consigue al menos # estrella en cada lección de la unidad anterior para desbloquear esta.} other {Consigue al menos # estrellas en cada lección de la unidad anterior para desbloquear esta.}}",
+    "locked": "(bloqueada)"
   },
   "freePlay": {
     "title": "Práctica libre",
-    "intro": "Toca lo que quieras: las teclas se iluminan con sus nombres. Los nombres de los acordes llegarán pronto."
+    "intro": "Toca lo que quieras: las teclas se iluminan con sus nombres, y los acordes e intervalos se nombran mientras los tocas."
   },
   "progress": {
     "title": "Progreso",
-    "intro": "Aquí aparecerán tu racha de práctica, tu tiempo de práctica y las lecciones completadas. Próximamente."
+    "empty": "Termina una lección o una canción y tu progreso aparecerá aquí.",
+    "lessons": "Lecciones completadas",
+    "stars": "Estrellas conseguidas",
+    "streak": "Racha de práctica",
+    "time": "Tiempo de práctica",
+    "outOf": "{value} de {total}",
+    "days": "{count, plural, =0 {Aún ningún día} one {# día} other {# días}}",
+    "recent": "Práctica reciente",
+    "underMinute": "Menos de un minuto"
   },
   "settings": {
     "title": "Configuración",
@@ -162,7 +177,6 @@
     "results": {
       "heading": "Resultados",
       "accuracy": "Precisión",
-      "stars": "{stars, plural, =0 {Sin estrellas} one {# estrella de 3} other {# estrellas de 3}}",
       "perfect": "Perfectas",
       "good": "Bien",
       "ok": "Aceptables",
@@ -188,6 +202,25 @@
     "complete": "¡Lección completada!",
     "noStars": "Completa todos los pasos sin saltarte ninguno para conseguir estrellas.",
     "restart": "Empezar la lección de nuevo",
-    "next": "Siguiente lección"
+    "next": "Siguiente lección",
+    "bestStars": "{stars, plural, one {Tu mejor resultado: # estrella} other {Tu mejor resultado: # estrellas}}"
+  },
+  "welcome": {
+    "title": "Bienvenido a Profesor de piano",
+    "step": "Paso {current} de {total}",
+    "skip": "Saltar la configuración",
+    "start": "Empezar a aprender",
+    "language": {
+      "heading": "Idioma y nombres de las notas",
+      "intro": "Elige tu idioma y cómo se nombran las notas: con letras ({letters}) o con solfeo ({solfege})."
+    },
+    "instrument": {
+      "heading": "Tu instrumento",
+      "intro": "Conecta un piano digital con un cable USB o usa el micrófono con un piano acústico. También puedes tocar con el teclado de la computadora."
+    },
+    "test": {
+      "heading": "Pruébalo",
+      "intro": "Pulsa algunas teclas. Cada una debería aparecer abajo con su nombre. Puedes cambiar todo esto más tarde en Configuración."
+    }
   }
 }

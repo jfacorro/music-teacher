@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ExerciseStep } from '../../../../content/lessons';
+import type { StepResult } from '../../../../content/lessons/result';
 import { PracticeRun } from '../../practice/PracticeRun';
 
 interface ExerciseStepViewProps {
   step: ExerciseStep;
   text: string;
-  /** Stars earned in a finished run, and whether that meets the step's pass rule. */
-  onResult: (stars: number, passed: boolean) => void;
+  /** A finished run's result, and whether it meets the step's pass rule. */
+  onResult: (result: StepResult, passed: boolean) => void;
   onContinue: () => void;
 }
 
@@ -37,7 +38,9 @@ export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseS
         mode={step.mode}
         hands={step.hands}
         metronome={metronome}
-        onFinish={(summary) => onResult(summary.stars, passes(summary.stars))}
+        onFinish={(summary) =>
+          onResult({ stars: summary.stars, accuracy: summary.accuracy }, passes(summary.stars))
+        }
         resultsActions={(summary) =>
           passes(summary.stars) ? (
             <button type="button" className="button button--primary" onClick={onContinue}>

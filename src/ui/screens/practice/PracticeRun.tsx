@@ -37,8 +37,8 @@ interface PracticeRunProps {
   metronome: boolean;
   /** Instruction shown next to the controls (defaults to a tip for the mode). */
   hint?: string;
-  /** Called once when the run ends, with its results. */
-  onFinish?: (summary: Summary) => void;
+  /** Called once when the run ends, with its results and how long it took (ms). */
+  onFinish?: (summary: Summary, durationMs: number) => void;
   /** Extra buttons on the results card (e.g. Continue in a lesson). */
   resultsActions?: (summary: Summary) => ReactNode;
 }
@@ -84,11 +84,12 @@ export function PracticeRun({
   }, [session]);
 
   const finished = useRef(onFinish);
+  const startedAt = useRef(0);
   useEffect(() => {
     finished.current = onFinish;
   });
   useEffect(() => {
-    if (state.summary) finished.current?.(state.summary);
+    if (state.summary) finished.current?.(state.summary, performance.now() - startedAt.current);
   }, [state.summary]);
 
   // The metronome reads the latest choice without restarting.
@@ -153,6 +154,8 @@ export function PracticeRun({
       session.pause();
       return;
     }
+    if (state.status === 'ready' || state.status === 'finished')
+      startedAt.current = performance.now();
     // Audio may only start from a click; wait for it so the count-in's first click is heard.
     await startAudio().catch((error: unknown) => console.warn('No audio', error));
     session.play();

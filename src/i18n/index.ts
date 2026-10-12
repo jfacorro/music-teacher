@@ -4,7 +4,7 @@ import { initReactI18next } from 'react-i18next';
 import { LANGUAGES, PSEUDO_LANGUAGE, SOURCE_LANGUAGE } from './languages';
 import { pseudoLocalizeResource, type Resource } from './pseudo';
 
-export const NAMESPACES = ['common', 'screens', 'songs', 'feedback', 'courses'] as const;
+export const NAMESPACES = ['common', 'screens', 'songs', 'feedback', 'courses', 'theory'] as const;
 
 // Lazy: each language/namespace file is its own chunk, loaded on first use. Lesson text uses
 // namespaces like "lessons/u1-l2" (locales/<lang>/lessons/u1-l2.json), loaded per lesson.

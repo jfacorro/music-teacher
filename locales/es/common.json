@@ -36,5 +36,6 @@
     "label": "Micrófono: {status}",
     "on": "Micrófono",
     "off": "Micrófono apagado"
-  }
+  },
+  "stars": "{stars, plural, =0 {Sin estrellas} one {# estrella de 3} other {# estrellas de 3}}"
 }

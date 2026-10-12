@@ -58,6 +58,14 @@ system setting (`src/i18n/naming.ts`).
 | Unit                                          | unit                                      | unidad                                 |
 | Step (of a lesson)                            | step                                      | paso                                   |
 | Pass (an exercise)                            | pass                                      | aprobar                                |
+| Chord                                         | chord                                     | acorde                                 |
+| Major / minor chord                           | major / minor                             | mayor / menor                          |
+| Diminished / augmented                        | diminished / augmented                    | disminuido / aumentado                 |
+| Interval                                      | interval                                  | intervalo                              |
+| Third / fifth (intervals)                     | third / fifth                             | tercera / quinta                       |
+| Perfect (fourth, fifth)                       | perfect                                   | justa                                  |
+| Tritone                                       | tritone                                   | tritono                                |
+| Streak                                        | streak                                    | racha                                  |
 
 Spanish uses neutral Latin American vocabulary ("computadora", not "ordenador") and the
 informal "tú".

@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router';
+import { useSettings } from '../storage/settings';
 import { MidiStatusBadge } from './components/MidiStatusBadge';
+import { WelcomeScreen } from './screens/WelcomeScreen';
 
 export function AppLayout() {
   const { t } = useTranslation();
+  const firstLaunchDone = useSettings((s) => s.firstLaunchDone);
 
   useEffect(() => {
     document.title = t('appTitle');
@@ -24,9 +27,7 @@ export function AppLayout() {
         </nav>
         <MidiStatusBadge />
       </header>
-      <main className="app-main">
-        <Outlet />
-      </main>
+      <main className="app-main">{firstLaunchDone ? <Outlet /> : <WelcomeScreen />}</main>
     </div>
   );
 }

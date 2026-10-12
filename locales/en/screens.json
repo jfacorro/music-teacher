@@ -1,19 +1,34 @@
 {
   "home": {
     "title": "Your learning path",
-    "intro": "Work through the lessons in order; each takes a few minutes. Start by checking that your keyboard is detected.",
     "checkKeyboard": "Check your keyboard",
     "unit": "Unit {number}: {title}",
     "songs": "Songs",
-    "songsIntro": "Practice whole songs any time, in wait or play-along mode."
+    "songsIntro": "Practice whole songs any time, in wait or play-along mode.",
+    "startLabel": "Start here",
+    "continueLabel": "Up next",
+    "start": "Start",
+    "continue": "Continue",
+    "allDone": "You’ve finished every lesson so far! Replay lessons for more stars, or practice the songs below.",
+    "unitProgress": "{done} of {total} done",
+    "unitLocked": "{stars, plural, one {Earn at least # star in every lesson of the previous unit to unlock this one.} other {Earn at least # stars in every lesson of the previous unit to unlock this one.}}",
+    "locked": "(locked)"
   },
   "freePlay": {
     "title": "Free play",
-    "intro": "Play anything: the keys light up with their names. Chord names are coming soon."
+    "intro": "Play anything: the keys light up with their names, and chords and intervals are named as you play them."
   },
   "progress": {
     "title": "Progress",
-    "intro": "Your practice streak, practice time and completed lessons will appear here. Coming soon."
+    "empty": "Finish a lesson or a song and your progress will show up here.",
+    "lessons": "Lessons completed",
+    "stars": "Stars earned",
+    "streak": "Practice streak",
+    "time": "Practice time",
+    "outOf": "{value} of {total}",
+    "days": "{count, plural, =0 {No days yet} one {# day} other {# days}}",
+    "recent": "Recent practice",
+    "underMinute": "Less than a minute"
   },
   "settings": {
     "title": "Settings",
@@ -162,7 +177,6 @@
     "results": {
       "heading": "Results",
       "accuracy": "Accuracy",
-      "stars": "{stars, plural, =0 {No stars} one {# star out of 3} other {# stars out of 3}}",
       "perfect": "Perfect",
       "good": "Good",
       "ok": "OK",
@@ -188,6 +202,25 @@
     "complete": "Lesson complete!",
     "noStars": "Finish every step without skipping to earn stars.",
     "restart": "Start the lesson again",
-    "next": "Next lesson"
+    "next": "Next lesson",
+    "bestStars": "{stars, plural, one {Your best: # star} other {Your best: # stars}}"
+  },
+  "welcome": {
+    "title": "Welcome to Piano Teacher",
+    "step": "Step {current} of {total}",
+    "skip": "Skip setup",
+    "start": "Start learning",
+    "language": {
+      "heading": "Language and note names",
+      "intro": "Choose your language, and how notes should be named: letters ({letters}) or solfège ({solfege})."
+    },
+    "instrument": {
+      "heading": "Your instrument",
+      "intro": "Connect a digital piano with a USB cable, or use the microphone with an acoustic piano. You can also play with the computer keyboard."
+    },
+    "test": {
+      "heading": "Try it",
+      "intro": "Press a few keys. Each one should appear below with its name. You can change all of this later in Settings."
+    }
   }
 }

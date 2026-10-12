@@ -1,0 +1,30 @@
+{
+  "chords": {
+    "major": "{root} major",
+    "minor": "{root} minor",
+    "diminished": "{root} diminished",
+    "augmented": "{root} augmented",
+    "sus2": "{root} sus2",
+    "sus4": "{root} sus4",
+    "dominant7": "{root}7",
+    "major7": "{root} major 7",
+    "minor7": "{root} minor 7",
+    "halfDiminished7": "{root} half-diminished",
+    "diminished7": "{root} diminished 7"
+  },
+  "slashChord": "{chord} / {bass}",
+  "intervals": {
+    "minorSecond": "Minor second",
+    "majorSecond": "Major second",
+    "minorThird": "Minor third",
+    "majorThird": "Major third",
+    "perfectFourth": "Perfect fourth",
+    "tritone": "Tritone",
+    "perfectFifth": "Perfect fifth",
+    "minorSixth": "Minor sixth",
+    "majorSixth": "Major sixth",
+    "minorSeventh": "Minor seventh",
+    "majorSeventh": "Major seventh",
+    "octave": "Octave"
+  }
+}

@@ -503,9 +503,10 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - All lesson, course and song text written as translation files in every supported language.
 - `locales/glossary.md` started with Unit 1–2 terminology.
 
-**1.7 Progress, home & free play**
-- Dexie DB: lesson results (best stars, best accuracy, attempts), settings.
-- Home screen with learning path and "continue".
+**1.7 Progress, home & free play** — ✔ done
+- Dexie DB: lesson and song results (best stars, best accuracy, attempts), settings, and a practice log.
+- Home screen with learning path and "continue"; unlock rules enforced.
+- Progress screen: lessons completed, stars, practice streak, practice time, recent practice (pulled forward from 2.4).
 - Basic results screen (accuracy, stars, retry/next).
 - Free play: note names; chord names (MIDI only in this phase), both in the selected naming system.
 - First-launch flow: language, naming system, input.
@@ -514,10 +515,10 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - [x] Casio connects over USB and every key is detected correctly. (verified 2026-10-12)
 - [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration.
 - [ ] All Unit 1–2 lessons are playable in wait and tempo modes, with either input.
-- [ ] Scores and stars persist across browser restarts.
-- [ ] Engine has unit tests for matching and scoring.
-- [ ] The whole app works in every supported language: no hard-coded strings (lint passes), key parity passes, pseudo-locale shows no untranslated text or broken layouts.
-- [ ] Switching naming system changes note names everywhere (keyboard, falling notes, lesson text, free play).
+- [x] Scores and stars persist across browser restarts.
+- [x] Engine has unit tests for matching and scoring.
+- [x] The whole app works in every supported language: no hard-coded strings (lint passes), key parity passes, pseudo-locale shows no untranslated text or broken layouts.
+- [x] Switching naming system changes note names everywhere (keyboard, falling notes, lesson text, free play).
 
 ---
 

@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { findLesson } from '../../../content/courses';
 import { lessonNamespace, type Lesson } from '../../../content/lessons';
+import { lessonResult, type StepResult } from '../../../content/lessons/result';
 import { useContentText } from '../../../i18n/useContentText';
+import { recordResult } from '../../../storage/progress';
 import { LessonComplete } from './LessonComplete';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
@@ -16,15 +18,46 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { unit, lesson: courseLesson } = findLesson(lesson.id)!;
 
   const [index, setIndex] = useState(0);
-  /** Stars per graded step (by index): best run for exercises, 3 for completed find steps. */
-  const [stars, setStars] = useState<ReadonlyMap<number, number>>(new Map());
+  /** Results per graded step (by index): best run for exercises, full marks for find steps. */
+  const [results, setResults] = useState<ReadonlyMap<number, StepResult>>(new Map());
   /** Steps whose goal was reached (found all keys, passed the exercise). */
   const [done, setDone] = useState<ReadonlySet<number>>(new Set());
+  const [startedAt, setStartedAt] = useState(() => performance.now());
 
   const finished = index >= lesson.steps.length;
   const step = lesson.steps[index];
   const text = step ? stepText(`steps.${step.text}`, step.textVars) : '';
+  const result = lessonResult(lesson.steps, results);
 
+  // Save the lesson once each time it's completed.
+  const recorded = useRef(false);
+  useEffect(() => {
+    if (!finished || recorded.current) return;
+    recorded.current = true;
+    void recordResult('lesson', lesson.id, {
+      ...result,
+      durationMs: performance.now() - startedAt,
+    });
+  }, [finished, lesson.id, result, startedAt]);
+
+  const restart = () => {
+    recorded.current = false;
+    setResults(new Map());
+    setDone(new Set());
+    setStartedAt(performance.now());
+    setIndex(0);
+  };
+  const saveStep = (stepIndex: number, stepResult: StepResult) =>
+    setResults((prev) => {
+      const best = prev.get(stepIndex);
+      if (best && best.stars >= stepResult.stars && best.accuracy >= stepResult.accuracy) {
+        return prev;
+      }
+      return new Map(prev).set(stepIndex, {
+        stars: Math.max(best?.stars ?? 0, stepResult.stars),
+        accuracy: Math.max(best?.accuracy ?? 0, stepResult.accuracy),
+      });
+    });
   const markDone = (stepIndex: number) => setDone((prev) => new Set(prev).add(stepIndex));
   const next = () => setIndex((i) => i + 1);
   const canContinue = step?.type === 'explain' || done.has(index);
@@ -50,7 +83,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
       </header>
 
       {finished ? (
-        <LessonComplete lesson={lesson} stars={stars} onRestart={() => setIndex(0)} />
+        <LessonComplete lessonId={lesson.id} stars={result.stars} onRestart={restart} />
       ) : (
         <>
           {step?.type === 'explain' && <ExplainStepView key={index} step={step} text={text} />}
@@ -60,7 +93,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               step={step}
               text={text}
               onDone={() => {
-                setStars((prev) => new Map(prev).set(index, 3));
+                saveStep(index, { stars: 3, accuracy: 1 });
                 markDone(index);
               }}
             />
@@ -70,10 +103,8 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               key={index}
               step={step}
               text={text}
-              onResult={(earned, passed) => {
-                setStars((prev) =>
-                  new Map(prev).set(index, Math.max(prev.get(index) ?? 0, earned)),
-                );
+              onResult={(stepResult, passed) => {
+                saveStep(index, stepResult);
                 if (passed) markDone(index);
               }}
               onContinue={next}

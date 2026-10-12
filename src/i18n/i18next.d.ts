@@ -4,6 +4,7 @@ import type courses from '../../locales/en/courses.json';
 import type feedback from '../../locales/en/feedback.json';
 import type screens from '../../locales/en/screens.json';
 import type songs from '../../locales/en/songs.json';
+import type theory from '../../locales/en/theory.json';
 
 // Type-checked translation keys: English is the source of truth.
 declare module 'i18next' {
@@ -15,6 +16,7 @@ declare module 'i18next' {
       songs: typeof songs;
       feedback: typeof feedback;
       courses: typeof courses;
+      theory: typeof theory;
     };
   }
 }

@@ -1,12 +1,17 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../storage/settings';
-import type { Pitch } from '../theory/pitch';
-import { defaultNamingSystem, noteName, type NamingSystem, type NoteNameOptions } from './naming';
+import {
+  defaultNamingSystem,
+  noteName,
+  type NamingSystem,
+  type NoteNameOptions,
+  type Spelled,
+} from './naming';
 
 export interface NoteNames {
   system: NamingSystem;
-  name: (pitch: Pitch, options?: NoteNameOptions) => string;
+  name: (pitch: Spelled, options?: NoteNameOptions) => string;
 }
 
 /** Note names in the user's naming system (or the language default) and octave preference. */

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { screenKeyDown, screenKeyUp } from '../../input/dev/screenInput';
 import { pitchFromMidi } from '../../theory/pitch';
+import { ChordName } from '../components/ChordName';
 import { HeldNotesDisplay } from '../components/HeldNotesDisplay';
 import { usePressedKeys } from '../hooks';
 import { FULL_PIANO, keyboardLayout } from '../keyboard/layout';
@@ -25,6 +26,7 @@ export function FreePlayScreen() {
       <h1>{t('freePlay.title')}</h1>
       <p>{t('freePlay.intro')}</p>
       <HeldNotesDisplay />
+      <ChordName />
       <PianoKeyboard
         layout={layout}
         pressed={pressed}

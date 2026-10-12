@@ -7,11 +7,12 @@ import { startLiveTracking } from './input/liveStore';
 import { micPermission, setMicDelay, setMicGate, startMic } from './input/mic/micInput';
 import { configureMidi, enableMidi, midiPermission } from './input/midi/midiInput';
 import { startRouting } from './input/routing';
+import { loadProgress } from './storage/progress';
 import { loadSettings, updateSettings } from './storage/settings';
 
 /** Everything that must be ready before the first render. */
 export async function bootstrap(): Promise<void> {
-  const settings = await loadSettings();
+  const [settings] = await Promise.all([loadSettings(), loadProgress()]);
   await initI18n(settings.language ?? detectLanguage(navigator.languages));
 
   startLiveTracking();
