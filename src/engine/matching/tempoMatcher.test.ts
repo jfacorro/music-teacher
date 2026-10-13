@@ -86,6 +86,19 @@ describe('TempoMatcher', () => {
     expect(matcher.done).toBe(true);
   });
 
+  it('lists the notes that could be played at a beat', () => {
+    const { notes } = scoreOf([
+      ['C4', 0],
+      ['E4', 0],
+      ['G4', 1],
+    ]);
+    const matcher = new TempoMatcher(notes);
+    expect(matcher.candidates(0.1, TEMPO, MIDI_WINDOWS).map((n) => n.pitch.midi)).toEqual([60, 64]);
+    matcher.play(C4, 0, TEMPO, MIDI_WINDOWS);
+    expect(matcher.candidates(0.1, TEMPO, MIDI_WINDOWS).map((n) => n.pitch.midi)).toEqual([64]);
+    expect(matcher.candidates(0.5, TEMPO, MIDI_WINDOWS)).toEqual([]);
+  });
+
   it('uses wider windows for the microphone', () => {
     const matcher = new TempoMatcher(scoreOf([['C4', 0]]).notes);
     expect(play(matcher, C4, 0.18, MIC_WINDOWS)).toMatchObject({ kind: 'hit', grade: 'ok' });

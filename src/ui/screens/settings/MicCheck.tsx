@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatPercent } from '../../../i18n/format';
 import { startMicMidiComparison } from '../../../input/mic/calibrate';
 import type { Comparison } from '../../../input/mic/calibration';
 import { useMic } from '../../../input/mic/micInput';
+import { downloadBlob, startMicRecording, type MicRecording } from '../../../input/mic/recording';
 import { useMidi } from '../../../input/midi/midiInput';
 import { setMicCalibration } from '../../../preferences';
 import { useSettings } from '../../../storage/settings';
@@ -19,17 +20,46 @@ export function MicCheck() {
   const latencyMs = useSettings((s) => s.micLatencyMs);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<Comparison | null>(null);
+  const [record, setRecord] = useState(true);
+  const [recording, setRecording] = useState<MicRecording | null>(null);
+  const recorder = useRef<ReturnType<typeof startMicRecording> | null>(null);
 
   useEffect(() => {
     if (!running) return;
     return startMicMidiComparison(setResult);
   }, [running]);
 
+  // Stop recording if the check goes away (e.g. the microphone was turned off).
+  useEffect(() => () => void recorder.current?.stop(), []);
+
   if (!micOn || !midiOn) return null;
+
+  const toggle = () => {
+    if (running) {
+      setRecording(recorder.current?.stop() ?? null);
+      recorder.current = null;
+    } else {
+      setResult(null);
+      setRecording(null);
+      if (record) {
+        recorder.current = startMicRecording({
+          gateDb: useMic.getState().gateDb,
+          micDelayMs: latencyMs,
+        });
+      }
+    }
+    setRunning(!running);
+  };
+
+  const save = (saved: MicRecording) => {
+    const name = `mic-check-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}`;
+    downloadBlob(saved.file, `${name}.json`);
+  };
 
   const rows: [string, string][] = result
     ? [
         [t('settings.micCheck.played'), String(result.reference)],
+        [t('settings.micCheck.together'), String(result.together)],
         [
           t('settings.micCheck.correct'),
           t('settings.micCheck.correctValue', {
@@ -60,14 +90,20 @@ export function MicCheck() {
     <section className="card">
       <h2>{t('settings.micCheck.heading')}</h2>
       <p className="muted">{t('settings.micCheck.intro')}</p>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={record}
+          disabled={running}
+          onChange={(e) => setRecord(e.target.checked)}
+        />
+        {t('settings.micCheck.record')}
+      </label>
       <div className="button-row">
         <button
           type="button"
           className={running ? 'button' : 'button button--primary'}
-          onClick={() => {
-            if (!running) setResult(null);
-            setRunning(!running);
-          }}
+          onClick={toggle}
         >
           {running ? t('settings.micCheck.stop') : t('settings.micCheck.start')}
         </button>
@@ -81,6 +117,14 @@ export function MicCheck() {
           </button>
         )}
       </div>
+      {recording && !running && (
+        <div className="notice">
+          <p>{t('settings.micCheck.saveHint')}</p>
+          <button type="button" className="button" onClick={() => save(recording)}>
+            {t('settings.micCheck.save', { seconds: Math.round(recording.seconds) })}
+          </button>
+        </div>
+      )}
       {rows.length > 0 && (
         <table className="events">
           <tbody>

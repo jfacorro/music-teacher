@@ -25,9 +25,14 @@ Press keys on the piano: they appear under **Live test** with their names.
 If the keyboard isn't listed, check the USB cable and that the piano is on. On Windows,
 only one app can use a MIDI device at a time, so close any other music software.
 
+If the metronome clicks sound late compared with the falling notes, use **Settings → Sound
+and timing → Measure timing** (tap a key on each click).
+
 For an acoustic piano, turn on the **Microphone** in Settings, then measure the background
 noise and the delay. With a MIDI keyboard you can also run the **Microphone check**: play with
-both on, and MIDI tells you how accurately the microphone hears each key.
+both on, and MIDI tells you how accurately the microphone hears each key. Saved recordings
+(`fixtures/mic/`) are replayed by the tests to tune note detection; see
+[fixtures/mic/README.md](fixtures/mic/README.md).
 
 ## Scripts
 

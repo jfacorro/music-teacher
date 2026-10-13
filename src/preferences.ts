@@ -1,4 +1,5 @@
 /** User preference changes that touch more than the stored settings. */
+import { setSoundTimingCorrection } from './audio/audio';
 import { changeLanguage } from './i18n';
 import { detectLanguage } from './i18n/languages';
 import { setDevInputEnabled } from './input/dev/devInput';
@@ -15,6 +16,12 @@ export function setLanguagePreference(language: string | null): void {
 export function setDevKeyboardPreference(enabled: boolean): void {
   updateSettings({ devKeyboard: enabled });
   setDevInputEnabled(enabled);
+}
+
+export function setSoundTiming(ms: number): void {
+  const soundTimingMs = Math.round(ms);
+  updateSettings({ soundTimingMs });
+  setSoundTimingCorrection(soundTimingMs);
 }
 
 export function setInputMode(inputMode: InputMode): void {

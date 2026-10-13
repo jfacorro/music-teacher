@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { SoundDelay } from '../../components/SoundDelay';
 import {
   DEV_OCTAVE_MAX,
   DEV_OCTAVE_MIN,
@@ -39,7 +38,6 @@ export function DevKeyboardSettings() {
         />
         {t('settings.devKeyboard.sound')}
       </label>
-      {keySound && <SoundDelay />}
       {enabled && (
         <>
           <p className="muted">

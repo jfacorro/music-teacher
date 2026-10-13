@@ -57,20 +57,37 @@ const DEFAULTS = {
 
 /** Hops of recent levels an onset must rise above. */
 const ONSET_LOOKBACK = 5;
-/** Minimum hops between two onsets. */
-const MIN_ONSET_GAP = 4;
+/**
+ * Minimum hops between two onsets (~100 ms). A real piano's sound keeps building for tens of
+ * milliseconds after the hammer strikes, which would otherwise look like a second onset.
+ * Fast sixteenth notes at 120 BPM are still 125 ms apart.
+ */
+const MIN_ONSET_GAP = 9;
 /** Give up on an attack that never settles on a pitch (e.g. a knock). */
 const MAX_ATTACK_FRAMES = 15;
 /** Allowed distance from a key's exact pitch. */
 const MAX_CENTS = 45;
 /** Extra stable hops required to switch notes without an onset (legato). */
 const LEGATO_EXTRA_FRAMES = 4;
+/**
+ * Extra stable hops required when a new attack shows the pitch that was already ringing:
+ * the previous note often dominates for a moment before the new one takes over.
+ */
+const RINGING_EXTRA_FRAMES = 2;
+/**
+ * At an attack, a pitch heard with less clarity than this needs extra hops: the first readings
+ * of a piano note are often an octave too high before settling.
+ */
+const CONFIDENT_CLARITY = 0.95;
+const UNSURE_EXTRA_FRAMES = 1;
+/** After a note ends, the same pitch can't start again on its own (without an onset) this soon. */
+const RELEASE_HOLD_S = 0.5;
 /** Level above the gate that maps to full velocity. */
 const VELOCITY_RANGE_DB = 40;
 
 type Phase =
   | { kind: 'idle' }
-  | { kind: 'attack'; time: number; peakDb: number; frames: number }
+  | { kind: 'attack'; time: number; peakDb: number; frames: number; ringing: number | null }
   | { kind: 'sounding'; midi: number; quietFrames: number };
 
 export class NoteDetector {
@@ -81,7 +98,8 @@ export class NoteDetector {
   private readonly levels: number[] = [];
   private hopsSinceOnset = Infinity;
   private phase: Phase = { kind: 'idle' };
-  private candidate: { midi: number; count: number; time: number } | null = null;
+  private candidate: { midi: number; count: number; time: number; clarity: number } | null = null;
+  private released: { midi: number; time: number } | null = null;
 
   /** Latest level and pitch, for meters and live display. */
   levelDb = -Infinity;
@@ -123,7 +141,8 @@ export class NoteDetector {
     if (onset) {
       const onsetTime = time + attackOffset(samples) / sampleRate;
       if (this.phase.kind === 'sounding') events.push(off(this.phase.midi, onsetTime));
-      this.phase = { kind: 'attack', time: onsetTime, peakDb: db, frames: 0 };
+      const ringing = this.phase.kind === 'sounding' ? this.phase.midi : null;
+      this.phase = { kind: 'attack', time: onsetTime, peakDb: db, frames: 0, ringing };
       this.candidate = null;
       this.hopsSinceOnset = 0;
       // The next onset must rise above this note, not above the silence before it (or the
@@ -158,8 +177,9 @@ export class NoteDetector {
       this.candidate = null;
     } else if (this.candidate?.midi === midi) {
       this.candidate.count++;
+      this.candidate.clarity = clarity;
     } else {
-      this.candidate = { midi, count: 1, time };
+      this.candidate = { midi, count: 1, time, clarity };
     }
   }
 
@@ -172,7 +192,13 @@ export class NoteDetector {
       case 'attack':
         phase.frames++;
         phase.peakDb = Math.max(phase.peakDb, db);
-        if (candidate && candidate.count >= stableFrames) {
+        if (
+          candidate &&
+          candidate.count >=
+            stableFrames +
+              (candidate.midi === phase.ringing ? RINGING_EXTRA_FRAMES : 0) +
+              (candidate.clarity < CONFIDENT_CLARITY ? UNSURE_EXTRA_FRAMES : 0)
+        ) {
           events.push(on(candidate.midi, phase.time, velocityFor(phase.peakDb, gateDb)));
           this.phase = { kind: 'sounding', midi: candidate.midi, quietFrames: 0 };
         } else if (phase.frames > MAX_ATTACK_FRAMES) {
@@ -180,13 +206,20 @@ export class NoteDetector {
         }
         break;
 
-      case 'idle':
-        // A soft attack can slip under the onset detector; accept a clearly stable pitch.
-        if (candidate && candidate.count >= stableFrames + 1) {
+      case 'idle': {
+        // A soft attack can slip under the onset detector; accept a clearly stable pitch,
+        // unless it's the note that just ended, still fading.
+        const fading =
+          candidate !== null &&
+          this.released !== null &&
+          this.released.midi === candidate.midi &&
+          time - this.released.time < RELEASE_HOLD_S;
+        if (candidate && candidate.count >= stableFrames + 1 && !fading) {
           events.push(on(candidate.midi, candidate.time, velocityFor(db, gateDb)));
           this.phase = { kind: 'sounding', midi: candidate.midi, quietFrames: 0 };
         }
         break;
+      }
 
       case 'sounding':
         if (db < gateDb) {
@@ -194,6 +227,7 @@ export class NoteDetector {
           if (phase.quietFrames >= releaseFrames) {
             const quietSince = time - ((releaseFrames - 1) * hopSize) / sampleRate;
             events.push(off(phase.midi, quietSince));
+            this.released = { midi: phase.midi, time };
             this.phase = { kind: 'idle' };
           }
           break;

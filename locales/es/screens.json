@@ -139,7 +139,7 @@
       "intro": "Con el cable MIDI y el micrófono encendidos, toca notas en todo el teclado. MIDI indica qué teclas tocaste de verdad, así que esto muestra qué tan bien las oye el micrófono.",
       "start": "Empezar la prueba",
       "stop": "Detener",
-      "played": "Notas tocadas (MIDI)",
+      "played": "Notas sueltas tocadas (MIDI)",
       "correct": "Oídas correctamente",
       "correctValue": "{count} ({percent})",
       "octaveErrors": "Nota correcta, octava incorrecta",
@@ -150,7 +150,23 @@
       "spread": "Variación del tiempo",
       "noValue": "—",
       "ms": "{ms} ms",
-      "useDelay": "Corregir el retraso en {ms} ms"
+      "useDelay": "Corregir el retraso en {ms} ms",
+      "record": "Grabar el audio, para ayudar a mejorar la detección de notas",
+      "save": "Guardar la grabación ({seconds} s)",
+      "saveHint": "Guarda un archivo (.json) con el audio del micrófono y las notas que tocaste por MIDI. Ponlo en la carpeta fixtures/mic del proyecto.",
+      "together": "Notas tocadas a la vez (aún no se cuentan)"
+    },
+    "sound": {
+      "heading": "Sonido y sincronización",
+      "intro": "Si los clics del metrónomo suenan tarde (o pronto) respecto a las notas que caen, mide la sincronización: toca cualquier tecla del piano justo con cada clic.",
+      "correction": "Corrección de sincronización: {ms} ms",
+      "measure": "Medir la sincronización",
+      "reset": "Restablecer",
+      "countIn": "Escucha… {beat}",
+      "running": "Toca una tecla justo con cada clic: {beat} de {total}",
+      "done": "Los clics suenan ahora {ms} ms antes ({taps} de {total} toques usados).",
+      "failed": "No se oyeron suficientes toques. Vuelve a intentarlo tocando una tecla en cada clic.",
+      "micFirst": "Hazlo antes de medir el retraso del micrófono."
     }
   },
   "practice": {

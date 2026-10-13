@@ -4,7 +4,9 @@
  *
  * Everything else in the app runs on the performance.now() clock; `audioTimeFor` converts
  * those times to the audio clock, compensating for output latency, so clicks are heard
- * exactly when the visuals hit the beat.
+ * exactly when the visuals hit the beat. Browsers don't always report the full output delay
+ * (it depends on the sound device and drivers), so a timing correction measured by tapping
+ * along (Settings) moves clicks earlier by the rest.
  */
 
 export interface AudioEngine {
@@ -18,6 +20,18 @@ export interface AudioEngine {
 }
 
 const MAX_LATE_S = 0.03;
+
+let timingCorrectionMs = 0;
+
+/** Extra output delay to compensate, from tap-along calibration (ms; negative = later). */
+export function setSoundTimingCorrection(ms: number): void {
+  timingCorrectionMs = ms;
+}
+
+/** How much earlier than their beat clicks must be queued, ms. */
+export function soundLeadMs(): number {
+  return Math.max(0, timingCorrectionMs);
+}
 
 let engine: Promise<AudioEngine> | null = null;
 let ready: AudioEngine | null = null;
@@ -71,7 +85,7 @@ async function createEngine(): Promise<AudioEngine> {
       piano.triggerRelease(noteName(midi), context.currentTime);
     },
     click(time, accent) {
-      const target = audioTimeFor(context, time);
+      const target = audioTimeFor(context, time - timingCorrectionMs);
       // A click that's already noticeably late (e.g. timers throttled in a background tab)
       // would only confuse; skip it rather than play it off the beat.
       if (target < context.currentTime - MAX_LATE_S) return;

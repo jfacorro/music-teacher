@@ -10,10 +10,15 @@ import type { Transport } from '../engine/transport';
 const WAKE_EVERY_MS = 25;
 const LOOK_AHEAD_MS = 120;
 
+/**
+ * @param leadMs extra look-ahead, when clicks are played earlier than their beat to make up
+ *   for a slow sound device (see the timing correction in audio.ts)
+ */
 export function startMetronome(
   transport: Transport,
   options: () => ClickOptions,
   click: (time: number, accent: boolean) => void,
+  leadMs: () => number = () => 0,
 ): () => void {
   // Clicks are queued up to here (in beats). A beat exactly at the current position still
   // clicks, so the first count-in beat isn't lost when playback starts on it.
@@ -25,7 +30,7 @@ export function startMetronome(
 
   const timer = setInterval(() => {
     if (!transport.playing) return;
-    const horizon = transport.position() + msToBeats(LOOK_AHEAD_MS, transport.tempo);
+    const horizon = transport.position() + msToBeats(LOOK_AHEAD_MS + leadMs(), transport.tempo);
     for (const { beat, accent } of clicksBetween(queuedUpTo, horizon, options())) {
       click(transport.timeAt(beat), accent);
     }

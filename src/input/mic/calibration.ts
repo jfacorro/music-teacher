@@ -18,7 +18,11 @@ export interface NotePair {
 }
 
 export interface Comparison {
+  /** Single reference notes the score is based on (notes played together are left out). */
   reference: number;
+  /** Reference notes played together with another (chords): not scored, since the
+   *  microphone detects one note at a time. */
+  together: number;
   detected: number;
   /** Paired and the same key. */
   correct: number;
@@ -39,7 +43,10 @@ export interface Comparison {
 }
 
 /** How far a detection may be from its reference (the microphone is never much early). */
-export const PAIRING_WINDOW = { earlyMs: 100, lateMs: 400 };
+export const PAIRING_WINDOW = { earlyMs: 150, lateMs: 250 };
+
+/** Reference notes this close to another one count as played together. */
+const TOGETHER_MS = 60;
 
 export function median(values: readonly number[]): number | null {
   if (values.length === 0) return null;
@@ -64,33 +71,46 @@ export function noiseFloorFrom(levelsDb: readonly number[]): number | null {
 }
 
 /**
- * Pairs each reference note, in time order, with the nearest unused detection inside the
- * pairing window, preferring the same key when the reference has a pitch.
+ * Pairs reference notes with detections inside the pairing window: first same-key pairs,
+ * closest first, then whatever is left (any key, closest first), so one missed note can't
+ * take the next note's detection and set off a chain of wrong pairings.
  */
 export function pairNotes(
   reference: readonly TimedNote[],
   detected: readonly TimedNote[],
   window = PAIRING_WINDOW,
 ): { pairs: NotePair[]; unpairedReference: TimedNote[]; unpairedDetected: TimedNote[] } {
-  const available = [...detected].sort((a, b) => a.time - b.time);
+  const refsLeft = new Set(reference);
+  const detsLeft = new Set(detected);
   const pairs: NotePair[] = [];
-  const unpairedReference: TimedNote[] = [];
 
-  for (const ref of [...reference].sort((a, b) => a.time - b.time)) {
-    const inWindow = available.filter(
-      (d) => d.time - ref.time >= -window.earlyMs && d.time - ref.time <= window.lateMs,
-    );
-    const samePitch = ref.pitch === null ? [] : inWindow.filter((d) => d.pitch === ref.pitch);
-    const pool = samePitch.length > 0 ? samePitch : inWindow;
-    const best = pool.sort((a, b) => Math.abs(a.time - ref.time) - Math.abs(b.time - ref.time))[0];
-    if (!best) {
-      unpairedReference.push(ref);
-      continue;
+  const pass = (accept: (ref: TimedNote, det: TimedNote) => boolean) => {
+    const candidates: NotePair[] = [];
+    for (const ref of refsLeft) {
+      for (const det of detsLeft) {
+        const offsetMs = det.time - ref.time;
+        if (offsetMs < -window.earlyMs || offsetMs > window.lateMs || !accept(ref, det)) continue;
+        candidates.push({ reference: ref, detected: det, offsetMs });
+      }
     }
-    available.splice(available.indexOf(best), 1);
-    pairs.push({ reference: ref, detected: best, offsetMs: best.time - ref.time });
-  }
-  return { pairs, unpairedReference, unpairedDetected: available };
+    candidates.sort((a, b) => Math.abs(a.offsetMs) - Math.abs(b.offsetMs));
+    for (const candidate of candidates) {
+      if (!refsLeft.has(candidate.reference) || !detsLeft.has(candidate.detected)) continue;
+      refsLeft.delete(candidate.reference);
+      detsLeft.delete(candidate.detected);
+      pairs.push(candidate);
+    }
+  };
+  pass((ref, det) => ref.pitch !== null && ref.pitch === det.pitch);
+  pass(() => true);
+
+  const byTime = (a: TimedNote, b: TimedNote) => a.time - b.time;
+  pairs.sort((a, b) => byTime(a.reference, b.reference));
+  return {
+    pairs,
+    unpairedReference: [...refsLeft].sort(byTime),
+    unpairedDetected: [...detsLeft].sort(byTime),
+  };
 }
 
 /** Delay (median offset) and steadiness (median absolute deviation) of paired notes. */
@@ -109,7 +129,19 @@ export function compare(
   reference: readonly TimedNote[],
   detected: readonly TimedNote[],
 ): Comparison {
-  const { pairs, unpairedReference, unpairedDetected } = pairNotes(reference, detected);
+  // Pair against every reference, so detections of chord notes aren't counted as extra,
+  // then score only the single notes.
+  const together = new Set(
+    reference.filter((note) =>
+      reference.some((other) => other !== note && Math.abs(other.time - note.time) <= TOGETHER_MS),
+    ),
+  );
+  const all = pairNotes(reference, detected);
+  const pairs = all.pairs.filter((p) => !together.has(p.reference));
+  const unpairedReference = all.unpairedReference.filter((note) => !together.has(note));
+  const unpairedDetected = all.unpairedDetected;
+  const scored = reference.length - together.size;
+
   const correct = pairs.filter((p) => p.detected.pitch === p.reference.pitch);
   const octaveErrors = pairs.filter(
     (p) =>
@@ -119,14 +151,15 @@ export function compare(
       Math.abs(p.detected.pitch - p.reference.pitch) % 12 === 0,
   ).length;
   return {
-    reference: reference.length,
+    reference: scored,
+    together: together.size,
     detected: detected.length,
     correct: correct.length,
     octaveErrors,
     wrongPitch: pairs.length - correct.length - octaveErrors,
     missed: unpairedReference.length,
     extra: unpairedDetected.length,
-    accuracy: reference.length === 0 ? 0 : correct.length / reference.length,
+    accuracy: scored === 0 ? 0 : correct.length / scored,
     ...delayOf(correct),
   };
 }

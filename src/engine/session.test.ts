@@ -184,6 +184,50 @@ describe('PracticeSession: tempo mode', () => {
   });
 });
 
+describe('PracticeSession: microphone notes near expected ones', () => {
+  const micOn = (pitch: number, time: number) => noteOn(pitch, time, 'mic');
+  const micOff = (pitch: number, time: number) => noteOff(pitch, time, 'mic');
+
+  it('counts an octave error as the expected note in tempo mode', () => {
+    const t = setup(melody, { defaultSource: 'mic' });
+    t.session.play();
+    t.at(0);
+    t.session.handleNote(micOn(C4 + 12, t.now));
+    expect(t.session.getState().feedback?.value).toMatchObject({ kind: 'hit', grade: 'perfect' });
+    expect(t.session.getState().marks).toEqual(new Map([[C4, 'correct']]));
+    expect(t.session.displayPitch(C4 + 12)).toBe(C4);
+    t.session.handleNote(micOff(C4 + 12, t.now));
+    expect(t.session.getState().marks.size).toBe(0);
+    expect(t.session.displayPitch(C4 + 12)).toBe(C4 + 12);
+  });
+
+  it('counts the third harmonic (an octave and a fifth up) in wait mode', () => {
+    const t = setup(melody, { mode: 'wait' });
+    t.session.play();
+    t.at(0);
+    t.session.handleNote(micOn(C4 + 19, t.now));
+    expect(t.session.getState().status).toBe('playing');
+    expect(t.session.outcomeOf(t.score.notes[0]!)).toEqual({ kind: 'correct' });
+  });
+
+  it('still marks unrelated microphone notes as wrong', () => {
+    const t = setup(melody, { mode: 'wait' });
+    t.session.play();
+    t.at(0);
+    t.session.handleNote(micOn(C4 + 7, t.now));
+    expect(t.session.getState().feedback?.value).toEqual({ kind: 'wrong' });
+    expect(t.session.getState().status).toBe('waiting');
+  });
+
+  it('is strict with MIDI, which never confuses octaves', () => {
+    const t = setup(melody);
+    t.session.play();
+    t.at(0);
+    t.press(C4 + 12);
+    expect(t.session.getState().feedback?.value).toEqual({ kind: 'wrong' });
+  });
+});
+
 describe('PracticeSession: wait mode', () => {
   it('has no count-in and starts at the lead-in', () => {
     const t = setup(melody, { mode: 'wait', leadIn: 2 });

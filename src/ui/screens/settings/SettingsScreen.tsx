@@ -6,6 +6,7 @@ import { LiveTest } from './LiveTest';
 import { MicCheck } from './MicCheck';
 import { MicSettings } from './MicSettings';
 import { MidiSettings } from './MidiSettings';
+import { SoundSettings } from './SoundSettings';
 
 export function SettingsScreen() {
   const { t } = useTranslation('screens');
@@ -18,6 +19,7 @@ export function SettingsScreen() {
         <MidiSettings />
         <MicSettings />
         <MicCheck />
+        <SoundSettings />
         <DevKeyboardSettings />
         <LanguageSettings />
       </div>

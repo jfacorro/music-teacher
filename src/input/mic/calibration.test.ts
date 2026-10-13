@@ -25,13 +25,23 @@ describe('pairNotes', () => {
       [note(1040), note(2600), note(3030), note(3060)],
     );
     expect(pairs.map((p) => p.offsetMs)).toEqual([40, 30]);
-    expect(unpairedReference.map((n) => n.time)).toEqual([2000]); // 600 ms late: too late
+    expect(unpairedReference.map((n) => n.time)).toEqual([2000]); // 600 ms later: too late
     expect(unpairedDetected.map((n) => n.time)).toEqual([2600, 3060]);
   });
 
   it('prefers a detection of the same key', () => {
     const { pairs } = pairNotes([note(1000, 60)], [note(1010, 72), note(1050, 60)]);
     expect(pairs[0]?.detected.pitch).toBe(60);
+  });
+
+  it('doesn’t let a missed note take the next note’s detection', () => {
+    // 62 at 1000 ms is missed; 64 at 1200 ms is heard at 1210 ms.
+    const { pairs, unpairedReference } = pairNotes(
+      [note(1000, 62), note(1200, 64)],
+      [note(1210, 64)],
+    );
+    expect(pairs.map((p) => [p.reference.pitch, p.detected.pitch])).toEqual([[64, 64]]);
+    expect(unpairedReference.map((n) => n.pitch)).toEqual([62]);
   });
 
   it('pairs any pitch with references that have none (clicks)', () => {
@@ -64,6 +74,7 @@ describe('compare', () => {
     ];
     expect(compare(midi, mic)).toEqual({
       reference: 5,
+      together: 0,
       detected: 5,
       correct: 2,
       octaveErrors: 1,
@@ -73,6 +84,18 @@ describe('compare', () => {
       accuracy: 0.4,
       latencyMs: 50,
       jitterMs: 5,
+    });
+  });
+
+  it('leaves notes played together out of the score', () => {
+    const midi = [note(0, 60), note(1000, 62), note(1020, 65), note(2000, 64)];
+    const mic = [note(40, 60), note(1050, 62), note(2040, 64)];
+    expect(compare(midi, mic)).toMatchObject({
+      reference: 2,
+      together: 2,
+      correct: 2,
+      extra: 0, // the chord's detection isn't counted as extra
+      accuracy: 1,
     });
   });
 });

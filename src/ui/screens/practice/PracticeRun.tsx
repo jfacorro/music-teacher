@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { audioIfReady, startAudio } from '../../../audio/audio';
+import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
 import { beatsPerMeasure, type Score, type ScoreNote } from '../../../engine/score';
 import type { Summary } from '../../../engine/scoring';
@@ -19,7 +19,8 @@ import { subscribeNotes } from '../../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
 import { useInstrument } from '../../../input/routing';
 import { pitchFromMidi } from '../../../theory/pitch';
-import { useActiveNotes, useAnimationFrame, usePressedKeys } from '../../hooks';
+import { useLiveInput } from '../../../input/liveStore';
+import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
@@ -107,6 +108,7 @@ export function PracticeRun({
           beatsPerMeasure: beatsPerMeasure(score.timeSignature),
         }),
         (time, accent) => audioIfReady()?.click(time, accent),
+        soundLeadMs,
       ),
     [transport, session, score],
   );
@@ -128,7 +130,16 @@ export function PracticeRun({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `state` signals new outcomes
     [active, session, state],
   );
-  const pressed = usePressedKeys();
+  // Held keys; a microphone note read as an expected note lights up that key.
+  const held = useLiveInput((s) => s.held);
+  const pressed = useMemo(
+    () =>
+      new Set(
+        held.map((note) => (note.source === 'mic' ? session.displayPitch(note.pitch) : note.pitch)),
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `state` signals new aliases
+    [held, session, state],
+  );
 
   const keyLabel = useCallback(
     (midi: number) => names.name(pitchFromMidi(midi), { octave: false }),

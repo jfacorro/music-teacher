@@ -511,6 +511,12 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Free play: note names; chord names (MIDI only in this phase), both in the selected naming system.
 - First-launch flow: language, naming system, input.
 
+#### Fixes from hardware testing (2026-10-13)
+- Metronome clicks were heard ~50–100 ms late on Windows (the browser under-reports output delay): tap-along **timing correction** in Settings → Sound and timing. Re-check for any remaining drift.
+- Microphone in lessons marked correct notes as wrong (octave / harmonic confusions): **expected-note-guided matching** — near an expected note, a mic note an octave, two octaves or an octave + fifth away counts as that note.
+- Microphone check was 70–90%: **recording tool** in the Microphone check saves the mic audio + MIDI ground truth; recordings in `fixtures/mic/` are replayed by `fixtures.test.ts` to tune the detector.
+- Tuned on the first Casio recording (100 notes, C3–E5): 87% with 20 extra detections → **97% (91/94 single notes), 0 octave/wrong notes, 3 extra** at a 12 dB threshold. Fixes: no new onset within ~100 ms (a real piano's attack builds for tens of ms), more evidence for unsure or still-ringing pitches, no re-trigger of a fading note, same-pitch-first pairing in the check, notes played together left out of the score. The recording is a regression test (≥ 92%).
+
 #### Phase 1 done when
 - [x] Casio connects over USB and every key is detected correctly. (verified 2026-10-12)
 - [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration.
@@ -647,6 +653,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 | Mic accuracy (octave errors, room noise, harmonics) | Stabilizer, calibration, expected-note-guided verification, wider timing windows; MIDI remains the reference |
 | Mic latency varies by device | Tap-along latency calibration, stored per input device |
 | App audio bleeding into the mic | Headphone recommendation; suppress detection during demo playback |
+| Browser under-reports audio output delay | Tap-along timing correction for clicks (Settings → Sound and timing) |
 | Windows MIDI exclusive access | Clear error message: "device busy — close other MIDI apps" |
 | Web MIDI browser support | Target Chrome/Edge; show a notice on unsupported browsers |
 | Sheet music cursor sync complexity (OSMD) | Spike early in Phase 2; fall back to rendering from the internal Score model if needed |

@@ -64,6 +64,8 @@ let capture: Capture | null = null;
 let calibratedDelayMs = 0;
 const held = new HeldNotes('mic');
 const levelListeners = new Set<(levelDb: number) => void>();
+type AudioListener = (samples: Float32Array, time: number, sampleRate: number) => void;
+const audioListeners = new Set<AudioListener>();
 
 export function setMicGate(gateDb: number): void {
   useMic.setState({ gateDb });
@@ -72,6 +74,15 @@ export function setMicGate(gateDb: number): void {
 
 export function setMicDelay(delayMs: number): void {
   calibratedDelayMs = delayMs;
+}
+
+/**
+ * Every hop of raw audio, with the time of its first sample on the same timeline as the
+ * microphone's note events (for recordings).
+ */
+export function subscribeMicAudio(listener: AudioListener): () => void {
+  audioListeners.add(listener);
+  return () => audioListeners.delete(listener);
 }
 
 /** Every hop's level (~90 per second), for noise calibration. */
@@ -193,8 +204,12 @@ function handleHop(current: Capture, samples: Float32Array, frame: number): void
   if (current.clockOffsets.length > CLOCK_WINDOW) current.clockOffsets.shift();
   const clockOffset = Math.min(...current.clockOffsets);
 
+  const toEventTime = (seconds: number) =>
+    seconds * 1000 + clockOffset - current.trackLatencyMs - calibratedDelayMs;
+  for (const listener of audioListeners) listener(samples, toEventTime(time), context.sampleRate);
+
   for (const event of detector.process(samples, time)) {
-    const at = event.time * 1000 + clockOffset - current.trackLatencyMs - calibratedDelayMs;
+    const at = toEventTime(event.time);
     if (event.type === 'on') held.on(event.midi, event.velocity, at);
     else held.off(event.midi, at);
   }

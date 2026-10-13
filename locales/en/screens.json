@@ -139,7 +139,7 @@
       "intro": "With both the MIDI cable and the microphone on, play notes across the keyboard. MIDI says which keys you really played, so this shows how well the microphone hears them.",
       "start": "Start check",
       "stop": "Stop",
-      "played": "Notes played (MIDI)",
+      "played": "Single notes played (MIDI)",
       "correct": "Heard correctly",
       "correctValue": "{count} ({percent})",
       "octaveErrors": "Right note, wrong octave",
@@ -150,7 +150,23 @@
       "spread": "Timing spread",
       "noValue": "—",
       "ms": "{ms} ms",
-      "useDelay": "Correct the delay by {ms} ms"
+      "useDelay": "Correct the delay by {ms} ms",
+      "record": "Record the audio, to help improve note detection",
+      "save": "Save recording ({seconds} s)",
+      "saveHint": "Saves one file (.json) with the microphone audio and the notes you played on MIDI. Put it in the project’s fixtures/mic folder.",
+      "together": "Notes played together (not counted yet)"
+    },
+    "sound": {
+      "heading": "Sound and timing",
+      "intro": "If the metronome clicks sound late (or early) compared with the falling notes, measure the timing: tap any key on your piano exactly with each click.",
+      "correction": "Timing correction: {ms} ms",
+      "measure": "Measure timing",
+      "reset": "Reset",
+      "countIn": "Listen… {beat}",
+      "running": "Tap a key exactly with each click: {beat} of {total}",
+      "done": "Clicks now play {ms} ms earlier ({taps} of {total} taps used).",
+      "failed": "Not enough taps were heard. Try again, tapping a key on every click.",
+      "micFirst": "Do this before measuring the microphone delay."
     }
   },
   "practice": {

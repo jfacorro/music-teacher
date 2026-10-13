@@ -56,6 +56,13 @@ export interface SessionOptions {
   defaultSource?: InputSourceKind;
 }
 
+/**
+ * Pitch differences (detected − expected) the microphone tends to confuse: octaves, and the
+ * octave plus a fifth (the strong third harmonic of piano tones). Near an expected note, a
+ * microphone note at one of these distances counts as that note (PLAN.md §12).
+ */
+const MIC_ALIASES = [12, -12, 24, -24, 19];
+
 const INITIAL_STATE: SessionState = {
   status: 'ready',
   countIn: null,
@@ -85,6 +92,8 @@ export class PracticeSession {
   private outcomes = new Map<ScoreNote, NoteOutcome>();
   private wrongBeats: number[] = [];
   private feedbackId = 0;
+  /** Held microphone pitch → the expected pitch it was read as. */
+  private readonly aliases = new Map<number, number>();
   private state: SessionState = INITIAL_STATE;
   private readonly listeners = new Set<() => void>();
 
@@ -125,10 +134,12 @@ export class PracticeSession {
 
   handleNote(event: NoteEvent): void {
     if (event.type === 'off') {
-      this.waitMatcher.release(event.pitch);
-      if (this.state.marks.has(event.pitch)) {
+      const pitch = this.aliases.get(event.pitch) ?? event.pitch;
+      this.aliases.delete(event.pitch);
+      this.waitMatcher.release(pitch);
+      if (this.state.marks.has(pitch)) {
         const marks = new Map(this.state.marks);
-        marks.delete(event.pitch);
+        marks.delete(pitch);
         this.setState({ marks });
       }
       return;
@@ -137,8 +148,11 @@ export class PracticeSession {
 
     this.source = event.source;
     const beat = this.transport.positionAt(event.time);
-    if (this.mode === 'tempo') this.handleTempoPress(event, beat);
-    else this.handleWaitPress(event, beat);
+    const pitch = this.resolvePitch(event, beat);
+    if (pitch !== event.pitch) this.aliases.set(event.pitch, pitch);
+    const press = { ...event, pitch };
+    if (this.mode === 'tempo') this.handleTempoPress(press, beat);
+    else this.handleWaitPress(press, beat);
   }
 
   /** Call every animation frame. */
@@ -179,6 +193,11 @@ export class PracticeSession {
 
   isGraded(note: ScoreNote): boolean {
     return this.gradedSet.has(note);
+  }
+
+  /** The key a held input pitch counts as (a microphone note may be read as an expected one). */
+  displayPitch(pitch: number): number {
+    return this.aliases.get(pitch) ?? pitch;
   }
 
   subscribe = (listener: () => void): (() => void) => {
@@ -241,6 +260,19 @@ export class PracticeSession {
     this.mark(pitch, 'wrong', { streak: 0, feedback: this.feedback({ kind: 'wrong' }) });
   }
 
+  /** A microphone note close to an expected note in a confusable way counts as that note. */
+  private resolvePitch(event: NoteEvent, beat: number): number {
+    if (event.source !== 'mic') return event.pitch;
+    const expected =
+      this.mode === 'tempo'
+        ? this.tempoMatcher
+            .candidates(beat, this.transport.tempo, this.windows())
+            .map((note) => note.pitch.midi)
+        : (this.waitMatcher.current?.notes.map((note) => note.pitch.midi) ?? []);
+    if (expected.includes(event.pitch)) return event.pitch;
+    return expected.find((pitch) => MIC_ALIASES.includes(event.pitch - pitch)) ?? event.pitch;
+  }
+
   /** When grading one hand, keys that belong to the other hand's notes aren't mistakes. */
   private isOtherHandNote(pitch: number, beat: number): boolean {
     const slack = msToBeats(this.windows().ok, this.transport.tempo);
@@ -280,6 +312,7 @@ export class PracticeSession {
     this.waitMatcher = new WaitMatcher(this.graded);
     this.outcomes = new Map();
     this.wrongBeats = [];
+    this.aliases.clear();
     this.transport.pause();
     this.transport.seek(this.startBeat);
     this.state = { ...INITIAL_STATE, marks: new Map() };

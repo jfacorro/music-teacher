@@ -37,6 +37,22 @@ describe('startMetronome', () => {
     ]);
   });
 
+  it('queues further ahead when clicks are played early', () => {
+    const transport = new Transport(60, () => now);
+    const queued: number[] = [];
+    const stop = startMetronome(
+      transport,
+      () => ({ metronome: true, countInFrom: null, beatsPerMeasure: 4 }),
+      (time) => queued.push(Math.round(time) + 0),
+      () => 300,
+    );
+    transport.seek(0.5);
+    transport.play();
+    run(250); // now at beat 0.75; look-ahead 120 + 300 ms reaches past beat 1
+    stop();
+    expect(queued).toEqual([500]);
+  });
+
   it('stays quiet while paused and resyncs after a seek', () => {
     const transport = new Transport(60, () => now);
     const clicks: number[] = [];

@@ -14,6 +14,8 @@ export interface Settings {
   devKeyboard: boolean;
   /** Piano sound for the computer and on-screen keyboards. */
   keySound: boolean;
+  /** Clicks are played this much earlier to make up for output delay the browser misses, ms. */
+  soundTimingMs: number;
   midiInputId: string | null;
   midiInputName: string | null;
   /** Which instrument the app listens to (PLAN.md §8 Settings). */
@@ -35,13 +37,14 @@ export const DEFAULT_SETTINGS: Settings = {
   showOctave: false,
   devKeyboard: true,
   keySound: true,
+  soundTimingMs: 0,
   midiInputId: null,
   midiInputName: null,
   inputMode: 'auto',
   micEnabled: false,
   micDeviceId: null,
   micNoiseFloorDb: -65,
-  micSensitivityDb: 15,
+  micSensitivityDb: 12,
   micLatencyMs: 0,
 };
 

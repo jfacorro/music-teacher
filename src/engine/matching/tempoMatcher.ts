@@ -37,6 +37,13 @@ export class TempoMatcher {
     return { kind: 'hit', note: best.note, grade, errorMs: best.errorMs };
   }
 
+  /** Notes still waiting to be played whose window includes `beat`. */
+  candidates(beat: number, tempo: number, windows: TimingWindows): ScoreNote[] {
+    return this.pending.filter(
+      (note) => Math.abs(beatsToMs(beat - note.start, tempo)) <= windows.ok,
+    );
+  }
+
   /** Time moved on to `beat`: returns the notes that can no longer be hit. */
   advance(beat: number, tempo: number, windows: TimingWindows): ScoreNote[] {
     const missed = this.pending.filter((note) => beatsToMs(beat - note.start, tempo) > windows.ok);
