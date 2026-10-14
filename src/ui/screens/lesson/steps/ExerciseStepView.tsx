@@ -55,7 +55,12 @@ export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseS
         }
         resultsActions={(summary) =>
           passes(summary.stars) ? (
-            <button type="button" className="button button--primary" onClick={onContinue}>
+            <button
+              type="button"
+              className="button button--primary"
+              title={t('lesson.tips.continue')}
+              onClick={onContinue}
+            >
               {t('lesson.continue')}
             </button>
           ) : null

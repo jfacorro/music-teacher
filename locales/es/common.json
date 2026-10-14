@@ -48,6 +48,7 @@
     "midi": "Teclado MIDI"
   },
   "modal": {
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "closeTip": "Cerrar (Esc)"
   }
 }

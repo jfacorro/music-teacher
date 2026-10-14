@@ -32,6 +32,7 @@ import { useLiveInput } from '../../../input/liveStore';
 import { activityTimer, recordPracticeTime } from '../../../storage/progress';
 import { toggleBars } from '../../barSelection';
 import { Modal } from '../../components/Modal';
+import { ICONS } from '../../icons';
 import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
@@ -323,24 +324,37 @@ export function PracticeRun({
       <div className="practice__controls">
         <button
           type="button"
-          className="button button--primary"
+          className="button button--primary button--icon"
           onClick={() => void togglePlay()}
+          aria-label={running ? t('practice.pause') : t('practice.play')}
           aria-keyshortcuts="Space"
-          title={t('practice.shortcut', { key: t('practice.keys.space') })}
+          title={t('practice.tips.withKey', {
+            action: running ? t('practice.pause') : t('practice.play'),
+            key: t('practice.keys.space'),
+          })}
         >
-          {running ? t('practice.pause') : t('practice.play')}
+          <span aria-hidden="true">{running ? ICONS.pause : ICONS.play}</span>
         </button>
         <button
           type="button"
-          className="button"
+          className="button button--icon"
           onClick={() => session.restart()}
+          aria-label={t('practice.restart')}
           aria-keyshortcuts="Escape"
-          title={t('practice.shortcut', { key: t('practice.keys.escape') })}
+          title={t('practice.tips.withKey', {
+            action: t('practice.restart'),
+            key: t('practice.keys.escape'),
+          })}
         >
-          {t('practice.restart')}
+          <span aria-hidden="true">{ICONS.restart}</span>
         </button>
         {state.summary && !resultsOpen && (
-          <button type="button" className="button" onClick={() => setDismissed(null)}>
+          <button
+            type="button"
+            className="button"
+            title={t('practice.tips.showResults')}
+            onClick={() => setDismissed(null)}
+          >
             {t('practice.results.show')}
           </button>
         )}
@@ -365,7 +379,12 @@ export function PracticeRun({
             {weak || extraActions ? (
               <>
                 {weak && onLoopChange && (
-                  <button type="button" className="button" onClick={() => onLoopChange(weak)}>
+                  <button
+                    type="button"
+                    className="button"
+                    title={t('practice.tips.weakSpot')}
+                    onClick={() => onLoopChange(weak)}
+                  >
                     {t('practice.results.weakSpot')}
                   </button>
                 )}

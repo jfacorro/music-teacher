@@ -60,6 +60,7 @@ export function ResultsCard({
         <button
           type="button"
           className={children ? 'button' : 'button button--primary'}
+          title={t('practice.tips.retry')}
           onClick={onRetry}
         >
           {t('practice.results.retry')}

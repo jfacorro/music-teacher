@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useId } from 'react';
 import { SHEET_NOTATIONS, type ScoreView, type SheetNotation } from '../../../content/lessons';
+import { ICONS } from '../../icons';
 
 const VIEWS: readonly ScoreView[] = ['falling', 'sheet'];
 
@@ -46,8 +47,12 @@ export function ViewToggle({
           role="radio"
           aria-checked={view === value}
           className={view === value ? 'segmented__option is-selected' : 'segmented__option'}
+          title={t(`practice.tips.${value}`)}
           onClick={() => onChange(value)}
         >
+          <span className="button__icon" aria-hidden="true">
+            {ICONS[value]}
+          </span>
           {t(`practice.view.${value}`)}
         </button>
       ))}

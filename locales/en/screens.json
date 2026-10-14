@@ -27,6 +27,10 @@
       "treble": "Treble clef",
       "bass": "Bass clef",
       "both": "Both clefs"
+    },
+    "tips": {
+      "play": "Play anything and see the notes and chords you play",
+      "quiz": "Name notes on the staff by playing their keys"
     }
   },
   "progress": {
@@ -278,13 +282,23 @@
     },
     "otherHand": "Play the other hand",
     "otherHandMic": "With the microphone, use headphones so it only hears you.",
-    "shortcut": "Shortcut: {key}",
     "keys": {
       "space": "Space",
       "escape": "Esc"
     },
     "tap": "Tap here, or any key",
-    "hintRhythm": "Tap any key with each note: only the timing counts. The metronome counts you in."
+    "hintRhythm": "Tap any key with each note: only the timing counts. The metronome counts you in.",
+    "tips": {
+      "withKey": "{action} ({key})",
+      "showResults": "Show the results of the last run again",
+      "weakSpot": "Repeat the bars that went worst",
+      "falling": "Falling notes: the notes fall onto the keys to play",
+      "sheet": "Sheet music: read the notes on the staff",
+      "wait": "The music waits for each note",
+      "tempo": "Play at a steady tempo, with a count-in and the metronome",
+      "retry": "Play this exercise again from the start",
+      "tap": "Tap in time with each note, or press any key"
+    }
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",
@@ -303,7 +317,12 @@
     "restart": "Start the lesson again",
     "next": "Next lesson",
     "bestStars": "{stars, plural, one {Your best: # star} other {Your best: # stars}}",
-    "staffPicture": "Notes on the staff"
+    "staffPicture": "Notes on the staff",
+    "tips": {
+      "back": "Go back to the previous step",
+      "continue": "Go on to the next step",
+      "skip": "Skip this step for now"
+    }
   },
   "welcome": {
     "title": "Welcome to Piano Teacher",
@@ -331,6 +350,7 @@
     "hint": "It’s the key lit up on the keyboard.",
     "progress": "Card {current} of {total}",
     "results": "Quiz results",
-    "firstTry": "{count} of {total} right on the first try"
+    "firstTry": "{count} of {total} right on the first try",
+    "newCards": "Start again with new cards"
   }
 }

@@ -46,6 +46,7 @@ export function Modal({ labelledBy, onClose, children }: ModalProps) {
           type="button"
           className="modal__close"
           aria-label={t('modal.close')}
+          title={t('modal.closeTip')}
           onClick={onClose}
         >
           <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">

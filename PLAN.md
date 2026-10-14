@@ -553,7 +553,8 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - "Play the other hand" when practicing one hand: the other hand is played by Tone.js (a softer synth), scheduled ahead like the metronome. In wait mode it waits too: notes where the music stops sound once the learner plays on. With the microphone, a tip suggests headphones (the other hand's keys never count as wrong).
 - "Practice the weak spot" on the results: loops the worst measure plus weak neighbors (below 90%), up to 4 bars.
 - Choosing bars that are already repeated (a click inside the loop, or the same bars again) stops repeating them.
-- Shortcuts while practicing (songs and lessons): Space plays and pauses, Escape starts over (tooltips on the buttons).
+- Shortcuts while practicing (songs and lessons): Space plays and pauses, Escape starts over.
+- Play/pause (▶ ⏸) and start over (↻) are icon buttons; the views have emoji (🎹 falling notes, 🎼 sheet music). Every button around the exercises has a tooltip saying what it does, with its key where it has one ("Play (Space)").
 - Settings page: sections stacked one after another; the live test keeps the last 20 events in a scrolling list.
 
 **2.4 Richer results & progress** — ✔ done

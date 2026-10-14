@@ -48,6 +48,7 @@ export function FreePlayScreen() {
               role="radio"
               aria-checked={mode === value}
               className={mode === value ? 'segmented__option is-selected' : 'segmented__option'}
+              title={t(`freePlay.tips.${value}`)}
               onClick={() => setMode(value)}
             >
               {t(`freePlay.modes.${value}`)}

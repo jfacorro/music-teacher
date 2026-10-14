@@ -155,6 +155,7 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
           <button
             type="button"
             className={actions ? 'button' : 'button button--primary'}
+            title={t('quiz.newCards')}
             onClick={restart}
           >
             {t('practice.results.retry')}

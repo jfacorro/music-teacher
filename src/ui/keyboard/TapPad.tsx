@@ -22,6 +22,7 @@ export function TapPad({ pitch, due, pressed, mark }: TapPadProps) {
     <button
       type="button"
       className={className}
+      title={t('practice.tips.tap')}
       // Taps come from the pointer; keyboard users tap any key, and Space stays play/pause.
       tabIndex={-1}
       onPointerDown={(event) => {
