@@ -40,6 +40,13 @@ export interface MusicXmlResult {
   notes: Map<string, ScoreNote>;
 }
 
+export interface MusicXmlOptions {
+  /** Hands that get a staff (default: every hand with notes); other notes are left out. */
+  hands?: readonly Hand[];
+  /** Text written under each note, e.g. its name for beginners (once per tied note). */
+  noteLabel?: (note: ScoreNote) => string;
+}
+
 export const noteKey = (staff: number, startDivision: number, midi: number) =>
   `${staff}|${startDivision}|${midi}`;
 
@@ -49,8 +56,11 @@ interface Event {
   notes: ScoreNote[]; // empty = rest
 }
 
-export function scoreToMusicXml(score: Score): MusicXmlResult {
-  const hands = (['R', 'L'] as const).filter((hand) => score.notes.some((n) => n.hand === hand));
+export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): MusicXmlResult {
+  const hands = (['R', 'L'] as const).filter(
+    (hand) =>
+      score.notes.some((n) => n.hand === hand) && (!options.hands || options.hands.includes(hand)),
+  );
   const staves: StaffInfo[] = hands.map((hand, i) => ({ hand, number: i + 1 }));
   const measureDivs = Math.round(beatsPerMeasure(score.timeSignature) * DIVISIONS);
   const measureCount = Math.max(1, score.measures.length);
@@ -69,7 +79,7 @@ export function scoreToMusicXml(score: Score): MusicXmlResult {
     if (m === 0) parts.push(attributes(score, staves));
     linesByStaff.forEach(({ staff, events }, i) => {
       if (i > 0) parts.push(`<backup><duration>${measureDivs}</duration></backup>`);
-      parts.push(...measureNotes(events, staff, from, to, index));
+      parts.push(...measureNotes(events, staff, from, to, index, options.noteLabel));
     });
     measures.push(`<measure number="${m + 1}">${parts.join('')}</measure>`);
   }
@@ -106,6 +116,7 @@ function measureNotes(
   from: number,
   to: number,
   index: Map<string, ScoreNote>,
+  noteLabel: MusicXmlOptions['noteLabel'],
 ): string[] {
   const out: string[] = [];
   const inMeasure = events.filter((e) => e.start < to && e.end > from);
@@ -126,7 +137,14 @@ function measureNotes(
       event.notes.forEach((note, n) => {
         index.set(noteKey(staff.number, at, note.pitch.midi), note);
         out.push(
-          noteXml(note, value, staff, { chord: n > 0, tieStart, tieStop, fingering: !tieStop }),
+          noteXml(note, value, staff, {
+            chord: n > 0,
+            tieStart,
+            tieStop,
+            fingering: !tieStop,
+            // Chord notes stack their labels on separate lines.
+            label: !tieStop && noteLabel ? { text: noteLabel(note), line: n + 1 } : null,
+          }),
         );
       });
       at += value.divs;
@@ -179,7 +197,14 @@ function noteXml(
     tieStart,
     tieStop,
     fingering,
-  }: { chord: boolean; tieStart: boolean; tieStop: boolean; fingering: boolean },
+    label,
+  }: {
+    chord: boolean;
+    tieStart: boolean;
+    tieStop: boolean;
+    fingering: boolean;
+    label: { text: string; line: number } | null;
+  },
 ): string {
   const { step, alter, octave } = note.pitch;
   const notations = [
@@ -198,8 +223,15 @@ function noteXml(
     `<type>${value.type}</type>${'<dot/>'.repeat(value.dots)}` +
     `<staff>${staff.number}</staff>` +
     (notations ? `<notations>${notations}</notations>` : '') +
+    (label
+      ? `<lyric number="${label.line}"><syllabic>single</syllabic><text>${escapeXml(label.text)}</text></lyric>`
+      : '') +
     '</note>'
   );
+}
+
+function escapeXml(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function voiceOf(staff: StaffInfo): number {
@@ -223,6 +255,6 @@ function attributes(score: Score, staves: StaffInfo[]): string {
     `<staves>${staves.length}</staves>` +
     clefs +
     '</attributes>' +
-    `<direction placement="above"><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>${score.tempo}</per-minute></metronome></direction-type><sound tempo="${score.tempo}"/></direction>`
+    `<sound tempo="${score.tempo}"/>`
   );
 }

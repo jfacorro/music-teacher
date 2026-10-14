@@ -3,11 +3,14 @@
  * horizontal line, with a cursor that follows the transport and scrolls along, and notes
  * colored by how they went (same colors as the falling notes).
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { GraphicalNote, OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { DIVISIONS, noteKey, scoreToMusicXml } from '../../content/musicxml';
-import type { Score, ScoreNote } from '../../engine/score';
+import type { SheetNotation } from '../../content/lessons';
+import type { Hand, Score, ScoreNote } from '../../engine/score';
+import type { HandFilter } from '../../engine/session';
+import { useNoteNames } from '../../i18n/useNoteNames';
 import type { Transport } from '../../engine/transport';
 import { readCssColors, useColorScheme } from '../canvas';
 import { useAnimationFrame } from '../hooks';
@@ -19,6 +22,9 @@ interface SheetMusicProps {
   styleOf?: (note: ScoreNote) => NoteStyle;
   /** Changes whenever note outcomes may have changed, to recolor. */
   outcomesVersion?: unknown;
+  notation: SheetNotation;
+  /** The hands being practiced: other staves are left out unless `notation` is 'grand'. */
+  hands: HandFilter;
 }
 
 const COLORS = {
@@ -37,19 +43,40 @@ interface Rendered {
   colors: Record<keyof typeof COLORS, string>;
 }
 
+/** A little smaller than OSMD's default, so sheet and keyboard fit on a laptop screen. */
+const ZOOM = 0.9;
+
 /** Position of an OSMD iterator, in beats (its timestamps are in whole notes). */
 const beatOf = (iterator: { currentTimeStamp: { RealValue: number } }) =>
   iterator.currentTimeStamp.RealValue * 4;
 
-export function SheetMusic({ score, transport, styleOf, outcomesVersion }: SheetMusicProps) {
+export function SheetMusic({
+  score,
+  transport,
+  styleOf,
+  outcomesVersion,
+  notation,
+  hands,
+}: SheetMusicProps) {
   const { t } = useTranslation('screens');
   const scrollerRef = useRef<HTMLDivElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const rendered = useRef<Rendered | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const scheme = useColorScheme();
+  const names = useNoteNames();
 
-  // Render (again when the score or the color scheme changes).
+  const music = useMemo(() => {
+    const staves: Hand[] | undefined =
+      notation === 'grand' || hands === 'both' ? undefined : [hands];
+    return scoreToMusicXml(score, {
+      hands: staves,
+      noteLabel:
+        notation === 'names' ? (note) => names.name(note.pitch, { octave: false }) : undefined,
+    });
+  }, [score, notation, hands, names]);
+
+  // Render (again when the music or the color scheme changes).
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
@@ -61,7 +88,7 @@ export function SheetMusic({ score, transport, styleOf, outcomesVersion }: Sheet
       const { OpenSheetMusicDisplay } = await import('opensheetmusicdisplay');
       if (cancelled) return;
       const colors = readCssColors(host, COLORS);
-      const { xml, notes } = scoreToMusicXml(score);
+      const { xml, notes } = music;
       host.replaceChildren();
       const osmd = new OpenSheetMusicDisplay(host, {
         backend: 'svg',
@@ -75,7 +102,8 @@ export function SheetMusic({ score, transport, styleOf, outcomesVersion }: Sheet
         drawPartAbbreviations: false,
         // Measure numbers above the staff look like finger numbers to a beginner.
         drawMeasureNumbers: false,
-        drawingParameters: 'compacttight',
+        // Default spacing: roomy enough for note names under every note.
+        drawingParameters: 'default',
         renderSingleHorizontalStaffline: true,
         defaultColorMusic: colors.music,
         followCursor: false,
@@ -83,6 +111,7 @@ export function SheetMusic({ score, transport, styleOf, outcomesVersion }: Sheet
       });
       await osmd.load(xml);
       if (cancelled) return;
+      osmd.zoom = ZOOM;
       osmd.render();
       osmd.cursor.show();
       rendered.current = { osmd, graphics: indexGraphics(osmd, notes), applied: new Map(), colors };
@@ -97,7 +126,7 @@ export function SheetMusic({ score, transport, styleOf, outcomesVersion }: Sheet
       rendered.current?.osmd.clear();
       rendered.current = null;
     };
-  }, [score, scheme]);
+  }, [music, scheme]);
 
   // Color notes by outcome.
   useEffect(() => {

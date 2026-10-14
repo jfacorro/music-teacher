@@ -120,9 +120,19 @@ describe('PracticeSession: tempo mode', () => {
       ]),
     );
     expect(t.session.getState().streak).toBe(0);
-    expect(t.session.getState().feedback?.value).toEqual({ kind: 'wrong' });
+    expect(t.session.getState().feedback?.value).toMatchObject({ kind: 'wrong' });
     t.release(E4);
     expect(t.session.getState().marks.has(E4)).toBe(false);
+  });
+
+  it('names the expected notes when a wrong key is played', () => {
+    const t = setup(melody);
+    t.session.play();
+    t.at(0.95);
+    t.press(C4); // D4 is due
+    const feedback = t.session.getState().feedback?.value;
+    expect(feedback?.kind).toBe('wrong');
+    expect(feedback?.kind === 'wrong' && feedback.expected.map((p) => p.midi)).toEqual([D4]);
   });
 
   it('misses notes nobody plays', () => {
@@ -215,7 +225,7 @@ describe('PracticeSession: microphone notes near expected ones', () => {
     t.session.play();
     t.at(0);
     t.session.handleNote(micOn(C4 + 7, t.now));
-    expect(t.session.getState().feedback?.value).toEqual({ kind: 'wrong' });
+    expect(t.session.getState().feedback?.value).toMatchObject({ kind: 'wrong' });
     expect(t.session.getState().status).toBe('waiting');
   });
 
@@ -224,7 +234,7 @@ describe('PracticeSession: microphone notes near expected ones', () => {
     t.session.play();
     t.at(0);
     t.press(C4 + 12);
-    expect(t.session.getState().feedback?.value).toEqual({ kind: 'wrong' });
+    expect(t.session.getState().feedback?.value).toMatchObject({ kind: 'wrong' });
   });
 });
 
@@ -268,6 +278,21 @@ describe('PracticeSession: wait mode', () => {
     t.wait(1000);
     t.press(C3); // E4 is still held, so this completes the chord
     expect(t.session.getState().status).toBe('playing');
+  });
+
+  it('names the notes it waits for when a wrong key is played', () => {
+    const t = setup(
+      [
+        ['C3', 0, 1, 'L'],
+        ['E4', 0],
+      ],
+      { mode: 'wait' },
+    );
+    t.session.play();
+    t.at(0);
+    t.press(D4);
+    const feedback = t.session.getState().feedback?.value;
+    expect(feedback?.kind === 'wrong' && feedback.expected.map((p) => p.midi)).toEqual([C3, E4]);
   });
 
   it('scores correct notes minus wrong keys', () => {

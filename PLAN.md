@@ -540,11 +540,12 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Inline JSON scores converted to MusicXML (`src/content/musicxml.ts`: grand staff by hand, rests, ties across bar lines, chords, finger numbers) so every lesson can use either view.
 - View toggle in the lesson player and song practice; per-exercise default view (`"view": "sheet"` in lesson JSON). OSMD is loaded on demand (own chunk).
 
-**2.2 Notation ramp**
-- Level A: single staff, note names inside noteheads (custom OSMD notehead labels using the selected naming system).
-- Level B: single staff, no names (hint on wrong note).
-- Level C: grand staff, both clefs.
-- Setting + per-lesson default controlling the level.
+**2.2 Notation ramp** — ✔ done
+- Level A ("Note names"): the staff of the hand being played, with each note's name (selected naming system, no octave) written under it as a lyric — readable at any zoom, unlike labels inside noteheads.
+- Level B ("No names"): the same staff without names. A wrong key shows a hint with the notes to play ("Wrong key · play C, E"; in wait mode only the chord keys not already held).
+- Level C ("Both staves"): grand staff, treble and bass, whatever hand is selected.
+- "Sheet music starts with" setting (Settings → Language and notes) plus a per-exercise `"notation"` in lesson JSON; a Notation menu next to the view toggle changes it for the current run.
+- Sheet rendered at 90% with default spacing so names fit and the keyboard stays on a 1280×720 screen; the printed tempo mark is dropped (it's in the header).
 
 **2.3 Practice tools**
 - Loop a range of measures (select on the score or the falling-notes timeline).

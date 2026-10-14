@@ -41,6 +41,11 @@ export class WaitMatcher {
     return this.groups[this.index];
   }
 
+  /** The current group's notes whose keys aren't down: what still has to be played. */
+  get missing(): ScoreNote[] {
+    return this.current?.notes.filter((note) => !this.held.has(note.pitch.midi)) ?? [];
+  }
+
   get done(): boolean {
     return this.index >= this.groups.length;
   }

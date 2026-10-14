@@ -45,7 +45,8 @@
         "solfege": "Solfège"
       },
       "showOctave": "Show octave numbers",
-      "preview": "Example: {notes}"
+      "preview": "Example: {notes}",
+      "sheetNotation": "Sheet music starts with"
     },
     "midi": {
       "heading": "MIDI keyboard",
@@ -208,7 +209,13 @@
       "sheet": "Sheet music"
     },
     "sheetLoading": "Loading the sheet music…",
-    "sheetError": "Couldn’t show the sheet music. Try falling notes instead."
+    "sheetError": "Couldn’t show the sheet music. Try falling notes instead.",
+    "notation": {
+      "label": "Notation",
+      "names": "Note names",
+      "plain": "No names",
+      "grand": "Both staves"
+    }
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",

@@ -132,6 +132,36 @@ describe('scoreToMusicXml', () => {
     expect((xml.match(/<fingering>1<\/fingering>/g) ?? []).length).toBe(1);
   });
 
+  it('can leave out a hand’s staff', () => {
+    const score = scoreOf([
+      ['E4', 0, 4],
+      ['C3', 0, 4, 'L'],
+    ]);
+    const right = scoreToMusicXml(score, { hands: ['R'] });
+    expect(right.staves).toEqual([{ hand: 'R', number: 1 }]);
+    expect(right.xml).not.toContain('<sign>F</sign>');
+    expect(written(right.xml, 1)).toEqual(['E4:whole']);
+
+    const left = scoreToMusicXml(score, { hands: ['L'] });
+    expect(left.staves).toEqual([{ hand: 'L', number: 1 }]);
+    expect(left.xml).toContain('<clef number="1"><sign>F</sign>');
+    expect(written(left.xml, 1)).toEqual(['C3:whole']);
+  });
+
+  it('writes labels under notes, once per tied note, stacked for chords', () => {
+    const { xml } = scoreToMusicXml(
+      scoreOf([
+        ['C4', 3, 2], // tied across the bar line
+        ['E4', 5, 1],
+        ['G4', 5, 1],
+      ]),
+      { noteLabel: (note) => `<${note.pitch.step}>` },
+    );
+    const lyric = /<lyric number="(\d)">.*?<text>(.*?)<\/text><\/lyric>/g;
+    const lyrics = [...xml.matchAll(lyric)].map((m) => `${m[1]}:${m[2]}`);
+    expect(lyrics).toEqual(['1:&lt;C&gt;', '1:&lt;E&gt;', '2:&lt;G&gt;']);
+  });
+
   it('indexes every written note back to its score note', () => {
     const score = scoreOf([
       ['C4', 3, 2],

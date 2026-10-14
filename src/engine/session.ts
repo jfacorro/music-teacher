@@ -9,6 +9,7 @@
  * The UI calls `tick()` every animation frame and forwards every `NoteEvent` to `handleNote`.
  */
 import type { InputSourceKind, NoteEvent } from '../input/types';
+import type { Pitch } from '../theory/pitch';
 import { TempoMatcher } from './matching/tempoMatcher';
 import { WaitMatcher } from './matching/waitMatcher';
 import {
@@ -31,7 +32,8 @@ export type KeyMark = 'correct' | 'wrong';
 export type Feedback =
   | { kind: 'hit'; grade: Grade; timing: Timing }
   | { kind: 'correct' }
-  | { kind: 'wrong' }
+  /** `expected`: the notes to play instead (spelled as written), for a hint. */
+  | { kind: 'wrong'; expected: Pitch[] }
   | { kind: 'missed' };
 
 export interface SessionState {
@@ -257,7 +259,19 @@ export class PracticeSession {
 
   private wrong(pitch: number, beat: number): void {
     this.wrongBeats.push(beat);
-    this.mark(pitch, 'wrong', { streak: 0, feedback: this.feedback({ kind: 'wrong' }) });
+    this.mark(pitch, 'wrong', {
+      streak: 0,
+      feedback: this.feedback({ kind: 'wrong', expected: this.expectedAt(beat) }),
+    });
+  }
+
+  /** The notes the learner should be playing around `beat`. */
+  private expectedAt(beat: number): Pitch[] {
+    const notes =
+      this.mode === 'tempo'
+        ? this.tempoMatcher.upcoming(beat, this.transport.tempo, this.windows())
+        : this.waitMatcher.missing;
+    return [...notes].sort((a, b) => a.pitch.midi - b.pitch.midi).map((note) => note.pitch);
   }
 
   /** A microphone note close to an expected note in a confusable way counts as that note. */

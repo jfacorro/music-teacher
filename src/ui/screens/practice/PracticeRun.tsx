@@ -24,7 +24,7 @@ import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
-import type { ScoreView } from '../../../content/lessons';
+import type { ScoreView, SheetNotation } from '../../../content/lessons';
 import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
 import { ResultsCard } from './ResultsCard';
@@ -39,6 +39,7 @@ interface PracticeRunProps {
   hands: HandFilter;
   metronome: boolean;
   view: ScoreView;
+  notation: SheetNotation;
   /** Instruction shown next to the controls (defaults to a tip for the mode). */
   hint?: string;
   /** Called once when the run ends, with its results and how long it took (ms). */
@@ -54,6 +55,7 @@ export function PracticeRun({
   hands,
   metronome,
   view,
+  notation,
   hint,
   onFinish,
   resultsActions,
@@ -198,6 +200,8 @@ export function PracticeRun({
               transport={transport}
               styleOf={styleOf}
               outcomesVersion={state}
+              notation={notation}
+              hands={hands}
             />
           ) : (
             <FallingNotes

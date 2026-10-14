@@ -110,7 +110,14 @@ describe('parseLesson', () => {
           range: ['C3', 'C5'],
         },
         { type: 'find', text: 'b', notes: ['C4', 'E4'] },
-        { ...exercise, hands: 'R', pass: { minStars: 2 }, metronome: true, view: 'sheet' },
+        {
+          ...exercise,
+          hands: 'R',
+          pass: { minStars: 2 },
+          metronome: true,
+          view: 'sheet',
+          notation: 'plain',
+        },
         { type: 'exercise', text: 'song', mode: 'tempo', song: 'ode-to-joy', tempo: 80 },
       ],
     });
@@ -126,12 +133,14 @@ describe('parseLesson', () => {
       metronome: true,
       song: null,
       view: 'sheet',
+      notation: 'plain',
     });
     expect(lesson.steps[3]).toMatchObject({
       song: 'ode-to-joy',
       score: { tempo: 80 },
       hands: 'both',
       view: 'falling',
+      notation: null,
     });
   });
 
@@ -152,6 +161,7 @@ describe('parseLesson', () => {
     ],
     ['a bad mode', { ...exercise, mode: 'fast' }, 'mode'],
     ['a bad view', { ...exercise, view: 'tab' }, 'view'],
+    ['a bad notation', { ...exercise, notation: 'big' }, 'notation'],
     ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
     ['a backwards range', { type: 'find', text: 'x', notes: ['C4'], range: ['C5', 'C3'] }, 'range'],
   ])('rejects %s with its location', async (_, step, message) => {

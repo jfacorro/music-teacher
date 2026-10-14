@@ -44,6 +44,15 @@ export class TempoMatcher {
     );
   }
 
+  /** The notes to play next: those in their window now, else the next ones still to come. */
+  upcoming(beat: number, tempo: number, windows: TimingWindows): ScoreNote[] {
+    const now = this.candidates(beat, tempo, windows);
+    if (now.length > 0) return now;
+    const later = this.pending.filter((note) => note.start > beat);
+    const next = Math.min(...later.map((note) => note.start));
+    return later.filter((note) => note.start === next);
+  }
+
   /** Time moved on to `beat`: returns the notes that can no longer be hit. */
   advance(beat: number, tempo: number, windows: TimingWindows): ScoreNote[] {
     const missed = this.pending.filter((note) => beatsToMs(beat - note.start, tempo) > windows.ok);

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { SheetNotation } from '../content/lessons';
 import type { NamingSystem } from '../i18n/naming';
 import type { InputMode } from '../input/routing';
 import { db } from './db';
@@ -11,6 +12,8 @@ export interface Settings {
   /** null = the default for the current language. */
   namingSystem: NamingSystem | null;
   showOctave: boolean;
+  /** Sheet music level to start with when a lesson doesn't set one. */
+  sheetNotation: SheetNotation;
   devKeyboard: boolean;
   /** Piano sound for the computer and on-screen keyboards. */
   keySound: boolean;
@@ -35,6 +38,7 @@ export const DEFAULT_SETTINGS: Settings = {
   language: null,
   namingSystem: null,
   showOctave: false,
+  sheetNotation: 'names',
   devKeyboard: true,
   keySound: true,
   soundTimingMs: 0,

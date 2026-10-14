@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { SessionState } from '../../../engine/session';
+import { useNoteNames } from '../../../i18n/useNoteNames';
 
 interface FeedbackBadgeProps {
   feedback: SessionState['feedback'];
@@ -9,6 +10,7 @@ interface FeedbackBadgeProps {
 /** The latest verdict ("Perfect!", "Good · early", "Wrong key") and the current streak. */
 export function FeedbackBadge({ feedback, streak }: FeedbackBadgeProps) {
   const { t } = useTranslation('feedback');
+  const names = useNoteNames();
   if (!feedback) return null;
   const { value } = feedback;
 
@@ -27,7 +29,12 @@ export function FeedbackBadge({ feedback, streak }: FeedbackBadgeProps) {
       tone = 'good';
       break;
     case 'wrong':
-      text = t('wrong');
+      text =
+        value.expected.length > 0
+          ? t('wrongPlay', {
+              notes: value.expected.map((p) => names.name(p, { octave: false })).join(', '),
+            })
+          : t('wrong');
       tone = 'bad';
       break;
     case 'missed':

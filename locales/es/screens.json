@@ -45,7 +45,8 @@
         "solfege": "Solfeo"
       },
       "showOctave": "Mostrar el número de octava",
-      "preview": "Ejemplo: {notes}"
+      "preview": "Ejemplo: {notes}",
+      "sheetNotation": "La partitura empieza con"
     },
     "midi": {
       "heading": "Teclado MIDI",
@@ -208,7 +209,13 @@
       "sheet": "Partitura"
     },
     "sheetLoading": "Cargando la partitura…",
-    "sheetError": "No se pudo mostrar la partitura. Prueba con las notas que caen."
+    "sheetError": "No se pudo mostrar la partitura. Prueba con las notas que caen.",
+    "notation": {
+      "label": "Notación",
+      "names": "Con nombres",
+      "plain": "Sin nombres",
+      "grand": "Dos pentagramas"
+    }
   },
   "lesson": {
     "notFound": "Esta lección no existe.",

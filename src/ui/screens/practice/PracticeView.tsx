@@ -6,8 +6,9 @@ import type { Score } from '../../../engine/score';
 import type { HandFilter, PracticeMode } from '../../../engine/session';
 import { recordResult } from '../../../storage/progress';
 import type { ScoreView } from '../../../content/lessons';
+import { useSettings } from '../../../storage/settings';
 import { PracticeRun } from './PracticeRun';
-import { ViewToggle } from './ViewToggle';
+import { NotationSelect, ViewToggle } from './ViewToggle';
 
 const MODES: readonly PracticeMode[] = ['wait', 'tempo'];
 const HANDS: readonly HandFilter[] = ['both', 'R', 'L'];
@@ -20,6 +21,7 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
   const [hands, setHands] = useState<HandFilter>('both');
   const [metronome, setMetronome] = useState(false);
   const [view, setView] = useState<ScoreView>('falling');
+  const [notation, setNotation] = useState(() => useSettings.getState().sheetNotation);
   const handsId = useId();
 
   useEffect(preloadAudio, []);
@@ -42,6 +44,7 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
 
       <div className="practice__options">
         <ViewToggle view={view} onChange={setView} />
+        {view === 'sheet' && <NotationSelect notation={notation} onChange={setNotation} />}
         <div className="segmented" role="radiogroup" aria-label={t('practice.mode.label')}>
           {MODES.map((value) => (
             <button
@@ -87,6 +90,7 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
         hands={hands}
         metronome={metronome}
         view={view}
+        notation={notation}
         onFinish={(summary, durationMs) =>
           void recordResult('song', songId, {
             stars: summary.stars,

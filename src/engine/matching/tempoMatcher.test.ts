@@ -99,6 +99,21 @@ describe('TempoMatcher', () => {
     expect(matcher.candidates(0.5, TEMPO, MIDI_WINDOWS)).toEqual([]);
   });
 
+  it('says which notes come next', () => {
+    const { notes } = scoreOf([
+      ['C4', 0],
+      ['E4', 2],
+      ['G4', 2],
+    ]);
+    const matcher = new TempoMatcher(notes);
+    const upcoming = (beat: number) =>
+      matcher.upcoming(beat, TEMPO, MIDI_WINDOWS).map((n) => n.pitch.midi);
+    expect(upcoming(0.05)).toEqual([C4]); // in its window
+    expect(upcoming(1)).toEqual([E4, 67]); // the next chord
+    matcher.advance(5, TEMPO, MIDI_WINDOWS);
+    expect(upcoming(5)).toEqual([]);
+  });
+
   it('uses wider windows for the microphone', () => {
     const matcher = new TempoMatcher(scoreOf([['C4', 0]]).notes);
     expect(play(matcher, C4, 0.18, MIC_WINDOWS)).toMatchObject({ kind: 'hit', grade: 'ok' });

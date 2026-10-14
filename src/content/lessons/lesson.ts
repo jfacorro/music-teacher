@@ -41,10 +41,21 @@ export interface FindStep extends StepBase {
 /** How the music is shown: falling notes or sheet music. */
 export type ScoreView = 'falling' | 'sheet';
 
+/**
+ * Sheet music levels (PLAN.md §2.2): note names under the notes; no names; both staves
+ * (the full grand staff even when practicing one hand). The first two show only the staff of
+ * the hand being practiced.
+ */
+export type SheetNotation = 'names' | 'plain' | 'grand';
+
+export const SHEET_NOTATIONS: readonly SheetNotation[] = ['names', 'plain', 'grand'];
+
 export interface ExerciseStep extends StepBase {
   type: 'exercise';
   /** The view the exercise starts in (the learner can switch). */
   view: ScoreView;
+  /** The sheet music level it starts with; null = the learner's default (Settings). */
+  notation: SheetNotation | null;
   mode: PracticeMode;
   hands: HandFilter;
   score: Score;
@@ -161,6 +172,11 @@ async function exercise(
     throw new LessonError(at(location, 'view'), 'expected "falling" or "sheet"');
   }
 
+  const notation = data.notation ?? null;
+  if (notation !== null && !SHEET_NOTATIONS.includes(notation as SheetNotation)) {
+    throw new LessonError(at(location, 'notation'), 'expected "names", "plain" or "grand"');
+  }
+
   const pass = object(data.pass ?? {}, at(location, 'pass'));
   const minStars = pass.minStars ?? 0;
   if (![0, 1, 2, 3].includes(minStars as number)) {
@@ -170,6 +186,7 @@ async function exercise(
   return {
     mode: data.mode,
     view,
+    notation: notation as SheetNotation | null,
     hands,
     score,
     song,
