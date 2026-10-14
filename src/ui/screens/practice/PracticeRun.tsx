@@ -24,6 +24,8 @@ import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
+import type { ScoreView } from '../../../content/lessons';
+import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
 import { ResultsCard } from './ResultsCard';
 
@@ -36,6 +38,7 @@ interface PracticeRunProps {
   mode: PracticeMode;
   hands: HandFilter;
   metronome: boolean;
+  view: ScoreView;
   /** Instruction shown next to the controls (defaults to a tip for the mode). */
   hint?: string;
   /** Called once when the run ends, with its results and how long it took (ms). */
@@ -50,6 +53,7 @@ export function PracticeRun({
   mode,
   hands,
   metronome,
+  view,
   hint,
   onFinish,
   resultsActions,
@@ -188,14 +192,23 @@ export function PracticeRun({
 
       <div className="practice__stage">
         <div className="practice__notes">
-          <FallingNotes
-            score={score}
-            transport={transport}
-            layout={layout}
-            secondsVisible={SECONDS_VISIBLE}
-            labelFor={noteLabel}
-            styleOf={styleOf}
-          />
+          {view === 'sheet' ? (
+            <SheetMusic
+              score={score}
+              transport={transport}
+              styleOf={styleOf}
+              outcomesVersion={state}
+            />
+          ) : (
+            <FallingNotes
+              score={score}
+              transport={transport}
+              layout={layout}
+              secondsVisible={SECONDS_VISIBLE}
+              labelFor={noteLabel}
+              styleOf={styleOf}
+            />
+          )}
           {!state.summary && <FeedbackBadge feedback={state.feedback} streak={state.streak} />}
           {state.countIn !== null && (
             <div className="count-in" aria-live="assertive">

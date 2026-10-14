@@ -201,7 +201,14 @@
       "wrong": "Teclas incorrectas",
       "retry": "Intentar de nuevo"
     },
-    "songInfo": "{composer} · {bpm} BPM"
+    "songInfo": "{composer} · {bpm} BPM",
+    "view": {
+      "label": "Vista",
+      "falling": "Notas que caen",
+      "sheet": "Partitura"
+    },
+    "sheetLoading": "Cargando la partitura…",
+    "sheetError": "No se pudo mostrar la partitura. Prueba con las notas que caen."
   },
   "lesson": {
     "notFound": "Esta lección no existe.",

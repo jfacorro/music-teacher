@@ -201,7 +201,14 @@
       "wrong": "Wrong keys",
       "retry": "Try again"
     },
-    "songInfo": "{composer} · {bpm} BPM"
+    "songInfo": "{composer} · {bpm} BPM",
+    "view": {
+      "label": "View",
+      "falling": "Falling notes",
+      "sheet": "Sheet music"
+    },
+    "sheetLoading": "Loading the sheet music…",
+    "sheetError": "Couldn’t show the sheet music. Try falling notes instead."
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",

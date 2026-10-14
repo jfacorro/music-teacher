@@ -830,3 +830,24 @@ a.path__title:hover {
   font-size: 1.6rem;
   font-weight: 700;
 }
+
+/* Sheet music */
+
+.sheet-music {
+  position: relative;
+  min-height: 180px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--surface);
+}
+
+.sheet-music__host {
+  padding-block: 0.5rem;
+}
+
+.sheet-music__status {
+  position: absolute;
+  inset-inline-start: 1rem;
+  inset-block-start: 1rem;
+  margin: 0;
+}

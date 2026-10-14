@@ -519,7 +519,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Phase 1 done when
 - [x] Casio connects over USB and every key is detected correctly. (verified 2026-10-12)
-- [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration.
+- [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration. **TODO (user):** after setting the threshold and pressing "Correct the delay" in the Microphone check, confirm ≥ 90% heard correctly live (the recording replays at 97%) and that middle C is recognized reliably in lessons.
 - [ ] All Unit 1–2 lessons are playable in wait and tempo modes, with either input.
 - [x] Scores and stars persist across browser restarts.
 - [x] Engine has unit tests for matching and scoring.
@@ -534,11 +534,11 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Scope
 
-**2.1 Sheet music view**
+**2.1 Sheet music view** — ✔ done
 - OpenSheetMusicDisplay integration rendering MusicXML.
 - Cursor synchronized with the transport clock; current notes highlighted; played notes colored green/red on the staff.
-- Inline JSON scores converted to MusicXML (or rendered from the Score model) so every lesson can use either view.
-- View toggle in the lesson player; per-lesson default view.
+- Inline JSON scores converted to MusicXML (`src/content/musicxml.ts`: grand staff by hand, rests, ties across bar lines, chords, finger numbers) so every lesson can use either view.
+- View toggle in the lesson player and song practice; per-exercise default view (`"view": "sheet"` in lesson JSON). OSMD is loaded on demand (own chunk).
 
 **2.2 Notation ramp**
 - Level A: single staff, note names inside noteheads (custom OSMD notehead labels using the selected naming system).
