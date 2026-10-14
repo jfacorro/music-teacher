@@ -9,7 +9,8 @@ import {
   longestStreak,
   mergeResult,
   practicedDays,
-  recentDays,
+  activityLevel,
+  calendarWeeks,
   recordPracticeTime,
   recordResult,
   streakDays,
@@ -100,13 +101,40 @@ describe('practice time', () => {
     expect(dayOf(at('2026-01-05', '23:30'))).toBe('2026-01-05');
   });
 
-  it('lists the last days, oldest first, with no practice as zero', () => {
-    const days = recentDays({ '2026-10-13': 60_000, '2026-10-11': 1000 }, 3, at('2026-10-13'));
-    expect(days.map(({ day, ms }) => [day, ms])).toEqual([
-      ['2026-10-11', 1000],
-      ['2026-10-12', 0],
-      ['2026-10-13', 60_000],
+  it('lays out the last weeks from the first day of the week, up to today', () => {
+    // Wednesday 14 October 2026; weeks start on Sunday.
+    const weeks = calendarWeeks({ '2026-10-12': 60_000 }, 2, 0, at('2026-10-14'));
+    const cell = (day: { day: string; ms: number } | null) => day && `${day.day}:${day.ms}`;
+    expect(weeks.map((week) => week.map(cell))).toEqual([
+      [
+        '2026-10-04:0',
+        '2026-10-05:0',
+        '2026-10-06:0',
+        '2026-10-07:0',
+        '2026-10-08:0',
+        '2026-10-09:0',
+        '2026-10-10:0',
+      ],
+      ['2026-10-11:0', '2026-10-12:60000', '2026-10-13:0', '2026-10-14:0', null, null, null],
     ]);
+    // Weeks starting on Monday, across the end of summer time (25 October 2026 in Europe).
+    const monday = calendarWeeks({}, 53, 1, at('2026-10-26'));
+    expect(monday).toHaveLength(53);
+    expect(monday.at(-1)?.[0]?.day).toBe('2026-10-26');
+    expect(monday.at(-2)?.map((day) => day?.day)).toEqual([
+      '2026-10-19',
+      '2026-10-20',
+      '2026-10-21',
+      '2026-10-22',
+      '2026-10-23',
+      '2026-10-24',
+      '2026-10-25',
+    ]);
+  });
+
+  it('rates a day of practice from 0 to 4', () => {
+    const minutes = [0, 0.5, 4.9, 5, 14, 15, 29, 30, 120];
+    expect(minutes.map((m) => activityLevel(m * 60_000))).toEqual([0, 1, 1, 2, 2, 3, 3, 4, 4]);
   });
 
   it('counts time between key presses, up to a minute per gap', () => {

@@ -257,35 +257,61 @@ select {
   background: var(--problem-bg);
 }
 
-.midi-badge {
+/* The instrument being listened to, always in the header. */
+.input-picker {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.3rem 0.75rem;
+  padding-inline-start: 0.75rem;
   border-radius: 999px;
   border: 1px solid var(--border);
-  color: var(--text);
   font-size: 0.875rem;
-  text-decoration: none;
   white-space: nowrap;
 }
 
-.midi-badge__dot {
+.input-picker:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.input-picker select {
+  max-inline-size: 18rem;
+  padding: 0.3rem 0.5rem 0.3rem 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.input-picker select:focus {
+  outline: none;
+}
+
+.input-picker option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.input-picker__dot {
+  flex: none;
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 50%;
   background: var(--muted);
 }
 
-.midi-badge--ok .midi-badge__dot {
+.input-picker--ok .input-picker__dot {
   background: var(--ok);
 }
 
-.midi-badge--pending .midi-badge__dot {
+.input-picker--pending .input-picker__dot {
   background: var(--pending);
 }
 
-.midi-badge--problem .midi-badge__dot {
+.input-picker--problem .input-picker__dot {
   background: var(--problem);
 }
 
@@ -981,48 +1007,69 @@ button.bars__bar:focus-visible {
   font-size: 0.8rem;
 }
 
-/* Progress: practice per day */
+/* Progress: practice per day over the last year (GitHub-style activity calendar) */
 
-.days {
-  display: grid;
-  grid-template-columns: repeat(14, 1fr);
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.activity__scroller {
+  overflow-x: auto;
 }
 
-.day {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.day__bar {
-  display: flex;
-  align-items: flex-end;
+.activity__chart {
+  display: block;
   inline-size: 100%;
-  max-inline-size: 2rem;
-  block-size: 6rem;
-  border-radius: 4px;
+  block-size: auto;
+}
+
+.activity__label {
+  fill: var(--muted);
+  font-size: 10px;
+}
+
+.activity__cell--0 {
+  fill: var(--lane-bg);
   background: var(--lane-bg);
 }
 
-.day__bar > span {
-  inline-size: 100%;
-  border-radius: 4px;
-  background: var(--accent);
+.activity__cell--1 {
+  fill: color-mix(in srgb, var(--note-played) 30%, var(--lane-bg));
+  background: color-mix(in srgb, var(--note-played) 30%, var(--lane-bg));
 }
 
-.day__name {
+.activity__cell--2 {
+  fill: color-mix(in srgb, var(--note-played) 55%, var(--lane-bg));
+  background: color-mix(in srgb, var(--note-played) 55%, var(--lane-bg));
+}
+
+.activity__cell--3 {
+  fill: color-mix(in srgb, var(--note-played) 80%, var(--lane-bg));
+  background: color-mix(in srgb, var(--note-played) 80%, var(--lane-bg));
+}
+
+.activity__cell--4 {
+  fill: var(--note-played);
+  background: var(--note-played);
+}
+
+.activity__legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-block-start: 0.5rem;
   font-size: 0.75rem;
-  color: var(--muted);
 }
 
-.day.is-today .day__name {
-  color: var(--text);
-  font-weight: 700;
+.activity__legend :first-child {
+  margin-inline-start: 0.25rem;
+}
+
+.activity__swatch {
+  inline-size: 11px;
+  block-size: 11px;
+  border-radius: 2px;
+}
+
+.activity__swatch:last-of-type {
+  margin-inline-end: 0.25rem;
 }
 
 /* Progress: skills */

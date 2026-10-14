@@ -8,13 +8,13 @@
     "settings": "Configuración"
   },
   "midiBadge": {
-    "label": "Teclado MIDI: {status}",
     "connecting": "Conectando…",
     "disconnected": "Teclado desconectado",
     "busy": "Teclado ocupado",
     "none": "No se encontró ningún teclado",
     "off": "MIDI desactivado",
-    "unsupported": "MIDI no compatible"
+    "unsupported": "MIDI no compatible",
+    "denied": "MIDI bloqueado"
   },
   "sources": {
     "midi": "MIDI",
@@ -33,9 +33,18 @@
     "label": "Notas que caen: cada nota llega al teclado cuando hay que tocarla"
   },
   "micBadge": {
-    "label": "Micrófono: {status}",
     "on": "Micrófono",
-    "off": "Micrófono apagado"
+    "off": "Micrófono apagado",
+    "starting": "Activando el micrófono…",
+    "denied": "Micrófono bloqueado",
+    "error": "Problema con el micrófono",
+    "unsupported": "Sin soporte de micrófono"
   },
-  "stars": "{stars, plural, =0 {Sin estrellas} one {# estrella de 3} other {# estrellas de 3}}"
+  "stars": "{stars, plural, =0 {Sin estrellas} one {# estrella de 3} other {# estrellas de 3}}",
+  "inputPicker": {
+    "label": "Escuchar",
+    "auto": "Automático · {status}",
+    "nothing": "nada conectado",
+    "midi": "Teclado MIDI"
+  }
 }

@@ -7,20 +7,16 @@ import { useContentText } from '../../i18n/useContentText';
 import {
   longestStreak,
   practicedDays,
-  recentDays,
   resultKey,
   streakDays,
   totalPracticeMinutes,
   useProgress,
 } from '../../storage/progress';
 import { Stars } from '../components/Stars';
+import { ActivityCalendar } from './ActivityCalendar';
 
 const RECENT_LIMIT = 10;
-const CHART_DAYS = 14;
-/** The day chart's scale reaches at least this far, so a short day doesn't fill a bar. */
-const CHART_MIN_MS = 10 * 60_000;
 const DATE_AND_TIME: Intl.DateTimeFormatOptions = { dateStyle: 'medium', timeStyle: 'short' };
-const DAY_TITLE: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
 
 export function ProgressScreen() {
   const { t, i18n } = useTranslation('screens');
@@ -76,7 +72,7 @@ export function ProgressScreen() {
         <Stat label={t('progress.time')} value={time(minutes * 60_000)} />
       </div>
 
-      {practiced.length > 0 && <PracticeDays days={days} time={time} />}
+      <ActivityCalendar days={days} time={time} />
 
       <section className="card">
         <h2>{t('progress.skills.heading')}</h2>
@@ -125,54 +121,6 @@ export function ProgressScreen() {
           </table>
         </section>
       )}
-    </section>
-  );
-}
-
-/** Practice time per day over the last two weeks, as bars. */
-function PracticeDays({
-  days,
-  time,
-}: {
-  days: Readonly<Record<string, number>>;
-  time: (ms: number) => string;
-}) {
-  const { t, i18n } = useTranslation('screens');
-  const recent = recentDays(days, CHART_DAYS);
-  const scale = Math.max(CHART_MIN_MS, ...recent.map((day) => day.ms));
-  const total = recent.reduce((sum, day) => sum + day.ms, 0);
-  const weekday = new Intl.DateTimeFormat(i18n.language, { weekday: 'narrow' });
-
-  return (
-    <section className="card">
-      <h2>{t('progress.lastDays.heading')}</h2>
-      <p className="muted">{t('progress.lastDays.total', { time: time(total) })}</p>
-      <ol className="days">
-        {recent.map(({ day, date, ms }, index) => {
-          const label =
-            ms > 0
-              ? t('progress.lastDays.day', {
-                  date: formatDate(date, i18n.language, DAY_TITLE),
-                  time: time(ms),
-                })
-              : t('progress.lastDays.none', { date: formatDate(date, i18n.language, DAY_TITLE) });
-          return (
-            <li
-              key={day}
-              className={index === recent.length - 1 ? 'day is-today' : 'day'}
-              title={label}
-              aria-label={label}
-            >
-              <span className="day__bar">
-                <span style={{ blockSize: ms > 0 ? `max(3px, ${(ms / scale) * 100}%)` : 0 }} />
-              </span>
-              <span className="day__name" aria-hidden="true">
-                {weekday.format(date)}
-              </span>
-            </li>
-          );
-        })}
-      </ol>
     </section>
   );
 }

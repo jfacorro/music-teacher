@@ -30,12 +30,6 @@
     "recent": "Recent practice",
     "underMinute": "Less than a minute",
     "bestStreak": "Best: {count, plural, one {# day} other {# days}}",
-    "lastDays": {
-      "heading": "Last two weeks",
-      "total": "{time} in total",
-      "day": "{date}: {time}",
-      "none": "{date}: no practice"
-    },
     "skills": {
       "heading": "Skills",
       "lessons": "{played} of {total, plural, one {# lesson} other {# lessons}} played",
@@ -45,6 +39,16 @@
         "good": "Good",
         "mastered": "Mastered"
       }
+    },
+    "activity": {
+      "heading": "Practice in the last year",
+      "total": "{time} on {count, plural, one {# day} other {# days}}",
+      "empty": "Each day you practice turns a square green.",
+      "label": "Practice per day over the last year",
+      "day": "{date}: {time}",
+      "none": "{date}: no practice",
+      "less": "Less",
+      "more": "More"
     }
   },
   "settings": {

@@ -561,7 +561,8 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Results: "Bar by bar" heatmap, colored like the stars each bar would earn (dashed: no notes); in song practice, clicking a bar repeats it.
 - Results are shown above the music (not over it), so they have room and the colored notes stay visible.
 - Practice time is now measured while playing or waiting for a key (idle gaps count up to a minute), so loops and unfinished runs count too. It is saved per day (Dexie v3 `practiceDays`, filled from the existing log on upgrade); streaks come from it.
-- Progress screen: best streak next to the current one, practice time per day over the last two weeks (bar chart), skills.
+- Progress screen: best streak next to the current one, skills, and practice per day over the last year as an activity calendar like GitHub's (weeks as columns from the language's first weekday, months on top, 5 shades: none, under 5 / 15 / 30 minutes, 30+; scrolls on narrow screens).
+- The header's input badge is now a picker, always visible: Automatic / MIDI keyboard / Microphone, each with its live status; choosing MIDI or the microphone turns it on if needed.
 - Skill tags per lesson in `courses.json` (`keyboard`, `finger-numbers`, `rh-position`, `lh-position`, `note-values`, `rests`, `eighth-notes`, `steady-tempo`; names in `locales/*/courses.json`). Mastery = average best accuracy of the skill's lessons (unplayed = 0); level Learning / Good (≥ 80%) / Mastered (≥ 95%), like the stars.
 
 **2.5 New exercise types**

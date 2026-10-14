@@ -30,12 +30,6 @@
     "recent": "Práctica reciente",
     "underMinute": "Menos de un minuto",
     "bestStreak": "Récord: {count, plural, one {# día} other {# días}}",
-    "lastDays": {
-      "heading": "Últimas dos semanas",
-      "total": "{time} en total",
-      "day": "{date}: {time}",
-      "none": "{date}: sin práctica"
-    },
     "skills": {
       "heading": "Habilidades",
       "lessons": "{played} de {total, plural, one {# lección tocada} other {# lecciones tocadas}}",
@@ -45,6 +39,16 @@
         "good": "Bien",
         "mastered": "Dominada"
       }
+    },
+    "activity": {
+      "heading": "Práctica en el último año",
+      "total": "{time} en {count, plural, one {# día} other {# días}}",
+      "empty": "Cada día que practiques, un cuadrado se pondrá verde.",
+      "label": "Práctica por día durante el último año",
+      "day": "{date}: {time}",
+      "none": "{date}: sin práctica",
+      "less": "Menos",
+      "more": "Más"
     }
   },
   "settings": {

@@ -174,15 +174,40 @@ export function totalPracticeMinutes(days: Readonly<Record<string, number>>): nu
   return Object.values(days).reduce((sum, ms) => sum + ms, 0) / 60_000;
 }
 
-/** Practice time of the last `count` days, oldest first, ending today. */
-export function recentDays(
+export interface CalendarDay {
+  day: string;
+  date: Date;
+  ms: number;
+}
+
+/**
+ * The last `weeks` weeks for an activity calendar, oldest first, each starting on `firstDay`
+ * (0 = Sunday … 6 = Saturday) and ending with this week; days after today are null.
+ */
+export function calendarWeeks(
   days: Readonly<Record<string, number>>,
-  count: number,
+  weeks: number,
+  firstDay: number,
   now = Date.now(),
-): { day: string; date: Date; ms: number }[] {
-  return Array.from({ length: count }, (_, index) => {
-    const time = midday(now) - (count - 1 - index) * DAY_MS;
-    const day = dayOf(time);
-    return { day, date: new Date(time), ms: days[day] ?? 0 };
-  });
+): (CalendarDay | null)[][] {
+  const today = midday(now);
+  const sinceWeekStart = (new Date(today).getDay() - firstDay + 7) % 7;
+  const start = today - (sinceWeekStart + (weeks - 1) * 7) * DAY_MS;
+  return Array.from({ length: weeks }, (_, week) =>
+    Array.from({ length: 7 }, (_, weekday) => {
+      // Midday plus whole days stays on the right date across daylight-saving changes.
+      const time = start + (week * 7 + weekday) * DAY_MS;
+      const day = dayOf(time);
+      return day > dayOf(today) ? null : { day, date: new Date(time), ms: days[day] ?? 0 };
+    }),
+  );
+}
+
+/** Minutes of practice where each level of the activity calendar starts (1 to 4). */
+export const ACTIVITY_LEVELS = [0, 5, 15, 30] as const;
+
+/** 0 (none) to 4 (30 minutes or more), for coloring a day. */
+export function activityLevel(ms: number): 0 | 1 | 2 | 3 | 4 {
+  if (!(ms > 0)) return 0;
+  return ACTIVITY_LEVELS.filter((minutes) => ms >= minutes * 60_000).length as 1 | 2 | 3 | 4;
 }
