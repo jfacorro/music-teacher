@@ -1,0 +1,87 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "intro",
+      "textVars": {
+        "c3": "C3"
+      },
+      "keys": [
+        {
+          "note": "C3",
+          "finger": 5
+        },
+        {
+          "note": "D3",
+          "finger": 4
+        },
+        {
+          "note": "E3",
+          "finger": 3
+        },
+        {
+          "note": "F3",
+          "finger": 2
+        },
+        {
+          "note": "G3",
+          "finger": 1
+        }
+      ],
+      "hand": "L",
+      "range": ["C3", "C4"]
+    },
+    {
+      "type": "exercise",
+      "text": "hotCrossBuns",
+      "mode": "wait",
+      "hands": "L",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "hot-cross-buns",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "inTime",
+      "mode": "tempo",
+      "hands": "L",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "hot-cross-buns",
+      "tempo": 80,
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "mary",
+      "mode": "wait",
+      "hands": "L",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "mary-had-a-little-lamb",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "inTime",
+      "mode": "tempo",
+      "hands": "L",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "mary-had-a-little-lamb",
+      "tempo": 88,
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

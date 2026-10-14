@@ -1,0 +1,102 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "lines",
+      "textVars": {
+        "e": "E4",
+        "g": "G4",
+        "b": "B4",
+        "d": "D5",
+        "f": "F5"
+      },
+      "staff": {
+        "clef": "treble",
+        "notes": ["E4", "G4", "B4", "D5", "F5"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "E4"
+        },
+        {
+          "note": "G4"
+        },
+        {
+          "note": "B4"
+        },
+        {
+          "note": "D5"
+        },
+        {
+          "note": "F5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizLines",
+      "notes": ["E4", "G4", "B4", "D5", "F5"],
+      "count": 10,
+      "clef": "treble",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "explain",
+      "text": "spaces",
+      "textVars": {
+        "f": "F4",
+        "a": "A4",
+        "c": "C5",
+        "e": "E5"
+      },
+      "staff": {
+        "clef": "treble",
+        "notes": ["F4", "A4", "C5", "E5"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "F4"
+        },
+        {
+          "note": "A4"
+        },
+        {
+          "note": "C5"
+        },
+        {
+          "note": "E5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizSpaces",
+      "notes": ["F4", "A4", "C5", "E5"],
+      "count": 8,
+      "clef": "treble",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "quiz",
+      "text": "quizAll",
+      "textVars": {
+        "c": "C4",
+        "d": "D4"
+      },
+      "notes": ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"],
+      "count": 12,
+      "clef": "treble",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

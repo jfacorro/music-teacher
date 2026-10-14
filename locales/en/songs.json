@@ -6,5 +6,21 @@
   "when-the-saints": {
     "title": "When the Saints Go Marching In",
     "composer": "Traditional"
+  },
+  "lightly-row": {
+    "title": "Lightly Row",
+    "composer": "German folk song"
+  },
+  "au-clair-de-la-lune": {
+    "title": "Au clair de la lune",
+    "composer": "French folk song"
+  },
+  "hot-cross-buns": {
+    "title": "Hot Cross Buns",
+    "composer": "English nursery rhyme"
+  },
+  "mary-had-a-little-lamb": {
+    "title": "Mary Had a Little Lamb",
+    "composer": "American children’s song"
   }
 }

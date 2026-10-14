@@ -26,5 +26,18 @@
     "minorSeventh": "Séptima menor",
     "majorSeventh": "Séptima mayor",
     "octave": "Octava"
+  },
+  "markings": {
+    "adagio": "Adagio: lento, con calma (unos 55–75 BPM).",
+    "andante": "Andante: a paso tranquilo, como caminando (unos 75–100 BPM).",
+    "moderato": "Moderato: a velocidad moderada (unos 100–115 BPM).",
+    "allegretto": "Allegretto: bastante animado, algo más lento que allegro (unos 105–120 BPM).",
+    "allegro": "Allegro: rápido y animado (unos 120–150 BPM).",
+    "pp": "pp, pianissimo: muy suave.",
+    "p": "p, piano: suave.",
+    "mp": "mp, mezzo piano: medianamente suave.",
+    "mf": "mf, mezzo forte: medianamente fuerte.",
+    "f": "f, forte: fuerte.",
+    "ff": "ff, fortissimo: muy fuerte."
   }
 }

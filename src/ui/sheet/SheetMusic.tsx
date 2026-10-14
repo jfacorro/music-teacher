@@ -86,7 +86,7 @@ export function SheetMusic({
   const music = useMemo(() => {
     if (rhythm) return scoreToMusicXml(score, { rhythm: true });
     const staves: Hand[] | undefined =
-      notation === 'grand' || hands === 'both' ? undefined : [hands];
+      notation === 'grand' ? ['R', 'L'] : hands === 'both' ? undefined : [hands];
     return scoreToMusicXml(score, {
       hands: staves,
       noteLabel:

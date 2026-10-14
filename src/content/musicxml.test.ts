@@ -163,6 +163,22 @@ describe('scoreToMusicXml', () => {
     expect(lyrics).toEqual(['1:&lt;C&gt;', '1:&lt;E&gt;', '2:&lt;G&gt;']);
   });
 
+  it('can draw a staff for a hand without notes, and pictures without rests or bar lines', () => {
+    const score = scoreOf([['G4', 0, 4]]);
+    const both = scoreToMusicXml(score, { hands: ['R', 'L'] });
+    expect(both.staves).toEqual([
+      { hand: 'R', number: 1 },
+      { hand: 'L', number: 2 },
+    ]);
+    expect(written(both.xml, 2)).toEqual(['rest:measure']);
+    expect(both.xml).not.toContain('print-object="no"');
+
+    const picture = scoreToMusicXml(score, { hands: ['R', 'L'], illustration: true });
+    expect(picture.xml).toContain('<note print-object="no"><rest measure="yes"/>');
+    expect(picture.xml).toContain('<bar-style>none</bar-style>');
+    expect(written(picture.xml.replaceAll(' print-object="no"', ''), 1)).toEqual(['G4:whole']);
+  });
+
   it('writes rhythm on a one-line percussion staff', () => {
     const { xml } = scoreToMusicXml(
       scoreOf([

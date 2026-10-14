@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "lines": "Las cinco líneas del pentagrama en clave de sol, de abajo arriba: {e}, {g}, {b}, {d} y {f}. De una línea a la siguiente se salta una tecla blanca.",
+    "quizLines": "Toca las notas de las líneas.",
+    "spaces": "Los cuatro espacios, de abajo arriba: {f}, {a}, {c} y {e}: las teclas blancas entre las notas de las líneas.",
+    "quizSpaces": "Toca las notas de los espacios.",
+    "quizAll": "Líneas y espacios mezclados, más el {c} central en su línea adicional y el {d} justo debajo del pentagrama."
+  }
+}

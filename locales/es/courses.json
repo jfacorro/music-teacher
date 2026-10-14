@@ -7,6 +7,14 @@
     "u2": {
       "title": "Ritmo con notas reales",
       "description": "Negras, blancas y redondas, silencios y corcheas."
+    },
+    "u3": {
+      "title": "Leer en clave de sol",
+      "description": "El pentagrama, sus líneas y espacios, notas de referencia como el {c} central y melodías leídas en el pentagrama."
+    },
+    "u4": {
+      "title": "La clave de fa y la mano izquierda",
+      "description": "Notas de referencia en clave de fa, melodías para la mano izquierda y el pentagrama doble."
     }
   },
   "lessons": {
@@ -19,7 +27,17 @@
     "u2-l1": "Negras y blancas",
     "u2-l2": "Redondas y silencios",
     "u2-l3": "Corcheas",
-    "u2-l4": "Canción: When the Saints Go Marching In"
+    "u2-l4": "Canción: When the Saints Go Marching In",
+    "u3-l1": "El pentagrama y la clave de sol",
+    "u3-l2": "Líneas y espacios",
+    "u3-l3": "Paso a paso",
+    "u3-l4": "Saltos",
+    "u3-l5": "Canciones desde el pentagrama",
+    "u4-l1": "La clave de fa",
+    "u4-l2": "Líneas y espacios en clave de fa",
+    "u4-l3": "Melodías con la mano izquierda",
+    "u4-l4": "El pentagrama doble",
+    "u4-l5": "Canciones con la mano izquierda"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -29,6 +47,9 @@
     "note-values": "Duración de las notas",
     "rests": "Silencios",
     "eighth-notes": "Corcheas",
-    "steady-tempo": "Tocar a tiempo"
+    "steady-tempo": "Tocar a tiempo",
+    "treble-clef": "Leer en clave de sol",
+    "bass-clef": "Leer en clave de fa",
+    "grand-staff": "El pentagrama doble"
   }
 }

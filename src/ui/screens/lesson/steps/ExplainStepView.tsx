@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import type { ExplainStep } from '../../../../content/lessons';
 import type { ExpectedKey } from '../../../keyboard/PianoKeyboard';
+import { StaffPicture } from '../../../sheet/StaffPicture';
 import { StepKeyboard } from './StepKeyboard';
 
 export function ExplainStepView({ step, text }: { step: ExplainStep; text: string }) {
@@ -15,6 +16,9 @@ export function ExplainStepView({ step, text }: { step: ExplainStep; text: strin
   return (
     <div className="lesson__step">
       <p className="lesson__text">{text}</p>
+      {step.staff && (
+        <StaffPicture clef={step.staff.clef} notes={step.staff.notes} names={step.staff.names} />
+      )}
       <StepKeyboard range={step.range} highlight={highlight} />
     </div>
   );

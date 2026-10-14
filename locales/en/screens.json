@@ -301,7 +301,8 @@
     "noStars": "Finish every step without skipping to earn stars.",
     "restart": "Start the lesson again",
     "next": "Next lesson",
-    "bestStars": "{stars, plural, one {Your best: # star} other {Your best: # stars}}"
+    "bestStars": "{stars, plural, one {Your best: # star} other {Your best: # stars}}",
+    "staffPicture": "Notes on the staff"
   },
   "welcome": {
     "title": "Welcome to Piano Teacher",

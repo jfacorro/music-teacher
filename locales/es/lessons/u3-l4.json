@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "skips": "Cuando una nota salta de una línea a la siguiente, o de un espacio al siguiente, queda una tecla en medio: es un salto. {c}, {e} y {g} van por saltos: tócalos con los dedos 1, 3 y 5.",
+    "stepsAndSkips": "Esta melodía mezcla grados conjuntos y saltos. Antes de cada nota, pregúntate: ¿la tecla vecina o se salta una?",
+    "inTime": "Ahora a tempo con el metrónomo."
+  }
+}

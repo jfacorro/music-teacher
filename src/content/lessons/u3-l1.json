@@ -1,0 +1,107 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "staff",
+      "staff": {
+        "clef": "treble",
+        "notes": ["E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"]
+      },
+      "keys": [
+        {
+          "note": "E4"
+        },
+        {
+          "note": "F4"
+        },
+        {
+          "note": "G4"
+        },
+        {
+          "note": "A4"
+        },
+        {
+          "note": "B4"
+        },
+        {
+          "note": "C5"
+        },
+        {
+          "note": "D5"
+        },
+        {
+          "note": "E5"
+        },
+        {
+          "note": "F5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "explain",
+      "text": "trebleClef",
+      "textVars": {
+        "g": "G4"
+      },
+      "staff": {
+        "clef": "treble",
+        "notes": ["G4"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "G4"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "explain",
+      "text": "landmarks",
+      "textVars": {
+        "c": "C4",
+        "g": "G4",
+        "c5": "C5"
+      },
+      "staff": {
+        "clef": "treble",
+        "notes": ["C4", "G4", "C5"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "C4"
+        },
+        {
+          "note": "G4"
+        },
+        {
+          "note": "C5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "find",
+      "text": "findLandmarks",
+      "textVars": {
+        "c": "C4",
+        "g": "G4",
+        "c5": "C5"
+      },
+      "notes": ["C4", "G4", "C5"],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizLandmarks",
+      "notes": ["C4", "G4", "C5"],
+      "count": 9,
+      "clef": "treble",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

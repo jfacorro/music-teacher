@@ -1,6 +1,7 @@
 {
   "tempo": 100,
   "timeSignature": [4, 4],
+  "markings": ["moderato", "f"],
   "notes": [
     {
       "note": "C4",

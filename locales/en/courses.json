@@ -7,6 +7,14 @@
     "u2": {
       "title": "Rhythm with real notes",
       "description": "Quarter, half and whole notes, rests and eighth notes."
+    },
+    "u3": {
+      "title": "Reading the treble clef",
+      "description": "The staff, its lines and spaces, landmark notes like middle {c}, and melodies read from the staff."
+    },
+    "u4": {
+      "title": "The bass clef and the left hand",
+      "description": "Landmark notes in the bass clef, left-hand melodies and the grand staff."
     }
   },
   "lessons": {
@@ -19,7 +27,17 @@
     "u2-l1": "Quarter and half notes",
     "u2-l2": "Whole notes and rests",
     "u2-l3": "Eighth notes",
-    "u2-l4": "Song: When the Saints Go Marching In"
+    "u2-l4": "Song: When the Saints Go Marching In",
+    "u3-l1": "The staff and the treble clef",
+    "u3-l2": "Lines and spaces",
+    "u3-l3": "Step by step",
+    "u3-l4": "Skips",
+    "u3-l5": "Songs from the staff",
+    "u4-l1": "The bass clef",
+    "u4-l2": "Lines and spaces in the bass clef",
+    "u4-l3": "Left-hand melodies",
+    "u4-l4": "The grand staff",
+    "u4-l5": "Left-hand songs"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -29,6 +47,9 @@
     "note-values": "Note lengths",
     "rests": "Rests",
     "eighth-notes": "Eighth notes",
-    "steady-tempo": "Playing in time"
+    "steady-tempo": "Playing in time",
+    "treble-clef": "Reading the treble clef",
+    "bass-clef": "Reading the bass clef",
+    "grand-staff": "The grand staff"
   }
 }

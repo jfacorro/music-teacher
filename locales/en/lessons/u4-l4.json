@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "grandStaff": "Piano music joins the two staves with a brace: the grand staff. The right hand reads the treble staff on top, the left hand the bass staff below, and middle {c} sits between them.",
+    "quizGrand": "Landmarks from both staves: play each note you see.",
+    "takingTurns": "The hands take turns: the right hand plays on the treble staff, then the left answers on the bass staff. Both play the last note together.",
+    "inTime": "Now in time with the metronome."
+  }
+}

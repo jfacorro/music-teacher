@@ -6,5 +6,21 @@
   "when-the-saints": {
     "title": "When the Saints Go Marching In",
     "composer": "Tradicional"
+  },
+  "lightly-row": {
+    "title": "Hänschen klein",
+    "composer": "Canción popular alemana"
+  },
+  "au-clair-de-la-lune": {
+    "title": "A la luz de la luna",
+    "composer": "Canción popular francesa"
+  },
+  "hot-cross-buns": {
+    "title": "Hot Cross Buns",
+    "composer": "Canción infantil inglesa"
+  },
+  "mary-had-a-little-lamb": {
+    "title": "María tenía un corderito",
+    "composer": "Canción infantil estadounidense"
   }
 }

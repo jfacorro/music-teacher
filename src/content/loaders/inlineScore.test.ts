@@ -74,3 +74,25 @@ describe('parseInlineScore', () => {
     expect(() => parseInlineScore(input, 'song "x"')).toThrow(message);
   });
 });
+
+describe('markings', () => {
+  const base = {
+    tempo: 90,
+    timeSignature: [4, 4],
+    notes: [{ note: 'C4', start: 0, duration: 1, hand: 'R' }],
+  };
+
+  it('reads the Italian markings of a score', () => {
+    expect(parseInlineScore({ ...base, markings: ['moderato', 'mf'] }, 'x').markings).toEqual([
+      'moderato',
+      'mf',
+    ]);
+    expect(parseInlineScore(base, 'x').markings).toBeUndefined();
+  });
+
+  it('rejects unknown markings with their location', () => {
+    expect(() => parseInlineScore({ ...base, markings: ['fast'] }, 'x')).toThrow(
+      'x › markings › [0]: unknown marking "fast"',
+    );
+  });
+});

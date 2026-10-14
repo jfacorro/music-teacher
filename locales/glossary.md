@@ -66,6 +66,26 @@ system setting (`src/i18n/naming.ts`).
 | Perfect (fourth, fifth)                       | perfect                                   | justa                                  |
 | Tritone                                       | tritone                                   | tritono                                |
 | Streak                                        | streak                                    | racha                                  |
+| Staff                                         | staff                                     | pentagrama                             |
+| Treble clef (G clef)                          | treble clef                               | clave de sol                           |
+| Bass clef (F clef)                            | bass clef                                 | clave de fa                            |
+| Grand staff                                   | grand staff                               | pentagrama doble                       |
+| Line / space (of the staff)                   | line / space                              | línea / espacio                        |
+| Ledger line                                   | ledger line                               | línea adicional                        |
+| Landmark note                                 | landmark note                             | nota de referencia                     |
+| Step (to the next note)                       | step                                      | grado conjunto                         |
+| Skip (one note left out)                      | skip                                      | salto                                  |
+| Accidental                                    | accidental                                | alteración                             |
+| Sharp / flat / natural                        | sharp / flat / natural                    | sostenido / bemol / becuadro           |
+| Tempo marking                                 | tempo marking                             | indicación de tempo                    |
+| Dynamics                                      | dynamics                                  | matices                                |
+| Note quiz (flash cards)                       | note quiz                                 | test de notas                          |
+| Card (quiz)                                   | card                                      | tarjeta                                |
+| Tap (rhythm exercises)                        | tap                                       | toque                                  |
+| Extra tap                                     | extra tap                                 | toque de más                           |
+
+Italian score markings (_Moderato_, _mf_) are written the same in every language; only
+their explanations are translated (`theory.json` › `markings`).
 
 Spanish uses neutral Latin American vocabulary ("computadora", not "ordenador") and the
 informal "tú".

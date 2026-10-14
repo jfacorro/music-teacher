@@ -7,6 +7,7 @@ import type { HandFilter, LoopRange, PracticeMode } from '../../../engine/sessio
 import { recordResult } from '../../../storage/progress';
 import type { ScoreView } from '../../../content/lessons';
 import { useSettings } from '../../../storage/settings';
+import { Markings } from '../../components/Markings';
 import { PracticeRun } from './PracticeRun';
 import { PracticeTools, SPEED_MAX } from './PracticeTools';
 import { NotationSelect, ViewToggle } from './ViewToggle';
@@ -52,6 +53,7 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
           <h1>{ts(`${songId}.title`)}</h1>
           <p className="muted">
             {t('practice.songInfo', { composer: ts(`${songId}.composer`), bpm: score.tempo })}
+            <Markings markings={score.markings ?? []} />
           </p>
         </div>
       </header>

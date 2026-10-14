@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "lines": "The five lines of the bass staff, from the bottom: {g}, {b}, {d}, {f} and {a}.",
+    "quizLines": "Play the notes on the lines.",
+    "spaces": "And the four spaces, from the bottom: {a}, {c}, {e} and {g}.",
+    "quizSpaces": "Play the notes in the spaces.",
+    "quizAll": "The whole bass staff mixed, up to middle {c}."
+  }
+}

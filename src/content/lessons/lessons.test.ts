@@ -120,6 +120,7 @@ describe('parseLesson', () => {
           textVars: { c: 'C4' },
           keys: [{ note: 'C4', finger: 1 }],
           range: ['C3', 'C5'],
+          staff: { clef: 'treble', notes: ['C4', 'G4'], names: true },
         },
         { type: 'find', text: 'b', notes: ['C4', 'E4'] },
         {
@@ -158,7 +159,9 @@ describe('parseLesson', () => {
       keys: [{ pitch: { midi: 60 }, finger: 1 }],
       range: [48, 72],
       hand: 'R',
+      staff: { clef: 'treble', notes: [{ midi: 60 }, { midi: 67 }], names: true },
     });
+    expect(lesson.steps[1]).not.toHaveProperty('staff');
     expect(lesson.steps[2]).toMatchObject({
       hands: 'R',
       pass: { minStars: 2 },
@@ -196,6 +199,11 @@ describe('parseLesson', () => {
     ['a bad notation', { ...exercise, notation: 'big' }, 'notation'],
     ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
     ['a quiz without notes', { type: 'quiz', text: 'x', notes: [] }, 'notes'],
+    [
+      'a staff picture with a bad clef',
+      { type: 'explain', text: 'x', staff: { clef: 'alto', notes: ['C4'] } },
+      'staff › clef',
+    ],
     ['too many quiz cards', { type: 'quiz', text: 'x', notes: ['C4'], count: 100 }, 'count'],
     ['a bad clef', { type: 'quiz', text: 'x', notes: ['C4'], clef: 'alto' }, 'clef'],
     [

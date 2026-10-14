@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "bassClef": "The left hand usually reads from a second staff, with the bass clef or F clef. Its two dots sit around the fourth line from the bottom, and the note on that line is {f}: the {f} just below middle {c}.",
+    "landmarks": "Landmarks in the bass clef: {c3} in the second space, {f} on the clef’s line, and middle {c} on a ledger line above the staff, the same middle {c} as in the treble clef.",
+    "findLandmarks": "Play {c3}, {f} and middle {c}.",
+    "quizLandmarks": "Read them from the bass staff: play each note you see."
+  }
+}

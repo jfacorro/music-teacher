@@ -8,6 +8,10 @@ import { parseInlineScore } from '../loaders/inlineScore';
 const loaders = {
   'ode-to-joy': () => import('./ode-to-joy.json'),
   'when-the-saints': () => import('./when-the-saints.json'),
+  'lightly-row': () => import('./lightly-row.json'),
+  'au-clair-de-la-lune': () => import('./au-clair-de-la-lune.json'),
+  'hot-cross-buns': () => import('./hot-cross-buns.json'),
+  'mary-had-a-little-lamb': () => import('./mary-had-a-little-lamb.json'),
 } satisfies Record<string, () => Promise<{ default: unknown }>>;
 
 export type SongId = keyof typeof loaders;

@@ -1,0 +1,85 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "intro",
+      "textVars": {
+        "c": "C4"
+      },
+      "keys": [
+        {
+          "note": "C4",
+          "finger": 1
+        },
+        {
+          "note": "D4",
+          "finger": 2
+        },
+        {
+          "note": "E4",
+          "finger": 3
+        },
+        {
+          "note": "F4",
+          "finger": 4
+        },
+        {
+          "note": "G4",
+          "finger": 5
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "exercise",
+      "text": "auClair",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "au-clair-de-la-lune",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "inTime",
+      "mode": "tempo",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "au-clair-de-la-lune",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "lightlyRow",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "lightly-row",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "inTime",
+      "mode": "tempo",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "song": "lightly-row",
+      "tempo": 88,
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}
