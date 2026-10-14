@@ -25,6 +25,9 @@ export type {
   ExplainStep,
   FindStep,
   ExerciseStep,
+  QuizStep,
+  QuizClef,
+  RhythmStep,
   ScoreView,
   SheetNotation,
 } from './lesson';

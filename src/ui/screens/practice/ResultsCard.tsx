@@ -11,13 +11,22 @@ interface ResultsCardProps {
   summary: Summary;
   mode: PracticeMode;
   onRetry: () => void;
+  /** A rhythm exercise: wrong keys are extra taps. */
+  rhythm?: boolean;
   /** Lets a bar of the heatmap be clicked to repeat it (index from 0). */
   onSelectBar?: (bar: number) => void;
   /** Extra actions next to Try again. */
   children?: ReactNode;
 }
 
-export function ResultsCard({ summary, mode, onRetry, onSelectBar, children }: ResultsCardProps) {
+export function ResultsCard({
+  summary,
+  mode,
+  rhythm = false,
+  onRetry,
+  onSelectBar,
+  children,
+}: ResultsCardProps) {
   const { t, i18n } = useTranslation('screens');
 
   const counts =
@@ -36,7 +45,7 @@ export function ResultsCard({ summary, mode, onRetry, onSelectBar, children }: R
       <dl className="results__counts">
         {counts.map((key) => (
           <div key={key}>
-            <dt>{t(`practice.results.${key}`)}</dt>
+            <dt>{t(`practice.results.${key === 'wrong' && rhythm ? 'extra' : key}`)}</dt>
             <dd>{summary[key]}</dd>
           </div>
         ))}

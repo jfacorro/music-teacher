@@ -5,6 +5,15 @@
       "text": "wholeAndRests"
     },
     {
+      "type": "rhythm",
+      "text": "tapRests",
+      "pattern": "w | q rq h | h rh | q q rq q",
+      "tempo": 70,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
       "type": "exercise",
       "text": "wholeNotes",
       "mode": "tempo",

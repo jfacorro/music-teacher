@@ -5,6 +5,15 @@
       "text": "beats"
     },
     {
+      "type": "rhythm",
+      "text": "tapQuarters",
+      "pattern": "q q q q | h h | q q h | h q q",
+      "tempo": 70,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
       "type": "exercise",
       "text": "quartersAndHalves",
       "mode": "tempo",

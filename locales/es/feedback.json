@@ -9,5 +9,6 @@
   "wrong": "Tecla incorrecta",
   "missed": "Perdida",
   "streak": "{count, plural, one {# nota seguida} other {# notas seguidas}}",
-  "wrongPlay": "Tecla incorrecta · toca {notes}"
+  "wrongPlay": "Tecla incorrecta · toca {notes}",
+  "extra": "Toque de más"
 }

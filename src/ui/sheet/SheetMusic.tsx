@@ -30,6 +30,8 @@ interface SheetMusicProps {
   loop?: LoopRange | null;
   /** Lets the user drag across bars to choose them (off when undefined). */
   onSelectBars?: (range: LoopRange) => void;
+  /** A rhythm exercise: one line, no pitches. */
+  rhythm?: boolean;
 }
 
 /** Where a bar is drawn: px from the left of the sheet. */
@@ -70,6 +72,7 @@ export function SheetMusic({
   hands,
   loop,
   onSelectBars,
+  rhythm = false,
 }: SheetMusicProps) {
   const { t } = useTranslation('screens');
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -81,6 +84,7 @@ export function SheetMusic({
   const names = useNoteNames();
 
   const music = useMemo(() => {
+    if (rhythm) return scoreToMusicXml(score, { rhythm: true });
     const staves: Hand[] | undefined =
       notation === 'grand' || hands === 'both' ? undefined : [hands];
     return scoreToMusicXml(score, {
@@ -88,7 +92,7 @@ export function SheetMusic({
       noteLabel:
         notation === 'names' ? (note) => names.name(note.pitch, { octave: false }) : undefined,
     });
-  }, [score, notation, hands, names]);
+  }, [score, notation, hands, names, rhythm]);
 
   // Render (again when the music or the color scheme changes).
   useEffect(() => {

@@ -565,9 +565,11 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - The header's input badge is now a picker, always visible: Automatic / MIDI keyboard / Microphone, each with its live status; choosing MIDI or the microphone turns it on if needed.
 - Skill tags per lesson in `courses.json` (`keyboard`, `finger-numbers`, `rh-position`, `lh-position`, `note-values`, `rests`, `eighth-notes`, `steady-tempo`; names in `locales/*/courses.json`). Mastery = average best accuracy of the skill's lessons (unplayed = 0); level Learning / Good (≥ 80%) / Mastered (≥ 95%), like the stars.
 
-**2.5 New exercise types**
-- `quiz`: flashcard note naming (show a note on the staff → play the key).
-- `rhythm`: tap any key along with a rhythm pattern.
+**2.5 New exercise types** — ✔ done
+- `quiz` step: flash cards with one note on a treble or bass staff (`"clef": "auto"` picks treble from middle C up); play its key. Wrong keys are named with their octave ("That was F4. Try again."); after two misses the right key lights up; the microphone's octave/harmonic mix-ups count as right. Scored by first-try answers, like the stars. The keyboard has no labels (it's a reading exercise). Cards are drawn by OSMD, cropped to the staff so every card has the same size.
+- Free play has a "Note quiz" mode: 10 cards on the treble clef (C4–G5), bass clef (G2–C4) or both.
+- `rhythm` step: a pattern written as counted (`"q q h | e e q rq q"`: w h q e s, "." dotted, "r" rest; every bar must be full). Any key counts and only timing is graded (taps when nothing is due are "Extra taps"); shown on a one-line percussion staff (stems up) or as a single falling lane, with a big tap pad instead of the keyboard. Tempo mode with count-in and metronome; results include the timing breakdown.
+- Unit 2 lessons 1–3 start with a tap-the-rhythm step before playing the same kind of rhythm on keys.
 
 **2.6 Content: Units 3–4**
 - Treble clef: landmark notes (middle C, G4, C5), lines & spaces drills, melodies read from the staff.

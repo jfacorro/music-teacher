@@ -9,8 +9,10 @@ import { LessonComplete } from './LessonComplete';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
 import { FindStepView } from './steps/FindStepView';
+import { QuizStepView } from './steps/QuizStepView';
+import { RhythmStepView } from './steps/RhythmStepView';
 
-/** Steps through a lesson: explanations, key finding and graded exercises. */
+/** Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms. */
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('screens');
   const courseText = useContentText('courses');
@@ -96,6 +98,30 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
                 saveStep(index, { stars: 3, accuracy: 1 });
                 markDone(index);
               }}
+            />
+          )}
+          {step?.type === 'quiz' && (
+            <QuizStepView
+              key={index}
+              step={step}
+              text={text}
+              onResult={(stepResult, passed) => {
+                saveStep(index, stepResult);
+                if (passed) markDone(index);
+              }}
+              onContinue={next}
+            />
+          )}
+          {step?.type === 'rhythm' && (
+            <RhythmStepView
+              key={index}
+              step={step}
+              text={text}
+              onResult={(stepResult, passed) => {
+                saveStep(index, stepResult);
+                if (passed) markDone(index);
+              }}
+              onContinue={next}
             />
           )}
           {step?.type === 'exercise' && (

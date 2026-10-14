@@ -37,6 +37,10 @@ export function FeedbackBadge({ feedback, streak }: FeedbackBadgeProps) {
           : t('wrong');
       tone = 'bad';
       break;
+    case 'extra':
+      text = t('extra');
+      tone = 'bad';
+      break;
     case 'missed':
       text = t('missed');
       tone = 'bad';

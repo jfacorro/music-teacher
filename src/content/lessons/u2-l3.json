@@ -5,6 +5,15 @@
       "text": "eighths"
     },
     {
+      "type": "rhythm",
+      "text": "tapEighths",
+      "pattern": "e e e e q q | e e q h | q e e q e e | w",
+      "tempo": 60,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
       "type": "exercise",
       "text": "pairs",
       "mode": "tempo",

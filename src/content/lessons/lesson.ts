@@ -7,7 +7,10 @@
  * - explain:  text, optionally with highlighted keys (and finger numbers)
  * - find:     press each of the given keys once, in any order
  * - exercise: a graded practice run (wait or tempo mode) of an inline score or a song
+ * - quiz:     note-naming flash cards: a note on the staff, play its key
+ * - rhythm:   tap any key along with a rhythm pattern (see engine/rhythm.ts)
  */
+import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
 import type { Finger, Hand, Score } from '../../engine/score';
 import type { HandFilter, PracticeMode } from '../../engine/session';
 import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
@@ -65,7 +68,31 @@ export interface ExerciseStep extends StepBase {
   pass: { minStars: number };
 }
 
-export type LessonStep = ExplainStep | FindStep | ExerciseStep;
+/** The staff a quiz card is shown on; "auto": treble from middle C up, bass below. */
+export type QuizClef = 'treble' | 'bass' | 'auto';
+
+export interface QuizStep extends StepBase {
+  type: 'quiz';
+  /** The notes the cards are drawn from. */
+  notes: Pitch[];
+  /** How many cards. */
+  count: number;
+  clef: QuizClef;
+  pass: { minStars: number };
+}
+
+export interface RhythmStep extends StepBase {
+  type: 'rhythm';
+  /** The pattern as a score: a note per tap, on the line of a one-line rhythm staff. */
+  score: Score;
+  view: ScoreView;
+  metronome: boolean;
+  pass: { minStars: number };
+}
+
+export const QUIZ_CARDS_DEFAULT = 10;
+
+export type LessonStep = ExplainStep | FindStep | ExerciseStep | QuizStep | RhythmStep;
 
 export interface Lesson {
   id: string;
@@ -127,9 +154,76 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
     }
     case 'exercise':
       return { ...base, type: 'exercise', ...(await exercise(data, location)) };
+    case 'quiz': {
+      if (!Array.isArray(data.notes) || data.notes.length === 0) {
+        throw new LessonError(at(location, 'notes'), 'expected a non-empty array of notes');
+      }
+      const count = data.count ?? QUIZ_CARDS_DEFAULT;
+      if (typeof count !== 'number' || !Number.isInteger(count) || count < 1 || count > 50) {
+        throw new LessonError(at(location, 'count'), 'expected a whole number from 1 to 50');
+      }
+      const clef = data.clef ?? 'auto';
+      if (clef !== 'treble' && clef !== 'bass' && clef !== 'auto') {
+        throw new LessonError(at(location, 'clef'), 'expected "treble", "bass" or "auto"');
+      }
+      return {
+        ...base,
+        type: 'quiz',
+        notes: data.notes.map((note, i) => pitch(note, at(location, `notes[${i}]`))),
+        count,
+        clef,
+        pass: passRule(data, location),
+      };
+    }
+    case 'rhythm':
+      return { ...base, type: 'rhythm', ...rhythm(data, location) };
     default:
-      throw new LessonError(at(location, 'type'), 'expected "explain", "find" or "exercise"');
+      throw new LessonError(
+        at(location, 'type'),
+        'expected "explain", "find", "exercise", "quiz" or "rhythm"',
+      );
   }
+}
+
+function rhythm(
+  data: Record<string, unknown>,
+  location: string,
+): Omit<RhythmStep, keyof StepBase | 'type'> {
+  if (typeof data.pattern !== 'string') {
+    throw new LessonError(at(location, 'pattern'), 'expected a rhythm such as "q q h | w"');
+  }
+  const timeSignature = data.timeSignature ?? [4, 4];
+  let notes: { start: number; duration: number }[];
+  try {
+    notes = parseRhythm(data.pattern, timeSignature as [number, number]);
+  } catch (error) {
+    if (error instanceof RhythmError) throw new LessonError(at(location, 'pattern'), error.message);
+    throw error;
+  }
+  let score: Score;
+  try {
+    score = parseInlineScore(
+      {
+        tempo: data.tempo,
+        timeSignature,
+        notes: notes.map((note) => ({ ...note, note: RHYTHM_NOTE, hand: 'R' })),
+      },
+      location,
+    );
+  } catch (error) {
+    if (error instanceof ScoreError) throw new LessonError(error.location, error.message);
+    throw error;
+  }
+  const view = data.view ?? 'sheet';
+  if (view !== 'falling' && view !== 'sheet') {
+    throw new LessonError(at(location, 'view'), 'expected "falling" or "sheet"');
+  }
+  return {
+    score,
+    view,
+    metronome: data.metronome !== false,
+    pass: passRule(data, location),
+  };
 }
 
 async function exercise(
@@ -177,12 +271,6 @@ async function exercise(
     throw new LessonError(at(location, 'notation'), 'expected "names", "plain" or "grand"');
   }
 
-  const pass = object(data.pass ?? {}, at(location, 'pass'));
-  const minStars = pass.minStars ?? 0;
-  if (![0, 1, 2, 3].includes(minStars as number)) {
-    throw new LessonError(at(location, 'pass › minStars'), 'expected 0–3');
-  }
-
   return {
     mode: data.mode,
     view,
@@ -191,8 +279,17 @@ async function exercise(
     score,
     song,
     metronome: data.metronome === true,
-    pass: { minStars: minStars as number },
+    pass: passRule(data, location),
   };
+}
+
+function passRule(data: Record<string, unknown>, location: string): { minStars: number } {
+  const pass = object(data.pass ?? {}, at(location, 'pass'));
+  const minStars = pass.minStars ?? 0;
+  if (![0, 1, 2, 3].includes(minStars as number)) {
+    throw new LessonError(at(location, 'pass › minStars'), 'expected 0–3');
+  }
+  return { minStars: minStars as number };
 }
 
 function textVars(input: unknown, location: string): Record<string, Pitch> {

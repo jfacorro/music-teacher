@@ -131,9 +131,29 @@ describe('parseLesson', () => {
           notation: 'plain',
         },
         { type: 'exercise', text: 'song', mode: 'tempo', song: 'ode-to-joy', tempo: 80 },
+        { type: 'quiz', text: 'q', notes: ['C4', 'G4'], count: 5, clef: 'treble' },
+        { type: 'rhythm', text: 'r', pattern: 'q q h | e e q rq q', tempo: 90 },
       ],
     });
-    expect(lesson.steps.map((s) => s.type)).toEqual(['explain', 'find', 'exercise', 'exercise']);
+    expect(lesson.steps.map((s) => s.type)).toEqual([
+      'explain',
+      'find',
+      'exercise',
+      'exercise',
+      'quiz',
+      'rhythm',
+    ]);
+    expect(lesson.steps[4]).toMatchObject({
+      notes: [{ midi: 60 }, { midi: 67 }],
+      count: 5,
+      clef: 'treble',
+      pass: { minStars: 0 },
+    });
+    const rhythm = lesson.steps[5];
+    expect(rhythm).toMatchObject({ view: 'sheet', metronome: true, score: { tempo: 90 } });
+    expect(rhythm?.type === 'rhythm' && rhythm.score.notes.map((n) => n.start)).toEqual([
+      0, 1, 2, 4, 4.5, 5, 7,
+    ]);
     expect(lesson.steps[0]).toMatchObject({
       keys: [{ pitch: { midi: 60 }, finger: 1 }],
       range: [48, 72],
@@ -175,6 +195,15 @@ describe('parseLesson', () => {
     ['a bad view', { ...exercise, view: 'tab' }, 'view'],
     ['a bad notation', { ...exercise, notation: 'big' }, 'notation'],
     ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
+    ['a quiz without notes', { type: 'quiz', text: 'x', notes: [] }, 'notes'],
+    ['too many quiz cards', { type: 'quiz', text: 'x', notes: ['C4'], count: 100 }, 'count'],
+    ['a bad clef', { type: 'quiz', text: 'x', notes: ['C4'], clef: 'alto' }, 'clef'],
+    [
+      'a rhythm with a short bar',
+      { type: 'rhythm', text: 'x', pattern: 'q q q', tempo: 60 },
+      'pattern: bar 1 lasts 3 beats',
+    ],
+    ['a rhythm without a pattern', { type: 'rhythm', text: 'x', tempo: 60 }, 'pattern'],
     ['a backwards range', { type: 'find', text: 'x', notes: ['C4'], range: ['C5', 'C3'] }, 'range'],
   ])('rejects %s with its location', async (_, step, message) => {
     await expect(parseLesson('x', { steps: [step] })).rejects.toThrow(LessonError);

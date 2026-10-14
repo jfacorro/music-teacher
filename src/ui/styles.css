@@ -1182,3 +1182,78 @@ button.bars__bar:focus-visible {
   inset-block-start: 1rem;
   margin: 0;
 }
+
+/* Note quiz */
+
+.quiz {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.quiz__progress {
+  margin: 0;
+}
+
+.quiz__message {
+  margin: 0;
+  min-block-size: 1.5em;
+}
+
+/* OpenSheetMusicDisplay draws to its container's width: a card-sized one. */
+.note-card__host {
+  inline-size: min(300px, 100%);
+}
+
+.note-card__host svg {
+  display: block;
+  block-size: 170px;
+  inline-size: auto;
+  margin-inline: auto;
+}
+
+.quiz__results {
+  margin-block-start: 1rem;
+}
+
+.note-card {
+  display: flex;
+  justify-content: center;
+  padding-block: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+/* Rhythm exercises: one big key in place of the keyboard */
+
+.tap-pad {
+  display: block;
+  inline-size: 100%;
+  block-size: 7rem;
+  border: none;
+  border-block-start: 3px solid var(--hit-line);
+  background: var(--key-white);
+  color: var(--key-label);
+  font: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  transition: background-color 80ms;
+}
+
+.tap-pad.is-due {
+  background: color-mix(in srgb, var(--hand-right) 25%, var(--key-white));
+}
+
+.tap-pad.is-pressed {
+  background: color-mix(in srgb, var(--key-pressed) 35%, var(--key-white));
+}
+
+.tap-pad.is-correct {
+  background: color-mix(in srgb, var(--key-correct) 45%, var(--key-white));
+}
+
+.tap-pad.is-wrong {
+  background: color-mix(in srgb, var(--key-wrong) 45%, var(--key-white));
+}
