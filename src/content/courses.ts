@@ -10,9 +10,33 @@
 import { parseNote, type Pitch } from '../theory/pitch';
 import data from './courses.json';
 
+/** What lessons practice (PLAN.md §2.4), in curriculum order. Names: courses.json › skills. */
+export const SKILLS = [
+  'keyboard',
+  'finger-numbers',
+  'rh-position',
+  'lh-position',
+  'note-values',
+  'rests',
+  'eighth-notes',
+  'steady-tempo',
+] as const;
+
+export type Skill = (typeof SKILLS)[number];
+
 export interface CourseLesson {
   id: string;
   titleVars: Record<string, Pitch>;
+  skills: Skill[];
+}
+
+function skills(lessonId: string, input: readonly string[] | undefined): Skill[] {
+  return (input ?? []).map((skill) => {
+    if (!(SKILLS as readonly string[]).includes(skill)) {
+      throw new Error(`courses.json › ${lessonId}: unknown skill "${skill}"`);
+    }
+    return skill as Skill;
+  });
 }
 
 export interface Unit {
@@ -32,6 +56,7 @@ export const UNITS: readonly Unit[] = data.units.map((unit) => ({
   lessons: unit.lessons.map((lesson) => ({
     id: lesson.id,
     titleVars: vars((lesson as { titleVars?: Record<string, string> }).titleVars),
+    skills: skills(lesson.id, (lesson as { skills?: string[] }).skills),
   })),
 }));
 

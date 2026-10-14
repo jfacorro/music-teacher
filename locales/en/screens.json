@@ -28,7 +28,24 @@
     "outOf": "{value} of {total}",
     "days": "{count, plural, =0 {No days yet} one {# day} other {# days}}",
     "recent": "Recent practice",
-    "underMinute": "Less than a minute"
+    "underMinute": "Less than a minute",
+    "bestStreak": "Best: {count, plural, one {# day} other {# days}}",
+    "lastDays": {
+      "heading": "Last two weeks",
+      "total": "{time} in total",
+      "day": "{date}: {time}",
+      "none": "{date}: no practice"
+    },
+    "skills": {
+      "heading": "Skills",
+      "lessons": "{played} of {total, plural, one {# lesson} other {# lessons}} played",
+      "level": {
+        "notStarted": "Not started",
+        "learning": "Learning",
+        "good": "Good",
+        "mastered": "Mastered"
+      }
+    }
   },
   "settings": {
     "title": "Settings",
@@ -201,7 +218,21 @@
       "missed": "Missed",
       "wrong": "Wrong keys",
       "retry": "Try again",
-      "weakSpot": "Practice the weak spot"
+      "weakSpot": "Practice the weak spot",
+      "timing": {
+        "heading": "Timing",
+        "chart": "When each note was played: {early} early, {onTime} on time, {late} late",
+        "early": "{count} early",
+        "onTime": "{count} on time",
+        "late": "{count} late",
+        "average": "{direction, select, early {On average {ms} ms early} late {On average {ms} ms late} other {On average right on the beat}}"
+      },
+      "bars": {
+        "heading": "Bar by bar",
+        "bar": "Bar {bar}: {accuracy}",
+        "empty": "Bar {bar}: no notes",
+        "hint": "Click a bar to repeat it."
+      }
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {

@@ -29,6 +29,7 @@ import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
 import { useInstrument } from '../../../input/routing';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { useLiveInput } from '../../../input/liveStore';
+import { activityTimer, recordPracticeTime } from '../../../storage/progress';
 import { toggleBars } from '../../barSelection';
 import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
@@ -115,6 +116,17 @@ export function PracticeRun({
     document.addEventListener('visibilitychange', onVisibility);
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, [session]);
+
+  // Practice time: while playing (or waiting for a key), not counting long idle stretches.
+  useEffect(() => {
+    if (!running) return;
+    const timer = activityTimer();
+    const unsubscribe = subscribeNotes(timer.activity);
+    return () => {
+      unsubscribe();
+      void recordPracticeTime(timer.stop());
+    };
+  }, [running]);
 
   // A new loop starts over; a new speed carries on from where it is.
   const loopFirst = loop?.first;
@@ -309,6 +321,29 @@ export function PracticeRun({
         </p>
       </div>
 
+      {/* Results go above the music, which stays visible with its colored notes. */}
+      {state.summary && (
+        <ResultsCard
+          summary={state.summary}
+          mode={mode}
+          onRetry={() => {
+            session.restart();
+            void togglePlay();
+          }}
+          onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
+        >
+          {weak || extraActions ? (
+            <>
+              {weak && onLoopChange && (
+                <button type="button" className="button" onClick={() => onLoopChange(weak)}>
+                  {t('practice.results.weakSpot')}
+                </button>
+              )}
+              {extraActions}
+            </>
+          ) : null}
+        </ResultsCard>
+      )}
       <div className="practice__stage">
         <div className="practice__notes">
           {view === 'sheet' ? (
@@ -351,27 +386,6 @@ export function PracticeRun({
           onKeyDown={screenKeyDown}
           onKeyUp={screenKeyUp}
         />
-        {state.summary && (
-          <ResultsCard
-            summary={state.summary}
-            mode={mode}
-            onRetry={() => {
-              session.restart();
-              void togglePlay();
-            }}
-          >
-            {weak || extraActions ? (
-              <>
-                {weak && onLoopChange && (
-                  <button type="button" className="button" onClick={() => onLoopChange(weak)}>
-                    {t('practice.results.weakSpot')}
-                  </button>
-                )}
-                {extraActions}
-              </>
-            ) : null}
-          </ResultsCard>
-        )}
       </div>
     </>
   );

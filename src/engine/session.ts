@@ -398,7 +398,13 @@ export class PracticeSession {
     this.setState({
       status: 'finished',
       countIn: null,
-      summary: summarize(this.hands, this.outcomes, this.wrongBeats, this.score.measures),
+      summary: summarize(
+        this.hands,
+        this.outcomes,
+        this.wrongBeats,
+        this.score.measures,
+        this.mode === 'tempo' ? this.windows() : undefined,
+      ),
     });
   }
 

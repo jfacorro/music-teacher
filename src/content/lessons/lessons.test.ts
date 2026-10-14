@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
-import { LESSON_ORDER, UNITS, findLesson, nextLessonId } from '../courses';
+import { LESSON_ORDER, SKILLS, UNITS, findLesson, nextLessonId } from '../courses';
 import { lessonExists, loadLesson } from '.';
 import { LessonError, parseLesson } from './lesson';
 
@@ -12,6 +12,7 @@ const lessonTexts = import.meta.glob<LessonText>('/locales/*/lessons/*.json', {
 const courseTexts = import.meta.glob<{
   units: Record<string, { title?: string; description?: string }>;
   lessons: Record<string, string>;
+  skills: Record<string, string>;
 }>('/locales/*/courses.json', { eager: true, import: 'default' });
 const lessonFiles = import.meta.glob('./*.json');
 
@@ -34,8 +35,19 @@ describe('courses', () => {
     expect(findLesson('nope')).toBeNull();
   });
 
+  it('tags every lesson with what it practices, and every skill is practiced', () => {
+    const lessons = UNITS.flatMap((unit) => unit.lessons);
+    for (const lesson of lessons) expect(lesson.skills.length, lesson.id).toBeGreaterThan(0);
+    const used = new Set(lessons.flatMap((lesson) => lesson.skills));
+    expect([...SKILLS].filter((skill) => !used.has(skill))).toEqual([]);
+  });
+
   describe.each(TRANSLATED_LANGUAGES)('%s', (language) => {
     const texts = courseTexts[`/locales/${language}/courses.json`];
+
+    it('names every skill', () => {
+      for (const skill of SKILLS) expect(texts?.skills[skill], skill).toBeTruthy();
+    });
 
     it('has a title for every unit and lesson, using only the provided note variables', () => {
       for (const unit of UNITS) {

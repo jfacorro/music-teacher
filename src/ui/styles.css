@@ -532,18 +532,13 @@ select {
 }
 
 .results {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  transform: translate(-50%, -50%);
-  min-width: min(320px, 90%);
-  max-height: 95%;
-  overflow: auto;
+  inline-size: min(560px, 100%);
+  margin: 0 auto 0.75rem;
   padding: 1.25rem 1.5rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--surface);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
   text-align: center;
 }
 
@@ -860,6 +855,235 @@ a.path__title:hover {
 
 .stat strong {
   font-size: 1.5rem;
+}
+
+.progress > .card {
+  margin-block-end: 1rem;
+}
+
+.stat__detail {
+  font-size: 0.875rem;
+}
+
+/* Results: timing breakdown */
+
+.timing,
+.bars {
+  margin-block-end: 1rem;
+  text-align: start;
+}
+
+.timing h3,
+.bars h3 {
+  font-size: 0.9rem;
+  margin-block: 0 0.4rem;
+}
+
+.timing__chart {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.timing__zone--ok {
+  fill: color-mix(in srgb, var(--note-played) 10%, transparent);
+}
+
+.timing__zone--good {
+  fill: color-mix(in srgb, var(--note-played) 20%, transparent);
+}
+
+.timing__zone--perfect {
+  fill: color-mix(in srgb, var(--note-played) 35%, transparent);
+}
+
+.timing__beat {
+  stroke: var(--note-played);
+  stroke-width: 1;
+}
+
+.timing__dot {
+  fill: var(--text);
+  fill-opacity: 0.75;
+}
+
+.timing__counts {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.timing__average {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+}
+
+/* Results: bar by bar, colored like the stars it would earn */
+
+.bars__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bars__bar {
+  display: grid;
+  place-items: center;
+  min-inline-size: 2rem;
+  block-size: 2rem;
+  padding: 0 0.25rem;
+  border: none;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--badge-text);
+}
+
+button.bars__bar {
+  cursor: pointer;
+}
+
+button.bars__bar:hover,
+button.bars__bar:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.bars__bar--0 {
+  background: var(--key-wrong);
+}
+
+.bars__bar--1 {
+  background: color-mix(in srgb, var(--key-wrong) 45%, var(--pending));
+}
+
+.bars__bar--2 {
+  background: color-mix(in srgb, var(--pending) 35%, var(--note-played));
+}
+
+.bars__bar--3 {
+  background: var(--note-played);
+}
+
+.bars__bar--empty {
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+}
+
+.bars__hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+}
+
+/* Progress: practice per day */
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.day__bar {
+  display: flex;
+  align-items: flex-end;
+  inline-size: 100%;
+  max-inline-size: 2rem;
+  block-size: 6rem;
+  border-radius: 4px;
+  background: var(--lane-bg);
+}
+
+.day__bar > span {
+  inline-size: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+}
+
+.day__name {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.day.is-today .day__name {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Progress: skills */
+
+.skills {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skill {
+  display: grid;
+  grid-template-columns: minmax(10rem, 14rem) minmax(6rem, 1fr) auto;
+  align-items: center;
+  gap: 0.25rem 1rem;
+}
+
+.skill__lessons {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  margin-block-start: -0.35rem;
+}
+
+.skill__meter {
+  block-size: 0.5rem;
+  border-radius: 999px;
+  background: var(--lane-bg);
+  overflow: hidden;
+}
+
+.skill__meter > span {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--pending);
+}
+
+.skill--good .skill__meter > span {
+  background: color-mix(in srgb, var(--pending) 35%, var(--note-played));
+}
+
+.skill--mastered .skill__meter > span {
+  background: var(--note-played);
+}
+
+.skill__level {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .skill {
+    grid-template-columns: 1fr auto;
+  }
+
+  .skill__meter {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
 }
 
 /* Free play */

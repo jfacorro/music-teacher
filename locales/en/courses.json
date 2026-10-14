@@ -20,5 +20,15 @@
     "u2-l2": "Whole notes and rests",
     "u2-l3": "Eighth notes",
     "u2-l4": "Song: When the Saints Go Marching In"
+  },
+  "skills": {
+    "keyboard": "Finding the keys",
+    "finger-numbers": "Finger numbers",
+    "rh-position": "Right-hand position",
+    "lh-position": "Left-hand position",
+    "note-values": "Note lengths",
+    "rests": "Rests",
+    "eighth-notes": "Eighth notes",
+    "steady-tempo": "Playing in time"
   }
 }

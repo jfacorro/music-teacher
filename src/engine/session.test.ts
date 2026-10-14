@@ -89,6 +89,7 @@ describe('PracticeSession: tempo mode', () => {
     const { status, summary } = t.session.getState();
     expect(status).toBe('finished');
     expect(summary).toMatchObject({ expected: 3, perfect: 3, accuracy: 1, stars: 3 });
+    expect(summary?.timing).toMatchObject({ early: 0, onTime: 3, late: 0 });
     expect(t.transport.playing).toBe(false);
   });
 

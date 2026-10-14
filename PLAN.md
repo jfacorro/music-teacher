@@ -556,10 +556,13 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Shortcuts while practicing (songs and lessons): Space plays and pauses, Escape starts over (tooltips on the buttons).
 - Settings page: sections stacked one after another; the live test keeps the last 20 events in a scrolling list.
 
-**2.4 Richer results & progress**
-- Results: timing breakdown (early/late distribution), per-measure heatmap.
-- Progress screen: daily streak, practice time, lessons completed.
-- Skill tags on lessons (e.g. `treble-reading`, `lh-position`) and a simple mastery score per skill.
+**2.4 Richer results & progress** — ✔ done
+- Results (tempo mode): timing breakdown — a dot per note on an early ↔ late line over the perfect / good / OK windows, with early / on-time / late counts and the average offset ("On average 14 ms early").
+- Results: "Bar by bar" heatmap, colored like the stars each bar would earn (dashed: no notes); in song practice, clicking a bar repeats it.
+- Results are shown above the music (not over it), so they have room and the colored notes stay visible.
+- Practice time is now measured while playing or waiting for a key (idle gaps count up to a minute), so loops and unfinished runs count too. It is saved per day (Dexie v3 `practiceDays`, filled from the existing log on upgrade); streaks come from it.
+- Progress screen: best streak next to the current one, practice time per day over the last two weeks (bar chart), skills.
+- Skill tags per lesson in `courses.json` (`keyboard`, `finger-numbers`, `rh-position`, `lh-position`, `note-values`, `rests`, `eighth-notes`, `steady-tempo`; names in `locales/*/courses.json`). Mastery = average best accuracy of the skill's lessons (unplayed = 0); level Learning / Good (≥ 80%) / Mastered (≥ 95%), like the stars.
 
 **2.5 New exercise types**
 - `quiz`: flashcard note naming (show a note on the staff → play the key).

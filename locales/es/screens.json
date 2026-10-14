@@ -28,7 +28,24 @@
     "outOf": "{value} de {total}",
     "days": "{count, plural, =0 {Aún ningún día} one {# día} other {# días}}",
     "recent": "Práctica reciente",
-    "underMinute": "Menos de un minuto"
+    "underMinute": "Menos de un minuto",
+    "bestStreak": "Récord: {count, plural, one {# día} other {# días}}",
+    "lastDays": {
+      "heading": "Últimas dos semanas",
+      "total": "{time} en total",
+      "day": "{date}: {time}",
+      "none": "{date}: sin práctica"
+    },
+    "skills": {
+      "heading": "Habilidades",
+      "lessons": "{played} de {total, plural, one {# lección tocada} other {# lecciones tocadas}}",
+      "level": {
+        "notStarted": "Sin empezar",
+        "learning": "Aprendiendo",
+        "good": "Bien",
+        "mastered": "Dominada"
+      }
+    }
   },
   "settings": {
     "title": "Configuración",
@@ -201,7 +218,21 @@
       "missed": "Perdidas",
       "wrong": "Teclas incorrectas",
       "retry": "Intentar de nuevo",
-      "weakSpot": "Practicar el punto débil"
+      "weakSpot": "Practicar el punto débil",
+      "timing": {
+        "heading": "Precisión rítmica",
+        "chart": "Cuándo tocaste cada nota: {early} antes de tiempo, {onTime} a tiempo, {late} tarde",
+        "early": "{count} antes de tiempo",
+        "onTime": "{count} a tiempo",
+        "late": "{count} tarde",
+        "average": "{direction, select, early {De media, {ms} ms antes de tiempo} late {De media, {ms} ms tarde} other {De media, justo a tiempo}}"
+      },
+      "bars": {
+        "heading": "Compás a compás",
+        "bar": "Compás {bar}: {accuracy}",
+        "empty": "Compás {bar}: sin notas",
+        "hint": "Haz clic en un compás para repetirlo."
+      }
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {
