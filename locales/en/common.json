@@ -46,5 +46,8 @@
     "auto": "Automatic · {status}",
     "nothing": "nothing connected",
     "midi": "MIDI keyboard"
+  },
+  "modal": {
+    "close": "Close"
   }
 }

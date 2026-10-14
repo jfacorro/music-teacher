@@ -31,6 +31,7 @@ import { pitchFromMidi } from '../../../theory/pitch';
 import { useLiveInput } from '../../../input/liveStore';
 import { activityTimer, recordPracticeTime } from '../../../storage/progress';
 import { toggleBars } from '../../barSelection';
+import { Modal } from '../../components/Modal';
 import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
@@ -110,6 +111,8 @@ export function PracticeRun({
       }),
   );
   const state = useSyncExternalStore(session.subscribe, session.getState);
+  /** Results the learner closed (they stay closed until the next run's). */
+  const [dismissed, setDismissed] = useState<Summary | null>(null);
   const running = state.status === 'playing' || state.status === 'waiting';
 
   useEffect(() => subscribeNotes((event) => session.handleNote(event)), [session]);
@@ -274,6 +277,8 @@ export function PracticeRun({
       if (event.code !== 'Space' && event.code !== 'Escape') return;
       if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
       if (isTypingTarget(event.target)) return;
+      // An open dialog (the results) handles its own keys: Escape closes it.
+      if (document.querySelector('dialog:modal')) return;
       event.preventDefault(); // no page scrolling
       // A focused button or checkbox would react to Space as well, when the key comes up.
       if (event.target instanceof HTMLElement && event.target !== document.body) {
@@ -292,6 +297,7 @@ export function PracticeRun({
       ? undefined
       : (range: LoopRange) => onLoopChange(toggleBars(loop, range));
   const weak = state.summary && onLoopChange ? weakSpot(state.summary.measures) : null;
+  const resultsOpen = state.summary !== null && dismissed !== state.summary;
   const extraActions = state.summary ? (resultsActions?.(state.summary) ?? null) : null;
 
   const modeHint = rhythm
@@ -333,34 +339,41 @@ export function PracticeRun({
         >
           {t('practice.restart')}
         </button>
+        {state.summary && !resultsOpen && (
+          <button type="button" className="button" onClick={() => setDismissed(null)}>
+            {t('practice.results.show')}
+          </button>
+        )}
         <p className="muted" aria-live="polite">
           {hint ?? (loopHint || modeHint)}
         </p>
       </div>
 
-      {/* Results go above the music, which stays visible with its colored notes. */}
-      {state.summary && (
-        <ResultsCard
-          summary={state.summary}
-          mode={mode}
-          rhythm={rhythm}
-          onRetry={() => {
-            session.restart();
-            void togglePlay();
-          }}
-          onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
-        >
-          {weak || extraActions ? (
-            <>
-              {weak && onLoopChange && (
-                <button type="button" className="button" onClick={() => onLoopChange(weak)}>
-                  {t('practice.results.weakSpot')}
-                </button>
-              )}
-              {extraActions}
-            </>
-          ) : null}
-        </ResultsCard>
+      {/* Results float over the page; closed, the music stays with its colored notes. */}
+      {state.summary && resultsOpen && (
+        <Modal labelledBy="results-heading" onClose={() => setDismissed(state.summary)}>
+          <ResultsCard
+            summary={state.summary}
+            mode={mode}
+            rhythm={rhythm}
+            onRetry={() => {
+              session.restart();
+              void togglePlay();
+            }}
+            onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
+          >
+            {weak || extraActions ? (
+              <>
+                {weak && onLoopChange && (
+                  <button type="button" className="button" onClick={() => onLoopChange(weak)}>
+                    {t('practice.results.weakSpot')}
+                  </button>
+                )}
+                {extraActions}
+              </>
+            ) : null}
+          </ResultsCard>
+        </Modal>
       )}
       <div className="practice__stage">
         <div className="practice__notes">

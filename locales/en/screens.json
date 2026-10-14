@@ -248,7 +248,8 @@
         "empty": "Bar {bar}: no notes",
         "hint": "Click a bar to repeat it."
       },
-      "extra": "Extra taps"
+      "extra": "Extra taps",
+      "show": "Results"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {
