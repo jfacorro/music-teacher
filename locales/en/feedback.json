@@ -9,5 +9,6 @@
   "wrong": "Wrong key",
   "missed": "Missed",
   "streak": "{count, plural, one {# note in a row} other {# notes in a row}}",
-  "wrongPlay": "Wrong key · play {notes}"
+  "wrongPlay": "Wrong key · play {notes}",
+  "extra": "Extra tap"
 }

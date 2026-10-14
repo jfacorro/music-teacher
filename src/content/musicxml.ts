@@ -7,6 +7,7 @@
  * that start together form a chord); durations are multiples of a sixteenth note; key of C.
  */
 import { beatsPerMeasure, type Hand, type Score, type ScoreNote } from '../engine/score';
+import type { Pitch } from '../theory/pitch';
 
 /** Divisions per quarter note: sixteenths (3) and eighth-note triplets (4) are whole numbers. */
 export const DIVISIONS = 12;
@@ -45,6 +46,11 @@ export interface MusicXmlOptions {
   hands?: readonly Hand[];
   /** Text written under each note, e.g. its name for beginners (once per tied note). */
   noteLabel?: (note: ScoreNote) => string;
+  /**
+   * Rhythm only: one staff with a single line and a percussion clef, every note on the line
+   * (written at its pitch, which positions it).
+   */
+  rhythm?: boolean;
 }
 
 export const noteKey = (staff: number, startDivision: number, midi: number) =>
@@ -76,10 +82,12 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
     const from = m * measureDivs;
     const to = from + measureDivs;
     const parts: string[] = [];
-    if (m === 0) parts.push(attributes(score, staves));
+    if (m === 0) parts.push(attributes(score, staves, options.rhythm ?? false));
     linesByStaff.forEach(({ staff, events }, i) => {
       if (i > 0) parts.push(`<backup><duration>${measureDivs}</duration></backup>`);
-      parts.push(...measureNotes(events, staff, from, to, index, options.noteLabel));
+      parts.push(
+        ...measureNotes(events, staff, from, to, index, options.noteLabel, options.rhythm ?? false),
+      );
     });
     measures.push(`<measure number="${m + 1}">${parts.join('')}</measure>`);
   }
@@ -117,6 +125,7 @@ function measureNotes(
   to: number,
   index: Map<string, ScoreNote>,
   noteLabel: MusicXmlOptions['noteLabel'],
+  rhythm: boolean,
 ): string[] {
   const out: string[] = [];
   const inMeasure = events.filter((e) => e.start < to && e.end > from);
@@ -142,6 +151,7 @@ function measureNotes(
             tieStart,
             tieStop,
             fingering: !tieStop,
+            rhythm,
             // Chord notes stack their labels on separate lines.
             label: !tieStop && noteLabel ? { text: noteLabel(note), line: n + 1 } : null,
           }),
@@ -197,12 +207,14 @@ function noteXml(
     tieStart,
     tieStop,
     fingering,
+    rhythm,
     label,
   }: {
     chord: boolean;
     tieStart: boolean;
     tieStop: boolean;
     fingering: boolean;
+    rhythm: boolean;
     label: { text: string; line: number } | null;
   },
 ): string {
@@ -215,12 +227,16 @@ function noteXml(
   return (
     '<note>' +
     (chord ? '<chord/>' : '') +
-    `<pitch><step>${step}</step>${alter ? `<alter>${alter}</alter>` : ''}<octave>${octave}</octave></pitch>` +
+    (rhythm
+      ? `<unpitched><display-step>${step}</display-step><display-octave>${octave}</display-octave></unpitched>`
+      : `<pitch><step>${step}</step>${alter ? `<alter>${alter}</alter>` : ''}<octave>${octave}</octave></pitch>`) +
     `<duration>${value.divs}</duration>` +
     (tieStop ? '<tie type="stop"/>' : '') +
     (tieStart ? '<tie type="start"/>' : '') +
     `<voice>${voiceOf(staff)}</voice>` +
     `<type>${value.type}</type>${'<dot/>'.repeat(value.dots)}` +
+    // Rhythms read best with every stem up.
+    (rhythm ? '<stem>up</stem>' : '') +
     `<staff>${staff.number}</staff>` +
     (notations ? `<notations>${notations}</notations>` : '') +
     (label
@@ -238,15 +254,18 @@ function voiceOf(staff: StaffInfo): number {
   return staff.number === 1 ? 1 : 5;
 }
 
-function attributes(score: Score, staves: StaffInfo[]): string {
+function attributes(score: Score, staves: StaffInfo[], rhythm: boolean): string {
   const [beats, beatType] = score.timeSignature;
-  const clefs = staves
-    .map(({ hand, number }) =>
-      hand === 'R'
-        ? `<clef number="${number}"><sign>G</sign><line>2</line></clef>`
-        : `<clef number="${number}"><sign>F</sign><line>4</line></clef>`,
-    )
-    .join('');
+  const clefs = rhythm
+    ? '<clef number="1"><sign>percussion</sign></clef>' +
+      '<staff-details number="1"><staff-lines>1</staff-lines></staff-details>'
+    : staves
+        .map(({ hand, number }) =>
+          hand === 'R'
+            ? `<clef number="${number}"><sign>G</sign><line>2</line></clef>`
+            : `<clef number="${number}"><sign>F</sign><line>4</line></clef>`,
+        )
+        .join('');
   return (
     '<attributes>' +
     `<divisions>${DIVISIONS}</divisions>` +
@@ -256,5 +275,31 @@ function attributes(score: Score, staves: StaffInfo[]): string {
     clefs +
     '</attributes>' +
     `<sound tempo="${score.tempo}"/>`
+  );
+}
+
+export type Clef = 'treble' | 'bass';
+
+/** A single whole note on a treble or bass staff, without a time signature: a quiz card. */
+export function noteCardXml({ step, alter, octave }: Pitch, clef: Clef): string {
+  const accidental = alter === 1 ? 'sharp' : alter === -1 ? 'flat' : null;
+  return (
+    '<?xml version="1.0" encoding="UTF-8"?>' +
+    '<score-partwise version="4.0">' +
+    '<part-list><score-part id="P1"><part-name>Note</part-name></score-part></part-list>' +
+    '<part id="P1"><measure number="1">' +
+    '<attributes><divisions>1</divisions><key><fifths>0</fifths></key>' +
+    '<time print-object="no"><beats>4</beats><beat-type>4</beat-type></time>' +
+    (clef === 'treble'
+      ? '<clef><sign>G</sign><line>2</line></clef>'
+      : '<clef><sign>F</sign><line>4</line></clef>') +
+    '</attributes>' +
+    '<note>' +
+    `<pitch><step>${step}</step>${alter ? `<alter>${alter}</alter>` : ''}<octave>${octave}</octave></pitch>` +
+    '<duration>4</duration><type>whole</type>' +
+    (accidental ? `<accidental>${accidental}</accidental>` : '') +
+    '</note>' +
+    '<barline location="right"><bar-style>none</bar-style></barline>' +
+    '</measure></part></score-partwise>'
   );
 }

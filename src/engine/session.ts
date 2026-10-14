@@ -13,6 +13,7 @@
 import type { InputSourceKind, NoteEvent } from '../input/types';
 import type { Pitch } from '../theory/pitch';
 import { TempoMatcher } from './matching/tempoMatcher';
+import { resolvePlayed } from './micAliases';
 import { WaitMatcher } from './matching/waitMatcher';
 import {
   beatsPerMeasure,
@@ -36,6 +37,8 @@ export type Feedback =
   | { kind: 'correct' }
   /** `expected`: the notes to play instead (spelled as written), for a hint. */
   | { kind: 'wrong'; expected: Pitch[] }
+  /** A key played when no note was due (rhythm exercises, where any key counts). */
+  | { kind: 'extra' }
   | { kind: 'missed' };
 
 export interface SessionState {
@@ -67,14 +70,9 @@ export interface SessionOptions {
   loop?: LoopRange | null;
   /** Input assumed for timing windows until the first note arrives. */
   defaultSource?: InputSourceKind;
+  /** Rhythm exercises: any key counts as the next note; only timing matters. */
+  anyKey?: boolean;
 }
-
-/**
- * Pitch differences (detected − expected) the microphone tends to confuse: octaves, and the
- * octave plus a fifth (the strong third harmonic of piano tones). Near an expected note, a
- * microphone note at one of these distances counts as that note (PLAN.md §12).
- */
-const MIC_ALIASES = [12, -12, 24, -24, 19];
 
 const INITIAL_STATE: SessionState = {
   status: 'ready',
@@ -96,6 +94,7 @@ export class PracticeSession {
   readonly otherHand: ScoreNote[];
 
   private readonly leadInSeconds: number;
+  private readonly anyKey: boolean;
   /** The loop in beats, or null to play the whole score. */
   private loop: { start: number; end: number } | null = null;
   /** The notes being graded: the selected hands, within the loop. */
@@ -118,6 +117,7 @@ export class PracticeSession {
     this.mode = options.mode;
     this.source = options.defaultSource ?? 'midi';
     this.leadInSeconds = options.leadInSeconds;
+    this.anyKey = options.anyKey ?? false;
     this.hands = score.notes.filter((n) => options.hands === 'both' || n.hand === options.hands);
     this.otherHand = score.notes.filter((n) => !this.hands.includes(n));
     this.setLoop(options.loop ?? null);
@@ -338,7 +338,9 @@ export class PracticeSession {
     this.wrongBeats.push(beat);
     this.mark(pitch, 'wrong', {
       streak: 0,
-      feedback: this.feedback({ kind: 'wrong', expected: this.expectedAt(beat) }),
+      feedback: this.feedback(
+        this.anyKey ? { kind: 'extra' } : { kind: 'wrong', expected: this.expectedAt(beat) },
+      ),
     });
   }
 
@@ -351,17 +353,20 @@ export class PracticeSession {
     return [...notes].sort((a, b) => a.pitch.midi - b.pitch.midi).map((note) => note.pitch);
   }
 
-  /** A microphone note close to an expected note in a confusable way counts as that note. */
+  /**
+   * The key a played note counts as: with `anyKey`, the next note due (its pitch); for the
+   * microphone, an expected note it's easily confused with; otherwise itself.
+   */
   private resolvePitch(event: NoteEvent, beat: number): number {
-    if (event.source !== 'mic') return event.pitch;
+    if (!this.anyKey && event.source !== 'mic') return event.pitch;
     const expected =
       this.mode === 'tempo'
         ? this.tempoMatcher
             .candidates(beat, this.transport.tempo, this.windows())
             .map((note) => note.pitch.midi)
         : (this.waitMatcher.current?.notes.map((note) => note.pitch.midi) ?? []);
-    if (expected.includes(event.pitch)) return event.pitch;
-    return expected.find((pitch) => MIC_ALIASES.includes(event.pitch - pitch)) ?? event.pitch;
+    if (this.anyKey) return expected[0] ?? event.pitch;
+    return resolvePlayed(event.pitch, event.source, expected);
   }
 
   /**

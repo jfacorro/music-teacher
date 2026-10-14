@@ -331,6 +331,38 @@ describe('PracticeSession: wait mode', () => {
   });
 });
 
+describe('PracticeSession: any key (rhythm)', () => {
+  const rhythm: NoteSpec[] = [
+    ['E4', 0],
+    ['E4', 1],
+    ['E4', 2, 2],
+  ];
+
+  it('takes any key as the next note and grades only the timing', () => {
+    const t = setup(rhythm, { anyKey: true });
+    t.session.play();
+    for (const [beat, pitch] of [
+      [0, C4],
+      [1.02, D4],
+      [1.96, 90],
+    ] as const) {
+      t.at(beat);
+      t.press(pitch);
+      t.release(pitch);
+    }
+    t.at(4);
+    expect(t.session.getState().summary).toMatchObject({ expected: 3, perfect: 3, wrong: 0 });
+  });
+
+  it('calls a tap when nothing is due an extra tap', () => {
+    const t = setup(rhythm, { anyKey: true });
+    t.session.play();
+    t.at(0.5);
+    t.press(C4);
+    expect(t.session.getState().feedback?.value).toEqual({ kind: 'extra' });
+  });
+});
+
 describe('PracticeSession: loop and tempo', () => {
   /** One note per measure: C4 in the first, D4 in the second, E4 in the third. */
   const bars: NoteSpec[] = [

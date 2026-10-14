@@ -16,7 +16,18 @@
   },
   "freePlay": {
     "title": "Free play",
-    "intro": "Play anything: the keys light up with their names, and chords and intervals are named as you play them."
+    "intro": "Play anything: the keys light up with their names, and chords and intervals are named as you play them.",
+    "modes": {
+      "play": "Play freely",
+      "quiz": "Note quiz"
+    },
+    "quiz": {
+      "intro": "A note appears on the staff: play its key.",
+      "clef": "Notes on",
+      "treble": "Treble clef",
+      "bass": "Bass clef",
+      "both": "Both clefs"
+    }
   },
   "progress": {
     "title": "Progress",
@@ -236,7 +247,8 @@
         "bar": "Bar {bar}: {accuracy}",
         "empty": "Bar {bar}: no notes",
         "hint": "Click a bar to repeat it."
-      }
+      },
+      "extra": "Extra taps"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {
@@ -269,7 +281,9 @@
     "keys": {
       "space": "Space",
       "escape": "Esc"
-    }
+    },
+    "tap": "Tap here, or any key",
+    "hintRhythm": "Tap any key with each note: only the timing counts. The metronome counts you in."
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",
@@ -306,5 +320,15 @@
       "heading": "Try it",
       "intro": "Press a few keys. Each one should appear below with its name. You can change all of this later in Settings."
     }
+  },
+  "quiz": {
+    "cardLabel": "A note on the staff",
+    "prompt": "Which key is this note? Play it.",
+    "right": "Yes, that’s {note}!",
+    "wrong": "That was {note}. Try again.",
+    "hint": "It’s the key lit up on the keyboard.",
+    "progress": "Card {current} of {total}",
+    "results": "Quiz results",
+    "firstTry": "{count} of {total} right on the first try"
   }
 }

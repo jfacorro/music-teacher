@@ -35,6 +35,7 @@ import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
+import { TapPad } from '../../keyboard/TapPad';
 import type { ScoreView, SheetNotation } from '../../../content/lessons';
 import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
@@ -57,6 +58,11 @@ interface PracticeRunProps {
   loop?: LoopRange | null;
   /** Play the hand that isn't practiced. */
   otherHand?: boolean;
+  /**
+   * A rhythm exercise: any key counts, shown on a one-line staff or a single lane, with a tap
+   * pad in place of the keyboard.
+   */
+  rhythm?: boolean;
   /**
    * Asks for a loop: bars chosen on the music (null: chosen again, to stop repeating them), or
    * the weak spot after a run. Without it, neither is offered.
@@ -81,6 +87,7 @@ export function PracticeRun({
   speed = 100,
   loop = null,
   otherHand = false,
+  rhythm = false,
   onLoopChange,
   hint,
   onFinish,
@@ -97,6 +104,7 @@ export function PracticeRun({
         hands,
         leadInSeconds: LEAD_IN_SCREENS * SECONDS_VISIBLE,
         loop,
+        anyKey: rhythm,
         // Timing windows before the first note arrives: wider for the microphone.
         defaultSource: useInstrument.getState().instrument === 'mic' ? 'mic' : 'midi',
       }),
@@ -192,9 +200,14 @@ export function PracticeRun({
     if (!running || !otherHand) audioIfReady()?.stopAccompaniment();
   }, [running, otherHand]);
 
+  // A rhythm's notes are all on one key: a single lane.
+  const rhythmKey = score.notes[0]?.pitch.midi ?? 64;
   const layout = useMemo(
-    () => keyboardLayout(...rangeForNotes(score.notes.map((note) => note.pitch.midi))),
-    [score],
+    () =>
+      rhythm
+        ? keyboardLayout(rhythmKey, rhythmKey)
+        : keyboardLayout(...rangeForNotes(score.notes.map((note) => note.pitch.midi))),
+    [score, rhythm, rhythmKey],
   );
   // Light up the keys to play now: sounding notes that haven't been played yet. Outcomes
   // change with the session state, so recompute on both.
@@ -226,8 +239,8 @@ export function PracticeRun({
   );
   // Falling notes use the score's own spelling (a written D♭ stays D♭).
   const noteLabel = useCallback(
-    (note: ScoreNote) => names.name(note.pitch, { octave: false }),
-    [names],
+    (note: ScoreNote) => (rhythm ? '' : names.name(note.pitch, { octave: false })),
+    [names, rhythm],
   );
   const styleOf = useCallback(
     (note: ScoreNote): NoteStyle => {
@@ -281,7 +294,11 @@ export function PracticeRun({
   const weak = state.summary && onLoopChange ? weakSpot(state.summary.measures) : null;
   const extraActions = state.summary ? (resultsActions?.(state.summary) ?? null) : null;
 
-  const modeHint = mode === 'wait' ? t('practice.hintWait') : t('practice.hint');
+  const modeHint = rhythm
+    ? t('practice.hintRhythm')
+    : mode === 'wait'
+      ? t('practice.hintWait')
+      : t('practice.hint');
   const loopHint =
     loop &&
     [
@@ -326,6 +343,7 @@ export function PracticeRun({
         <ResultsCard
           summary={state.summary}
           mode={mode}
+          rhythm={rhythm}
           onRetry={() => {
             session.restart();
             void togglePlay();
@@ -356,6 +374,7 @@ export function PracticeRun({
               hands={hands}
               loop={loop}
               onSelectBars={selectBars}
+              rhythm={rhythm}
             />
           ) : (
             <FallingNotes
@@ -376,16 +395,25 @@ export function PracticeRun({
             </div>
           )}
         </div>
-        <PianoKeyboard
-          layout={layout}
-          pressed={pressed}
-          expected={expected}
-          marks={state.marks}
-          labels="white"
-          labelFor={keyLabel}
-          onKeyDown={screenKeyDown}
-          onKeyUp={screenKeyUp}
-        />
+        {rhythm ? (
+          <TapPad
+            pitch={rhythmKey}
+            due={expected.size > 0}
+            pressed={held.length > 0}
+            mark={state.marks.get(rhythmKey)}
+          />
+        ) : (
+          <PianoKeyboard
+            layout={layout}
+            pressed={pressed}
+            expected={expected}
+            marks={state.marks}
+            labels="white"
+            labelFor={keyLabel}
+            onKeyDown={screenKeyDown}
+            onKeyUp={screenKeyUp}
+          />
+        )}
       </div>
     </>
   );

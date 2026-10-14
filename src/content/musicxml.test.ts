@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { scoreOf } from '../engine/testUtils';
 import { loadSong, SONG_IDS } from './songs';
-import { DIVISIONS, noteKey, scoreToMusicXml } from './musicxml';
+import { DIVISIONS, noteCardXml, noteKey, scoreToMusicXml } from './musicxml';
+import { parseNote } from '../theory/pitch';
 
 /** The <note> elements of a staff, as short strings: "C4:quarter", "rest:half", "D4:eighth.". */
 function written(xml: string, staff: number): string[] {
@@ -160,6 +161,40 @@ describe('scoreToMusicXml', () => {
     const lyric = /<lyric number="(\d)">.*?<text>(.*?)<\/text><\/lyric>/g;
     const lyrics = [...xml.matchAll(lyric)].map((m) => `${m[1]}:${m[2]}`);
     expect(lyrics).toEqual(['1:&lt;C&gt;', '1:&lt;E&gt;', '2:&lt;G&gt;']);
+  });
+
+  it('writes rhythm on a one-line percussion staff', () => {
+    const { xml } = scoreToMusicXml(
+      scoreOf([
+        ['B4', 0],
+        ['B4', 1, 3],
+      ]),
+      { rhythm: true },
+    );
+    expect(xml).toContain('<sign>percussion</sign>');
+    expect(xml).toContain('<staff-lines>1</staff-lines>');
+    expect(xml).not.toContain('<pitch>');
+    expect(xml.split('<stem>up</stem>')).toHaveLength(3); // both notes
+    expect(xml).toContain(
+      '<unpitched><display-step>B</display-step><display-octave>4</display-octave></unpitched>',
+    );
+    expect(
+      written(
+        xml.replaceAll(/<unpitched>.*?<\/unpitched>/g, '<step>B</step><octave>4</octave>'),
+        1,
+      ),
+    ).toEqual(['B4:quarter', 'B4:half.']);
+  });
+
+  it('writes a quiz card: one whole note on the chosen clef, with its accidental', () => {
+    const treble = noteCardXml(parseNote('F#4'), 'treble');
+    expect(treble).toContain('<sign>G</sign>');
+    expect(treble).toContain('<step>F</step><alter>1</alter><octave>4</octave>');
+    expect(treble).toContain('<accidental>sharp</accidental>');
+    expect(treble).toContain('<time print-object="no">');
+    const bass = noteCardXml(parseNote('C3'), 'bass');
+    expect(bass).toContain('<sign>F</sign>');
+    expect(bass).not.toContain('<accidental>');
   });
 
   it('indexes every written note back to its score note', () => {

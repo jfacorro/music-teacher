@@ -16,7 +16,18 @@
   },
   "freePlay": {
     "title": "Práctica libre",
-    "intro": "Toca lo que quieras: las teclas se iluminan con sus nombres, y los acordes e intervalos se nombran mientras los tocas."
+    "intro": "Toca lo que quieras: las teclas se iluminan con sus nombres, y los acordes e intervalos se nombran mientras los tocas.",
+    "modes": {
+      "play": "Tocar libremente",
+      "quiz": "Test de notas"
+    },
+    "quiz": {
+      "intro": "Aparece una nota en el pentagrama: toca su tecla.",
+      "clef": "Notas en",
+      "treble": "Clave de sol",
+      "bass": "Clave de fa",
+      "both": "Las dos claves"
+    }
   },
   "progress": {
     "title": "Progreso",
@@ -236,7 +247,8 @@
         "bar": "Compás {bar}: {accuracy}",
         "empty": "Compás {bar}: sin notas",
         "hint": "Haz clic en un compás para repetirlo."
-      }
+      },
+      "extra": "Toques de más"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {
@@ -269,7 +281,9 @@
     "keys": {
       "space": "Espacio",
       "escape": "Esc"
-    }
+    },
+    "tap": "Toca aquí o cualquier tecla",
+    "hintRhythm": "Toca cualquier tecla con cada nota: solo cuenta el ritmo. El metrónomo marca la entrada."
   },
   "lesson": {
     "notFound": "Esta lección no existe.",
@@ -306,5 +320,15 @@
       "heading": "Pruébalo",
       "intro": "Pulsa algunas teclas. Cada una debería aparecer abajo con su nombre. Puedes cambiar todo esto más tarde en Configuración."
     }
+  },
+  "quiz": {
+    "cardLabel": "Una nota en el pentagrama",
+    "prompt": "¿Qué tecla es esta nota? Tócala.",
+    "right": "¡Sí, es {note}!",
+    "wrong": "Era {note}. Prueba otra vez.",
+    "hint": "Es la tecla iluminada en el teclado.",
+    "progress": "Tarjeta {current} de {total}",
+    "results": "Resultados del test",
+    "firstTry": "{count} de {total} a la primera"
   }
 }
