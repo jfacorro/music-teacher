@@ -294,8 +294,8 @@
       "weakSpot": "Repeat the bars that went worst",
       "falling": "Falling notes: the notes fall onto the keys to play",
       "sheet": "Sheet music: read the notes on the staff",
-      "wait": "The music waits for each note",
-      "tempo": "Play at a steady tempo, with a count-in and the metronome",
+      "wait": "Wait for me: the music waits for each note",
+      "tempo": "Play along: a steady tempo, with a count-in and the metronome",
       "retry": "Play this exercise again from the start",
       "tap": "Tap in time with each note, or press any key",
       "hands": {

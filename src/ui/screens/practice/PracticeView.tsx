@@ -69,11 +69,16 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
               type="button"
               role="radio"
               aria-checked={mode === value}
-              className={mode === value ? 'segmented__option is-selected' : 'segmented__option'}
+              aria-label={t(`practice.mode.${value}`)}
+              className={
+                mode === value
+                  ? 'segmented__option segmented__option--icon is-selected'
+                  : 'segmented__option segmented__option--icon'
+              }
               title={t(`practice.tips.${value}`)}
               onClick={() => chooseMode(value)}
             >
-              {t(`practice.mode.${value}`)}
+              <span aria-hidden="true">{ICONS[value]}</span>
             </button>
           ))}
         </div>

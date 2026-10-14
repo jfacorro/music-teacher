@@ -554,7 +554,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - "Practice the weak spot" on the results: loops the worst measure plus weak neighbors (below 90%), up to 4 bars.
 - Choosing bars that are already repeated (a click inside the loop, or the same bars again) stops repeating them.
 - Shortcuts while practicing (songs and lessons): Space plays and pauses, Escape starts over.
-- Play/pause (▶ ⏸) and start over (↻) are icon buttons; the views are emoji-only toggles (🎹 falling notes, 🎼 sheet music) and the hands are three icon buttons instead of a dropdown (🫲 left · 🙌 both · 🫱 right). Every button around the exercises has a tooltip saying what it does, with its key where it has one ("Play (Space)").
+- Play/pause (▶ ⏸) and start over (↻) are icon buttons; the views and modes are emoji-only toggles (🎹 falling notes, 🎼 sheet music; ⏳ wait for me, ⏱️ play along) and the hands are three icon buttons instead of a dropdown (🫲 left · 🙌 both · 🫱 right). Every button around the exercises has a tooltip saying what it does, with its key where it has one ("Play (Space)").
 - Settings page: sections stacked one after another; the live test keeps the last 20 events in a scrolling list.
 
 **2.4 Richer results & progress** — ✔ done

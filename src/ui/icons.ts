@@ -11,6 +11,8 @@ export const ICONS = {
   restart: textStyle(0x21bb), // ↻
   falling: String.fromCodePoint(0x1f3b9), // 🎹 notes falling onto the keyboard
   sheet: String.fromCodePoint(0x1f3bc), // 🎼 musical score
+  wait: String.fromCodePoint(0x23f3), // ⏳ the music takes its time
+  tempo: String.fromCodePoint(0x23f1, 0xfe0f), // ⏱️ timed
   L: String.fromCodePoint(0x1faf2), // 🫲 leftwards hand
   both: String.fromCodePoint(0x1f64c), // 🙌 both hands raised
   R: String.fromCodePoint(0x1faf1), // 🫱 rightwards hand
