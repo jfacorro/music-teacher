@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { accuracyOf, starsFor, summarize, type NoteOutcome } from './scoring';
+import { accuracyOf, starsFor, summarize, timingSummary, type NoteOutcome } from './scoring';
+import { MIDI_WINDOWS } from './timing';
 import type { ScoreNote } from './score';
 import { scoreOf } from './testUtils';
 
@@ -23,6 +24,15 @@ describe('starsFor', () => {
     [1, 3],
   ])('%f → %i stars', (accuracy, stars) => {
     expect(starsFor(accuracy)).toBe(stars);
+  });
+});
+
+describe('timingSummary', () => {
+  it('counts early, on-time and late notes and averages the error', () => {
+    const timing = timingSummary([-120, -60, -30, 0, 40, 51], MIDI_WINDOWS);
+    expect(timing).toMatchObject({ early: 2, onTime: 3, late: 1 });
+    expect(timing.meanMs).toBeCloseTo(-119 / 6);
+    expect(timingSummary([], MIDI_WINDOWS).meanMs).toBe(0);
   });
 });
 
@@ -58,7 +68,26 @@ describe('summarize', () => {
     // (1 + 1 + 0.8 + 0.5 - 0.25) / 6
     expect(summary.accuracy).toBeCloseTo(3.05 / 6);
     expect(summary.stars).toBe(0);
+    expect(summary.timing).toBeNull(); // no windows given
     expect(a).toBeDefined();
+  });
+
+  it('breaks timing down when given the windows', () => {
+    const outcomes = new Map<ScoreNote, NoteOutcome>([
+      [d!, { kind: 'hit', grade: 'perfect', errorMs: 10 }],
+      [c, { kind: 'hit', grade: 'good', errorMs: -70 }],
+      [f!, { kind: 'missed' }],
+      [e!, { kind: 'hit', grade: 'ok', errorMs: 120 }],
+    ]);
+    const { timing } = summarize(score.notes, outcomes, [], score.measures, MIDI_WINDOWS);
+    expect(timing).toEqual({
+      errorsMs: [-70, 10, 120], // in score order
+      early: 1,
+      onTime: 1,
+      late: 1,
+      meanMs: 20,
+      windows: MIDI_WINDOWS,
+    });
   });
 
   it('scores wait mode: every note correct, minus wrong keys', () => {

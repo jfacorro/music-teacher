@@ -19,4 +19,13 @@ export function lessonNamespace(id: string): string {
   return `lessons/${id}`;
 }
 
-export type { Lesson, LessonStep, ExplainStep, FindStep, ExerciseStep } from './lesson';
+export type {
+  Lesson,
+  LessonStep,
+  ExplainStep,
+  FindStep,
+  ExerciseStep,
+  ScoreView,
+  SheetNotation,
+} from './lesson';
+export { SHEET_NOTATIONS } from './lesson';

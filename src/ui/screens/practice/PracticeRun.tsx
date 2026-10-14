@@ -8,22 +8,35 @@ import {
   type ReactNode,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import { startAccompaniment } from '../../../audio/accompaniment';
 import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
 import { beatsPerMeasure, type Score, type ScoreNote } from '../../../engine/score';
 import type { Summary } from '../../../engine/scoring';
-import { PracticeSession, type HandFilter, type PracticeMode } from '../../../engine/session';
+import {
+  PracticeSession,
+  type HandFilter,
+  type LoopRange,
+  type PracticeMode,
+} from '../../../engine/session';
 import { Transport } from '../../../engine/transport';
+import { weakSpot } from '../../../engine/weakSpots';
+import { formatPercent } from '../../../i18n/format';
+import { isTypingTarget } from '../../../input/dev/devInput';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { subscribeNotes } from '../../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
 import { useInstrument } from '../../../input/routing';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { useLiveInput } from '../../../input/liveStore';
+import { activityTimer, recordPracticeTime } from '../../../storage/progress';
+import { toggleBars } from '../../barSelection';
 import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
+import type { ScoreView, SheetNotation } from '../../../content/lessons';
+import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
 import { ResultsCard } from './ResultsCard';
 
@@ -36,6 +49,19 @@ interface PracticeRunProps {
   mode: PracticeMode;
   hands: HandFilter;
   metronome: boolean;
+  view: ScoreView;
+  notation: SheetNotation;
+  /** Percent of the score's tempo (default 100). */
+  speed?: number;
+  /** Bars to repeat, or null for the whole score. */
+  loop?: LoopRange | null;
+  /** Play the hand that isn't practiced. */
+  otherHand?: boolean;
+  /**
+   * Asks for a loop: bars chosen on the music (null: chosen again, to stop repeating them), or
+   * the weak spot after a run. Without it, neither is offered.
+   */
+  onLoopChange?: (range: LoopRange | null) => void;
   /** Instruction shown next to the controls (defaults to a tip for the mode). */
   hint?: string;
   /** Called once when the run ends, with its results and how long it took (ms). */
@@ -50,20 +76,27 @@ export function PracticeRun({
   mode,
   hands,
   metronome,
+  view,
+  notation,
+  speed = 100,
+  loop = null,
+  otherHand = false,
+  onLoopChange,
   hint,
   onFinish,
   resultsActions,
 }: PracticeRunProps) {
-  const { t } = useTranslation('screens');
+  const { t, i18n } = useTranslation('screens');
   const names = useNoteNames();
 
-  const [transport] = useState(() => new Transport(score.tempo));
+  const [transport] = useState(() => new Transport((score.tempo * speed) / 100));
   const [session] = useState(
     () =>
       new PracticeSession(score, transport, {
         mode,
         hands,
-        leadIn: (LEAD_IN_SCREENS * SECONDS_VISIBLE * score.tempo) / 60,
+        leadInSeconds: LEAD_IN_SCREENS * SECONDS_VISIBLE,
+        loop,
         // Timing windows before the first note arrives: wider for the microphone.
         defaultSource: useInstrument.getState().instrument === 'mic' ? 'mic' : 'midi',
       }),
@@ -84,6 +117,29 @@ export function PracticeRun({
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, [session]);
 
+  // Practice time: while playing (or waiting for a key), not counting long idle stretches.
+  useEffect(() => {
+    if (!running) return;
+    const timer = activityTimer();
+    const unsubscribe = subscribeNotes(timer.activity);
+    return () => {
+      unsubscribe();
+      void recordPracticeTime(timer.stop());
+    };
+  }, [running]);
+
+  // A new loop starts over; a new speed carries on from where it is.
+  const loopFirst = loop?.first;
+  const loopLast = loop?.last;
+  useEffect(() => {
+    session.setLoop(
+      loopFirst === undefined || loopLast === undefined
+        ? null
+        : { first: loopFirst, last: loopLast },
+    );
+  }, [session, loopFirst, loopLast]);
+  useEffect(() => session.setTempo((score.tempo * speed) / 100), [session, score, speed]);
+
   const finished = useRef(onFinish);
   const startedAt = useRef(0);
   useEffect(() => {
@@ -93,11 +149,13 @@ export function PracticeRun({
     if (state.summary) finished.current?.(state.summary, performance.now() - startedAt.current);
   }, [state.summary]);
 
-  // The metronome reads the latest choice without restarting.
+  // The metronome and the other hand read the latest choices without restarting.
   const metronomeOn = useRef(metronome);
+  const otherHandOn = useRef(otherHand);
   useEffect(() => {
     metronomeOn.current = metronome;
-  }, [metronome]);
+    otherHandOn.current = otherHand;
+  }, [metronome, otherHand]);
   useEffect(
     () =>
       startMetronome(
@@ -105,6 +163,8 @@ export function PracticeRun({
         () => ({
           metronome: metronomeOn.current,
           countInFrom: session.countInFrom,
+          musicStart: session.musicStart,
+          loopEnd: session.looping ? session.musicEnd : null,
           beatsPerMeasure: beatsPerMeasure(score.timeSignature),
         }),
         (time, accent) => audioIfReady()?.click(time, accent),
@@ -112,6 +172,25 @@ export function PracticeRun({
       ),
     [transport, session, score],
   );
+  useEffect(
+    () =>
+      startAccompaniment(
+        transport,
+        () => ({
+          enabled: otherHandOn.current,
+          notes: session.otherHand,
+          from: session.musicStart,
+          until: Math.min(session.holdBeat, session.musicEnd),
+        }),
+        (note, start, end) => audioIfReady()?.accompany(note.pitch.midi, start, end),
+        soundLeadMs,
+      ),
+    [transport, session],
+  );
+  // Waiting for a key keeps the other hand ringing; stopping silences it.
+  useEffect(() => {
+    if (!running || !otherHand) audioIfReady()?.stopAccompaniment();
+  }, [running, otherHand]);
 
   const layout = useMemo(
     () => keyboardLayout(...rangeForNotes(score.notes.map((note) => note.pitch.midi))),
@@ -119,7 +198,7 @@ export function PracticeRun({
   );
   // Light up the keys to play now: sounding notes that haven't been played yet. Outcomes
   // change with the session state, so recompute on both.
-  const active = useActiveNotes(session.graded, transport);
+  const active = useActiveNotes(session.practiced, transport);
   const expected = useMemo(
     () =>
       new Map<number, ExpectedKey>(
@@ -172,30 +251,124 @@ export function PracticeRun({
     session.play();
   };
 
+  // Shortcuts: Space plays and pauses, Escape starts over.
+  const latestTogglePlay = useRef(togglePlay);
+  useEffect(() => {
+    latestTogglePlay.current = togglePlay;
+  });
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.code !== 'Space' && event.code !== 'Escape') return;
+      if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (isTypingTarget(event.target)) return;
+      event.preventDefault(); // no page scrolling
+      // A focused button or checkbox would react to Space as well, when the key comes up.
+      if (event.target instanceof HTMLElement && event.target !== document.body) {
+        event.target.blur();
+      }
+      if (event.code === 'Space') void latestTogglePlay.current();
+      else session.restart();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [session]);
+
+  // Bars can be chosen on the music while it isn't playing.
+  const selectBars =
+    running || !onLoopChange
+      ? undefined
+      : (range: LoopRange) => onLoopChange(toggleBars(loop, range));
+  const weak = state.summary && onLoopChange ? weakSpot(state.summary.measures) : null;
+  const extraActions = state.summary ? (resultsActions?.(state.summary) ?? null) : null;
+
+  const modeHint = mode === 'wait' ? t('practice.hintWait') : t('practice.hint');
+  const loopHint =
+    loop &&
+    [
+      t('practice.loop.hint'),
+      state.lastPass &&
+        t('practice.loop.lastPass', {
+          count: state.lastPass.count,
+          accuracy: formatPercent(state.lastPass.accuracy, i18n.language),
+        }),
+    ]
+      .filter(Boolean)
+      .join(' ');
+
   return (
     <>
       <div className="practice__controls">
-        <button type="button" className="button button--primary" onClick={() => void togglePlay()}>
+        <button
+          type="button"
+          className="button button--primary"
+          onClick={() => void togglePlay()}
+          aria-keyshortcuts="Space"
+          title={t('practice.shortcut', { key: t('practice.keys.space') })}
+        >
           {running ? t('practice.pause') : t('practice.play')}
         </button>
-        <button type="button" className="button" onClick={() => session.restart()}>
+        <button
+          type="button"
+          className="button"
+          onClick={() => session.restart()}
+          aria-keyshortcuts="Escape"
+          title={t('practice.shortcut', { key: t('practice.keys.escape') })}
+        >
           {t('practice.restart')}
         </button>
-        <p className="muted">
-          {hint ?? (mode === 'wait' ? t('practice.hintWait') : t('practice.hint'))}
+        <p className="muted" aria-live="polite">
+          {hint ?? (loopHint || modeHint)}
         </p>
       </div>
 
+      {/* Results go above the music, which stays visible with its colored notes. */}
+      {state.summary && (
+        <ResultsCard
+          summary={state.summary}
+          mode={mode}
+          onRetry={() => {
+            session.restart();
+            void togglePlay();
+          }}
+          onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
+        >
+          {weak || extraActions ? (
+            <>
+              {weak && onLoopChange && (
+                <button type="button" className="button" onClick={() => onLoopChange(weak)}>
+                  {t('practice.results.weakSpot')}
+                </button>
+              )}
+              {extraActions}
+            </>
+          ) : null}
+        </ResultsCard>
+      )}
       <div className="practice__stage">
         <div className="practice__notes">
-          <FallingNotes
-            score={score}
-            transport={transport}
-            layout={layout}
-            secondsVisible={SECONDS_VISIBLE}
-            labelFor={noteLabel}
-            styleOf={styleOf}
-          />
+          {view === 'sheet' ? (
+            <SheetMusic
+              score={score}
+              transport={transport}
+              styleOf={styleOf}
+              outcomesVersion={state}
+              notation={notation}
+              hands={hands}
+              loop={loop}
+              onSelectBars={selectBars}
+            />
+          ) : (
+            <FallingNotes
+              score={score}
+              transport={transport}
+              layout={layout}
+              secondsVisible={SECONDS_VISIBLE}
+              labelFor={noteLabel}
+              styleOf={styleOf}
+              loop={loop}
+              onSelectBars={selectBars}
+            />
+          )}
           {!state.summary && <FeedbackBadge feedback={state.feedback} streak={state.streak} />}
           {state.countIn !== null && (
             <div className="count-in" aria-live="assertive">
@@ -213,18 +386,6 @@ export function PracticeRun({
           onKeyDown={screenKeyDown}
           onKeyUp={screenKeyUp}
         />
-        {state.summary && (
-          <ResultsCard
-            summary={state.summary}
-            mode={mode}
-            onRetry={() => {
-              session.restart();
-              void togglePlay();
-            }}
-          >
-            {resultsActions?.(state.summary)}
-          </ResultsCard>
-        )}
       </div>
     </>
   );

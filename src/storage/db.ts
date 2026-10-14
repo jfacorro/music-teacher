@@ -28,10 +28,17 @@ export interface PracticeLogRow {
   durationMs: number;
 }
 
+/** Time spent playing on one local day ("2026-10-14"), loops and unfinished runs included. */
+export interface PracticeDayRow {
+  day: string;
+  ms: number;
+}
+
 export const db = new Dexie('piano-teacher') as Dexie & {
   settings: EntityTable<KeyValueRow, 'key'>;
   results: EntityTable<ResultRow, 'key'>;
   practiceLog: EntityTable<PracticeLogRow, 'id'>;
+  practiceDays: EntityTable<PracticeDayRow, 'day'>;
 };
 
 db.version(1).stores({
@@ -42,3 +49,25 @@ db.version(2).stores({
   results: 'key',
   practiceLog: '++id, at',
 });
+
+// Practice time used to come from finished runs only: carry it over, day by day.
+db.version(3)
+  .stores({ practiceDays: 'day' })
+  .upgrade(async (tx) => {
+    const days = new Map<string, number>();
+    await tx
+      .table<PracticeLogRow>('practiceLog')
+      .each((entry) =>
+        days.set(dayOf(entry.at), (days.get(dayOf(entry.at)) ?? 0) + entry.durationMs),
+      );
+    await tx
+      .table<PracticeDayRow>('practiceDays')
+      .bulkPut([...days].map(([day, ms]) => ({ day, ms })));
+  });
+
+/** Local calendar day, e.g. "2026-10-13". */
+export function dayOf(time: number): string {
+  const date = new Date(time);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}

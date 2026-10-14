@@ -11,6 +11,7 @@ import { useNoteNames } from '../../../i18n/useNoteNames';
 import { setLanguagePreference } from '../../../preferences';
 import { updateSettings, useSettings } from '../../../storage/settings';
 import { parseNote } from '../../../theory/pitch';
+import { SHEET_NOTATIONS, type SheetNotation } from '../../../content/lessons';
 
 const AUTO = 'auto';
 const SCALE = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'].map(parseNote);
@@ -24,6 +25,8 @@ export function LanguageSettings() {
   const language = useSettings((s) => s.language);
   const namingSystem = useSettings((s) => s.namingSystem);
   const showOctave = useSettings((s) => s.showOctave);
+  const sheetNotation = useSettings((s) => s.sheetNotation);
+  const notationId = useId();
   const names = useNoteNames();
   const languageId = useId();
   const namingId = useId();
@@ -93,6 +96,21 @@ export function LanguageSettings() {
           notes: PREVIEW.map((pitch) => names.name(pitch)).join(', '),
         })}
       </p>
+
+      <div className="field">
+        <label htmlFor={notationId}>{t('settings.language.sheetNotation')}</label>
+        <select
+          id={notationId}
+          value={sheetNotation}
+          onChange={(e) => updateSettings({ sheetNotation: e.target.value as SheetNotation })}
+        >
+          {SHEET_NOTATIONS.map((value) => (
+            <option key={value} value={value}>
+              {t(`practice.notation.${value}`)}
+            </option>
+          ))}
+        </select>
+      </div>
     </section>
   );
 }

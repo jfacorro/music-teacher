@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router';
 import { useSettings } from '../storage/settings';
-import { MidiStatusBadge } from './components/MidiStatusBadge';
+import { InputPicker } from './components/InputPicker';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
 export function AppLayout() {
@@ -25,7 +25,7 @@ export function AppLayout() {
           <NavLink to="/progress">{t('nav.progress')}</NavLink>
           <NavLink to="/settings">{t('nav.settings')}</NavLink>
         </nav>
-        <MidiStatusBadge />
+        <InputPicker />
       </header>
       <main className="app-main">{firstLaunchDone ? <Outlet /> : <WelcomeScreen />}</main>
     </div>

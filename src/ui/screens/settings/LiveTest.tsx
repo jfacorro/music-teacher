@@ -24,24 +24,27 @@ export function LiveTest() {
       {recent.length > 0 && (
         <>
           <h3>{t('settings.liveTest.recent')}</h3>
-          <table className="events">
-            <thead>
-              <tr>
-                <th scope="col">{t('settings.liveTest.event')}</th>
-                <th scope="col">{t('settings.liveTest.note')}</th>
-                <th scope="col">{t('settings.liveTest.source')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recent.map((event) => (
-                <tr key={`${event.time}-${event.type}-${event.pitch}`}>
-                  <td>{t('settings.liveTest.type', { type: event.type })}</td>
-                  <td>{label(event.pitch)}</td>
-                  <td>{tc(`sources.${event.source}`)}</td>
+          {/* Scrolls inside the card, so the page doesn't jump as keys are played. */}
+          <div className="events-scroll">
+            <table className="events">
+              <thead>
+                <tr>
+                  <th scope="col">{t('settings.liveTest.event')}</th>
+                  <th scope="col">{t('settings.liveTest.note')}</th>
+                  <th scope="col">{t('settings.liveTest.source')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {recent.map((event) => (
+                  <tr key={`${event.time}-${event.type}-${event.pitch}`}>
+                    <td>{t('settings.liveTest.type', { type: event.type })}</td>
+                    <td>{label(event.pitch)}</td>
+                    <td>{tc(`sources.${event.source}`)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
     </section>

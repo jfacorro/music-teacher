@@ -13,7 +13,7 @@ export function SettingsScreen() {
   return (
     <section className="screen">
       <h1>{t('settings.title')}</h1>
-      <div className="settings-grid">
+      <div className="settings-list">
         <InputSettings />
         <LiveTest />
         <MidiSettings />

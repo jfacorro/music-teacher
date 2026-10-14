@@ -519,7 +519,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Phase 1 done when
 - [x] Casio connects over USB and every key is detected correctly. (verified 2026-10-12)
-- [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration.
+- [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration. **TODO (user):** after setting the threshold and pressing "Correct the delay" in the Microphone check, confirm ≥ 90% heard correctly live (the recording replays at 97%) and that middle C is recognized reliably in lessons.
 - [ ] All Unit 1–2 lessons are playable in wait and tempo modes, with either input.
 - [x] Scores and stars persist across browser restarts.
 - [x] Engine has unit tests for matching and scoring.
@@ -534,28 +534,36 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Scope
 
-**2.1 Sheet music view**
+**2.1 Sheet music view** — ✔ done
 - OpenSheetMusicDisplay integration rendering MusicXML.
 - Cursor synchronized with the transport clock; current notes highlighted; played notes colored green/red on the staff.
-- Inline JSON scores converted to MusicXML (or rendered from the Score model) so every lesson can use either view.
-- View toggle in the lesson player; per-lesson default view.
+- Inline JSON scores converted to MusicXML (`src/content/musicxml.ts`: grand staff by hand, rests, ties across bar lines, chords, finger numbers) so every lesson can use either view.
+- View toggle in the lesson player and song practice; per-exercise default view (`"view": "sheet"` in lesson JSON). OSMD is loaded on demand (own chunk).
 
-**2.2 Notation ramp**
-- Level A: single staff, note names inside noteheads (custom OSMD notehead labels using the selected naming system).
-- Level B: single staff, no names (hint on wrong note).
-- Level C: grand staff, both clefs.
-- Setting + per-lesson default controlling the level.
+**2.2 Notation ramp** — ✔ done
+- Level A ("Note names"): the staff of the hand being played, with each note's name (selected naming system, no octave) written under it as a lyric — readable at any zoom, unlike labels inside noteheads.
+- Level B ("No names"): the same staff without names. A wrong key shows a hint with the notes to play ("Wrong key · play C, E"; in wait mode only the chord keys not already held).
+- Level C ("Both staves"): grand staff, treble and bass, whatever hand is selected.
+- "Sheet music starts with" setting (Settings → Language and notes) plus a per-exercise `"notation"` in lesson JSON; a Notation menu next to the view toggle changes it for the current run.
+- Sheet rendered at 90% with default spacing so names fit and the keyboard stays on a 1280×720 screen; the printed tempo mark is dropped (it's in the header).
 
-**2.3 Practice tools**
-- Loop a range of measures (select on the score or the falling-notes timeline).
-- Tempo slider (40–100%).
-- Hand selection with auto-play of the other hand via Tone.js.
-- "Practice weak spots": jump to the measures with the lowest accuracy.
+**2.3 Practice tools** — ✔ done (song practice; lesson exercises keep their set tempo, hands and pass rule)
+- Loop a range of measures: "Repeat bars [from] to [to]", or drag across bars on the sheet music or the falling notes while stopped. Out-of-loop notes are greyed and the loop is shaded. Tempo mode counts in during the bar before the loop and jumps back at its end keeping the beat (metronome included); wait mode jumps back once the last notes are played. Each time through shows its accuracy ("3 times through · last time 92%"); loops never end in results, so they aren't recorded.
+- Speed slider (40–100%, shows the resulting BPM): changes the tempo on the fly, without starting over.
+- "Play the other hand" when practicing one hand: the other hand is played by Tone.js (a softer synth), scheduled ahead like the metronome. In wait mode it waits too: notes where the music stops sound once the learner plays on. With the microphone, a tip suggests headphones (the other hand's keys never count as wrong).
+- "Practice the weak spot" on the results: loops the worst measure plus weak neighbors (below 90%), up to 4 bars.
+- Choosing bars that are already repeated (a click inside the loop, or the same bars again) stops repeating them.
+- Shortcuts while practicing (songs and lessons): Space plays and pauses, Escape starts over (tooltips on the buttons).
+- Settings page: sections stacked one after another; the live test keeps the last 20 events in a scrolling list.
 
-**2.4 Richer results & progress**
-- Results: timing breakdown (early/late distribution), per-measure heatmap.
-- Progress screen: daily streak, practice time, lessons completed.
-- Skill tags on lessons (e.g. `treble-reading`, `lh-position`) and a simple mastery score per skill.
+**2.4 Richer results & progress** — ✔ done
+- Results (tempo mode): timing breakdown — a dot per note on an early ↔ late line over the perfect / good / OK windows, with early / on-time / late counts and the average offset ("On average 14 ms early").
+- Results: "Bar by bar" heatmap, colored like the stars each bar would earn (dashed: no notes); in song practice, clicking a bar repeats it.
+- Results are shown above the music (not over it), so they have room and the colored notes stay visible.
+- Practice time is now measured while playing or waiting for a key (idle gaps count up to a minute), so loops and unfinished runs count too. It is saved per day (Dexie v3 `practiceDays`, filled from the existing log on upgrade); streaks come from it.
+- Progress screen: best streak next to the current one, skills, and practice per day over the last year as an activity calendar like GitHub's (weeks as columns from the language's first weekday, months on top, 5 shades: none, under 5 / 15 / 30 minutes, 30+; scrolls on narrow screens).
+- The header's input badge is now a picker, always visible: Automatic / MIDI keyboard / Microphone, each with its live status; choosing MIDI or the microphone turns it on if needed.
+- Skill tags per lesson in `courses.json` (`keyboard`, `finger-numbers`, `rh-position`, `lh-position`, `note-values`, `rests`, `eighth-notes`, `steady-tempo`; names in `locales/*/courses.json`). Mastery = average best accuracy of the skill's lessons (unplayed = 0); level Learning / Good (≥ 80%) / Mastered (≥ 95%), like the stars.
 
 **2.5 New exercise types**
 - `quiz`: flashcard note naming (show a note on the staff → play the key).

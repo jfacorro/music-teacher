@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
-import { LESSON_ORDER, UNITS, findLesson, nextLessonId } from '../courses';
+import { LESSON_ORDER, SKILLS, UNITS, findLesson, nextLessonId } from '../courses';
 import { lessonExists, loadLesson } from '.';
 import { LessonError, parseLesson } from './lesson';
 
@@ -12,6 +12,7 @@ const lessonTexts = import.meta.glob<LessonText>('/locales/*/lessons/*.json', {
 const courseTexts = import.meta.glob<{
   units: Record<string, { title?: string; description?: string }>;
   lessons: Record<string, string>;
+  skills: Record<string, string>;
 }>('/locales/*/courses.json', { eager: true, import: 'default' });
 const lessonFiles = import.meta.glob('./*.json');
 
@@ -34,8 +35,19 @@ describe('courses', () => {
     expect(findLesson('nope')).toBeNull();
   });
 
+  it('tags every lesson with what it practices, and every skill is practiced', () => {
+    const lessons = UNITS.flatMap((unit) => unit.lessons);
+    for (const lesson of lessons) expect(lesson.skills.length, lesson.id).toBeGreaterThan(0);
+    const used = new Set(lessons.flatMap((lesson) => lesson.skills));
+    expect([...SKILLS].filter((skill) => !used.has(skill))).toEqual([]);
+  });
+
   describe.each(TRANSLATED_LANGUAGES)('%s', (language) => {
     const texts = courseTexts[`/locales/${language}/courses.json`];
+
+    it('names every skill', () => {
+      for (const skill of SKILLS) expect(texts?.skills[skill], skill).toBeTruthy();
+    });
 
     it('has a title for every unit and lesson, using only the provided note variables', () => {
       for (const unit of UNITS) {
@@ -110,7 +122,14 @@ describe('parseLesson', () => {
           range: ['C3', 'C5'],
         },
         { type: 'find', text: 'b', notes: ['C4', 'E4'] },
-        { ...exercise, hands: 'R', pass: { minStars: 2 }, metronome: true },
+        {
+          ...exercise,
+          hands: 'R',
+          pass: { minStars: 2 },
+          metronome: true,
+          view: 'sheet',
+          notation: 'plain',
+        },
         { type: 'exercise', text: 'song', mode: 'tempo', song: 'ode-to-joy', tempo: 80 },
       ],
     });
@@ -125,11 +144,15 @@ describe('parseLesson', () => {
       pass: { minStars: 2 },
       metronome: true,
       song: null,
+      view: 'sheet',
+      notation: 'plain',
     });
     expect(lesson.steps[3]).toMatchObject({
       song: 'ode-to-joy',
       score: { tempo: 80 },
       hands: 'both',
+      view: 'falling',
+      notation: null,
     });
   });
 
@@ -149,6 +172,8 @@ describe('parseLesson', () => {
       'score › notes',
     ],
     ['a bad mode', { ...exercise, mode: 'fast' }, 'mode'],
+    ['a bad view', { ...exercise, view: 'tab' }, 'view'],
+    ['a bad notation', { ...exercise, notation: 'big' }, 'notation'],
     ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
     ['a backwards range', { type: 'find', text: 'x', notes: ['C4'], range: ['C5', 'C3'] }, 'range'],
   ])('rejects %s with its location', async (_, step, message) => {

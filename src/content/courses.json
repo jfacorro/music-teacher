@@ -7,25 +7,31 @@
       },
       "lessons": [
         {
-          "id": "u1-l1"
+          "id": "u1-l1",
+          "skills": ["keyboard"]
         },
         {
           "id": "u1-l2",
           "titleVars": {
             "c": "C4"
-          }
+          },
+          "skills": ["keyboard"]
         },
         {
-          "id": "u1-l3"
+          "id": "u1-l3",
+          "skills": ["finger-numbers", "rh-position"]
         },
         {
-          "id": "u1-l4"
+          "id": "u1-l4",
+          "skills": ["rh-position"]
         },
         {
-          "id": "u1-l5"
+          "id": "u1-l5",
+          "skills": ["finger-numbers", "lh-position"]
         },
         {
-          "id": "u1-l6"
+          "id": "u1-l6",
+          "skills": ["lh-position"]
         }
       ]
     },
@@ -36,16 +42,20 @@
       },
       "lessons": [
         {
-          "id": "u2-l1"
+          "id": "u2-l1",
+          "skills": ["note-values", "steady-tempo"]
         },
         {
-          "id": "u2-l2"
+          "id": "u2-l2",
+          "skills": ["note-values", "rests", "steady-tempo"]
         },
         {
-          "id": "u2-l3"
+          "id": "u2-l3",
+          "skills": ["eighth-notes", "steady-tempo"]
         },
         {
-          "id": "u2-l4"
+          "id": "u2-l4",
+          "skills": ["steady-tempo"]
         }
       ]
     }

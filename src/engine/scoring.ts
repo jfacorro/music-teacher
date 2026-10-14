@@ -1,6 +1,6 @@
-/** Accuracy, stars and per-measure stats (PLAN.md §6.3). */
+/** Accuracy, stars, timing and per-measure stats (PLAN.md §6.3). */
 import type { Measure, ScoreNote } from './score';
-import type { Grade } from './timing';
+import { timingOf, type Grade, type TimingWindows } from './timing';
 
 export type NoteOutcome =
   | { kind: 'hit'; grade: Grade; errorMs: number }
@@ -25,9 +25,24 @@ export interface Tally {
   accuracy: number;
 }
 
+/** How early or late the notes were played (tempo mode). */
+export interface TimingSummary {
+  /** Timing error of each note played, in score order, ms (negative = early). */
+  errorsMs: number[];
+  early: number;
+  onTime: number;
+  late: number;
+  /** Average error, ms: below zero, early on average. */
+  meanMs: number;
+  /** The windows the notes were graded with. */
+  windows: TimingWindows;
+}
+
 export interface Summary extends Tally {
   stars: 0 | 1 | 2 | 3;
   measures: Tally[];
+  /** Null in wait mode, where timing isn't graded. */
+  timing: TimingSummary | null;
 }
 
 export function weightOf(outcome: NoteOutcome | undefined): number {
@@ -49,12 +64,14 @@ export function starsFor(accuracy: number): 0 | 1 | 2 | 3 {
  * @param notes the graded notes
  * @param outcomes what happened to each note (absent = not played, counts as missed)
  * @param wrongBeats beat position of each wrong or extra key press
+ * @param windows the timing windows, to break timing down (tempo mode)
  */
 export function summarize(
   notes: readonly ScoreNote[],
   outcomes: ReadonlyMap<ScoreNote, NoteOutcome>,
   wrongBeats: readonly number[],
   measures: readonly Measure[],
+  windows?: TimingWindows,
 ): Summary {
   const total = tally(notes, outcomes, wrongBeats.length);
   const perMeasure = measures.map((measure, index) => {
@@ -67,7 +84,30 @@ export function summarize(
       wrongBeats.filter((beat) => inside(beat) || (index === 0 && beat < 0)).length,
     );
   });
-  return { ...total, stars: starsFor(total.accuracy), measures: perMeasure };
+  const errorsMs = notes.flatMap((note) => {
+    const outcome = outcomes.get(note);
+    return outcome?.kind === 'hit' ? [outcome.errorMs] : [];
+  });
+  return {
+    ...total,
+    stars: starsFor(total.accuracy),
+    measures: perMeasure,
+    timing: windows ? timingSummary(errorsMs, windows) : null,
+  };
+}
+
+export function timingSummary(errorsMs: readonly number[], windows: TimingWindows): TimingSummary {
+  const count = (timing: string) =>
+    errorsMs.filter((error) => timingOf(error, windows) === timing).length;
+  return {
+    errorsMs: [...errorsMs],
+    early: count('early'),
+    onTime: count('onTime'),
+    late: count('late'),
+    meanMs:
+      errorsMs.length === 0 ? 0 : errorsMs.reduce((sum, error) => sum + error, 0) / errorsMs.length,
+    windows,
+  };
 }
 
 function tally(

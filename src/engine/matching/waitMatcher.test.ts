@@ -86,6 +86,21 @@ describe('WaitMatcher', () => {
     expect(matcher.press(C4, 2500, TOLERANCE)).toMatchObject({ groupComplete: true });
   });
 
+  it('says which notes of the chord still have to be played', () => {
+    const matcher = new WaitMatcher(
+      scoreOf([
+        ['C3', 0, 1, 'L'],
+        ['E4', 0],
+      ]).notes,
+    );
+    const missing = () => matcher.missing.map((n) => n.pitch.midi);
+    expect(missing()).toEqual([C3, E4]);
+    matcher.press(E4, 1000, TOLERANCE);
+    expect(missing()).toEqual([C3]); // E4 is held
+    matcher.release(E4);
+    expect(missing()).toEqual([C3, E4]); // played together or held: E4 is needed again
+  });
+
   it('needs a fresh press for a repeated note, even if the key is still down', () => {
     const matcher = new WaitMatcher(
       scoreOf([

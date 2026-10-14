@@ -28,7 +28,28 @@
     "outOf": "{value} of {total}",
     "days": "{count, plural, =0 {No days yet} one {# day} other {# days}}",
     "recent": "Recent practice",
-    "underMinute": "Less than a minute"
+    "underMinute": "Less than a minute",
+    "bestStreak": "Best: {count, plural, one {# day} other {# days}}",
+    "skills": {
+      "heading": "Skills",
+      "lessons": "{played} of {total, plural, one {# lesson} other {# lessons}} played",
+      "level": {
+        "notStarted": "Not started",
+        "learning": "Learning",
+        "good": "Good",
+        "mastered": "Mastered"
+      }
+    },
+    "activity": {
+      "heading": "Practice in the last year",
+      "total": "{time} on {count, plural, one {# day} other {# days}}",
+      "empty": "Each day you practice turns a square green.",
+      "label": "Practice per day over the last year",
+      "day": "{date}: {time}",
+      "none": "{date}: no practice",
+      "less": "Less",
+      "more": "More"
+    }
   },
   "settings": {
     "title": "Settings",
@@ -45,7 +66,8 @@
         "solfege": "Solfège"
       },
       "showOctave": "Show octave numbers",
-      "preview": "Example: {notes}"
+      "preview": "Example: {notes}",
+      "sheetNotation": "Sheet music starts with"
     },
     "midi": {
       "heading": "MIDI keyboard",
@@ -199,9 +221,55 @@
       "correct": "Correct",
       "missed": "Missed",
       "wrong": "Wrong keys",
-      "retry": "Try again"
+      "retry": "Try again",
+      "weakSpot": "Practice the weak spot",
+      "timing": {
+        "heading": "Timing",
+        "chart": "When each note was played: {early} early, {onTime} on time, {late} late",
+        "early": "{count} early",
+        "onTime": "{count} on time",
+        "late": "{count} late",
+        "average": "{direction, select, early {On average {ms} ms early} late {On average {ms} ms late} other {On average right on the beat}}"
+      },
+      "bars": {
+        "heading": "Bar by bar",
+        "bar": "Bar {bar}: {accuracy}",
+        "empty": "Bar {bar}: no notes",
+        "hint": "Click a bar to repeat it."
+      }
     },
-    "songInfo": "{composer} · {bpm} BPM"
+    "songInfo": "{composer} · {bpm} BPM",
+    "view": {
+      "label": "View",
+      "falling": "Falling notes",
+      "sheet": "Sheet music"
+    },
+    "sheetLoading": "Loading the sheet music…",
+    "sheetError": "Couldn’t show the sheet music. Try falling notes instead.",
+    "notation": {
+      "label": "Notation",
+      "names": "Note names",
+      "plain": "No names",
+      "grand": "Both staves"
+    },
+    "speed": "Speed",
+    "speedValue": "{percent} · {bpm} BPM",
+    "loop": {
+      "label": "Repeat bars",
+      "first": "First bar",
+      "last": "Last bar",
+      "to": "to",
+      "tip": "Tip: drag across bars on the music to repeat them.",
+      "hint": "The chosen bars repeat until you stop.",
+      "lastPass": "{count, plural, one {Once through} other {# times through}} · last time {accuracy}"
+    },
+    "otherHand": "Play the other hand",
+    "otherHandMic": "With the microphone, use headphones so it only hears you.",
+    "shortcut": "Shortcut: {key}",
+    "keys": {
+      "space": "Space",
+      "escape": "Esc"
+    }
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",
