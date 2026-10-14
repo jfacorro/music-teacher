@@ -48,6 +48,7 @@
     "midi": "MIDI keyboard"
   },
   "modal": {
-    "close": "Close"
+    "close": "Close",
+    "closeTip": "Close (Esc)"
   }
 }

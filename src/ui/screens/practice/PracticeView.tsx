@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { preloadAudio } from '../../../audio/audio';
 import type { SongId } from '../../../content/songs';
@@ -10,10 +10,12 @@ import { useSettings } from '../../../storage/settings';
 import { Markings } from '../../components/Markings';
 import { PracticeRun } from './PracticeRun';
 import { PracticeTools, SPEED_MAX } from './PracticeTools';
+import { ICONS } from '../../icons';
 import { NotationSelect, ViewToggle } from './ViewToggle';
 
 const MODES: readonly PracticeMode[] = ['wait', 'tempo'];
-const HANDS: readonly HandFilter[] = ['both', 'R', 'L'];
+/** In the order of the hands on the keyboard: left, both, right. */
+const HANDS: readonly HandFilter[] = ['L', 'both', 'R'];
 
 /** Song header and practice options; each combination of options is a fresh run. */
 export function PracticeView({ songId, score }: { songId: SongId; score: Score }) {
@@ -31,7 +33,6 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
   });
   const [looping, setLooping] = useState(false);
   const [otherHand, setOtherHand] = useState(false);
-  const handsId = useId();
 
   /** null: stop repeating (keeping the bars for next time). */
   const chooseLoop = (range: LoopRange | null, on = true) => {
@@ -68,27 +69,39 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
               type="button"
               role="radio"
               aria-checked={mode === value}
-              className={mode === value ? 'segmented__option is-selected' : 'segmented__option'}
+              aria-label={t(`practice.mode.${value}`)}
+              className={
+                mode === value
+                  ? 'segmented__option segmented__option--icon is-selected'
+                  : 'segmented__option segmented__option--icon'
+              }
+              title={t(`practice.tips.${value}`)}
               onClick={() => chooseMode(value)}
             >
-              {t(`practice.mode.${value}`)}
+              <span aria-hidden="true">{ICONS[value]}</span>
             </button>
           ))}
         </div>
-        <label className="inline-field" htmlFor={handsId}>
-          {t('practice.hands.label')}
-          <select
-            id={handsId}
-            value={hands}
-            onChange={(e) => setHands(e.target.value as HandFilter)}
-          >
-            {HANDS.map((value) => (
-              <option key={value} value={value}>
-                {t(`practice.hands.${value}`)}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="segmented" role="radiogroup" aria-label={t('practice.hands.label')}>
+          {HANDS.map((value) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={hands === value}
+              aria-label={t(`practice.hands.${value}`)}
+              className={
+                hands === value
+                  ? 'segmented__option segmented__option--icon is-selected'
+                  : 'segmented__option segmented__option--icon'
+              }
+              title={t(`practice.tips.hands.${value}`)}
+              onClick={() => setHands(value)}
+            >
+              <span aria-hidden="true">{ICONS[value]}</span>
+            </button>
+          ))}
+        </div>
         <label className="checkbox">
           <input
             type="checkbox"

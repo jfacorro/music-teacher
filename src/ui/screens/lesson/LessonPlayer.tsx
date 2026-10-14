@@ -142,16 +142,27 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               type="button"
               className="button"
               disabled={index === 0}
+              title={t('lesson.tips.back')}
               onClick={() => setIndex((i) => i - 1)}
             >
               {t('lesson.back')}
             </button>
             {canContinue ? (
-              <button type="button" className="button button--primary" onClick={next}>
+              <button
+                type="button"
+                className="button button--primary"
+                title={t('lesson.tips.continue')}
+                onClick={next}
+              >
                 {t('lesson.continue')}
               </button>
             ) : (
-              <button type="button" className="button button--quiet" onClick={next}>
+              <button
+                type="button"
+                className="button button--quiet"
+                title={t('lesson.tips.skip')}
+                onClick={next}
+              >
                 {t('lesson.skip')}
               </button>
             )}

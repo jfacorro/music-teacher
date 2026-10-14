@@ -225,6 +225,18 @@ select {
   text-decoration: none;
 }
 
+/* A button showing only an icon (its name is in its label and tooltip). */
+.button--icon {
+  min-inline-size: 2.75rem;
+  padding-inline: 0.75rem;
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.button__icon {
+  margin-inline-end: 0.4em;
+}
+
 .button:disabled {
   opacity: 0.5;
   cursor: default;
@@ -482,6 +494,14 @@ select {
   background: var(--surface);
   color: var(--muted);
   cursor: pointer;
+}
+
+/* An option showing only an icon (its name is in its label and tooltip). */
+.segmented__option--icon {
+  min-inline-size: 2.75rem;
+  padding-inline: 0.7rem;
+  font-size: 1.15rem;
+  line-height: 1.2;
 }
 
 .segmented__option + .segmented__option {

@@ -27,6 +27,10 @@
       "treble": "Clave de sol",
       "bass": "Clave de fa",
       "both": "Las dos claves"
+    },
+    "tips": {
+      "play": "Toca lo que quieras y mira las notas y los acordes que tocas",
+      "quiz": "Reconoce notas en el pentagrama tocando sus teclas"
     }
   },
   "progress": {
@@ -278,13 +282,28 @@
     },
     "otherHand": "Tocar la otra mano",
     "otherHandMic": "Con el micrófono, usa auriculares para que solo te oiga a ti.",
-    "shortcut": "Atajo: {key}",
     "keys": {
       "space": "Espacio",
       "escape": "Esc"
     },
     "tap": "Toca aquí o cualquier tecla",
-    "hintRhythm": "Toca cualquier tecla con cada nota: solo cuenta el ritmo. El metrónomo marca la entrada."
+    "hintRhythm": "Toca cualquier tecla con cada nota: solo cuenta el ritmo. El metrónomo marca la entrada.",
+    "tips": {
+      "withKey": "{action} ({key})",
+      "showResults": "Volver a ver los resultados de la última vez",
+      "weakSpot": "Repetir los compases que peor salieron",
+      "falling": "Notas que caen: las notas caen sobre las teclas que hay que tocar",
+      "sheet": "Partitura: lee las notas en el pentagrama",
+      "wait": "Espérame: la música espera cada nota",
+      "tempo": "Tocar a tempo: tempo constante, con entrada y metrónomo",
+      "retry": "Volver a tocar este ejercicio desde el principio",
+      "tap": "Toca a tiempo con cada nota, o pulsa cualquier tecla",
+      "hands": {
+        "both": "Practicar con las dos manos",
+        "R": "Practicar solo la mano derecha",
+        "L": "Practicar solo la mano izquierda"
+      }
+    }
   },
   "lesson": {
     "notFound": "Esta lección no existe.",
@@ -303,7 +322,12 @@
     "restart": "Empezar la lección de nuevo",
     "next": "Siguiente lección",
     "bestStars": "{stars, plural, one {Tu mejor resultado: # estrella} other {Tu mejor resultado: # estrellas}}",
-    "staffPicture": "Notas en el pentagrama"
+    "staffPicture": "Notas en el pentagrama",
+    "tips": {
+      "back": "Volver al paso anterior",
+      "continue": "Pasar al siguiente paso",
+      "skip": "Saltar este paso por ahora"
+    }
   },
   "welcome": {
     "title": "Bienvenido a Profesor de piano",
@@ -331,6 +355,7 @@
     "hint": "Es la tecla iluminada en el teclado.",
     "progress": "Tarjeta {current} de {total}",
     "results": "Resultados del test",
-    "firstTry": "{count} de {total} a la primera"
+    "firstTry": "{count} de {total} a la primera",
+    "newCards": "Empezar de nuevo con tarjetas nuevas"
   }
 }

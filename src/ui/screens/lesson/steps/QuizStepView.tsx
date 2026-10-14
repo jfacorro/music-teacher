@@ -30,7 +30,12 @@ export function QuizStepView({ step, text, onResult, onContinue }: QuizStepViewP
         }
         actions={(result) =>
           passes(result.stars) ? (
-            <button type="button" className="button button--primary" onClick={onContinue}>
+            <button
+              type="button"
+              className="button button--primary"
+              title={t('lesson.tips.continue')}
+              onClick={onContinue}
+            >
               {t('lesson.continue')}
             </button>
           ) : null
