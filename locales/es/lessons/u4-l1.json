@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "bassClef": "La mano izquierda suele leer en otro pentagrama, con la clave de fa. Sus dos puntos rodean la cuarta línea desde abajo, y la nota en esa línea es {f}: el {f} justo debajo del {c} central.",
+    "landmarks": "Notas de referencia en clave de fa: el {c3} en el segundo espacio, el {f} en la línea de la clave y el {c} central en una línea adicional encima del pentagrama: el mismo {c} central que en la clave de sol.",
+    "findLandmarks": "Toca el {c3}, el {f} y el {c} central.",
+    "quizLandmarks": "Léelas en el pentagrama en clave de fa: toca cada nota que veas."
+  }
+}

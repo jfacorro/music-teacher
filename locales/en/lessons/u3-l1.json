@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "staff": "Music is written on a staff: five lines with four spaces between them. Notes sit on the lines or in the spaces, and the higher a note sits, the higher it sounds. These notes climb one step at a time: line, space, line…",
+    "trebleClef": "The curly sign at the start is the treble clef, or G clef: its curl wraps around the second line from the bottom, and the note on that line is {g}. The right hand usually plays from this staff.",
+    "landmarks": "Three landmark notes help you find all the others: middle {c} on a short extra line below the staff (a ledger line), {g} on the clef’s line, and the higher {c5} in the third space.",
+    "findLandmarks": "Play the three landmarks: middle {c}, {g} and the higher {c5}.",
+    "quizLandmarks": "Now read them from the staff: play each note you see."
+  }
+}

@@ -301,7 +301,8 @@
     "noStars": "Completa todos los pasos sin saltarte ninguno para conseguir estrellas.",
     "restart": "Empezar la lección de nuevo",
     "next": "Siguiente lección",
-    "bestStars": "{stars, plural, one {Tu mejor resultado: # estrella} other {Tu mejor resultado: # estrellas}}"
+    "bestStars": "{stars, plural, one {Tu mejor resultado: # estrella} other {Tu mejor resultado: # estrellas}}",
+    "staffPicture": "Notas en el pentagrama"
   },
   "welcome": {
     "title": "Bienvenido a Profesor de piano",

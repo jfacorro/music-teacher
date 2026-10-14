@@ -58,6 +58,65 @@
           "skills": ["steady-tempo"]
         }
       ]
+    },
+    {
+      "id": "u3",
+      "textVars": {
+        "c": "C4"
+      },
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u3-l1",
+          "skills": ["treble-clef"]
+        },
+        {
+          "id": "u3-l2",
+          "skills": ["treble-clef"]
+        },
+        {
+          "id": "u3-l3",
+          "skills": ["treble-clef", "rh-position"]
+        },
+        {
+          "id": "u3-l4",
+          "skills": ["treble-clef", "rh-position"]
+        },
+        {
+          "id": "u3-l5",
+          "skills": ["treble-clef", "steady-tempo"]
+        }
+      ]
+    },
+    {
+      "id": "u4",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u4-l1",
+          "skills": ["bass-clef"]
+        },
+        {
+          "id": "u4-l2",
+          "skills": ["bass-clef"]
+        },
+        {
+          "id": "u4-l3",
+          "skills": ["bass-clef", "lh-position"]
+        },
+        {
+          "id": "u4-l4",
+          "skills": ["grand-staff"]
+        },
+        {
+          "id": "u4-l5",
+          "skills": ["bass-clef", "lh-position", "steady-tempo"]
+        }
+      ]
     }
   ]
 }

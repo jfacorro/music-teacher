@@ -42,7 +42,10 @@ export interface MusicXmlResult {
 }
 
 export interface MusicXmlOptions {
-  /** Hands that get a staff (default: every hand with notes); other notes are left out. */
+  /**
+   * Hands that get a staff, even without notes (default: every hand with notes); other notes
+   * are left out.
+   */
   hands?: readonly Hand[];
   /** Text written under each note, e.g. its name for beginners (once per tied note). */
   noteLabel?: (note: ScoreNote) => string;
@@ -51,6 +54,8 @@ export interface MusicXmlOptions {
    * (written at its pitch, which positions it).
    */
   rhythm?: boolean;
+  /** A picture of some notes rather than music: no rests and no bar lines are drawn. */
+  illustration?: boolean;
 }
 
 export const noteKey = (staff: number, startDivision: number, midi: number) =>
@@ -63,9 +68,8 @@ interface Event {
 }
 
 export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): MusicXmlResult {
-  const hands = (['R', 'L'] as const).filter(
-    (hand) =>
-      score.notes.some((n) => n.hand === hand) && (!options.hands || options.hands.includes(hand)),
+  const hands = (['R', 'L'] as const).filter((hand) =>
+    options.hands ? options.hands.includes(hand) : score.notes.some((n) => n.hand === hand),
   );
   const staves: StaffInfo[] = hands.map((hand, i) => ({ hand, number: i + 1 }));
   const measureDivs = Math.round(beatsPerMeasure(score.timeSignature) * DIVISIONS);
@@ -89,17 +93,24 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
         ...measureNotes(events, staff, from, to, index, options.noteLabel, options.rhythm ?? false),
       );
     });
+    if (options.illustration) parts.push(NO_BAR_LINE);
     measures.push(`<measure number="${m + 1}">${parts.join('')}</measure>`);
   }
 
+  const body = measures.join('');
   const xml =
     '<?xml version="1.0" encoding="UTF-8"?>' +
     '<score-partwise version="4.0">' +
     '<part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>' +
-    `<part id="P1">${measures.join('')}</part>` +
+    `<part id="P1">${options.illustration ? hideRests(body) : body}</part>` +
     '</score-partwise>';
   return { xml, staves, notes: index };
 }
+
+const NO_BAR_LINE = '<barline location="right"><bar-style>none</bar-style></barline>';
+
+/** Rests take their space but aren't drawn. */
+const hideRests = (xml: string) => xml.replaceAll('<note><rest', '<note print-object="no"><rest');
 
 /** One hand's notes as a single line of events (chords grouped, overlaps cut). */
 function eventsFor(notes: readonly ScoreNote[]): Event[] {

@@ -4,6 +4,7 @@
  * per minute.
  */
 import type { Pitch } from '../theory/pitch';
+import type { Marking } from './markings';
 
 export type Hand = 'L' | 'R';
 export type Finger = 1 | 2 | 3 | 4 | 5;
@@ -27,6 +28,8 @@ export interface Score {
   /** Sorted by start, then pitch. */
   notes: ScoreNote[];
   measures: Measure[];
+  /** Italian tempo words and dynamics written at the start, e.g. "moderato", "mf". */
+  markings?: Marking[];
 }
 
 export function beatsPerMeasure([numerator, denominator]: [number, number]): number {

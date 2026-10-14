@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "staff": "La música se escribe en un pentagrama: cinco líneas con cuatro espacios entre ellas. Las notas van en las líneas o en los espacios, y cuanto más arriba está una nota, más aguda suena. Estas notas suben de una en una: línea, espacio, línea…",
+    "trebleClef": "El signo en espiral del principio es la clave de sol: su espiral rodea la segunda línea desde abajo, y la nota en esa línea es {g}. La mano derecha suele tocar lo que está en este pentagrama.",
+    "landmarks": "Tres notas de referencia te ayudan a encontrar todas las demás: el {c} central en una línea corta extra debajo del pentagrama (una línea adicional), el {g} en la línea de la clave y el {c5} más agudo en el tercer espacio.",
+    "findLandmarks": "Toca las tres notas de referencia: el {c} central, el {g} y el {c5} más agudo.",
+    "quizLandmarks": "Ahora léelas en el pentagrama: toca cada nota que veas."
+  }
+}

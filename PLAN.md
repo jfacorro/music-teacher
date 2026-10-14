@@ -571,12 +571,13 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - `rhythm` step: a pattern written as counted (`"q q h | e e q rq q"`: w h q e s, "." dotted, "r" rest; every bar must be full). Any key counts and only timing is graded (taps when nothing is due are "Extra taps"); shown on a one-line percussion staff (stems up) or as a single falling lane, with a big tap pad instead of the keyboard. Tempo mode with count-in and metronome; results include the timing breakdown.
 - Unit 2 lessons 1–3 start with a tap-the-rhythm step before playing the same kind of rhythm on keys.
 
-**2.6 Content: Units 3–4**
-- Treble clef: landmark notes (middle C, G4, C5), lines & spaces drills, melodies read from the staff.
-- Bass clef: landmark notes (F3, C3), LH melodies, grand staff introduction.
-- 2–3 public-domain songs per unit.
-- All new text translated; glossary extended (clefs, staff, ledger lines, accidentals, …).
-- Tooltips explaining Italian score markings, localized.
+**2.6 Content: Units 3–4** — ✔ done
+- Unit 3, reading the treble clef (5 lessons): the staff and the treble clef; landmark notes (middle C, G4, C5); lines and spaces (note quizzes); steps and skips, read from the staff with names, then without, then in time; songs `au-clair-de-la-lune` and `lightly-row`.
+- Unit 4, the bass clef and the left hand (5 lessons): the bass clef and its landmarks (C3, F3, middle C); lines and spaces; left-hand melodies in C position; the grand staff (picture, a quiz across both staves, the hands taking turns); songs `hot-cross-buns` and `mary-had-a-little-lamb` (left hand). Units 3 and 4 unlock like Unit 2 (every lesson of the previous unit with ≥ 1 star).
+- Explain steps can show notes on a staff (`"staff": { "clef": "treble" | "bass" | "grand", "notes": [...], "names": true }`), drawn by OSMD without bar lines or rests (`StaticStaff`, shared with the quiz cards).
+- Italian markings: scores can list `"markings"` (tempo words adagio … allegro, dynamics pp … ff); they're shown as chips next to the song info and in lesson exercises, with a localized explanation on hover or focus (`theory.json` › `markings`). Every song has its markings. (Grading dynamics comes with MIDI velocity in Phase 3.)
+- "Both staves" now always shows both staves, even for music in one hand.
+- New skills: treble clef, bass clef, grand staff. All text in English and Spanish; glossary extended (staff, clefs, grand staff, ledger line, steps and skips, accidentals, markings, quiz and rhythm terms).
 
 #### Phase 2 done when
 - [ ] Any lesson can be played in either falling-notes or sheet-music view with a synced cursor.

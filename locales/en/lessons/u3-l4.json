@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "skips": "When a note jumps from a line to the next line, or from a space to the next space, one key is left out: that’s a skip. {c}, {e} and {g} go by skips: play them with fingers 1, 3 and 5.",
+    "stepsAndSkips": "This melody mixes steps and skips. Before each note, ask yourself: the next key, or one key skipped?",
+    "inTime": "Now in time with the metronome."
+  }
+}

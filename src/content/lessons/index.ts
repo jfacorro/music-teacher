@@ -23,6 +23,8 @@ export type {
   Lesson,
   LessonStep,
   ExplainStep,
+  StaffClef,
+  StaffNotes,
   FindStep,
   ExerciseStep,
   QuizStep,

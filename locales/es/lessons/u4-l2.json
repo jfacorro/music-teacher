@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "lines": "Las cinco líneas del pentagrama en clave de fa, de abajo arriba: {g}, {b}, {d}, {f} y {a}.",
+    "quizLines": "Toca las notas de las líneas.",
+    "spaces": "Y los cuatro espacios, de abajo arriba: {a}, {c}, {e} y {g}.",
+    "quizSpaces": "Toca las notas de los espacios.",
+    "quizAll": "Todo el pentagrama en clave de fa mezclado, hasta el {c} central."
+  }
+}

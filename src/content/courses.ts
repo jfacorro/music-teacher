@@ -20,6 +20,9 @@ export const SKILLS = [
   'rests',
   'eighth-notes',
   'steady-tempo',
+  'treble-clef',
+  'bass-clef',
+  'grand-staff',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];

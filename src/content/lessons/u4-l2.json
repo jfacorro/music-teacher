@@ -1,0 +1,103 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "lines",
+      "textVars": {
+        "g": "G2",
+        "b": "B2",
+        "d": "D3",
+        "f": "F3",
+        "a": "A3"
+      },
+      "staff": {
+        "clef": "bass",
+        "notes": ["G2", "B2", "D3", "F3", "A3"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "G2"
+        },
+        {
+          "note": "B2"
+        },
+        {
+          "note": "D3"
+        },
+        {
+          "note": "F3"
+        },
+        {
+          "note": "A3"
+        }
+      ],
+      "hand": "L",
+      "range": ["C2", "C4"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizLines",
+      "notes": ["G2", "B2", "D3", "F3", "A3"],
+      "count": 10,
+      "clef": "bass",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "explain",
+      "text": "spaces",
+      "textVars": {
+        "a": "A2",
+        "c": "C3",
+        "e": "E3",
+        "g": "G3"
+      },
+      "staff": {
+        "clef": "bass",
+        "notes": ["A2", "C3", "E3", "G3"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "A2"
+        },
+        {
+          "note": "C3"
+        },
+        {
+          "note": "E3"
+        },
+        {
+          "note": "G3"
+        }
+      ],
+      "hand": "L",
+      "range": ["C2", "C4"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizSpaces",
+      "notes": ["A2", "C3", "E3", "G3"],
+      "count": 8,
+      "clef": "bass",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "quiz",
+      "text": "quizAll",
+      "textVars": {
+        "c": "C4"
+      },
+      "notes": ["G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"],
+      "count": 12,
+      "clef": "bass",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

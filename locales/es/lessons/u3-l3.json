@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "steps": "Cuando una nota pasa a la línea o al espacio de al lado, se mueve por grado conjunto: a la tecla blanca vecina. Pon el pulgar derecho en el {c} central, un dedo por tecla, y sigue las notas hacia arriba y hacia abajo.",
+    "readWithNames": "Lee la melodía en el pentagrama. Por ahora, los nombres de las notas están escritos debajo.",
+    "readWithout": "Otra melodía, esta vez sin nombres. Fíjate en la línea o el espacio de cada nota.",
+    "inTime": "Ahora tócala a tempo con el metrónomo."
+  }
+}

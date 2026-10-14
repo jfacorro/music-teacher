@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "lines": "The five lines of the treble staff, from the bottom: {e}, {g}, {b}, {d} and {f}. From one line to the next you skip a white key.",
+    "quizLines": "Play the notes on the lines.",
+    "spaces": "The four spaces, from the bottom: {f}, {a}, {c} and {e}: the white keys between the line notes.",
+    "quizSpaces": "Play the notes in the spaces.",
+    "quizAll": "Lines and spaces mixed, plus middle {c} on its ledger line and {d} just below the staff."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "grandStaff": "La música para piano une los dos pentagramas con una llave: es el pentagrama doble. La mano derecha lee el pentagrama de arriba, en clave de sol; la izquierda, el de abajo, en clave de fa; y el {c} central queda entre los dos.",
+    "quizGrand": "Notas de referencia de los dos pentagramas: toca cada nota que veas.",
+    "takingTurns": "Las manos se turnan: la derecha toca en el pentagrama de arriba y la izquierda le contesta en el de abajo. La última nota la tocan las dos juntas.",
+    "inTime": "Ahora a tempo con el metrónomo."
+  }
+}

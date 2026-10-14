@@ -1,0 +1,72 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "bassClef",
+      "textVars": {
+        "f": "F3",
+        "c": "C4"
+      },
+      "staff": {
+        "clef": "bass",
+        "notes": ["F3"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "F3"
+        }
+      ],
+      "hand": "L",
+      "range": ["C2", "C4"]
+    },
+    {
+      "type": "explain",
+      "text": "landmarks",
+      "textVars": {
+        "c3": "C3",
+        "f": "F3",
+        "c": "C4"
+      },
+      "staff": {
+        "clef": "bass",
+        "notes": ["C3", "F3", "C4"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "C3"
+        },
+        {
+          "note": "F3"
+        },
+        {
+          "note": "C4"
+        }
+      ],
+      "hand": "L",
+      "range": ["C2", "C4"]
+    },
+    {
+      "type": "find",
+      "text": "findLandmarks",
+      "textVars": {
+        "c3": "C3",
+        "f": "F3",
+        "c": "C4"
+      },
+      "notes": ["C3", "F3", "C4"],
+      "range": ["C2", "C4"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizLandmarks",
+      "notes": ["C3", "F3", "C4"],
+      "count": 9,
+      "clef": "bass",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

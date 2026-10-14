@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "steps": "When a note moves to the very next line or space, it moves by a step: to the neighboring white key. Put your right thumb on middle {c}, one finger per key, and follow the notes up and down.",
+    "readWithNames": "Read the melody from the staff. For now, the note names are written under the notes.",
+    "readWithout": "Another melody, this time without names. Look at each note’s line or space.",
+    "inTime": "Now play it in time with the metronome."
+  }
+}

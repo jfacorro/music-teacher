@@ -28,11 +28,23 @@ interface StepBase {
   textVars: Record<string, Pitch>;
 }
 
+/** The staves of a staff picture: treble, bass, or both (the grand staff). */
+export type StaffClef = 'treble' | 'bass' | 'grand';
+
+export interface StaffNotes {
+  clef: StaffClef;
+  notes: Pitch[];
+  /** Write each note's name under it. */
+  names: boolean;
+}
+
 export interface ExplainStep extends StepBase {
   type: 'explain';
   keys: KeyHint[];
   hand: Hand;
   range: [number, number] | null;
+  /** Notes shown on a staff above the keyboard. */
+  staff: StaffNotes | null;
 }
 
 export interface FindStep extends StepBase {
@@ -140,6 +152,7 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
         keys: keyHints(data.keys ?? [], at(location, 'keys')),
         hand: data.hand === 'L' ? 'L' : 'R',
         range: range(data.range, at(location, 'range')),
+        staff: data.staff === undefined ? null : staffNotes(data.staff, at(location, 'staff')),
       };
     case 'find': {
       if (!Array.isArray(data.notes) || data.notes.length === 0) {
@@ -290,6 +303,21 @@ function passRule(data: Record<string, unknown>, location: string): { minStars: 
     throw new LessonError(at(location, 'pass › minStars'), 'expected 0–3');
   }
   return { minStars: minStars as number };
+}
+
+function staffNotes(input: unknown, location: string): StaffNotes {
+  const data = object(input, location);
+  if (data.clef !== 'treble' && data.clef !== 'bass' && data.clef !== 'grand') {
+    throw new LessonError(at(location, 'clef'), 'expected "treble", "bass" or "grand"');
+  }
+  if (!Array.isArray(data.notes) || data.notes.length === 0) {
+    throw new LessonError(at(location, 'notes'), 'expected a non-empty array of notes');
+  }
+  return {
+    clef: data.clef,
+    notes: data.notes.map((note, i) => pitch(note, at(location, `notes[${i}]`))),
+    names: data.names === true,
+  };
 }
 
 function textVars(input: unknown, location: string): Record<string, Pitch> {

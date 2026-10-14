@@ -1,7 +1,7 @@
 /**
  * Loads inline JSON scores (PLAN.md §7):
  *
- *   { "tempo": 100, "timeSignature": [4, 4],
+ *   { "tempo": 100, "timeSignature": [4, 4], "markings": ["moderato", "mf"],
  *     "notes": [{ "note": "E4", "start": 0, "duration": 1, "hand": "R", "finger": 3 }, …] }
  *
  * Validates everything once at load time and reports problems with their location, e.g.
@@ -15,6 +15,7 @@ import {
   type Score,
   type ScoreNote,
 } from '../../engine/score';
+import { isMarking, type Marking } from '../../engine/markings';
 import { InvalidNoteError, parseNote } from '../../theory/pitch';
 
 export class ScoreError extends Error {
@@ -41,7 +42,25 @@ export function parseInlineScore(input: unknown, location: string): Score {
     .map((note, index) => parseScoreNote(note, at(location, `notes[${index}]`)))
     .sort((a, b) => a.start - b.start || a.pitch.midi - b.pitch.midi);
 
-  return { tempo, timeSignature, notes, measures: measuresFor(notes, timeSignature) };
+  const markings = parseMarkings(data.markings, at(location, 'markings'));
+  return {
+    tempo,
+    timeSignature,
+    notes,
+    measures: measuresFor(notes, timeSignature),
+    ...(markings.length > 0 && { markings }),
+  };
+}
+
+function parseMarkings(input: unknown, location: string): Marking[] {
+  if (input === undefined) return [];
+  if (!Array.isArray(input)) throw new ScoreError(location, 'expected an array');
+  return input.map((marking, index) => {
+    if (!isMarking(marking)) {
+      throw new ScoreError(at(location, `[${index}]`), `unknown marking "${String(marking)}"`);
+    }
+    return marking;
+  });
 }
 
 function parseScoreNote(input: unknown, location: string): ScoreNote {

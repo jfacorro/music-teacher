@@ -1,0 +1,112 @@
+{
+  "tempo": 90,
+  "timeSignature": [4, 4],
+  "notes": [
+    {
+      "note": "E3",
+      "start": 0,
+      "duration": 1,
+      "hand": "L",
+      "finger": 3
+    },
+    {
+      "note": "D3",
+      "start": 1,
+      "duration": 1,
+      "hand": "L",
+      "finger": 4
+    },
+    {
+      "note": "C3",
+      "start": 2,
+      "duration": 2,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "E3",
+      "start": 4,
+      "duration": 1,
+      "hand": "L"
+    },
+    {
+      "note": "D3",
+      "start": 5,
+      "duration": 1,
+      "hand": "L"
+    },
+    {
+      "note": "C3",
+      "start": 6,
+      "duration": 2,
+      "hand": "L"
+    },
+    {
+      "note": "C3",
+      "start": 8,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "C3",
+      "start": 8.5,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "C3",
+      "start": 9,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "C3",
+      "start": 9.5,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "D3",
+      "start": 10,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "D3",
+      "start": 10.5,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "D3",
+      "start": 11,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "D3",
+      "start": 11.5,
+      "duration": 0.5,
+      "hand": "L"
+    },
+    {
+      "note": "E3",
+      "start": 12,
+      "duration": 1,
+      "hand": "L"
+    },
+    {
+      "note": "D3",
+      "start": 13,
+      "duration": 1,
+      "hand": "L"
+    },
+    {
+      "note": "C3",
+      "start": 14,
+      "duration": 2,
+      "hand": "L"
+    }
+  ],
+  "markings": ["andante", "mf"]
+}
