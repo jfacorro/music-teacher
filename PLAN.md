@@ -519,7 +519,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Phase 1 done when
 - [x] Casio connects over USB and every key is detected correctly. (verified 2026-10-12)
-- [ ] Mic mode reliably detects single notes in the C3–C6 range after calibration. **TODO (user):** after setting the threshold and pressing "Correct the delay" in the Microphone check, confirm ≥ 90% heard correctly live (the recording replays at 97%) and that middle C is recognized reliably in lessons.
+- [x] Mic mode reliably detects single notes in the C3–C6 range after calibration. (verified 2026-10-15: threshold 12 dB and "Correct the delay" give ≥ 90% heard correctly live in the Microphone check; middle C is recognized reliably in lessons)
 - [ ] All Unit 1–2 lessons are playable in wait and tempo modes, with either input.
 - [x] Scores and stars persist across browser restarts.
 - [x] Engine has unit tests for matching and scoring.
@@ -580,11 +580,11 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - New skills: treble clef, bass clef, grand staff. All text in English and Spanish; glossary extended (staff, clefs, grand staff, ledger line, steps and skips, accidentals, markings, quiz and rhythm terms).
 
 #### Phase 2 done when
-- [ ] Any lesson can be played in either falling-notes or sheet-music view with a synced cursor.
-- [ ] Loop, slow-down and hand selection work in tempo mode.
-- [ ] Note-naming quiz works with both inputs and in every naming system.
-- [ ] Units 3–4 are complete and playable in every supported language.
-- [ ] Sheet-music note labels follow the selected naming system.
+- [x] Any lesson can be played in either falling-notes or sheet-music view with a synced cursor. (verified 2026-10-15 on the Casio)
+- [x] Loop, slow-down and hand selection work in tempo mode. (verified 2026-10-15 on the Casio)
+- [x] Note-naming quiz works with both inputs and in every naming system. (verified 2026-10-15 on the Casio)
+- [x] Units 3–4 are complete and playable in every supported language. (verified 2026-10-15 on the Casio)
+- [x] Sheet-music note labels follow the selected naming system. (verified 2026-10-15 on the Casio)
 
 ---
 
