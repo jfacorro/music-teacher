@@ -496,6 +496,14 @@ select {
   cursor: pointer;
 }
 
+/* An option showing only an icon (its name is in its label and tooltip). */
+.segmented__option--icon {
+  min-inline-size: 2.75rem;
+  padding-inline: 0.7rem;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
 .segmented__option + .segmented__option {
   border-inline-start: 1px solid var(--border);
 }

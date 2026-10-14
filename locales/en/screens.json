@@ -297,7 +297,12 @@
       "wait": "The music waits for each note",
       "tempo": "Play at a steady tempo, with a count-in and the metronome",
       "retry": "Play this exercise again from the start",
-      "tap": "Tap in time with each note, or press any key"
+      "tap": "Tap in time with each note, or press any key",
+      "hands": {
+        "both": "Practice both hands",
+        "R": "Practice the right hand only",
+        "L": "Practice the left hand only"
+      }
     }
   },
   "lesson": {

@@ -46,14 +46,16 @@ export function ViewToggle({
           type="button"
           role="radio"
           aria-checked={view === value}
-          className={view === value ? 'segmented__option is-selected' : 'segmented__option'}
+          className={
+            view === value
+              ? 'segmented__option segmented__option--icon is-selected'
+              : 'segmented__option segmented__option--icon'
+          }
+          aria-label={t(`practice.view.${value}`)}
           title={t(`practice.tips.${value}`)}
           onClick={() => onChange(value)}
         >
-          <span className="button__icon" aria-hidden="true">
-            {ICONS[value]}
-          </span>
-          {t(`practice.view.${value}`)}
+          <span aria-hidden="true">{ICONS[value]}</span>
         </button>
       ))}
     </div>

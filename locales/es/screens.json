@@ -297,7 +297,12 @@
       "wait": "La música espera cada nota",
       "tempo": "Toca a tempo constante, con entrada y metrónomo",
       "retry": "Volver a tocar este ejercicio desde el principio",
-      "tap": "Toca a tiempo con cada nota, o pulsa cualquier tecla"
+      "tap": "Toca a tiempo con cada nota, o pulsa cualquier tecla",
+      "hands": {
+        "both": "Practicar con las dos manos",
+        "R": "Practicar solo la mano derecha",
+        "L": "Practicar solo la mano izquierda"
+      }
     }
   },
   "lesson": {
