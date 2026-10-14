@@ -1,7 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { beatsPerMeasure, notesBetween, type Score, type ScoreNote } from '../../engine/score';
+import {
+  beatsPerMeasure,
+  measureAt,
+  notesBetween,
+  type Score,
+  type ScoreNote,
+} from '../../engine/score';
+import type { LoopRange } from '../../engine/session';
 import type { Transport } from '../../engine/transport';
+import { useBarSelection } from '../barSelection';
 import { pitchClass } from '../../theory/pitch';
 import {
   prepareCanvas,
@@ -21,6 +29,10 @@ interface FallingNotesProps {
   labelFor: (note: ScoreNote) => string;
   /** How each note went; read every frame, so keep the function stable. */
   styleOf?: (note: ScoreNote) => NoteStyle;
+  /** Bars being repeated, shaded. */
+  loop?: LoopRange | null;
+  /** Lets the user drag across bars to choose them (off when undefined). */
+  onSelectBars?: (range: LoopRange) => void;
 }
 
 /** played: right in time · missed: never played · muted: not graded (other hand). */
@@ -37,6 +49,7 @@ const COLORS = {
   played: '--note-played',
   missed: '--note-missed',
   noteText: '--badge-text',
+  loop: '--accent',
 };
 type Colors = Record<keyof typeof COLORS, string>;
 
@@ -51,12 +64,29 @@ export function FallingNotes({
   secondsVisible,
   labelFor,
   styleOf,
+  loop,
+  onSelectBars,
 }: FallingNotesProps) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const size = useElementSize(containerRef);
   const scheme = useColorScheme();
+
+  // The bar under the pointer: the beat at its height, as the notes fall right now.
+  const barAt = (event: PointerEvent<HTMLElement>) => {
+    const box = event.currentTarget.getBoundingClientRect();
+    if (box.height === 0) return null;
+    const visibleBeats = (secondsVisible * transport.tempo) / 60;
+    const beat = transport.position() + ((box.bottom - event.clientY) / box.height) * visibleBeats;
+    return measureAt(score.measures, beat);
+  };
+  const { selection, handlers } = useBarSelection(onSelectBars, barAt);
+  // Read every frame without restarting the drawing loop.
+  const shaded = useRef<LoopRange | null>(null);
+  useEffect(() => {
+    shaded.current = selection ?? loop ?? null;
+  }, [selection, loop]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -74,6 +104,7 @@ export function FallingNotes({
         visibleBeats: (secondsVisible * transport.tempo) / 60,
         labelFor,
         styleOf,
+        loop: shaded.current,
         colors,
       });
       frame = requestAnimationFrame(draw);
@@ -83,7 +114,11 @@ export function FallingNotes({
   }, [size, score, transport, layout, secondsVisible, labelFor, styleOf, scheme]);
 
   return (
-    <div ref={containerRef} className="falling-notes">
+    <div
+      ref={containerRef}
+      className={onSelectBars ? 'falling-notes is-selectable' : 'falling-notes'}
+      {...handlers}
+    >
       <canvas
         ref={canvasRef}
         role="img"
@@ -101,6 +136,7 @@ interface FrameState {
   visibleBeats: number;
   labelFor: (note: ScoreNote) => string;
   styleOf?: (note: ScoreNote) => NoteStyle;
+  loop: LoopRange | null;
   colors: Colors;
 }
 
@@ -108,7 +144,7 @@ function drawFrame(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  { score, layout, position, visibleBeats, labelFor, styleOf, colors }: FrameState,
+  { score, layout, position, visibleBeats, labelFor, styleOf, loop, colors }: FrameState,
 ): void {
   const unit = width / layout.whiteCount;
   const pxPerBeat = height / visibleBeats;
@@ -130,6 +166,20 @@ function drawFrame(
     const isMeasure = Math.abs(beat / measureLength - Math.round(beat / measureLength)) < 1e-9;
     ctx.fillStyle = isMeasure ? colors.measureLine : colors.beatLine;
     ctx.fillRect(0, Math.round(yFor(beat)) - (isMeasure ? 1 : 0.5), width, isMeasure ? 2 : 1);
+  }
+
+  // The bars being repeated: a band with a line at each end.
+  const first = loop && score.measures[loop.first];
+  const last = loop && score.measures[loop.last];
+  if (first && last) {
+    const top = yFor(last.start + last.length);
+    const bottom = yFor(first.start);
+    ctx.fillStyle = colors.loop;
+    ctx.globalAlpha = 0.12;
+    ctx.fillRect(0, top, width, bottom - top);
+    ctx.globalAlpha = 1;
+    ctx.fillRect(0, Math.round(top) - 1, width, 2);
+    ctx.fillRect(0, Math.round(bottom) - 1, width, 2);
   }
 
   // Notes.

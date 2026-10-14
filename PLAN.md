@@ -547,11 +547,14 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - "Sheet music starts with" setting (Settings → Language and notes) plus a per-exercise `"notation"` in lesson JSON; a Notation menu next to the view toggle changes it for the current run.
 - Sheet rendered at 90% with default spacing so names fit and the keyboard stays on a 1280×720 screen; the printed tempo mark is dropped (it's in the header).
 
-**2.3 Practice tools**
-- Loop a range of measures (select on the score or the falling-notes timeline).
-- Tempo slider (40–100%).
-- Hand selection with auto-play of the other hand via Tone.js.
-- "Practice weak spots": jump to the measures with the lowest accuracy.
+**2.3 Practice tools** — ✔ done (song practice; lesson exercises keep their set tempo, hands and pass rule)
+- Loop a range of measures: "Repeat bars [from] to [to]", or drag across bars on the sheet music or the falling notes while stopped. Out-of-loop notes are greyed and the loop is shaded. Tempo mode counts in during the bar before the loop and jumps back at its end keeping the beat (metronome included); wait mode jumps back once the last notes are played. Each time through shows its accuracy ("3 times through · last time 92%"); loops never end in results, so they aren't recorded.
+- Speed slider (40–100%, shows the resulting BPM): changes the tempo on the fly, without starting over.
+- "Play the other hand" when practicing one hand: the other hand is played by Tone.js (a softer synth), scheduled ahead like the metronome. In wait mode it waits too: notes where the music stops sound once the learner plays on. With the microphone, a tip suggests headphones (the other hand's keys never count as wrong).
+- "Practice the weak spot" on the results: loops the worst measure plus weak neighbors (below 90%), up to 4 bars.
+- Choosing bars that are already repeated (a click inside the loop, or the same bars again) stops repeating them.
+- Shortcuts while practicing (songs and lessons): Space plays and pauses, Escape starts over (tooltips on the buttons).
+- Settings page: sections stacked one after another; the live test keeps the last 20 events in a scrolling list.
 
 **2.4 Richer results & progress**
 - Results: timing breakdown (early/late distribution), per-measure heatmap.

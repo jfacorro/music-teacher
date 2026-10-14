@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { subscribeNotes } from './bus';
 import type { InputSourceKind, NoteEvent } from './types';
 
-const RECENT_LIMIT = 12;
+const RECENT_LIMIT = 20;
 
 interface LiveInputState {
   /** Keys currently down, sorted low to high. */

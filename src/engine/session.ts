@@ -5,6 +5,8 @@
  * - Tempo mode: the music plays at a steady tempo after a one-measure count-in; notes are
  *   graded on timing and missed once their window passes.
  * - Wait mode: the music stops at each note or chord until the right keys are pressed.
+ * - Loop: only a range of measures is practiced, over and over; each time through ends with
+ *   a quick score instead of the results.
  *
  * The UI calls `tick()` every animation frame and forwards every `NoteEvent` to `handleNote`.
  */
@@ -20,7 +22,7 @@ import {
   type Score,
   type ScoreNote,
 } from './score';
-import { summarize, type NoteOutcome, type Summary } from './scoring';
+import { accuracyOf, summarize, weightOf, type NoteOutcome, type Summary } from './scoring';
 import { chordToleranceFor, timingOf, windowsFor, type Grade, type Timing } from './timing';
 import type { Transport } from './transport';
 
@@ -47,13 +49,22 @@ export interface SessionState {
   /** Verdict for each key currently held down. */
   marks: ReadonlyMap<number, KeyMark>;
   summary: Summary | null;
+  /** While looping: how many times through so far, and the accuracy of the latest one. */
+  lastPass: { count: number; accuracy: number } | null;
+}
+
+/** Measures to repeat, by index (0 = first measure), both included. */
+export interface LoopRange {
+  first: number;
+  last: number;
 }
 
 export interface SessionOptions {
   mode: PracticeMode;
   hands: HandFilter;
-  /** Beats before the first note where playback starts (so the first notes are on screen). */
-  leadIn: number;
+  /** Seconds of music before the first note where playback starts (so it's on screen). */
+  leadInSeconds: number;
+  loop?: LoopRange | null;
   /** Input assumed for timing windows until the first note arrives. */
   defaultSource?: InputSourceKind;
 }
@@ -72,22 +83,24 @@ const INITIAL_STATE: SessionState = {
   feedback: null,
   marks: new Map(),
   summary: null,
+  lastPass: null,
 };
 
 export class PracticeSession {
   readonly score: Score;
   readonly transport: Transport;
   readonly mode: PracticeMode;
-  /** The notes being graded (the selected hands). */
-  readonly graded: ScoreNote[];
-  /** First count-in beat (tempo mode), or null. */
-  readonly countInFrom: number | null;
-  /** Where playback starts and restarts. */
-  readonly startBeat: number;
+  /** The notes of the selected hands. */
+  readonly hands: ScoreNote[];
+  /** The other hand's notes (none when practicing both). */
+  readonly otherHand: ScoreNote[];
 
-  private readonly gradedSet: ReadonlySet<ScoreNote>;
-  private readonly otherHand: ScoreNote[];
-  private readonly end: number;
+  private readonly leadInSeconds: number;
+  /** The loop in beats, or null to play the whole score. */
+  private loop: { start: number; end: number } | null = null;
+  /** The notes being graded: the selected hands, within the loop. */
+  private practicedNotes: ScoreNote[] = [];
+  private practicedSet: ReadonlySet<ScoreNote> = new Set();
   private source: InputSourceKind;
   private tempoMatcher!: TempoMatcher;
   private waitMatcher!: WaitMatcher;
@@ -104,13 +117,51 @@ export class PracticeSession {
     this.transport = transport;
     this.mode = options.mode;
     this.source = options.defaultSource ?? 'midi';
-    this.graded = score.notes.filter((n) => options.hands === 'both' || n.hand === options.hands);
-    this.gradedSet = new Set(this.graded);
-    this.otherHand = score.notes.filter((n) => !this.gradedSet.has(n));
-    this.end = scoreEnd(score);
-    this.countInFrom = this.mode === 'tempo' ? -beatsPerMeasure(score.timeSignature) : null;
-    this.startBeat = -Math.max(options.leadIn, -(this.countInFrom ?? 0));
-    this.reset();
+    this.leadInSeconds = options.leadInSeconds;
+    this.hands = score.notes.filter((n) => options.hands === 'both' || n.hand === options.hands);
+    this.otherHand = score.notes.filter((n) => !this.hands.includes(n));
+    this.setLoop(options.loop ?? null);
+  }
+
+  /** The notes being graded: the selected hands, within the loop if there is one. */
+  get practiced(): readonly ScoreNote[] {
+    return this.practicedNotes;
+  }
+
+  /** Where the practiced music starts: beat 0, or the loop's first beat. */
+  get musicStart(): number {
+    return this.loop?.start ?? 0;
+  }
+
+  /** Where playback ends, or jumps back to the start of the loop. */
+  get musicEnd(): number {
+    return this.loop?.end ?? scoreEnd(this.score);
+  }
+
+  get looping(): boolean {
+    return this.loop !== null;
+  }
+
+  /** First count-in beat (tempo mode: one measure before the music), or null. */
+  get countInFrom(): number | null {
+    return this.mode === 'tempo'
+      ? this.musicStart - beatsPerMeasure(this.score.timeSignature)
+      : null;
+  }
+
+  /** Where playback starts and restarts: the lead-in or the count-in, whichever is longer. */
+  get startBeat(): number {
+    const leadIn = (this.leadInSeconds * this.transport.tempo) / 60;
+    const countIn = this.musicStart - (this.countInFrom ?? this.musicStart);
+    return this.musicStart - Math.max(leadIn, countIn);
+  }
+
+  /**
+   * In wait mode the music stops at the next notes until they're played, so nothing at or
+   * after this beat may sound yet (e.g. the other hand). Infinity when the music won't stop.
+   */
+  get holdBeat(): number {
+    return this.mode === 'wait' ? (this.waitMatcher.current?.start ?? Infinity) : Infinity;
   }
 
   // Controls
@@ -130,6 +181,28 @@ export class PracticeSession {
 
   restart(): void {
     this.reset();
+  }
+
+  /** Practices only these measures, over and over (null: the whole score). Starts over. */
+  setLoop(range: LoopRange | null): void {
+    const { measures } = this.score;
+    const first = range ? measures[Math.max(0, range.first)] : undefined;
+    const last = range ? measures[Math.min(measures.length - 1, range.last)] : undefined;
+    this.loop =
+      first && last && first.start <= last.start
+        ? { start: first.start, end: last.start + last.length }
+        : null;
+    const inLoop = (note: ScoreNote) =>
+      !this.loop || (note.start >= this.loop.start && note.start < this.loop.end);
+    this.practicedNotes = this.hands.filter(inLoop);
+    this.practicedSet = new Set(this.practicedNotes);
+    this.reset();
+  }
+
+  /** Plays slower or faster from where it is; before starting, moves to the new lead-in. */
+  setTempo(tempo: number): void {
+    this.transport.setTempo(tempo);
+    if (this.state.status === 'ready') this.transport.seek(this.startBeat);
   }
 
   // Input and time
@@ -169,9 +242,10 @@ export class PracticeSession {
       if (missed.length > 0)
         this.setState({ streak: 0, feedback: this.feedback({ kind: 'missed' }) });
 
+      const from = this.countInFrom;
       const countIn =
-        this.countInFrom !== null && position >= this.countInFrom && position < 0
-          ? Math.floor(position - this.countInFrom) + 1
+        from !== null && position >= from && position < this.musicStart
+          ? Math.floor(position - from) + 1
           : null;
       if (countIn !== this.state.countIn) this.setState({ countIn });
     } else {
@@ -183,8 +257,11 @@ export class PracticeSession {
       }
     }
 
+    if (position < this.musicEnd) return;
     const matched = this.mode === 'tempo' ? this.tempoMatcher.done : this.waitMatcher.done;
-    if (matched && position >= this.end) this.finish();
+    // When looping in tempo mode, time doesn't wait for notes still in their window.
+    if (this.loop && (matched || this.mode === 'tempo')) this.nextPass(this.loop, position);
+    else if (matched) this.finish();
   }
 
   // Queries
@@ -194,7 +271,7 @@ export class PracticeSession {
   }
 
   isGraded(note: ScoreNote): boolean {
-    return this.gradedSet.has(note);
+    return this.practicedSet.has(note);
   }
 
   /** The key a held input pitch counts as (a microphone note may be read as an expected one). */
@@ -215,7 +292,7 @@ export class PracticeSession {
     const windows = this.windows();
     const tempo = this.transport.tempo;
     // Ignore playing around before the music starts (e.g. during the count-in).
-    if (beat < -msToBeats(windows.ok, tempo)) return;
+    if (beat < this.musicStart - msToBeats(windows.ok, tempo)) return;
 
     const result = this.tempoMatcher.play(event.pitch, beat, tempo, windows);
     if (result.kind === 'hit') {
@@ -232,7 +309,7 @@ export class PracticeSession {
           timing: timingOf(result.errorMs, windows),
         }),
       });
-    } else if (!this.isOtherHandNote(event.pitch, beat)) {
+    } else if (!this.isUngradedNote(event.pitch, beat)) {
       this.wrong(event.pitch, beat);
     }
   }
@@ -241,7 +318,7 @@ export class PracticeSession {
     const group = this.waitMatcher.current;
     const result = this.waitMatcher.press(event.pitch, event.time, chordToleranceFor(event.source));
     if (result.kind === 'wrong') {
-      if (!this.isOtherHandNote(event.pitch, beat)) this.wrong(event.pitch, beat);
+      if (!this.isUngradedNote(event.pitch, beat)) this.wrong(event.pitch, beat);
       return;
     }
     if (result.groupComplete && group) {
@@ -287,11 +364,15 @@ export class PracticeSession {
     return expected.find((pitch) => MIC_ALIASES.includes(event.pitch - pitch)) ?? event.pitch;
   }
 
-  /** When grading one hand, keys that belong to the other hand's notes aren't mistakes. */
-  private isOtherHandNote(pitch: number, beat: number): boolean {
+  /**
+   * Keys of notes that aren't graded aren't mistakes: the other hand's when grading one hand,
+   * or those just outside the loop.
+   */
+  private isUngradedNote(pitch: number, beat: number): boolean {
     const slack = msToBeats(this.windows().ok, this.transport.tempo);
-    return this.otherHand.some(
+    return this.score.notes.some(
       (note) =>
+        !this.practicedSet.has(note) &&
         note.pitch.midi === pitch &&
         beat >= note.start - slack &&
         beat <= note.start + note.duration + slack,
@@ -317,15 +398,29 @@ export class PracticeSession {
     this.setState({
       status: 'finished',
       countIn: null,
-      summary: summarize(this.graded, this.outcomes, this.wrongBeats, this.score.measures),
+      summary: summarize(this.hands, this.outcomes, this.wrongBeats, this.score.measures),
     });
   }
 
-  private reset(): void {
-    this.tempoMatcher = new TempoMatcher(this.graded);
-    this.waitMatcher = new WaitMatcher(this.graded);
+  /** The end of the loop: scores this time through and jumps back, keeping the beat. */
+  private nextPass(loop: { start: number; end: number }, position: number): void {
+    const notes = this.practicedNotes;
+    const weights = notes.reduce((sum, note) => sum + weightOf(this.outcomes.get(note)), 0);
+    const accuracy = accuracyOf(weights, this.wrongBeats.length, notes.length);
+    this.resetMatching();
+    this.transport.seek(loop.start + (position - loop.end));
+    this.setState({ lastPass: { count: (this.state.lastPass?.count ?? 0) + 1, accuracy } });
+  }
+
+  private resetMatching(): void {
+    this.tempoMatcher = new TempoMatcher(this.practicedNotes);
+    this.waitMatcher = new WaitMatcher(this.practicedNotes);
     this.outcomes = new Map();
     this.wrongBeats = [];
+  }
+
+  private reset(): void {
+    this.resetMatching();
     this.aliases.clear();
     this.transport.pause();
     this.transport.seek(this.startBeat);

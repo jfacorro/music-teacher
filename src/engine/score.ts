@@ -55,3 +55,9 @@ export function beatsToMs(beats: number, tempo: number): number {
 export function msToBeats(ms: number, tempo: number): number {
   return (ms * tempo) / 60_000;
 }
+
+/** Index of the measure containing `beat` (the first or last one, outside the score). */
+export function measureAt(measures: readonly Measure[], beat: number): number {
+  const index = measures.findIndex((measure) => beat < measure.start + measure.length);
+  return index < 0 ? measures.length - 1 : index;
+}

@@ -15,11 +15,17 @@ export interface AudioEngine {
   /** Piano-like note, right now. */
   noteOn(midi: number, velocity: number): void;
   noteOff(midi: number): void;
+  /** A note of the other hand, heard from `start` to `end` (performance.now() ms). */
+  accompany(midi: number, start: number, end: number): void;
+  /** Silences the other hand (on pause or restart). */
+  stopAccompaniment(): void;
   /** Time from playing a sound to hearing it, as reported by the browser, ms. */
   outputDelayMs(): number;
 }
 
 const MAX_LATE_S = 0.03;
+/** A note of the other hand may start late by this much (better late than missing). */
+const MAX_LATE_NOTE_S = 0.1;
 
 let timingCorrectionMs = 0;
 
@@ -71,6 +77,12 @@ async function createEngine(): Promise<AudioEngine> {
     envelope: { attack: 0.004, decay: 1.6, sustain: 0.08, release: 0.6 },
     volume: -12,
   }).toDestination();
+  // The other hand: the same sound, a little softer than the learner's own notes.
+  const accompanist = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: 'custom', partials: [1, 0.45, 0.25, 0.12, 0.08] },
+    envelope: { attack: 0.004, decay: 1.6, sustain: 0.08, release: 0.6 },
+    volume: -16,
+  }).toDestination();
   const noteName = (midi: number) => Tone.Frequency(midi, 'midi').toNote();
 
   let lastClick = 0;
@@ -83,6 +95,16 @@ async function createEngine(): Promise<AudioEngine> {
     },
     noteOff(midi) {
       piano.triggerRelease(noteName(midi), context.currentTime);
+    },
+    accompany(midi, start, end) {
+      const from = audioTimeFor(context, start - timingCorrectionMs);
+      if (from < context.currentTime - MAX_LATE_NOTE_S) return;
+      const when = Math.max(from, context.currentTime);
+      const until = audioTimeFor(context, end - timingCorrectionMs);
+      accompanist.triggerAttackRelease(noteName(midi), Math.max(0.05, until - when), when, 0.7);
+    },
+    stopAccompaniment() {
+      accompanist.releaseAll();
     },
     click(time, accent) {
       const target = audioTimeFor(context, time - timingCorrectionMs);

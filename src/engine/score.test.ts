@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseInlineScore } from '../content/loaders/inlineScore';
-import { beatsToMs, msToBeats, notesAt, notesBetween, scoreEnd } from './score';
+import { beatsToMs, measureAt, msToBeats, notesAt, notesBetween, scoreEnd } from './score';
 
 const score = parseInlineScore(
   {
@@ -33,6 +33,13 @@ describe('score helpers', () => {
   it('finds the notes overlapping a window', () => {
     expect(midis(notesBetween(score.notes, 1.5, 4))).toEqual([48, 64]);
     expect(midis(notesBetween(score.notes, 2, 4.1))).toEqual([67]);
+  });
+
+  it('finds the measure containing a beat', () => {
+    expect(score.measures).toHaveLength(2);
+    expect([-2, 0, 3.9, 4, 7, 20].map((beat) => measureAt(score.measures, beat))).toEqual([
+      0, 0, 0, 1, 1, 1,
+    ]);
   });
 
   it('converts between beats and milliseconds', () => {

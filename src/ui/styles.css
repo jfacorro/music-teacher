@@ -177,6 +177,13 @@ h3 {
   align-items: start;
 }
 
+/* Settings: one section after the other. */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -340,6 +347,26 @@ select {
   font-weight: 600;
 }
 
+/* About eight rows tall; the header stays put while the rows scroll. */
+.events-scroll {
+  max-height: 16rem;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.events-scroll .events th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  border-block-end: none;
+  box-shadow: inset 0 -1px var(--border);
+}
+
+.events-scroll .events tr:last-child td {
+  border-block-end: none;
+}
+
 .button-row {
   display: flex;
   flex-wrap: wrap;
@@ -384,6 +411,19 @@ select {
 
 .practice__options .checkbox {
   margin: 0;
+}
+
+.practice__tools {
+  margin-block-start: -0.25rem;
+}
+
+.practice__speed {
+  min-width: 8.5em;
+  font-variant-numeric: tabular-nums;
+}
+
+.practice__tip {
+  font-size: 0.875rem;
 }
 
 .practice__controls {
@@ -843,6 +883,26 @@ a.path__title:hover {
 
 .sheet-music__host {
   padding-block: 0.5rem;
+}
+
+/* The bars being repeated. */
+.sheet-music__loop {
+  position: absolute;
+  inset-block: 0;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-inline: 2px solid var(--accent);
+  pointer-events: none;
+}
+
+/* Bars can be dragged across to repeat them. */
+.sheet-music.is-selectable,
+.falling-notes.is-selectable {
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.falling-notes.is-selectable {
+  cursor: row-resize;
 }
 
 .sheet-music__status {

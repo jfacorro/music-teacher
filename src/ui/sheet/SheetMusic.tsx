@@ -3,15 +3,16 @@
  * horizontal line, with a cursor that follows the transport and scrolls along, and notes
  * colored by how they went (same colors as the falling notes).
  */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { GraphicalNote, OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { DIVISIONS, noteKey, scoreToMusicXml } from '../../content/musicxml';
 import type { SheetNotation } from '../../content/lessons';
 import type { Hand, Score, ScoreNote } from '../../engine/score';
-import type { HandFilter } from '../../engine/session';
+import type { HandFilter, LoopRange } from '../../engine/session';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import type { Transport } from '../../engine/transport';
+import { useBarSelection } from '../barSelection';
 import { readCssColors, useColorScheme } from '../canvas';
 import { useAnimationFrame } from '../hooks';
 import type { NoteStyle } from '../keyboard/FallingNotes';
@@ -25,6 +26,16 @@ interface SheetMusicProps {
   notation: SheetNotation;
   /** The hands being practiced: other staves are left out unless `notation` is 'grand'. */
   hands: HandFilter;
+  /** Bars being repeated, shaded. */
+  loop?: LoopRange | null;
+  /** Lets the user drag across bars to choose them (off when undefined). */
+  onSelectBars?: (range: LoopRange) => void;
+}
+
+/** Where a bar is drawn: px from the left of the sheet. */
+interface BarBox {
+  left: number;
+  right: number;
 }
 
 const COLORS = {
@@ -57,12 +68,15 @@ export function SheetMusic({
   outcomesVersion,
   notation,
   hands,
+  loop,
+  onSelectBars,
 }: SheetMusicProps) {
   const { t } = useTranslation('screens');
   const scrollerRef = useRef<HTMLDivElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const rendered = useRef<Rendered | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [bars, setBars] = useState<BarBox[]>([]);
   const scheme = useColorScheme();
   const names = useNoteNames();
 
@@ -115,6 +129,7 @@ export function SheetMusic({
       osmd.render();
       osmd.cursor.show();
       rendered.current = { osmd, graphics: indexGraphics(osmd, notes), applied: new Map(), colors };
+      setBars(barBoxes(osmd));
       setStatus('ready');
     })().catch((error: unknown) => {
       console.error('Could not render the sheet music', error);
@@ -183,8 +198,32 @@ export function SheetMusic({
     }
   });
 
+  const barAt = (event: PointerEvent<HTMLElement>) => {
+    const host = hostRef.current;
+    if (!host || bars.length === 0) return null;
+    const x = event.clientX - host.getBoundingClientRect().left;
+    const index = bars.findIndex((bar) => x < bar.right);
+    return index < 0 ? bars.length - 1 : index;
+  };
+  const { selection, handlers } = useBarSelection(onSelectBars, barAt);
+  const shaded = selection ?? loop ?? null;
+  const from = shaded && bars[shaded.first];
+  const to = shaded && bars[shaded.last];
+
   return (
-    <div ref={scrollerRef} className="sheet-music" role="img" aria-label={t('practice.view.sheet')}>
+    <div
+      ref={scrollerRef}
+      className={onSelectBars ? 'sheet-music is-selectable' : 'sheet-music'}
+      role="img"
+      aria-label={t('practice.view.sheet')}
+      {...handlers}
+    >
+      {from && to && (
+        <div
+          className="sheet-music__loop"
+          style={{ left: from.left, width: to.right - from.left }}
+        />
+      )}
       {status === 'loading' && (
         <p className="muted sheet-music__status">{t('practice.sheetLoading')}</p>
       )}
@@ -194,6 +233,16 @@ export function SheetMusic({
       <div ref={hostRef} className="sheet-music__host" />
     </div>
   );
+}
+
+/** Where each bar is drawn, from OSMD's layout (10 px per unit at 100% zoom). */
+function barBoxes(osmd: OpenSheetMusicDisplay): BarBox[] {
+  const px = 10 * osmd.zoom;
+  return osmd.GraphicSheet.MeasureList.map((staves) => {
+    const box = staves.find((measure) => measure)?.PositionAndShape;
+    const left = (box?.AbsolutePosition.x ?? 0) * px;
+    return { left, right: left + (box?.Size.width ?? 0) * px };
+  });
 }
 
 /** Finds the rendered notes of each score note, matching staff, position and pitch. */

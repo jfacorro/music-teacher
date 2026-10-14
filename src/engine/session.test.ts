@@ -16,7 +16,7 @@ function setup(specs: NoteSpec[], options: Partial<SessionOptions> = {}) {
   const session = new PracticeSession(score, transport, {
     mode: 'tempo',
     hands: 'both',
-    leadIn: 2,
+    leadInSeconds: 2,
     ...options,
   });
   return {
@@ -52,8 +52,8 @@ const melody: NoteSpec[] = [
 
 describe('PracticeSession: tempo mode', () => {
   it('starts after a one-measure count-in (or the lead-in, if longer)', () => {
-    expect(setup(melody, { leadIn: 2 }).transport.position()).toBe(-4);
-    expect(setup(melody, { leadIn: 6 }).transport.position()).toBe(-6);
+    expect(setup(melody, { leadInSeconds: 2 }).transport.position()).toBe(-4);
+    expect(setup(melody, { leadInSeconds: 6 }).transport.position()).toBe(-6);
   });
 
   it('counts in 1–4 before the music starts', () => {
@@ -182,7 +182,7 @@ describe('PracticeSession: tempo mode', () => {
       ],
       { hands: 'R' },
     );
-    expect(t.session.graded.map((n) => n.pitch.midi)).toEqual([C4, D4]);
+    expect(t.session.practiced.map((n) => n.pitch.midi)).toEqual([C4, D4]);
     t.session.play();
     t.at(0);
     t.press(C3); // left-hand note: neither right nor wrong
@@ -240,7 +240,7 @@ describe('PracticeSession: microphone notes near expected ones', () => {
 
 describe('PracticeSession: wait mode', () => {
   it('has no count-in and starts at the lead-in', () => {
-    const t = setup(melody, { mode: 'wait', leadIn: 2 });
+    const t = setup(melody, { mode: 'wait', leadInSeconds: 2 });
     expect(t.session.countInFrom).toBeNull();
     expect(t.transport.position()).toBe(-2);
   });
@@ -327,5 +327,100 @@ describe('PracticeSession: wait mode', () => {
     t.at(0.5);
     expect(t.session.getState().status).toBe('playing');
     expect(t.session.outcomeOf(t.score.notes[0]!)).toEqual({ kind: 'correct' });
+  });
+});
+
+describe('PracticeSession: loop and tempo', () => {
+  /** One note per measure: C4 in the first, D4 in the second, E4 in the third. */
+  const bars: NoteSpec[] = [
+    ['C4', 0],
+    ['D4', 4],
+    ['E4', 8],
+  ];
+
+  it('practices only the loop, counting in during the measure before it', () => {
+    const t = setup(bars, { loop: { first: 1, last: 1 } });
+    expect(t.session.practiced.map((n) => n.pitch.midi)).toEqual([D4]);
+    expect(t.session.isGraded(t.score.notes[0]!)).toBe(false);
+    expect(t.session.countInFrom).toBe(0);
+    expect(t.transport.position()).toBe(0);
+    t.session.play();
+    t.at(1);
+    expect(t.session.getState().countIn).toBe(2);
+    t.at(4);
+    expect(t.session.getState().countIn).toBeNull();
+  });
+
+  it('jumps back at the end of the loop, keeping the beat and scoring each time through', () => {
+    const t = setup(bars, { loop: { first: 1, last: 1 } });
+    const d4 = t.score.notes[1]!;
+    t.session.play();
+    t.at(4);
+    t.press(D4);
+    t.release(D4);
+    t.at(8.01);
+    expect(t.transport.position()).toBeCloseTo(4.01);
+    expect(t.session.getState()).toMatchObject({
+      status: 'playing',
+      lastPass: { count: 1, accuracy: 1 },
+      summary: null,
+    });
+    expect(t.session.outcomeOf(d4)).toBeUndefined(); // a fresh start
+
+    t.at(8.5); // D4 not played this time
+    expect(t.session.getState().lastPass).toEqual({ count: 2, accuracy: 0 });
+    expect(t.transport.position()).toBeCloseTo(4.5);
+  });
+
+  it('loops in wait mode once the last notes are played', () => {
+    const t = setup(bars, { mode: 'wait', loop: { first: 0, last: 1 } });
+    t.session.play();
+    t.at(0);
+    t.press(C4);
+    t.at(4);
+    expect(t.session.getState().status).toBe('waiting');
+    t.press(D4);
+    t.at(8);
+    expect(t.session.getState().lastPass).toEqual({ count: 1, accuracy: 1 });
+    t.at(0.01);
+    expect(t.session.getState().status).toBe('waiting');
+    expect(t.transport.position()).toBe(0);
+  });
+
+  it('doesn’t count keys of the notes just before the loop as wrong', () => {
+    const t = setup(
+      [
+        ['C4', 0, 4],
+        ['D4', 4],
+      ],
+      { mode: 'wait', loop: { first: 1, last: 1 } },
+    );
+    t.session.play();
+    t.at(2.5);
+    t.press(C4);
+    expect(t.session.getState().feedback).toBeNull();
+    t.press(E4);
+    expect(t.session.getState().feedback?.value.kind).toBe('wrong');
+  });
+
+  it('turns the loop off and starts over', () => {
+    const t = setup(bars, { loop: { first: 1, last: 1 } });
+    t.session.play();
+    t.at(5);
+    t.session.setLoop(null);
+    expect(t.session.practiced).toHaveLength(3);
+    expect(t.session.getState().status).toBe('ready');
+    expect(t.transport.position()).toBe(-4);
+  });
+
+  it('changes tempo without jumping, and moves to the new lead-in before starting', () => {
+    const t = setup(melody, { mode: 'wait', leadInSeconds: 2 });
+    t.session.setTempo(30);
+    expect(t.transport.position()).toBe(-1); // 2 s at 30 BPM
+    t.session.play();
+    t.wait(1000);
+    expect(t.transport.position()).toBeCloseTo(-0.5);
+    t.session.setTempo(60);
+    expect(t.transport.position()).toBeCloseTo(-0.5);
   });
 });

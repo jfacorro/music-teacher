@@ -200,7 +200,8 @@
       "correct": "Correct",
       "missed": "Missed",
       "wrong": "Wrong keys",
-      "retry": "Try again"
+      "retry": "Try again",
+      "weakSpot": "Practice the weak spot"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {
@@ -215,6 +216,24 @@
       "names": "Note names",
       "plain": "No names",
       "grand": "Both staves"
+    },
+    "speed": "Speed",
+    "speedValue": "{percent} · {bpm} BPM",
+    "loop": {
+      "label": "Repeat bars",
+      "first": "First bar",
+      "last": "Last bar",
+      "to": "to",
+      "tip": "Tip: drag across bars on the music to repeat them.",
+      "hint": "The chosen bars repeat until you stop.",
+      "lastPass": "{count, plural, one {Once through} other {# times through}} · last time {accuracy}"
+    },
+    "otherHand": "Play the other hand",
+    "otherHandMic": "With the microphone, use headphones so it only hears you.",
+    "shortcut": "Shortcut: {key}",
+    "keys": {
+      "space": "Space",
+      "escape": "Esc"
     }
   },
   "lesson": {

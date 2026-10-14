@@ -200,7 +200,8 @@
       "correct": "Correctas",
       "missed": "Perdidas",
       "wrong": "Teclas incorrectas",
-      "retry": "Intentar de nuevo"
+      "retry": "Intentar de nuevo",
+      "weakSpot": "Practicar el punto débil"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {
@@ -215,6 +216,24 @@
       "names": "Con nombres",
       "plain": "Sin nombres",
       "grand": "Dos pentagramas"
+    },
+    "speed": "Velocidad",
+    "speedValue": "{percent} · {bpm} BPM",
+    "loop": {
+      "label": "Repetir compases",
+      "first": "Primer compás",
+      "last": "Último compás",
+      "to": "a",
+      "tip": "Consejo: arrastra sobre los compases de la música para repetirlos.",
+      "hint": "Los compases elegidos se repiten hasta que pares.",
+      "lastPass": "{count, plural, one {Una vuelta} other {# vueltas}} · la última {accuracy}"
+    },
+    "otherHand": "Tocar la otra mano",
+    "otherHandMic": "Con el micrófono, usa auriculares para que solo te oiga a ti.",
+    "shortcut": "Atajo: {key}",
+    "keys": {
+      "space": "Espacio",
+      "escape": "Esc"
     }
   },
   "lesson": {

@@ -29,6 +29,26 @@ describe('clicksBetween', () => {
     expect(beats(clicksBetween(1.2, 1.9, options))).toEqual([]);
   });
 
+  it('counts in before a loop and stops at its end, where playback jumps back', () => {
+    const options = {
+      metronome: true,
+      countInFrom: 4,
+      musicStart: 8,
+      loopEnd: 12,
+      beatsPerMeasure: 4,
+    };
+    expect(beats(clicksBetween(3, 20, options))).toEqual([
+      '4!',
+      '5',
+      '6',
+      '7',
+      '8!',
+      '9',
+      '10',
+      '11',
+    ]);
+  });
+
   it('accents measures in other time signatures', () => {
     expect(
       beats(clicksBetween(-1, 6, { metronome: true, countInFrom: null, beatsPerMeasure: 3 })),

@@ -80,7 +80,7 @@ function releaseAll(): void {
 }
 
 /** Don't steal keys from text fields or from selects (letters jump between options). */
-function isTypingTarget(target: EventTarget | null): boolean {
+export function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   if (target.isContentEditable) return true;
   if (target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) return true;
