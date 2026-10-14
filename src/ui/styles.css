@@ -1326,3 +1326,70 @@ button.bars__bar:focus-visible {
   visibility: visible;
   opacity: 1;
 }
+
+/* Floating window (results), over a dimmed page */
+
+.modal {
+  inline-size: min(560px, calc(100% - 2rem));
+  max-block-size: calc(100% - 2rem);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  overflow: visible;
+}
+
+.modal:focus {
+  outline: none;
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+
+.modal[open] {
+  animation: modal-in 160ms ease-out;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.modal__body {
+  position: relative;
+  max-block-size: calc(100vh - 2rem);
+  overflow: auto;
+  border-radius: var(--radius);
+}
+
+.modal__body .results {
+  inline-size: auto;
+  margin: 0;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.4);
+}
+
+.modal__close {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 0.6rem;
+  inset-inline-end: 0.6rem;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.modal__close:hover,
+.modal__close:focus-visible {
+  background: var(--lane-bg);
+  color: var(--text);
+}

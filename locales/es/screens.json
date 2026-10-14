@@ -248,7 +248,8 @@
         "empty": "Compás {bar}: sin notas",
         "hint": "Haz clic en un compás para repetirlo."
       },
-      "extra": "Toques de más"
+      "extra": "Toques de más",
+      "show": "Resultados"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {
