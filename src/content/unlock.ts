@@ -7,7 +7,12 @@
  */
 import type { Unit } from './courses';
 
-export type LessonStatus = 'locked' | 'available' | 'completed';
+export const LessonStatus = {
+  Locked: 'locked',
+  Available: 'available',
+  Completed: 'completed',
+} as const;
+export type LessonStatus = (typeof LessonStatus)[keyof typeof LessonStatus];
 
 export interface LessonState {
   status: LessonStatus;
@@ -29,7 +34,11 @@ export function lessonStates(
     for (const lesson of unit.lessons) {
       const stars = starsOf(lesson.id);
       const status: LessonStatus =
-        !unitOpen || !previousDone ? 'locked' : stars >= 1 ? 'completed' : 'available';
+        !unitOpen || !previousDone
+          ? LessonStatus.Locked
+          : stars >= 1
+            ? LessonStatus.Completed
+            : LessonStatus.Available;
       states.set(lesson.id, { status, stars });
       previousDone = stars >= 1;
     }
@@ -45,12 +54,12 @@ export function nextLessonToPlay(
 ): string | null {
   for (const unit of units) {
     for (const lesson of unit.lessons) {
-      if (states.get(lesson.id)?.status === 'available') return lesson.id;
+      if (states.get(lesson.id)?.status === LessonStatus.Available) return lesson.id;
     }
   }
   return null;
 }
 
 export function isUnitOpen(unit: Unit, states: ReadonlyMap<string, LessonState>): boolean {
-  return unit.lessons.some((lesson) => states.get(lesson.id)?.status !== 'locked');
+  return unit.lessons.some((lesson) => states.get(lesson.id)?.status !== LessonStatus.Locked);
 }

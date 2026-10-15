@@ -10,12 +10,13 @@
 import {
   beatsPerMeasure,
   type Finger,
-  type Hand,
+  Hand,
   type Measure,
   type Score,
   type ScoreNote,
 } from '../../engine/score';
 import { isMarking, type Marking } from '../../engine/markings';
+import { describeValues, isValueOf } from '../../lib/values';
 import { InvalidNoteError, parseNote } from '../../theory/pitch';
 
 export class ScoreError extends Error {
@@ -84,8 +85,8 @@ function parseScoreNote(input: unknown, location: string): ScoreNote {
     exclusive: true,
   });
 
-  if (data.hand !== 'L' && data.hand !== 'R') {
-    throw new ScoreError(at(location, 'hand'), 'expected "L" or "R"');
+  if (!isValueOf(Hand, data.hand)) {
+    throw new ScoreError(at(location, 'hand'), `expected ${describeValues(Hand)}`);
   }
   const hand: Hand = data.hand;
 

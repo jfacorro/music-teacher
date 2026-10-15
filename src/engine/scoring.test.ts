@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { accuracyOf, starsFor, summarize, timingSummary, type NoteOutcome } from './scoring';
-import { MIDI_WINDOWS } from './timing';
+import {
+  accuracyOf,
+  starsFor,
+  summarize,
+  timingSummary,
+  type NoteOutcome,
+  OutcomeKind,
+} from './scoring';
+import { MIDI_WINDOWS, Grade } from './timing';
 import type { ScoreNote } from './score';
 import { scoreOf } from './testUtils';
 
@@ -49,11 +56,11 @@ describe('summarize', () => {
 
   it('counts outcomes, accuracy and stars', () => {
     const outcomes = new Map<ScoreNote, NoteOutcome>([
-      [c, { kind: 'hit', grade: 'perfect', errorMs: 0 }],
-      [d!, { kind: 'hit', grade: 'perfect', errorMs: 10 }],
-      [e!, { kind: 'hit', grade: 'good', errorMs: -70 }],
-      [f!, { kind: 'hit', grade: 'ok', errorMs: 120 }],
-      [g!, { kind: 'missed' }],
+      [c, { kind: OutcomeKind.Hit, grade: Grade.Perfect, errorMs: 0 }],
+      [d!, { kind: OutcomeKind.Hit, grade: Grade.Perfect, errorMs: 10 }],
+      [e!, { kind: OutcomeKind.Hit, grade: Grade.Good, errorMs: -70 }],
+      [f!, { kind: OutcomeKind.Hit, grade: Grade.Ok, errorMs: 120 }],
+      [g!, { kind: OutcomeKind.Missed }],
       // a: never played → missed
     ]);
     const summary = summarize(score.notes, outcomes, [2.5], score.measures);
@@ -74,10 +81,10 @@ describe('summarize', () => {
 
   it('breaks timing down when given the windows', () => {
     const outcomes = new Map<ScoreNote, NoteOutcome>([
-      [d!, { kind: 'hit', grade: 'perfect', errorMs: 10 }],
-      [c, { kind: 'hit', grade: 'good', errorMs: -70 }],
-      [f!, { kind: 'missed' }],
-      [e!, { kind: 'hit', grade: 'ok', errorMs: 120 }],
+      [d!, { kind: OutcomeKind.Hit, grade: Grade.Perfect, errorMs: 10 }],
+      [c, { kind: OutcomeKind.Hit, grade: Grade.Good, errorMs: -70 }],
+      [f!, { kind: OutcomeKind.Missed }],
+      [e!, { kind: OutcomeKind.Hit, grade: Grade.Ok, errorMs: 120 }],
     ]);
     const { timing } = summarize(score.notes, outcomes, [], score.measures, MIDI_WINDOWS);
     expect(timing).toEqual({

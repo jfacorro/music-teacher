@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import type { LessonStep } from './lesson';
+import { type LessonStep, StepType } from './lesson';
 import { lessonResult } from './result';
 
 const step = (type: LessonStep['type']) => ({ type }) as LessonStep;
 
 describe('lessonResult', () => {
-  const steps = [step('explain'), step('find'), step('exercise'), step('exercise')];
+  const steps = [
+    step(StepType.Explain),
+    step(StepType.Find),
+    step(StepType.Exercise),
+    step(StepType.Exercise),
+  ];
 
   it('takes the weakest graded step’s stars and the average accuracy', () => {
     const result = lessonResult(
@@ -27,6 +32,6 @@ describe('lessonResult', () => {
   });
 
   it('gives three stars to a lesson with nothing graded', () => {
-    expect(lessonResult([step('explain')], new Map())).toEqual({ stars: 3, accuracy: 1 });
+    expect(lessonResult([step(StepType.Explain)], new Map())).toEqual({ stars: 3, accuracy: 1 });
   });
 });

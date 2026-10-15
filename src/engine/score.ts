@@ -6,7 +6,12 @@
 import type { Pitch } from '../theory/pitch';
 import type { Marking } from './markings';
 
-export type Hand = 'L' | 'R';
+export const Hand = {
+  Left: 'L',
+  Right: 'R',
+} as const;
+export type Hand = (typeof Hand)[keyof typeof Hand];
+
 export type Finger = 1 | 2 | 3 | 4 | 5;
 
 export interface ScoreNote {

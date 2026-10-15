@@ -8,10 +8,11 @@
  * Every bar must be full. Notes are placed on one pitch, which is where a one-line rhythm staff
  * draws them.
  */
+import type { NoteString } from '../theory/pitch';
 import { beatsPerMeasure } from './score';
 
 /** On a one-line staff, OpenSheetMusicDisplay draws E4 on the line. */
-export const RHYTHM_NOTE = 'E4';
+export const RHYTHM_NOTE: NoteString = 'E4';
 
 const VALUES: Readonly<Record<string, number>> = { w: 4, h: 2, q: 1, e: 0.5, s: 0.25 };
 const TOKEN = /^(r?)([whqes])(\.?)$/;

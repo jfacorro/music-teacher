@@ -9,8 +9,17 @@ import { create } from 'zustand';
 import { HeldNotes } from '../bus';
 import { NoteDetector, type PitchReading } from './detector';
 import workletUrl from './capture-processor.js?url&no-inline';
+import { InputSource, NoteEventType } from '../types';
 
-export type MicStatus = 'unsupported' | 'off' | 'starting' | 'on' | 'denied' | 'error';
+export const MicStatus = {
+  Unsupported: 'unsupported',
+  Off: 'off',
+  Starting: 'starting',
+  On: 'on',
+  Denied: 'denied',
+  Error: 'error',
+} as const;
+export type MicStatus = (typeof MicStatus)[keyof typeof MicStatus];
 
 export interface MicDevice {
   id: string;
@@ -37,7 +46,7 @@ export function isMicSupported(): boolean {
 }
 
 export const useMic = create<MicState>(() => ({
-  status: isMicSupported() ? 'off' : 'unsupported',
+  status: isMicSupported() ? MicStatus.Off : MicStatus.Unsupported,
   devices: [],
   deviceId: null,
   levelDb: -Infinity,
@@ -62,7 +71,7 @@ interface Capture {
 
 let capture: Capture | null = null;
 let calibratedDelayMs = 0;
-const held = new HeldNotes('mic');
+const held = new HeldNotes(InputSource.Mic);
 const levelListeners = new Set<(levelDb: number) => void>();
 type AudioListener = (samples: Float32Array, time: number, sampleRate: number) => void;
 const audioListeners = new Set<AudioListener>();
@@ -112,11 +121,11 @@ export async function refreshMicDevices(): Promise<void> {
 
 export async function startMic(deviceId: string | null): Promise<void> {
   if (!isMicSupported()) {
-    useMic.setState({ status: 'unsupported' });
+    useMic.setState({ status: MicStatus.Unsupported });
     return;
   }
   stopMic();
-  useMic.setState({ status: 'starting' });
+  useMic.setState({ status: MicStatus.Starting });
 
   let stream: MediaStream | null = null;
   let context: AudioContext | null = null;
@@ -164,12 +173,12 @@ export async function startMic(deviceId: string | null): Promise<void> {
     worklet.port.onmessage = (event: MessageEvent<{ samples: Float32Array; frame: number }>) =>
       handleHop(current, event.data.samples, event.data.frame);
     track?.addEventListener('ended', () => {
-      if (capture === current) stopMic('error');
+      if (capture === current) stopMic(MicStatus.Error);
     });
     await context.resume();
 
     capture = current;
-    useMic.setState({ status: 'on', deviceId: settings?.deviceId ?? deviceId });
+    useMic.setState({ status: MicStatus.On, deviceId: settings?.deviceId ?? deviceId });
     await refreshMicDevices();
   } catch (error) {
     console.warn('Could not start the microphone', error);
@@ -178,11 +187,11 @@ export async function startMic(deviceId: string | null): Promise<void> {
     const denied =
       error instanceof DOMException &&
       (error.name === 'NotAllowedError' || error.name === 'SecurityError');
-    useMic.setState({ status: denied ? 'denied' : 'error' });
+    useMic.setState({ status: denied ? MicStatus.Denied : MicStatus.Error });
   }
 }
 
-export function stopMic(status: MicStatus = 'off'): void {
+export function stopMic(status: MicStatus = MicStatus.Off): void {
   if (!capture) return;
   const { context, stream, nodes } = capture;
   capture = null;
@@ -210,7 +219,7 @@ function handleHop(current: Capture, samples: Float32Array, frame: number): void
 
   for (const event of detector.process(samples, time)) {
     const at = toEventTime(event.time);
-    if (event.type === 'on') held.on(event.midi, event.velocity, at);
+    if (event.type === NoteEventType.On) held.on(event.midi, event.velocity, at);
     else held.off(event.midi, at);
   }
 

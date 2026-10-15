@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { emitNote, setActiveSources } from '../input/bus';
-import { useInstrument } from '../input/routing';
+import { useInstrument, Instrument } from '../input/routing';
 import { noteOff, noteOn } from '../engine/testUtils';
 import { useSettings } from '../storage/settings';
 import { startKeySound } from './keySound';
+import { InputSource } from '../input/types';
 
 const audio = vi.hoisted(() => ({ noteOn: vi.fn(), noteOff: vi.fn(), click: vi.fn() }));
 vi.mock('./audio', () => ({ startAudio: () => Promise.resolve(audio) }));
@@ -22,9 +23,9 @@ describe('startKeySound', () => {
   afterEach(() => stop());
 
   it('plays the computer and on-screen keyboards', async () => {
-    emitNote(noteOn(60, 0, 'dev'));
-    emitNote(noteOn(64, 0, 'screen'));
-    emitNote(noteOff(60, 10, 'dev'));
+    emitNote(noteOn(60, 0, InputSource.Dev));
+    emitNote(noteOn(64, 0, InputSource.Screen));
+    emitNote(noteOff(60, 10, InputSource.Dev));
     await flush();
     expect(audio.noteOn.mock.calls).toEqual([
       [60, 100],
@@ -34,19 +35,19 @@ describe('startKeySound', () => {
   });
 
   it('leaves MIDI and microphone notes silent', async () => {
-    emitNote(noteOn(60, 0, 'midi'));
-    emitNote(noteOn(62, 0, 'mic'));
+    emitNote(noteOn(60, 0, InputSource.Midi));
+    emitNote(noteOn(62, 0, InputSource.Mic));
     await flush();
     expect(audio.noteOn).not.toHaveBeenCalled();
   });
 
   it('stays silent when turned off or while listening through the microphone', async () => {
     useSettings.setState({ keySound: false });
-    emitNote(noteOn(60, 0, 'dev'));
+    emitNote(noteOn(60, 0, InputSource.Dev));
     useSettings.setState({ keySound: true });
-    useInstrument.setState({ instrument: 'mic' });
-    emitNote(noteOn(62, 0, 'dev'));
-    emitNote(noteOff(62, 0, 'dev'));
+    useInstrument.setState({ instrument: Instrument.Mic });
+    emitNote(noteOn(62, 0, InputSource.Dev));
+    emitNote(noteOff(62, 0, InputSource.Dev));
     await flush();
     expect(audio.noteOn).not.toHaveBeenCalled();
     expect(audio.noteOff).not.toHaveBeenCalled();

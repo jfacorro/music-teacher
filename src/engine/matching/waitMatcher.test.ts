@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { scoreOf } from '../testUtils';
 import { WaitMatcher, groupByStart } from './waitMatcher';
+import { Hand } from '../score';
 
 const C3 = 48;
 const C4 = 60;
@@ -11,7 +12,7 @@ const TOLERANCE = 150;
 describe('groupByStart', () => {
   it('groups notes that start together', () => {
     const { notes } = scoreOf([
-      ['C3', 0, 4, 'L'],
+      ['C3', 0, 4, Hand.Left],
       ['E4', 0],
       ['D4', 1],
     ]);
@@ -64,7 +65,7 @@ describe('WaitMatcher', () => {
   it('accepts a chord built up slowly while the keys stay down', () => {
     const matcher = new WaitMatcher(
       scoreOf([
-        ['C3', 0, 1, 'L'],
+        ['C3', 0, 1, Hand.Left],
         ['E4', 0],
       ]).notes,
     );
@@ -89,7 +90,7 @@ describe('WaitMatcher', () => {
   it('says which notes of the chord still have to be played', () => {
     const matcher = new WaitMatcher(
       scoreOf([
-        ['C3', 0, 1, 'L'],
+        ['C3', 0, 1, Hand.Left],
         ['E4', 0],
       ]).notes,
     );
@@ -104,7 +105,7 @@ describe('WaitMatcher', () => {
   it('can let any key of a chord complete it (for the microphone)', () => {
     const matcher = new WaitMatcher(
       scoreOf([
-        ['C3', 0, 1, 'L'],
+        ['C3', 0, 1, Hand.Left],
         ['E4', 0],
       ]).notes,
     );

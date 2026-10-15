@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { readCssColors, useColorScheme } from '../canvas';
+import { LoadStatus } from '../loadStatus';
 
 /** Staff spaces kept above and below the staves: room for a few ledger lines. */
 const MARGIN_SPACES = 3;
@@ -28,7 +29,7 @@ export function StaticStaff({ xml, label, barWidth = 12, spacePx = 17 }: StaticS
   const { t } = useTranslation('screens');
   const hostRef = useRef<HTMLDivElement>(null);
   const osmdRef = useRef<OpenSheetMusicDisplay | null>(null);
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [status, setStatus] = useState<LoadStatus>(LoadStatus.Loading);
   const scheme = useColorScheme();
 
   // One renderer, created again only when the colors change.
@@ -58,23 +59,23 @@ export function StaticStaff({ xml, label, barWidth = 12, spacePx = 17 }: StaticS
         osmd.EngravingRules.FixedMeasureWidth = true;
         osmd.EngravingRules.FixedMeasureWidthFixedValue = barWidth;
         osmdRef.current = osmd;
-        setStatus('ready');
+        setStatus(LoadStatus.Ready);
       })
       .catch((error: unknown) => {
         console.error('Could not load the sheet music renderer', error);
-        if (!cancelled) setStatus('error');
+        if (!cancelled) setStatus(LoadStatus.Error);
       });
     return () => {
       cancelled = true;
       osmdRef.current?.clear();
       osmdRef.current = null;
-      setStatus('loading');
+      setStatus(LoadStatus.Loading);
     };
   }, [scheme, barWidth]);
 
   useEffect(() => {
     const osmd = osmdRef.current;
-    if (!osmd || status !== 'ready') return;
+    if (!osmd || status !== LoadStatus.Ready) return;
     let cancelled = false;
     void osmd
       .load(xml)
@@ -91,7 +92,9 @@ export function StaticStaff({ xml, label, barWidth = 12, spacePx = 17 }: StaticS
 
   return (
     <div className="static-staff" role="img" aria-label={label}>
-      {status === 'error' && <p className="notice notice--problem">{t('practice.sheetError')}</p>}
+      {status === LoadStatus.Error && (
+        <p className="notice notice--problem">{t('practice.sheetError')}</p>
+      )}
       <div ref={hostRef} className="static-staff__host" />
     </div>
   );

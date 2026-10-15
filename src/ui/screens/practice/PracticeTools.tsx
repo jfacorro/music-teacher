@@ -1,9 +1,9 @@
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Score } from '../../../engine/score';
-import type { HandFilter, LoopRange } from '../../../engine/session';
+import { HandFilter, type LoopRange } from '../../../engine/session';
 import { formatPercent } from '../../../i18n/format';
-import { useInstrument } from '../../../input/routing';
+import { useInstrument, Instrument } from '../../../input/routing';
 
 export const SPEED_MIN = 40;
 export const SPEED_MAX = 100;
@@ -36,7 +36,7 @@ export function PracticeTools({
 }: PracticeToolsProps) {
   const { t, i18n } = useTranslation('screens');
   const speedId = useId();
-  const listening = useInstrument((s) => s.instrument === 'mic');
+  const listening = useInstrument((s) => s.instrument === Instrument.Mic);
   const bars = score.measures.map((_, index) => index);
 
   const setFirst = (first: number) =>
@@ -98,7 +98,7 @@ export function PracticeTools({
         </select>
       </span>
 
-      {hands !== 'both' && (
+      {hands !== HandFilter.Both && (
         <label className="checkbox">
           <input
             type="checkbox"
@@ -110,7 +110,7 @@ export function PracticeTools({
       )}
 
       {!looping && <span className="muted practice__tip">{t('practice.loop.tip')}</span>}
-      {hands !== 'both' && otherHand && listening && (
+      {hands !== HandFilter.Both && otherHand && listening && (
         <span className="muted practice__tip">{t('practice.otherHandMic')}</span>
       )}
     </div>

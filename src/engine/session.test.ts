@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { PracticeSession, type SessionOptions } from './session';
+import {
+  PracticeSession,
+  type SessionOptions,
+  PracticeMode,
+  HandFilter,
+  FeedbackKind,
+} from './session';
 import { noteOff, noteOn, scoreOf, type NoteSpec } from './testUtils';
 import { Transport } from './transport';
+import { InputSource } from '../input/types';
+import { Hand } from './score';
 
 const C3 = 48;
 const C4 = 60;
@@ -15,8 +23,8 @@ function setup(specs: NoteSpec[], options: Partial<SessionOptions> = {}) {
   let now = 0;
   const transport = new Transport(score.tempo, () => now);
   const session = new PracticeSession(score, transport, {
-    mode: 'tempo',
-    hands: 'both',
+    mode: PracticeMode.Tempo,
+    hands: HandFilter.Both,
     leadInSeconds: 2,
     ...options,
   });
@@ -134,7 +142,9 @@ describe('PracticeSession: tempo mode', () => {
     t.press(C4); // D4 is due
     const feedback = t.session.getState().feedback?.value;
     expect(feedback?.kind).toBe('wrong');
-    expect(feedback?.kind === 'wrong' && feedback.expected.map((p) => p.midi)).toEqual([D4]);
+    expect(feedback?.kind === FeedbackKind.Wrong && feedback.expected.map((p) => p.midi)).toEqual([
+      D4,
+    ]);
   });
 
   it('misses notes nobody plays', () => {
@@ -178,11 +188,11 @@ describe('PracticeSession: tempo mode', () => {
   it('grades only the selected hand and ignores the other hand’s keys', () => {
     const t = setup(
       [
-        ['C3', 0, 2, 'L'],
+        ['C3', 0, 2, Hand.Left],
         ['C4', 0],
         ['D4', 1],
       ],
-      { hands: 'R' },
+      { hands: HandFilter.Right },
     );
     expect(t.session.practiced.map((n) => n.pitch.midi)).toEqual([C4, D4]);
     t.session.play();
@@ -197,11 +207,11 @@ describe('PracticeSession: tempo mode', () => {
 });
 
 describe('PracticeSession: microphone notes near expected ones', () => {
-  const micOn = (pitch: number, time: number) => noteOn(pitch, time, 'mic');
-  const micOff = (pitch: number, time: number) => noteOff(pitch, time, 'mic');
+  const micOn = (pitch: number, time: number) => noteOn(pitch, time, InputSource.Mic);
+  const micOff = (pitch: number, time: number) => noteOff(pitch, time, InputSource.Mic);
 
   it('counts an octave error as the expected note in tempo mode', () => {
-    const t = setup(melody, { defaultSource: 'mic' });
+    const t = setup(melody, { defaultSource: InputSource.Mic });
     t.session.play();
     t.at(0);
     t.session.handleNote(micOn(C4 + 12, t.now));
@@ -214,7 +224,7 @@ describe('PracticeSession: microphone notes near expected ones', () => {
   });
 
   it('counts the third harmonic (an octave and a fifth up) in wait mode', () => {
-    const t = setup(melody, { mode: 'wait' });
+    const t = setup(melody, { mode: PracticeMode.Wait });
     t.session.play();
     t.at(0);
     t.session.handleNote(micOn(C4 + 19, t.now));
@@ -223,7 +233,7 @@ describe('PracticeSession: microphone notes near expected ones', () => {
   });
 
   it('still marks unrelated microphone notes as wrong', () => {
-    const t = setup(melody, { mode: 'wait' });
+    const t = setup(melody, { mode: PracticeMode.Wait });
     t.session.play();
     t.at(0);
     t.session.handleNote(micOn(C4 + 7, t.now));
@@ -242,13 +252,13 @@ describe('PracticeSession: microphone notes near expected ones', () => {
 
 describe('PracticeSession: wait mode', () => {
   it('has no count-in and starts at the lead-in', () => {
-    const t = setup(melody, { mode: 'wait', leadInSeconds: 2 });
+    const t = setup(melody, { mode: PracticeMode.Wait, leadInSeconds: 2 });
     expect(t.session.countInFrom).toBeNull();
     expect(t.transport.position()).toBe(-2);
   });
 
   it('stops at each note until it is played', () => {
-    const t = setup(melody, { mode: 'wait' });
+    const t = setup(melody, { mode: PracticeMode.Wait });
     t.session.play();
     t.at(0.03);
     expect(t.session.getState().status).toBe('waiting');
@@ -268,10 +278,10 @@ describe('PracticeSession: wait mode', () => {
   it('waits for every key of a chord', () => {
     const t = setup(
       [
-        ['C3', 0, 1, 'L'],
+        ['C3', 0, 1, Hand.Left],
         ['E4', 0],
       ],
-      { mode: 'wait' },
+      { mode: PracticeMode.Wait },
     );
     t.session.play();
     t.at(0);
@@ -285,20 +295,23 @@ describe('PracticeSession: wait mode', () => {
   it('names the notes it waits for when a wrong key is played', () => {
     const t = setup(
       [
-        ['C3', 0, 1, 'L'],
+        ['C3', 0, 1, Hand.Left],
         ['E4', 0],
       ],
-      { mode: 'wait' },
+      { mode: PracticeMode.Wait },
     );
     t.session.play();
     t.at(0);
     t.press(D4);
     const feedback = t.session.getState().feedback?.value;
-    expect(feedback?.kind === 'wrong' && feedback.expected.map((p) => p.midi)).toEqual([C3, E4]);
+    expect(feedback?.kind === FeedbackKind.Wrong && feedback.expected.map((p) => p.midi)).toEqual([
+      C3,
+      E4,
+    ]);
   });
 
   it('scores correct notes minus wrong keys', () => {
-    const t = setup(melody, { mode: 'wait' });
+    const t = setup(melody, { mode: PracticeMode.Wait });
     t.session.play();
     for (const [beat, pitches] of [
       [0, [C4]],
@@ -322,7 +335,7 @@ describe('PracticeSession: wait mode', () => {
   });
 
   it('accepts a note played before the music reaches it', () => {
-    const t = setup(melody, { mode: 'wait' });
+    const t = setup(melody, { mode: PracticeMode.Wait });
     t.session.play();
     t.at(-0.5);
     t.press(C4);
@@ -340,7 +353,7 @@ describe('PracticeSession: chords with the microphone', () => {
     ['D4', 1],
   ];
   const micPress = (t: ReturnType<typeof setup>, pitch: number) =>
-    t.session.handleNote(noteOn(pitch, t.now, 'mic'));
+    t.session.handleNote(noteOn(pitch, t.now, InputSource.Mic));
 
   it('counts any note of a chord for the whole chord in tempo mode', () => {
     const t = setup(chord);
@@ -355,7 +368,7 @@ describe('PracticeSession: chords with the microphone', () => {
   });
 
   it('moves on after any note of a chord in wait mode', () => {
-    const t = setup(chord, { mode: 'wait' });
+    const t = setup(chord, { mode: PracticeMode.Wait });
     t.session.play();
     t.at(0);
     micPress(t, G4);
@@ -368,7 +381,7 @@ describe('PracticeSession: chords with the microphone', () => {
   });
 
   it('still wants every note of a chord from a MIDI keyboard', () => {
-    const t = setup(chord, { mode: 'wait' });
+    const t = setup(chord, { mode: PracticeMode.Wait });
     t.session.play();
     t.at(0);
     t.press(G4);
@@ -451,7 +464,7 @@ describe('PracticeSession: loop and tempo', () => {
   });
 
   it('loops in wait mode once the last notes are played', () => {
-    const t = setup(bars, { mode: 'wait', loop: { first: 0, last: 1 } });
+    const t = setup(bars, { mode: PracticeMode.Wait, loop: { first: 0, last: 1 } });
     t.session.play();
     t.at(0);
     t.press(C4);
@@ -471,7 +484,7 @@ describe('PracticeSession: loop and tempo', () => {
         ['C4', 0, 4],
         ['D4', 4],
       ],
-      { mode: 'wait', loop: { first: 1, last: 1 } },
+      { mode: PracticeMode.Wait, loop: { first: 1, last: 1 } },
     );
     t.session.play();
     t.at(2.5);
@@ -492,7 +505,7 @@ describe('PracticeSession: loop and tempo', () => {
   });
 
   it('changes tempo without jumping, and moves to the new lead-in before starting', () => {
-    const t = setup(melody, { mode: 'wait', leadInSeconds: 2 });
+    const t = setup(melody, { mode: PracticeMode.Wait, leadInSeconds: 2 });
     t.session.setTempo(30);
     expect(t.transport.position()).toBe(-1); // 2 s at 30 BPM
     t.session.play();

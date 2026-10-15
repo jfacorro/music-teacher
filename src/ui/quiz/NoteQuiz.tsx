@@ -5,30 +5,34 @@
  */
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { QuizClef } from '../../content/lessons';
+import { QuizClef } from '../../content/lessons';
 import { resolvePlayed } from '../../engine/micAliases';
 import { quizCards, quizResult, type QuizResult } from '../../engine/quiz';
-import type { KeyMark } from '../../engine/session';
+import { KeyMark } from '../../engine/session';
 import { formatPercent } from '../../i18n/format';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { subscribeNotes } from '../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../input/dev/screenInput';
 import { useLiveInput } from '../../input/liveStore';
 import { activityTimer, recordPracticeTime } from '../../storage/progress';
-import { pitchFromMidi, type Pitch } from '../../theory/pitch';
+import { MIDDLE_C, pitchFromMidi, type Pitch } from '../../theory/pitch';
 import { Stars } from '../components/Stars';
 import { usePressedKeys } from '../hooks';
 import { keyboardLayout, rangeForNotes } from '../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../keyboard/PianoKeyboard';
+import { KeyLabels } from '../keyboard/styles';
 import { NoteCard } from '../sheet/NoteCard';
+import { Hand } from '../../engine/score';
+import { NoteEventType } from '../../input/types';
+import { Clef } from '../../content/musicxml';
 
 /** Pause on a right answer before the next card. */
 const NEXT_CARD_MS = 900;
 /** Misses before the right key is shown. */
 const HINT_AFTER = 2;
 
-const clefFor = (pitch: Pitch, clef: QuizClef) =>
-  clef === 'auto' ? (pitch.midi >= 60 ? 'treble' : 'bass') : clef;
+const clefFor = (pitch: Pitch, clef: QuizClef): Clef =>
+  clef === QuizClef.Auto ? (pitch.midi >= MIDDLE_C ? Clef.Treble : Clef.Bass) : clef;
 
 interface NoteQuizProps {
   notes: readonly Pitch[];
@@ -63,7 +67,7 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
     () =>
       subscribeNotes((event) => {
         const { card: current, answered: done, misses: missed } = latest.current;
-        if (event.type !== 'on' || !current || done) return;
+        if (event.type !== NoteEventType.On || !current || done) return;
         if (resolvePlayed(event.pitch, event.source, [current.midi]) === current.midi) {
           setAnswered(true);
           setWrongKey(null);
@@ -128,8 +132,8 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
           ? held.map((note) => [
               note.pitch,
               resolvePlayed(note.pitch, note.source, [card.midi]) === card.midi
-                ? 'correct'
-                : 'wrong',
+                ? KeyMark.Correct
+                : KeyMark.Wrong,
             ])
           : [],
       ),
@@ -137,7 +141,7 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
   );
   const showKey = card && (answered || misses >= HINT_AFTER);
   const expected = useMemo(
-    () => new Map<number, ExpectedKey>(showKey ? [[card.midi, { hand: 'R' }]] : []),
+    () => new Map<number, ExpectedKey>(showKey ? [[card.midi, { hand: Hand.Right }]] : []),
     [showKey, card],
   );
 
@@ -202,7 +206,7 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
         pressed={pressed}
         expected={expected}
         marks={marks}
-        labels="none"
+        labels={KeyLabels.None}
         labelFor={(midi) => names.name(pitchFromMidi(midi), { octave: false })}
         onKeyDown={screenKeyDown}
         onKeyUp={screenKeyUp}

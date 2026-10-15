@@ -8,34 +8,41 @@ import { SoundDelay } from '../../components/SoundDelay';
 const TAPS = 12;
 const COUNT_IN = 4;
 
+const TapTask = {
+  Idle: 'idle',
+  Running: 'running',
+  Done: 'done',
+  Failed: 'failed',
+} as const;
+
 type Task =
-  | { kind: 'idle' }
-  | { kind: 'running'; beat: number; countingIn: boolean }
-  | { kind: 'done'; ms: number; taps: number }
-  | { kind: 'failed' };
+  | { kind: typeof TapTask.Idle }
+  | { kind: typeof TapTask.Running; beat: number; countingIn: boolean }
+  | { kind: typeof TapTask.Done; ms: number; taps: number }
+  | { kind: typeof TapTask.Failed };
 
 /** Output delay readout and the tap-along timing correction for metronome clicks. */
 export function SoundSettings() {
   const { t } = useTranslation('screens');
   const correction = useSettings((s) => s.soundTimingMs);
-  const [task, setTask] = useState<Task>({ kind: 'idle' });
-  const running = task.kind === 'running';
+  const [task, setTask] = useState<Task>({ kind: TapTask.Idle });
+  const running = task.kind === TapTask.Running;
 
   const measure = async () => {
-    setTask({ kind: 'running', beat: 0, countingIn: true });
+    setTask({ kind: TapTask.Running, beat: 0, countingIn: true });
     const result = await measureClickTiming({
       taps: TAPS,
       countIn: COUNT_IN,
-      onBeat: (beat, countingIn) => setTask({ kind: 'running', beat, countingIn }),
+      onBeat: (beat, countingIn) => setTask({ kind: TapTask.Running, beat, countingIn }),
     });
     // Fewer than half the clicks tapped: not reliable.
     if (result.offsetMs === null || result.taps < TAPS / 2) {
-      setTask({ kind: 'failed' });
+      setTask({ kind: TapTask.Failed });
       return;
     }
     const ms = Math.round(correction + result.offsetMs);
     setSoundTiming(ms);
-    setTask({ kind: 'done', ms, taps: result.taps });
+    setTask({ kind: TapTask.Done, ms, taps: result.taps });
   };
 
   return (
@@ -62,19 +69,19 @@ export function SoundSettings() {
           {t('settings.sound.reset')}
         </button>
       </div>
-      {task.kind === 'running' && (
+      {task.kind === TapTask.Running && (
         <p className="notice" role="status">
           {task.countingIn
             ? t('settings.sound.countIn', { beat: task.beat })
             : t('settings.sound.running', { beat: task.beat - COUNT_IN, total: TAPS })}
         </p>
       )}
-      {task.kind === 'done' && (
+      {task.kind === TapTask.Done && (
         <p className="notice notice--ok" role="status">
           {t('settings.sound.done', { ms: task.ms, taps: task.taps, total: TAPS })}
         </p>
       )}
-      {task.kind === 'failed' && (
+      {task.kind === TapTask.Failed && (
         <p className="notice notice--problem" role="status">
           {t('settings.sound.failed')}
         </p>

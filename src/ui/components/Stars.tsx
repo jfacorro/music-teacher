@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { StarsSize } from './starsSize';
 
 const STAR = '\u2605';
 const EMPTY_STAR = '\u2606';
 
 /** ★★☆ with an accessible label ("2 stars out of 3"). */
-export function Stars({ stars, size = 'large' }: { stars: number; size?: 'large' | 'small' }) {
+export function Stars({ stars, size = StarsSize.Large }: { stars: number; size?: StarsSize }) {
   const { t } = useTranslation();
   const count = Math.max(0, Math.min(3, Math.round(stars)));
   return (

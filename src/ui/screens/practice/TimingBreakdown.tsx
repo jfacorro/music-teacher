@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { TimingSummary } from '../../../engine/scoring';
+import { Grade, Timing } from '../../../engine/timing';
 
 const WIDTH = 300;
 const HEIGHT = 40;
@@ -7,7 +8,7 @@ const MARGIN = 6;
 /** Averages this close to the beat read as "right on the beat". */
 const ON_BEAT_MS = 10;
 /** The grading windows, widest first so the narrower ones are drawn on top. */
-const ZONES = ['ok', 'good', 'perfect'] as const;
+const ZONES = [Grade.Ok, Grade.Good, Grade.Perfect] as const;
 
 /**
  * Where each note landed in time (PLAN.md §2.4): a dot per note on a line from early to late,
@@ -20,7 +21,8 @@ export function TimingBreakdown({ timing }: { timing: TimingSummary }) {
     WIDTH / 2 +
     (Math.max(-windows.ok, Math.min(windows.ok, ms)) / windows.ok) * (WIDTH / 2 - MARGIN);
   const mean = Math.round(timing.meanMs);
-  const direction = Math.abs(mean) <= ON_BEAT_MS ? 'onBeat' : mean < 0 ? 'early' : 'late';
+  const direction =
+    Math.abs(mean) <= ON_BEAT_MS ? Timing.OnTime : mean < 0 ? Timing.Early : Timing.Late;
 
   return (
     <section className="timing" aria-labelledby="timing-heading">

@@ -6,7 +6,13 @@
 import { STAR_THRESHOLDS } from '../engine/scoring';
 import type { Skill, Unit } from './courses';
 
-export type SkillLevel = 'notStarted' | 'learning' | 'good' | 'mastered';
+export const SkillLevel = {
+  NotStarted: 'notStarted',
+  Learning: 'learning',
+  Good: 'good',
+  Mastered: 'mastered',
+} as const;
+export type SkillLevel = (typeof SkillLevel)[keyof typeof SkillLevel];
 
 export interface SkillProgress {
   skill: Skill;
@@ -44,8 +50,8 @@ export function skillProgress(
 }
 
 function levelOf(played: number, mastery: number): SkillLevel {
-  if (played === 0) return 'notStarted';
-  if (mastery >= STAR_THRESHOLDS[2] - 1e-9) return 'mastered';
-  if (mastery >= STAR_THRESHOLDS[1] - 1e-9) return 'good';
-  return 'learning';
+  if (played === 0) return SkillLevel.NotStarted;
+  if (mastery >= STAR_THRESHOLDS[2] - 1e-9) return SkillLevel.Mastered;
+  if (mastery >= STAR_THRESHOLDS[1] - 1e-9) return SkillLevel.Good;
+  return SkillLevel.Learning;
 }

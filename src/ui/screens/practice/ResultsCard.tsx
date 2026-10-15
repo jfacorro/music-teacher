@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Summary } from '../../../engine/scoring';
-import type { PracticeMode } from '../../../engine/session';
+import { PracticeMode } from '../../../engine/session';
 import { formatPercent } from '../../../i18n/format';
 import { Stars } from '../../components/Stars';
 import { BarHeatmap } from './BarHeatmap';
@@ -30,7 +30,7 @@ export function ResultsCard({
   const { t, i18n } = useTranslation('screens');
 
   const counts =
-    mode === 'tempo'
+    mode === PracticeMode.Tempo
       ? (['perfect', 'good', 'ok', 'missed', 'wrong'] as const)
       : (['correct', 'wrong'] as const);
 

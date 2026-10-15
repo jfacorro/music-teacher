@@ -10,12 +10,12 @@ import {
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { setLanguagePreference } from '../../../preferences';
 import { updateSettings, useSettings } from '../../../storage/settings';
-import { parseNote } from '../../../theory/pitch';
+import { pitchesOf } from '../../../theory/pitch';
 import { SHEET_NOTATIONS, type SheetNotation } from '../../../content/lessons';
 
 const AUTO = 'auto';
-const SCALE = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'].map(parseNote);
-const PREVIEW = ['C4', 'F#4', 'Bb4', 'B4'].map(parseNote);
+const SCALE = pitchesOf('C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4');
+const PREVIEW = pitchesOf('C4', 'F#4', 'Bb4', 'B4');
 
 const scaleExample = (system: NamingSystem) =>
   SCALE.map((pitch) => noteName(pitch, system)).join(' ');

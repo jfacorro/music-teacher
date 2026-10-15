@@ -7,6 +7,7 @@ import {
   timingOf,
   windowsFor,
 } from './timing';
+import { InputSource } from '../input/types';
 
 describe('gradeFor', () => {
   it.each([
@@ -40,11 +41,11 @@ describe('timingOf', () => {
 
 describe('per-source settings', () => {
   it('uses MIDI windows for every source except the microphone', () => {
-    expect(windowsFor('midi')).toBe(MIDI_WINDOWS);
-    expect(windowsFor('dev')).toBe(MIDI_WINDOWS);
-    expect(windowsFor('screen')).toBe(MIDI_WINDOWS);
-    expect(windowsFor('mic')).toBe(MIC_WINDOWS);
-    expect(chordToleranceFor('midi')).toBe(150);
-    expect(chordToleranceFor('mic')).toBe(250);
+    expect(windowsFor(InputSource.Midi)).toBe(MIDI_WINDOWS);
+    expect(windowsFor(InputSource.Dev)).toBe(MIDI_WINDOWS);
+    expect(windowsFor(InputSource.Screen)).toBe(MIDI_WINDOWS);
+    expect(windowsFor(InputSource.Mic)).toBe(MIC_WINDOWS);
+    expect(chordToleranceFor(InputSource.Midi)).toBe(150);
+    expect(chordToleranceFor(InputSource.Mic)).toBe(250);
   });
 });

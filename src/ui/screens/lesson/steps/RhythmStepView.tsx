@@ -4,6 +4,8 @@ import type { RhythmStep } from '../../../../content/lessons';
 import type { StepResult } from '../../../../content/lessons/result';
 import { PracticeRun } from '../../practice/PracticeRun';
 import { ViewToggle } from '../../practice/ViewToggle';
+import { SheetNotation } from '../../../../content/lessons/lesson';
+import { PracticeMode, HandFilter } from '../../../../engine/session';
 
 interface RhythmStepViewProps {
   step: RhythmStep;
@@ -38,11 +40,11 @@ export function RhythmStepView({ step, text, onResult, onContinue }: RhythmStepV
       </div>
       <PracticeRun
         score={step.score}
-        mode="tempo"
-        hands="both"
+        mode={PracticeMode.Tempo}
+        hands={HandFilter.Both}
         metronome={metronome}
         view={view}
-        notation="plain"
+        notation={SheetNotation.Plain}
         rhythm
         onFinish={(summary) =>
           onResult({ stars: summary.stars, accuracy: summary.accuracy }, passes(summary.stars))

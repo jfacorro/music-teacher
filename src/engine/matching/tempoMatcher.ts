@@ -6,9 +6,15 @@
 import { beatsToMs, type ScoreNote } from '../score';
 import { gradeFor, type Grade, type TimingWindows } from '../timing';
 
+export const TempoResultKind = {
+  Hit: 'hit',
+  Extra: 'extra',
+} as const;
+export type TempoResultKind = (typeof TempoResultKind)[keyof typeof TempoResultKind];
+
 export type TempoResult =
-  | { kind: 'hit'; note: ScoreNote; grade: Grade; errorMs: number }
-  | { kind: 'extra'; pitch: number; beat: number };
+  | { kind: typeof TempoResultKind.Hit; note: ScoreNote; grade: Grade; errorMs: number }
+  | { kind: typeof TempoResultKind.Extra; pitch: number; beat: number };
 
 export class TempoMatcher {
   private pending: ScoreNote[];
@@ -30,11 +36,11 @@ export class TempoMatcher {
       if (Math.abs(errorMs) > windows.ok) continue;
       if (!best || Math.abs(errorMs) < Math.abs(best.errorMs)) best = { note, errorMs };
     }
-    if (!best) return { kind: 'extra', pitch, beat };
+    if (!best) return { kind: TempoResultKind.Extra, pitch, beat };
 
     this.pending = this.pending.filter((note) => note !== best.note);
     const grade = gradeFor(best.errorMs, windows) as Grade;
-    return { kind: 'hit', note: best.note, grade, errorMs: best.errorMs };
+    return { kind: TempoResultKind.Hit, note: best.note, grade, errorMs: best.errorMs };
   }
 
   /** Takes the other pending notes that start with `note` (the rest of its chord). */

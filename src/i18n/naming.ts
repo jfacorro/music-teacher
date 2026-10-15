@@ -5,9 +5,18 @@
  */
 import type { Alter, Pitch, Step } from '../theory/pitch';
 
-export type NamingSystem = 'english' | 'german' | 'solfege';
+export const NamingSystem = {
+  English: 'english',
+  German: 'german',
+  Solfege: 'solfege',
+} as const;
+export type NamingSystem = (typeof NamingSystem)[keyof typeof NamingSystem];
 
-export const NAMING_SYSTEMS: readonly NamingSystem[] = ['english', 'german', 'solfege'];
+export const NAMING_SYSTEMS: readonly NamingSystem[] = [
+  NamingSystem.English,
+  NamingSystem.German,
+  NamingSystem.Solfege,
+];
 
 export interface NoteNameOptions {
   /** Append the octave number (scientific pitch notation, C4 = middle C). */
@@ -40,9 +49,9 @@ const SOLFEGE_LANGUAGES = ['es', 'fr', 'it', 'pt', 'ro', 'ca', 'gl'];
 
 export function defaultNamingSystem(language: string): NamingSystem {
   const base = language.toLowerCase().split('-')[0] ?? '';
-  if (GERMAN_LANGUAGES.includes(base)) return 'german';
-  if (SOLFEGE_LANGUAGES.includes(base)) return 'solfege';
-  return 'english';
+  if (GERMAN_LANGUAGES.includes(base)) return NamingSystem.German;
+  if (SOLFEGE_LANGUAGES.includes(base)) return NamingSystem.Solfege;
+  return NamingSystem.English;
 }
 
 export function noteName(
@@ -56,11 +65,11 @@ export function noteName(
 
 function baseName(step: Step, alter: Alter, system: NamingSystem): string {
   switch (system) {
-    case 'english':
+    case NamingSystem.English:
       return step + ACCIDENTAL_SYMBOLS[alter];
-    case 'solfege':
+    case NamingSystem.Solfege:
       return SOLFEGE[step] + ACCIDENTAL_SYMBOLS[alter];
-    case 'german':
+    case NamingSystem.German:
       return germanName(step, alter);
   }
 }

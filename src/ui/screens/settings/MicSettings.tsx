@@ -2,22 +2,32 @@ import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { measureDelayByTapping, measureNoiseFloor } from '../../../input/mic/calibrate';
-import { useMic } from '../../../input/mic/micInput';
+import { useMic, MicStatus } from '../../../input/mic/micInput';
 import { disableMic, enableMic, setMicCalibration } from '../../../preferences';
 import { useSettings } from '../../../storage/settings';
 import { pitchFromMidi } from '../../../theory/pitch';
+
+const CalibrationTask = {
+  Idle: 'idle',
+  Noise: 'noise',
+  NoiseDone: 'noiseDone',
+  Delay: 'delay',
+  DelayDone: 'delayDone',
+  Failed: 'failed',
+} as const;
+type CalibrationTask = (typeof CalibrationTask)[keyof typeof CalibrationTask];
 
 const METER_MIN_DB = -90;
 const METER_MAX_DB = 0;
 const TAPS = 8;
 
 type Task =
-  | { kind: 'idle' }
-  | { kind: 'noise' }
-  | { kind: 'delay'; beat: number; countingIn: boolean }
-  | { kind: 'noiseDone'; floorDb: number }
-  | { kind: 'delayDone'; delayMs: number; taps: number }
-  | { kind: 'failed' };
+  | { kind: typeof CalibrationTask.Idle }
+  | { kind: typeof CalibrationTask.Noise }
+  | { kind: typeof CalibrationTask.Delay; beat: number; countingIn: boolean }
+  | { kind: typeof CalibrationTask.NoiseDone; floorDb: number }
+  | { kind: typeof CalibrationTask.DelayDone; delayMs: number; taps: number }
+  | { kind: typeof CalibrationTask.Failed };
 
 export function MicSettings() {
   const { t } = useTranslation('screens');
@@ -27,66 +37,66 @@ export function MicSettings() {
   const noiseFloorDb = useSettings((s) => s.micNoiseFloorDb);
   const sensitivityDb = useSettings((s) => s.micSensitivityDb);
   const latencyMs = useSettings((s) => s.micLatencyMs);
-  const [task, setTask] = useState<Task>({ kind: 'idle' });
+  const [task, setTask] = useState<Task>({ kind: CalibrationTask.Idle });
   const deviceSelectId = useId();
   const sensitivityId = useId();
 
-  const busy = task.kind === 'noise' || task.kind === 'delay';
+  const busy = task.kind === CalibrationTask.Noise || task.kind === CalibrationTask.Delay;
 
   const runNoise = async () => {
-    setTask({ kind: 'noise' });
+    setTask({ kind: CalibrationTask.Noise });
     const floorDb = await measureNoiseFloor();
     if (floorDb === null) {
-      setTask({ kind: 'failed' });
+      setTask({ kind: CalibrationTask.Failed });
       return;
     }
     setMicCalibration({ noiseFloorDb: Math.round(floorDb) });
-    setTask({ kind: 'noiseDone', floorDb: Math.round(floorDb) });
+    setTask({ kind: CalibrationTask.NoiseDone, floorDb: Math.round(floorDb) });
   };
 
   const runDelay = async () => {
-    setTask({ kind: 'delay', beat: 0, countingIn: true });
+    setTask({ kind: CalibrationTask.Delay, beat: 0, countingIn: true });
     const result = await measureDelayByTapping({
       taps: TAPS,
-      onBeat: (beat, countingIn) => setTask({ kind: 'delay', beat, countingIn }),
+      onBeat: (beat, countingIn) => setTask({ kind: CalibrationTask.Delay, beat, countingIn }),
     });
     // Fewer than half the clicks answered: not reliable.
     if (result.delayMs === null || result.taps < TAPS / 2) {
-      setTask({ kind: 'failed' });
+      setTask({ kind: CalibrationTask.Failed });
       return;
     }
     const delayMs = latencyMs + result.delayMs;
     setMicCalibration({ latencyMs: delayMs });
-    setTask({ kind: 'delayDone', delayMs: Math.round(delayMs), taps: result.taps });
+    setTask({ kind: CalibrationTask.DelayDone, delayMs: Math.round(delayMs), taps: result.taps });
   };
 
   return (
     <section className="card">
       <h2>{t('settings.mic.heading')}</h2>
-      {status === 'unsupported' && (
+      {status === MicStatus.Unsupported && (
         <p className="notice notice--problem">{t('settings.mic.unsupported')}</p>
       )}
-      {status !== 'unsupported' && status !== 'on' && (
+      {status !== MicStatus.Unsupported && status !== MicStatus.On && (
         <>
           <p>{t('settings.mic.intro')}</p>
-          {status === 'denied' && (
+          {status === MicStatus.Denied && (
             <p className="notice notice--problem">{t('settings.mic.denied')}</p>
           )}
-          {status === 'error' && (
+          {status === MicStatus.Error && (
             <p className="notice notice--problem">{t('settings.mic.error')}</p>
           )}
           <button
             type="button"
             className="button button--primary"
-            disabled={status === 'starting'}
+            disabled={status === MicStatus.Starting}
             onClick={() => void enableMic()}
           >
-            {status === 'starting' ? t('settings.mic.starting') : t('settings.mic.enable')}
+            {status === MicStatus.Starting ? t('settings.mic.starting') : t('settings.mic.enable')}
           </button>
         </>
       )}
 
-      {status === 'on' && (
+      {status === MicStatus.On && (
         <>
           <div className="field">
             <label htmlFor={deviceSelectId}>{t('settings.mic.device')}</label>
@@ -166,15 +176,15 @@ export function MicSettings() {
 function TaskStatus({ task }: { task: Task }) {
   const { t } = useTranslation('screens');
   switch (task.kind) {
-    case 'idle':
+    case CalibrationTask.Idle:
       return null;
-    case 'noise':
+    case CalibrationTask.Noise:
       return (
         <p className="notice" role="status">
           {t('settings.mic.noiseRunning')}
         </p>
       );
-    case 'delay':
+    case CalibrationTask.Delay:
       return (
         <p className="notice" role="status">
           {task.countingIn
@@ -182,19 +192,19 @@ function TaskStatus({ task }: { task: Task }) {
             : t('settings.mic.delayRunning', { beat: task.beat - 4, total: TAPS })}
         </p>
       );
-    case 'noiseDone':
+    case CalibrationTask.NoiseDone:
       return (
         <p className="notice notice--ok" role="status">
           {t('settings.mic.noiseDone', { db: task.floorDb })}
         </p>
       );
-    case 'delayDone':
+    case CalibrationTask.DelayDone:
       return (
         <p className="notice notice--ok" role="status">
           {t('settings.mic.delayDone', { ms: task.delayMs, taps: task.taps, total: TAPS })}
         </p>
       );
-    case 'failed':
+    case CalibrationTask.Failed:
       return (
         <p className="notice notice--problem" role="status">
           {t('settings.mic.failed')}

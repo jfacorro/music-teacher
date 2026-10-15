@@ -8,7 +8,11 @@ import { dayOf, db, type PracticeLogRow, type ResultRow } from './db';
 
 export { dayOf };
 
-export type ResultKind = 'lesson' | 'song';
+export const ResultKind = {
+  Lesson: 'lesson',
+  Song: 'song',
+} as const;
+export type ResultKind = (typeof ResultKind)[keyof typeof ResultKind];
 
 export interface Attempt {
   stars: number;

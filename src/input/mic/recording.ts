@@ -8,10 +8,13 @@
 import { subscribeRawNotes } from '../bus';
 import { subscribeMicAudio } from './micInput';
 import { dataUrlFromBytes, encodeWav } from './wav';
+import { InputSource } from '../types';
+import type { Instrument } from '../routing';
+import type { NoteEventType } from '../types';
 
 export interface RecordedEvent {
-  source: 'midi' | 'mic';
-  type: 'on' | 'off';
+  source: Instrument;
+  type: NoteEventType;
   pitch: number;
   velocity: number;
   /** ms from the first recorded sample */
@@ -55,7 +58,7 @@ export function startMicRecording(settings: { gateDb: number; micDelayMs: number
     length += samples.length;
   });
   const stopNotes = subscribeRawNotes((event) => {
-    if (event.source !== 'midi' && event.source !== 'mic') return;
+    if (event.source !== InputSource.Midi && event.source !== InputSource.Mic) return;
     events.push({
       source: event.source,
       type: event.type,

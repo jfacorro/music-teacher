@@ -4,32 +4,36 @@
  */
 import { pitchClass, type Alter, type Step } from './pitch';
 
-export type ChordQuality =
-  | 'major'
-  | 'minor'
-  | 'diminished'
-  | 'augmented'
-  | 'sus2'
-  | 'sus4'
-  | 'dominant7'
-  | 'major7'
-  | 'minor7'
-  | 'halfDiminished7'
-  | 'diminished7';
+export const ChordQuality = {
+  Major: 'major',
+  Minor: 'minor',
+  Diminished: 'diminished',
+  Augmented: 'augmented',
+  Sus2: 'sus2',
+  Sus4: 'sus4',
+  Dominant7: 'dominant7',
+  Major7: 'major7',
+  Minor7: 'minor7',
+  HalfDiminished7: 'halfDiminished7',
+  Diminished7: 'diminished7',
+} as const;
+export type ChordQuality = (typeof ChordQuality)[keyof typeof ChordQuality];
 
-export type IntervalName =
-  | 'minorSecond'
-  | 'majorSecond'
-  | 'minorThird'
-  | 'majorThird'
-  | 'perfectFourth'
-  | 'tritone'
-  | 'perfectFifth'
-  | 'minorSixth'
-  | 'majorSixth'
-  | 'minorSeventh'
-  | 'majorSeventh'
-  | 'octave';
+export const IntervalName = {
+  MinorSecond: 'minorSecond',
+  MajorSecond: 'majorSecond',
+  MinorThird: 'minorThird',
+  MajorThird: 'majorThird',
+  PerfectFourth: 'perfectFourth',
+  Tritone: 'tritone',
+  PerfectFifth: 'perfectFifth',
+  MinorSixth: 'minorSixth',
+  MajorSixth: 'majorSixth',
+  MinorSeventh: 'minorSeventh',
+  MajorSeventh: 'majorSeventh',
+  Octave: 'octave',
+} as const;
+export type IntervalName = (typeof IntervalName)[keyof typeof IntervalName];
 
 export interface Chord {
   /** Pitch class of the root, 0 = C. */
@@ -41,32 +45,32 @@ export interface Chord {
 
 /** Semitones above the root, in ascending order. */
 const TEMPLATES: readonly [ChordQuality, readonly number[]][] = [
-  ['major', [0, 4, 7]],
-  ['minor', [0, 3, 7]],
-  ['diminished', [0, 3, 6]],
-  ['augmented', [0, 4, 8]],
-  ['sus2', [0, 2, 7]],
-  ['sus4', [0, 5, 7]],
-  ['dominant7', [0, 4, 7, 10]],
-  ['major7', [0, 4, 7, 11]],
-  ['minor7', [0, 3, 7, 10]],
-  ['halfDiminished7', [0, 3, 6, 10]],
-  ['diminished7', [0, 3, 6, 9]],
+  [ChordQuality.Major, [0, 4, 7]],
+  [ChordQuality.Minor, [0, 3, 7]],
+  [ChordQuality.Diminished, [0, 3, 6]],
+  [ChordQuality.Augmented, [0, 4, 8]],
+  [ChordQuality.Sus2, [0, 2, 7]],
+  [ChordQuality.Sus4, [0, 5, 7]],
+  [ChordQuality.Dominant7, [0, 4, 7, 10]],
+  [ChordQuality.Major7, [0, 4, 7, 11]],
+  [ChordQuality.Minor7, [0, 3, 7, 10]],
+  [ChordQuality.HalfDiminished7, [0, 3, 6, 10]],
+  [ChordQuality.Diminished7, [0, 3, 6, 9]],
 ];
 
 const INTERVALS: readonly IntervalName[] = [
-  'octave',
-  'minorSecond',
-  'majorSecond',
-  'minorThird',
-  'majorThird',
-  'perfectFourth',
-  'tritone',
-  'perfectFifth',
-  'minorSixth',
-  'majorSixth',
-  'minorSeventh',
-  'majorSeventh',
+  IntervalName.Octave,
+  IntervalName.MinorSecond,
+  IntervalName.MajorSecond,
+  IntervalName.MinorThird,
+  IntervalName.MajorThird,
+  IntervalName.PerfectFourth,
+  IntervalName.Tritone,
+  IntervalName.PerfectFifth,
+  IntervalName.MinorSixth,
+  IntervalName.MajorSixth,
+  IntervalName.MinorSeventh,
+  IntervalName.MajorSeventh,
 ];
 
 /** The chord formed by the held keys, or null if they don't make a known chord. */
@@ -94,7 +98,7 @@ export function identifyInterval(midis: readonly number[]): IntervalName | null 
   const unique = [...new Set(midis)].sort((a, b) => a - b);
   if (unique.length !== 2) return null;
   const distance = unique[1]! - unique[0]!;
-  if (distance === 12) return 'octave';
+  if (distance === 12) return IntervalName.Octave;
   return INTERVALS[distance % 12] ?? null;
 }
 

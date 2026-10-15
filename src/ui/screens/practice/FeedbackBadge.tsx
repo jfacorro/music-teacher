@@ -1,6 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import type { SessionState } from '../../../engine/session';
+import { type SessionState, FeedbackKind } from '../../../engine/session';
 import { useNoteNames } from '../../../i18n/useNoteNames';
+import { Timing, Grade } from '../../../engine/timing';
+
+const BadgeTone = {
+  Good: 'good',
+  Okay: 'okay',
+  Bad: 'bad',
+} as const;
+type BadgeTone = (typeof BadgeTone)[keyof typeof BadgeTone];
 
 interface FeedbackBadgeProps {
   feedback: SessionState['feedback'];
@@ -15,35 +23,35 @@ export function FeedbackBadge({ feedback, streak }: FeedbackBadgeProps) {
   const { value } = feedback;
 
   let text: string;
-  let tone: 'good' | 'okay' | 'bad';
+  let tone: BadgeTone;
   switch (value.kind) {
-    case 'hit':
+    case FeedbackKind.Hit:
       text =
-        value.timing === 'onTime'
+        value.timing === Timing.OnTime
           ? t(value.grade)
           : t('withTiming', { grade: t(value.grade), timing: t(value.timing) });
-      tone = value.grade === 'ok' ? 'okay' : 'good';
+      tone = value.grade === Grade.Ok ? BadgeTone.Okay : BadgeTone.Good;
       break;
-    case 'correct':
+    case FeedbackKind.Correct:
       text = t('correct');
-      tone = 'good';
+      tone = BadgeTone.Good;
       break;
-    case 'wrong':
+    case FeedbackKind.Wrong:
       text =
         value.expected.length > 0
           ? t('wrongPlay', {
               notes: value.expected.map((p) => names.name(p, { octave: false })).join(', '),
             })
           : t('wrong');
-      tone = 'bad';
+      tone = BadgeTone.Bad;
       break;
-    case 'extra':
+    case FeedbackKind.Extra:
       text = t('extra');
-      tone = 'bad';
+      tone = BadgeTone.Bad;
       break;
-    case 'missed':
+    case FeedbackKind.Missed:
       text = t('missed');
-      tone = 'bad';
+      tone = BadgeTone.Bad;
       break;
   }
 

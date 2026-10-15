@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FindStep } from '../../../../content/lessons';
-import type { KeyMark } from '../../../../engine/session';
+import { KeyMark } from '../../../../engine/session';
 import { subscribeNotes } from '../../../../input/bus';
 import { useLiveInput } from '../../../../input/liveStore';
 import type { ExpectedKey } from '../../../keyboard/PianoKeyboard';
 import { StepKeyboard } from './StepKeyboard';
+import { NoteEventType } from '../../../../input/types';
+import { Hand } from '../../../../engine/score';
 
 interface FindStepViewProps {
   step: FindStep;
@@ -23,7 +25,7 @@ export function FindStepView({ step, text, onDone }: FindStepViewProps) {
   useEffect(
     () =>
       subscribeNotes((event) => {
-        if (event.type !== 'on' || !targets.has(event.pitch)) return;
+        if (event.type !== NoteEventType.On || !targets.has(event.pitch)) return;
         setFound((prev) => (prev.has(event.pitch) ? prev : new Set(prev).add(event.pitch)));
       }),
     [targets],
@@ -41,7 +43,7 @@ export function FindStepView({ step, text, onDone }: FindStepViewProps) {
   const highlight = useMemo(
     () =>
       new Map<number, ExpectedKey>(
-        [...targets].filter((midi) => !found.has(midi)).map((midi) => [midi, { hand: 'R' }]),
+        [...targets].filter((midi) => !found.has(midi)).map((midi) => [midi, { hand: Hand.Right }]),
       ),
     [targets, found],
   );
@@ -49,7 +51,7 @@ export function FindStepView({ step, text, onDone }: FindStepViewProps) {
   const marks = useMemo(
     () =>
       new Map<number, KeyMark>(
-        held.map((note) => [note.pitch, targets.has(note.pitch) ? 'correct' : 'wrong']),
+        held.map((note) => [note.pitch, targets.has(note.pitch) ? KeyMark.Correct : KeyMark.Wrong]),
       ),
     [held, targets],
   );

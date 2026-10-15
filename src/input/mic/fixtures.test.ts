@@ -9,6 +9,8 @@ import { compare, type TimedNote } from './calibration';
 import { NoteDetector } from './detector';
 import type { RecordingFile } from './recording';
 import { bytesFromDataUrl, decodeWav } from './wav';
+import { Instrument } from '../routing';
+import { NoteEventType } from '../types';
 
 type Fixture = RecordingFile & { minAccuracy?: number };
 
@@ -23,7 +25,8 @@ function replay(fixture: Fixture): TimedNote[] {
   const detected: TimedNote[] = [];
   for (let i = 0; i + HOP <= samples.length; i += HOP) {
     for (const event of detector.process(samples.subarray(i, i + HOP), i / sampleRate)) {
-      if (event.type === 'on') detected.push({ time: event.time * 1000, pitch: event.midi });
+      if (event.type === NoteEventType.On)
+        detected.push({ time: event.time * 1000, pitch: event.midi });
     }
   }
   return detected;
@@ -38,7 +41,7 @@ describe('microphone recordings', () => {
       expect(fixture.audio, `${name}.json has no audio`).toMatch(/^data:audio\/wav;base64,/);
 
       const midi = fixture.events
-        .filter((event) => event.source === 'midi' && event.type === 'on')
+        .filter((event) => event.source === Instrument.Midi && event.type === NoteEventType.On)
         .map((event) => ({ time: event.timeMs, pitch: event.pitch }));
       const result = compare(midi, replay(fixture));
       console.log(

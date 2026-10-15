@@ -1,4 +1,4 @@
-import type { InputSourceKind, NoteEvent, NoteListener } from './types';
+import { type InputSource, type NoteEvent, type NoteListener, NoteEventType } from './types';
 
 /**
  * Fan-out point between input sources and everything that consumes notes. Regular listeners
@@ -7,7 +7,7 @@ import type { InputSourceKind, NoteEvent, NoteListener } from './types';
  */
 const listeners = new Set<NoteListener>();
 const rawListeners = new Set<NoteListener>();
-let isActive: (source: InputSourceKind) => boolean = () => true;
+let isActive: (source: InputSource) => boolean = () => true;
 
 export function emitNote(event: NoteEvent): void {
   for (const listener of rawListeners) listener(event);
@@ -25,7 +25,7 @@ export function subscribeRawNotes(listener: NoteListener): () => void {
   return () => rawListeners.delete(listener);
 }
 
-export function setActiveSources(filter: (source: InputSourceKind) => boolean): void {
+export function setActiveSources(filter: (source: InputSource) => boolean): void {
   isActive = filter;
 }
 
@@ -35,20 +35,20 @@ export function setActiveSources(filter: (source: InputSourceKind) => boolean): 
  */
 export class HeldNotes {
   private readonly held = new Set<number>();
-  private readonly source: InputSourceKind;
+  private readonly source: InputSource;
 
-  constructor(source: InputSourceKind) {
+  constructor(source: InputSource) {
     this.source = source;
   }
 
   on(pitch: number, velocity: number, time: number): void {
     this.held.add(pitch);
-    emitNote({ type: 'on', pitch, velocity, time, source: this.source });
+    emitNote({ type: NoteEventType.On, pitch, velocity, time, source: this.source });
   }
 
   off(pitch: number, time: number): void {
     if (!this.held.delete(pitch)) return;
-    emitNote({ type: 'off', pitch, velocity: 0, time, source: this.source });
+    emitNote({ type: NoteEventType.Off, pitch, velocity: 0, time, source: this.source });
   }
 
   releaseAll(time = performance.now()): void {

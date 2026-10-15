@@ -6,6 +6,7 @@ import {
   notesBetween,
   type Score,
   type ScoreNote,
+  Hand,
 } from '../../engine/score';
 import type { LoopRange } from '../../engine/session';
 import type { Transport } from '../../engine/transport';
@@ -19,6 +20,7 @@ import {
   useElementSize,
 } from '../canvas';
 import type { KeyboardLayout } from './layout';
+import { NoteStyle } from './styles';
 
 interface FallingNotesProps {
   score: Score;
@@ -28,15 +30,12 @@ interface FallingNotesProps {
   secondsVisible: number;
   labelFor: (note: ScoreNote) => string;
   /** How each note went; read every frame, so keep the function stable. */
-  styleOf?: (note: ScoreNote) => NoteStyle;
+  styleOf?: (note: ScoreNote) => NoteStyle | undefined;
   /** Bars being repeated, shaded. */
   loop?: LoopRange | null;
   /** Lets the user drag across bars to choose them (off when undefined). */
   onSelectBars?: (range: LoopRange) => void;
 }
-
-/** played: right in time · missed: never played · muted: not graded (other hand). */
-export type NoteStyle = 'played' | 'missed' | 'muted' | undefined;
 
 const COLORS = {
   background: '--lane-bg',
@@ -135,7 +134,7 @@ interface FrameState {
   position: number;
   visibleBeats: number;
   labelFor: (note: ScoreNote) => string;
-  styleOf?: (note: ScoreNote) => NoteStyle;
+  styleOf?: (note: ScoreNote) => NoteStyle | undefined;
   loop: LoopRange | null;
   colors: Colors;
 }
@@ -199,15 +198,15 @@ function drawFrame(
 
     roundedRect(ctx, x, top + 1, w, bottom - top - 2, Math.min(6, w * 0.3));
     ctx.fillStyle =
-      style === 'played'
+      style === NoteStyle.Played
         ? colors.played
-        : style === 'missed'
+        : style === NoteStyle.Missed
           ? colors.missed
-          : note.hand === 'L'
+          : note.hand === Hand.Left
             ? colors.left
             : colors.right;
-    ctx.globalAlpha = style === 'muted' ? 0.3 : active ? 1 : 0.85;
-    const glow = active && style !== 'muted' && style !== 'missed';
+    ctx.globalAlpha = style === NoteStyle.Muted ? 0.3 : active ? 1 : 0.85;
+    const glow = active && style !== NoteStyle.Muted && style !== NoteStyle.Missed;
     ctx.shadowColor = glow ? ctx.fillStyle : 'transparent';
     ctx.shadowBlur = glow ? 12 : 0;
     ctx.fill();

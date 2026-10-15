@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
+import type { ResultKind } from './progress';
 
 interface KeyValueRow {
   key: string;
@@ -21,7 +22,7 @@ export interface PracticeLogRow {
   id?: number;
   /** ms since epoch */
   at: number;
-  kind: 'lesson' | 'song';
+  kind: ResultKind;
   refId: string;
   stars: number;
   accuracy: number;

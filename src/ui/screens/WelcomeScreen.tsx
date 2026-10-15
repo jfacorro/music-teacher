@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { noteName } from '../../i18n/naming';
+import { noteName, NamingSystem } from '../../i18n/naming';
 import { updateSettings } from '../../storage/settings';
-import { parseNote } from '../../theory/pitch';
+import { pitchesOf } from '../../theory/pitch';
 import { InputSettings } from './settings/InputSettings';
 import { LanguageSettings } from './settings/LanguageSettings';
 import { LiveTest } from './settings/LiveTest';
@@ -10,8 +10,8 @@ import { MicSettings } from './settings/MicSettings';
 import { MidiSettings } from './settings/MidiSettings';
 
 const STEPS = ['language', 'instrument', 'test'] as const;
-const EXAMPLE = ['C4', 'D4', 'E4'].map(parseNote);
-const example = (system: 'english' | 'solfege') =>
+const EXAMPLE = pitchesOf('C4', 'D4', 'E4');
+const example = (system: typeof NamingSystem.English | typeof NamingSystem.Solfege) =>
   EXAMPLE.map((pitch) => noteName(pitch, system)).join(' ');
 
 /** First launch: pick the language and note names, connect an instrument, try a key. */
@@ -29,8 +29,8 @@ export function WelcomeScreen() {
       <p>
         {step === 'language'
           ? t('welcome.language.intro', {
-              letters: example('english'),
-              solfege: example('solfege'),
+              letters: example(NamingSystem.English),
+              solfege: example(NamingSystem.Solfege),
             })
           : t(`welcome.${step}.intro`)}
       </p>

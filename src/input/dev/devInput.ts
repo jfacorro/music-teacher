@@ -6,6 +6,7 @@
 import { create } from 'zustand';
 import { PIANO_HIGHEST, PIANO_LOWEST } from '../../theory/pitch';
 import { HeldNotes } from '../bus';
+import { InputSource } from '../types';
 
 /** Physical key → semitones above the current octave's C. */
 export const DEV_KEYS: Readonly<Record<string, number>> = {
@@ -28,7 +29,7 @@ export function devKeyToPitch(code: string, octave: number): number | null {
 
 export const useDevInput = create(() => ({ enabled: false, octave: 4 }));
 
-const held = new HeldNotes('dev');
+const held = new HeldNotes(InputSource.Dev);
 const pressed = new Map<string, number>(); // key code → pitch it started
 
 export function setDevInputEnabled(enabled: boolean): void {

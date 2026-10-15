@@ -6,7 +6,7 @@
  * Simplifications that fit the current content: each hand plays one line at a time (notes
  * that start together form a chord); durations are multiples of a sixteenth note; key of C.
  */
-import { beatsPerMeasure, type Hand, type Score, type ScoreNote } from '../engine/score';
+import { beatsPerMeasure, Hand, type Score, type ScoreNote } from '../engine/score';
 import type { Pitch } from '../theory/pitch';
 
 /** Divisions per quarter note: sixteenths (3) and eighth-note triplets (4) are whole numbers. */
@@ -68,7 +68,7 @@ interface Event {
 }
 
 export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): MusicXmlResult {
-  const hands = (['R', 'L'] as const).filter((hand) =>
+  const hands = [Hand.Right, Hand.Left].filter((hand) =>
     options.hands ? options.hands.includes(hand) : score.notes.some((n) => n.hand === hand),
   );
   const staves: StaffInfo[] = hands.map((hand, i) => ({ hand, number: i + 1 }));
@@ -272,7 +272,7 @@ function attributes(score: Score, staves: StaffInfo[], rhythm: boolean): string 
       '<staff-details number="1"><staff-lines>1</staff-lines></staff-details>'
     : staves
         .map(({ hand, number }) =>
-          hand === 'R'
+          hand === Hand.Right
             ? `<clef number="${number}"><sign>G</sign><line>2</line></clef>`
             : `<clef number="${number}"><sign>F</sign><line>4</line></clef>`,
         )
@@ -289,7 +289,11 @@ function attributes(score: Score, staves: StaffInfo[], rhythm: boolean): string 
   );
 }
 
-export type Clef = 'treble' | 'bass';
+export const Clef = {
+  Treble: 'treble',
+  Bass: 'bass',
+} as const;
+export type Clef = (typeof Clef)[keyof typeof Clef];
 
 /** A single whole note on a treble or bass staff, without a time signature: a quiz card. */
 export function noteCardXml({ step, alter, octave }: Pitch, clef: Clef): string {
@@ -301,7 +305,7 @@ export function noteCardXml({ step, alter, octave }: Pitch, clef: Clef): string 
     '<part id="P1"><measure number="1">' +
     '<attributes><divisions>1</divisions><key><fifths>0</fifths></key>' +
     '<time print-object="no"><beats>4</beats><beat-type>4</beat-type></time>' +
-    (clef === 'treble'
+    (clef === Clef.Treble
       ? '<clef><sign>G</sign><line>2</line></clef>'
       : '<clef><sign>F</sign><line>4</line></clef>') +
     '</attributes>' +

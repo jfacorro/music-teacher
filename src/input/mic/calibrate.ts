@@ -1,7 +1,7 @@
 /** Calibration procedures for the Settings screen (PLAN.md §5.4). */
 import { startAudio } from '../../audio/audio';
 import { subscribeRawNotes } from '../bus';
-import type { NoteEvent } from '../types';
+import { type NoteEvent, InputSource, NoteEventType } from '../types';
 import {
   compare,
   delayOf,
@@ -63,7 +63,11 @@ export async function measureDelayByTapping({
 
   const detected: TimedNote[] = [];
   const stop = subscribeRawNotes((event) => {
-    if (event.source === 'mic' && event.type === 'on' && !CLICK_PITCHES.has(event.pitch)) {
+    if (
+      event.source === InputSource.Mic &&
+      event.type === NoteEventType.On &&
+      !CLICK_PITCHES.has(event.pitch)
+    ) {
       detected.push({ time: event.time, pitch: event.pitch });
     }
   });
@@ -85,9 +89,9 @@ export function startMicMidiComparison(onUpdate: (comparison: Comparison) => voi
   const mic: TimedNote[] = [];
   let scheduled = false;
   const stop = subscribeRawNotes((event: NoteEvent) => {
-    if (event.type !== 'on') return;
-    if (event.source === 'midi') midi.push({ time: event.time, pitch: event.pitch });
-    else if (event.source === 'mic') mic.push({ time: event.time, pitch: event.pitch });
+    if (event.type !== NoteEventType.On) return;
+    if (event.source === InputSource.Midi) midi.push({ time: event.time, pitch: event.pitch });
+    else if (event.source === InputSource.Mic) mic.push({ time: event.time, pitch: event.pitch });
     else return;
     if (scheduled) return;
     scheduled = true;

@@ -4,8 +4,12 @@ import { Link, useParams } from 'react-router';
 import { isSongId, loadSong, type SongId } from '../../../content/songs';
 import type { Score } from '../../../engine/score';
 import { PracticeView } from './PracticeView';
+import { LoadStatus } from '../../loadStatus';
 
-type LoadState = { status: 'loading' } | { status: 'ready'; score: Score } | { status: 'error' };
+type LoadState =
+  | { status: typeof LoadStatus.Loading }
+  | { status: typeof LoadStatus.Ready; score: Score }
+  | { status: typeof LoadStatus.Error };
 
 export function PracticeScreen() {
   const { songId } = useParams();
@@ -24,15 +28,15 @@ export function PracticeScreen() {
 
 function SongLoader({ songId }: { songId: SongId }) {
   const { t } = useTranslation('screens');
-  const [state, setState] = useState<LoadState>({ status: 'loading' });
+  const [state, setState] = useState<LoadState>({ status: LoadStatus.Loading });
 
   useEffect(() => {
     let cancelled = false;
     loadSong(songId).then(
-      (score) => !cancelled && setState({ status: 'ready', score }),
+      (score) => !cancelled && setState({ status: LoadStatus.Ready, score }),
       (error: unknown) => {
         console.error(error);
-        if (!cancelled) setState({ status: 'error' });
+        if (!cancelled) setState({ status: LoadStatus.Error });
       },
     );
     return () => {
@@ -40,8 +44,8 @@ function SongLoader({ songId }: { songId: SongId }) {
     };
   }, [songId]);
 
-  if (state.status === 'loading') return null;
-  if (state.status === 'error') {
+  if (state.status === LoadStatus.Loading) return null;
+  if (state.status === LoadStatus.Error) {
     return (
       <section className="screen">
         <p className="notice notice--problem">{t('practice.loadError')}</p>
