@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { preloadAudio } from '../../../audio/audio';
-import type { SongId } from '../../../content/songs';
 import type { Score } from '../../../engine/score';
 import { HandFilter, type LoopRange, PracticeMode } from '../../../engine/session';
-import { recordResult, ResultKind } from '../../../storage/progress';
+import { recordResult, type ResultKind } from '../../../storage/progress';
 import { ScoreView } from '../../../content/lessons';
 import { useSettings } from '../../../storage/settings';
 import { Markings } from '../../components/Markings';
@@ -17,10 +16,19 @@ const MODES: readonly PracticeMode[] = [PracticeMode.Wait, PracticeMode.Tempo];
 /** In the order of the hands on the keyboard: left, both, right. */
 const HANDS: readonly HandFilter[] = [HandFilter.Left, HandFilter.Both, HandFilter.Right];
 
+interface PracticeViewProps {
+  title: string;
+  composer: string | null;
+  score: Score;
+  /** Where finished runs are saved. */
+  result: { kind: ResultKind; id: string };
+  /** Shown next to the title, e.g. a link to the song's settings. */
+  actions?: ReactNode;
+}
+
 /** Song header and practice options; each combination of options is a fresh run. */
-export function PracticeView({ songId, score }: { songId: SongId; score: Score }) {
+export function PracticeView({ title, composer, score, result, actions }: PracticeViewProps) {
   const { t } = useTranslation('screens');
-  const { t: ts } = useTranslation('songs');
   const [mode, setMode] = useState<PracticeMode>(PracticeMode.Wait);
   const [hands, setHands] = useState<HandFilter>(HandFilter.Both);
   const [metronome, setMetronome] = useState(false);
@@ -51,12 +59,15 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
     <section className="screen practice">
       <header className="practice__header">
         <div>
-          <h1>{ts(`${songId}.title`)}</h1>
+          <h1>{title}</h1>
           <p className="muted">
-            {t('practice.songInfo', { composer: ts(`${songId}.composer`), bpm: score.tempo })}
+            {composer
+              ? t('practice.songInfo', { composer, bpm: score.tempo })
+              : t('practice.tempoInfo', { bpm: score.tempo })}
             <Markings markings={score.markings ?? []} />
           </p>
         </div>
+        {actions}
       </header>
 
       <div className="practice__options">
@@ -137,7 +148,7 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
         otherHand={hands !== HandFilter.Both && otherHand}
         onLoopChange={chooseLoop}
         onFinish={(summary, durationMs) =>
-          void recordResult(ResultKind.Song, songId, {
+          void recordResult(result.kind, result.id, {
             stars: summary.stars,
             accuracy: summary.accuracy,
             durationMs,

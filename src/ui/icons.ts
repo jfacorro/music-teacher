@@ -16,4 +16,5 @@ export const ICONS = {
   L: String.fromCodePoint(0x1faf2), // 🫲 leftwards hand
   both: String.fromCodePoint(0x1f64c), // 🙌 both hands raised
   R: String.fromCodePoint(0x1faf1), // 🫱 rightwards hand
+  settings: String.fromCodePoint(0x2699, 0xfe0f), // ⚙️ gear
 } as const;

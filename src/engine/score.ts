@@ -35,14 +35,26 @@ export interface Score {
   measures: Measure[];
   /** Italian tempo words and dynamics written at the start, e.g. "moderato", "mf". */
   markings?: Marking[];
+  /** Key signature as in MusicXML `<fifths>` (negative = flats); C major when absent. */
+  keyFifths?: number;
 }
 
 export function beatsPerMeasure([numerator, denominator]: [number, number]): number {
   return (numerator * 4) / denominator;
 }
 
+/** Whole measures from beat 0 until the end of the last note (at least one). */
+export function wholeMeasures(
+  notes: readonly ScoreNote[],
+  timeSignature: [number, number],
+): Measure[] {
+  const length = beatsPerMeasure(timeSignature);
+  const count = Math.max(1, Math.ceil(scoreEnd({ notes }) / length - 1e-9));
+  return Array.from({ length: count }, (_, i) => ({ start: i * length, length }));
+}
+
 /** Beat where the last note ends. */
-export function scoreEnd(score: Score): number {
+export function scoreEnd(score: { notes: readonly ScoreNote[] }): number {
   return score.notes.reduce((end, note) => Math.max(end, note.start + note.duration), 0);
 }
 

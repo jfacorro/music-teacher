@@ -7,14 +7,7 @@
  * Validates everything once at load time and reports problems with their location, e.g.
  * `song "ode-to-joy" › notes[3] › note: Invalid note "H4": …`.
  */
-import {
-  beatsPerMeasure,
-  type Finger,
-  Hand,
-  type Measure,
-  type Score,
-  type ScoreNote,
-} from '../../engine/score';
+import { type Finger, Hand, type Score, type ScoreNote, wholeMeasures } from '../../engine/score';
 import { isMarking, type Marking } from '../../engine/markings';
 import { describeValues, isValueOf } from '../../lib/values';
 import { InvalidNoteError, parseNote } from '../../theory/pitch';
@@ -48,7 +41,7 @@ export function parseInlineScore(input: unknown, location: string): Score {
     tempo,
     timeSignature,
     notes,
-    measures: measuresFor(notes, timeSignature),
+    measures: wholeMeasures(notes, timeSignature),
     ...(markings.length > 0 && { markings }),
   };
 }
@@ -110,14 +103,6 @@ function parseTimeSignature(input: unknown, location: string): [number, number] 
     throw new ScoreError(location, 'expected [beats, noteValue] such as [4, 4] or [6, 8]');
   }
   return [input[0], input[1]];
-}
-
-/** Whole measures from beat 0 until the end of the last note. */
-function measuresFor(notes: ScoreNote[], timeSignature: [number, number]): Measure[] {
-  const length = beatsPerMeasure(timeSignature);
-  const end = notes.reduce((max, note) => Math.max(max, note.start + note.duration), 0);
-  const count = Math.max(1, Math.ceil(end / length - 1e-9));
-  return Array.from({ length: count }, (_, i) => ({ start: i * length, length }));
 }
 
 function expectObject(input: unknown, location: string): Record<string, unknown> {

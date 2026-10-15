@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
 import { skillProgress, SkillLevel } from '../../content/skills';
 import { isSongId } from '../../content/songs';
+import { useMySongs } from '../../storage/mySongs';
 import { formatDate, formatPercent, formatPracticeTime } from '../../i18n/format';
 import { useContentText } from '../../i18n/useContentText';
 import {
@@ -46,8 +47,13 @@ export function ProgressScreen() {
       ? t('progress.underMinute')
       : formatPracticeTime(ms / 60_000, i18n.language);
 
+  const mySongs = useMySongs((s) => s.songs);
+
   const titleOf = (kind: ResultKind, id: string) => {
     if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
+    if (kind === ResultKind.MySong) {
+      return mySongs.find((song) => String(song.id) === id)?.title ?? t('progress.deletedSong');
+    }
     const found = findLesson(id);
     return found ? courseText(`lessons.${id}`, found.lesson.titleVars) : id;
   };

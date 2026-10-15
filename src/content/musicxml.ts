@@ -4,7 +4,7 @@
  * bass staff for the left hand (only the staves that have notes).
  *
  * Simplifications that fit the current content: each hand plays one line at a time (notes
- * that start together form a chord); durations are multiples of a sixteenth note; key of C.
+ * that start together form a chord); durations are multiples of a sixteenth note.
  */
 import { beatsPerMeasure, Hand, type Score, type ScoreNote } from '../engine/score';
 import type { Pitch } from '../theory/pitch';
@@ -280,7 +280,7 @@ function attributes(score: Score, staves: StaffInfo[], rhythm: boolean): string 
   return (
     '<attributes>' +
     `<divisions>${DIVISIONS}</divisions>` +
-    '<key><fifths>0</fifths></key>' +
+    `<key><fifths>${score.keyFifths ?? 0}</fifths></key>` +
     `<time><beats>${beats}</beats><beat-type>${beatType}</beat-type></time>` +
     `<staves>${staves.length}</staves>` +
     clefs +

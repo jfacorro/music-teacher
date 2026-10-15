@@ -206,6 +206,25 @@ select {
   max-width: 100%;
 }
 
+input[type='text'],
+input[type='number'] {
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  max-width: 100%;
+}
+
+input[aria-invalid='true'] {
+  border-color: var(--problem);
+}
+
+.field__error {
+  color: var(--problem);
+}
+
 .checkbox {
   display: flex;
   align-items: center;
@@ -240,6 +259,12 @@ select {
 .button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+/* Removes something for good (asks first). */
+.button--danger {
+  color: var(--problem);
+  border-color: var(--problem);
 }
 
 .button--primary {
@@ -447,7 +472,26 @@ select {
   margin-block: 1rem;
 }
 
-.practice__options .checkbox {
+.practice__options input[type='text'],
+input[type='number'] {
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  max-width: 100%;
+}
+
+input[aria-invalid='true'] {
+  border-color: var(--problem);
+}
+
+.field__error {
+  color: var(--problem);
+}
+
+.checkbox {
   margin: 0;
 }
 
@@ -1416,4 +1460,50 @@ button.bars__bar:focus-visible {
 .modal__close:focus-visible {
   background: var(--lane-bg);
   color: var(--text);
+}
+
+/* Importing songs (My songs) */
+
+.unit__actions {
+  margin-block-start: 1rem;
+}
+
+.drop-zone {
+  border-style: dashed;
+  border-width: 2px;
+}
+
+.drop-zone.is-dragging {
+  border-color: var(--accent);
+  background: var(--bg);
+}
+
+.song-setup {
+  max-width: 50rem;
+}
+
+.song-setup h2 {
+  margin-block: 1.5rem 0.25rem;
+  font-size: 1.1rem;
+}
+
+/* Wide track tables scroll sideways instead of widening the page. */
+.table-scroll {
+  overflow-x: auto;
+  margin-block-end: 1rem;
+}
+
+.song-setup__tracks td {
+  vertical-align: middle;
+}
+
+.song-setup__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2rem;
+}
+
+.song-setup__warnings ul {
+  margin: 0.25rem 0 0;
+  padding-inline-start: 1.25rem;
 }

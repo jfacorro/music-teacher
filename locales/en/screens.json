@@ -12,7 +12,11 @@
     "allDone": "You’ve finished every lesson so far! Replay lessons for more stars, or practice the songs below.",
     "unitProgress": "{done} of {total} done",
     "unitLocked": "{stars, plural, one {Earn at least # star in every lesson of the previous unit to unlock this one.} other {Earn at least # stars in every lesson of the previous unit to unlock this one.}}",
-    "locked": "(locked)"
+    "locked": "(locked)",
+    "mySongs": "My songs",
+    "mySongsIntro": "Songs you imported. They’re kept in this browser, on this computer.",
+    "mySongsEmpty": "Import a MIDI or MusicXML file to practice your own music.",
+    "importSong": "Import a song"
   },
   "freePlay": {
     "title": "Free play",
@@ -64,7 +68,8 @@
       "none": "{date}: no practice",
       "less": "Less",
       "more": "More"
-    }
+    },
+    "deletedSong": "Deleted song"
   },
   "settings": {
     "title": "Settings",
@@ -304,7 +309,11 @@
         "L": "Practice the left hand only"
       }
     },
-    "micChords": "With the microphone, any note of a chord counts for the whole chord. Connect a MIDI keyboard to check every note."
+    "micChords": "With the microphone, any note of a chord counts for the whole chord. Connect a MIDI keyboard to check every note.",
+    "tempoInfo": "{bpm} BPM",
+    "songSettings": "Song settings",
+    "songSettingsTip": "Change the hands, key or tempo, or delete the song",
+    "noNotes": "This song has no notes to play: choose a hand for at least one track in its settings."
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",
@@ -358,5 +367,70 @@
     "results": "Quiz results",
     "firstTry": "{count} of {total} right on the first try",
     "newCards": "Start again with new cards"
+  },
+  "mySongs": {
+    "backHome": "Back to Learn",
+    "notFound": "This song isn’t in My songs.",
+    "loadError": "Couldn’t load this song.",
+    "import": {
+      "title": "Import a song",
+      "intro": "Choose a MIDI file (.mid) or a MusicXML file (.musicxml, .xml or .mxl), for example one exported from a notation program. Your songs are kept in this browser, on this computer.",
+      "choose": "Choose a file",
+      "drop": "Or drop the file here.",
+      "reading": "Reading the file…",
+      "errors": {
+        "unknownFormat": "This isn’t a MIDI or MusicXML file.",
+        "unreadable": "This file couldn’t be read. It may be damaged, or saved in a form this app doesn’t support.",
+        "noNotes": "This file has no notes to play.",
+        "tooLarge": "This file is too large to be a piano piece."
+      }
+    },
+    "setup": {
+      "importTitle": "Set up the song",
+      "editTitle": "Song settings",
+      "file": "From {fileName}",
+      "title": "Title",
+      "composer": "Composer (optional)",
+      "tracks": "Tracks",
+      "tracksHint": "Choose which hand plays each track. Tracks that aren’t played are left out.",
+      "track": "Track",
+      "notes": "Notes",
+      "range": "Range",
+      "hand": "Hand",
+      "handFor": "Hand for {track}",
+      "trackNumber": "Track {number}",
+      "trackStaff": "{name}, staff {staff}",
+      "hands": {
+        "R": "Right hand",
+        "L": "Left hand",
+        "split": "Both hands (split at middle {c})",
+        "none": "Not played"
+      },
+      "transpose": "Transpose",
+      "originalKey": "Original key",
+      "semitones": "{count, plural, one {{signed} semitone} other {{signed} semitones}}",
+      "tempo": "Tempo (BPM)",
+      "tempoFromFile": "The file says {bpm}.",
+      "tempoRange": "Choose a tempo between {min} and {max}.",
+      "summary": "{notes, plural, one {# note} other {# notes}} in {bars, plural, one {# bar} other {# bars}}",
+      "noHands": "Choose a hand for at least one track.",
+      "saveAndPractice": "Save and practice",
+      "save": "Save",
+      "cancel": "Cancel",
+      "chooseAnother": "Choose another file",
+      "delete": "Delete song",
+      "deleteTitle": "Delete “{title}”?",
+      "deleteText": "The song is removed from My songs. Your practice history is kept.",
+      "deleteConfirm": "Delete",
+      "keep": "Keep it"
+    },
+    "warnings": {
+      "heading": "Good to know",
+      "timingRounded": "Notes were lined up to the nearest sixteenth note, so triplets and timing played in by hand are approximated.",
+      "tempoChanges": "The tempo changes during the piece: the first tempo is used throughout.",
+      "timeSignatureChanges": "The time signature changes during the piece: the bars follow the first one.",
+      "repeatsIgnored": "Repeats are played once, as written.",
+      "outOfRange": "{count, plural, one {# note would be} other {# notes would be}} off the keyboard after transposing, so {count, plural, one {it’s} other {they’re}} left out."
+    }
   }
 }

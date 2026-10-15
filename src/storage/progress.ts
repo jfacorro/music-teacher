@@ -11,6 +11,8 @@ export { dayOf };
 export const ResultKind = {
   Lesson: 'lesson',
   Song: 'song',
+  /** An imported song ("My songs"). */
+  MySong: 'mySong',
 } as const;
 export type ResultKind = (typeof ResultKind)[keyof typeof ResultKind];
 
@@ -21,7 +23,7 @@ export interface Attempt {
 }
 
 interface ProgressState {
-  /** By key: "lesson:<id>" / "song:<id>". */
+  /** By key: "lesson:<id>" / "song:<id>" / "mySong:<id>". */
   results: Readonly<Record<string, ResultRow>>;
   log: readonly PracticeLogRow[];
   /** Practice time by local day ("2026-10-14"), ms. */
