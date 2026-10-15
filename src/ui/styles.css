@@ -1456,8 +1456,29 @@ button.bars__bar:focus-visible {
   color: var(--text);
 }
 
-.progress__empty {
+/* The home screen: the title, and the way into the lessons. */
+.progress__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin-block-end: 1rem;
+}
+
+.progress__header h1 {
+  margin: 0;
+}
+
+.button--big {
+  font-size: 1.75rem;
+  padding: 0.9rem 3rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
+}
+
+.button--big:hover {
+  filter: brightness(1.08);
 }
 
 /* Importing songs (My songs) */

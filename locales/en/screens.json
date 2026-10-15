@@ -70,7 +70,8 @@
       "more": "More"
     },
     "deletedSong": "Deleted song",
-    "startLearning": "Start learning"
+    "letsGo": "Let’s Go!",
+    "letsGoTip": "Go to your learning path"
   },
   "settings": {
     "title": "Settings",

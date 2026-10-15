@@ -70,7 +70,8 @@
       "more": "Más"
     },
     "deletedSong": "Canción eliminada",
-    "startLearning": "Empezar a aprender"
+    "letsGo": "¡Vamos!",
+    "letsGoTip": "Ir a tu camino de aprendizaje"
   },
   "settings": {
     "title": "Configuración",

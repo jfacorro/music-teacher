@@ -61,15 +61,17 @@ export function ProgressScreen() {
 
   return (
     <section className="screen progress">
-      <h1>{t('progress.title')}</h1>
-      {log.length === 0 && practiced.length === 0 && (
-        <div className="card progress__empty">
-          <p>{t('progress.empty')}</p>
-          <Link className="button button--primary" to="/learn">
-            {t('progress.startLearning')}
-          </Link>
-        </div>
-      )}
+      <div className="progress__header">
+        <h1>{t('progress.title')}</h1>
+        <Link
+          className="button button--primary button--big"
+          to="/learn"
+          title={t('progress.letsGoTip')}
+        >
+          {t('progress.letsGo')}
+        </Link>
+      </div>
+      {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
 
       <div className="stat-grid">
         <Stat
