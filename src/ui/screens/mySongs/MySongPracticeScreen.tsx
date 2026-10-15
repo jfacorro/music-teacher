@@ -22,7 +22,7 @@ export function MySongPracticeScreen() {
         <p className="notice notice--problem">
           {state.status === LoadStatus.Error ? t('mySongs.loadError') : t('mySongs.notFound')}
         </p>
-        <Link to="/learn">{t('mySongs.backHome')}</Link>
+        <Link to="/songs">{t('mySongs.backHome')}</Link>
       </section>
     );
   }

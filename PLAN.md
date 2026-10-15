@@ -426,6 +426,7 @@ Note names differ by language, so the naming system is its **own setting**, defa
    - Controls: play/pause, restart, mode, tempo, hand selection, loop (Phase 2), view toggle.
    - Indicator showing active input (MIDI / mic) and connection status.
 3. **Results** — accuracy, timing breakdown, stars, per-measure heatmap, "retry" / "practice weak spots" / "next".
+4. **Song practice** (`/songs`) — the built-in songs and My songs (imported), with their best stars; each opens the practice screen.
 4. **Free play** — shows notes played (names on keys and staff), identifies chords; note-naming quiz.
 5. **Progress** — the home screen (`/`, also opened from the app's name in the header): streak, practice time per day, lessons completed, skill mastery; a big “Let’s Go!” button leads to the learning path.
 6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, metronome and piano volume (also from the 🔊 button on the practice screen; by default the click sits under the music), theme.

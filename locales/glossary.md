@@ -84,6 +84,7 @@ system setting (`src/i18n/naming.ts`).
 | Card (quiz)                                   | card                                      | tarjeta                                |
 | Tap (rhythm exercises)                        | tap                                       | toque                                  |
 | Extra tap                                     | extra tap                                 | toque de más                           |
+| Song practice (page)                          | Song practice                             | Práctica de canciones                  |
 | Imported songs (library)                      | My songs                                  | Mis canciones                          |
 | Import (a file)                               | import                                    | importar                               |
 | Track (of a MIDI file or score)               | track                                     | pista                                  |

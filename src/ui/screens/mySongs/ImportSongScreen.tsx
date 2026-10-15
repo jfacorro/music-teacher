@@ -110,7 +110,7 @@ export function ImportSongScreen() {
         )}
       </div>
       <p>
-        <Link to="/learn">{t('mySongs.backHome')}</Link>
+        <Link to="/songs">{t('mySongs.backHome')}</Link>
       </p>
     </section>
   );

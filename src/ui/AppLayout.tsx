@@ -22,6 +22,7 @@ export function AppLayout() {
         </Link>
         <nav className="app-nav" aria-label={t('nav.label')}>
           <NavLink to="/learn">{t('nav.learn')}</NavLink>
+          <NavLink to="/songs">{t('nav.songs')}</NavLink>
           <NavLink to="/free-play">{t('nav.freePlay')}</NavLink>
           <NavLink to="/settings">{t('nav.settings')}</NavLink>
         </nav>

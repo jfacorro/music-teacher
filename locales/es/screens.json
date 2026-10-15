@@ -3,20 +3,14 @@
     "title": "Tu camino de aprendizaje",
     "checkKeyboard": "Comprobar el teclado",
     "unit": "Unidad {number}: {title}",
-    "songs": "Canciones",
-    "songsIntro": "Practica canciones completas cuando quieras, en modo espera o a tempo.",
     "startLabel": "Empieza aquí",
     "continueLabel": "Siguiente",
     "start": "Empezar",
     "continue": "Continuar",
-    "allDone": "¡Terminaste todas las lecciones disponibles! Repite lecciones para conseguir más estrellas o practica las canciones de abajo.",
+    "allDone": "¡Terminaste todas las lecciones disponibles! Repite lecciones para conseguir más estrellas o practica canciones completas en Práctica de canciones.",
     "unitProgress": "{done} de {total} hechas",
     "unitLocked": "{stars, plural, one {Consigue al menos # estrella en cada lección de la unidad anterior para desbloquear esta.} other {Consigue al menos # estrellas en cada lección de la unidad anterior para desbloquear esta.}}",
     "locked": "(bloqueada)",
-    "mySongs": "Mis canciones",
-    "mySongsIntro": "Canciones que importaste. Se guardan en este navegador, en esta computadora.",
-    "mySongsEmpty": "Importa un archivo MIDI o MusicXML para practicar tu propia música.",
-    "importSong": "Importar una canción",
     "unitStars": "{stars} de {total} estrellas",
     "unitToggle": "Mostrar u ocultar las lecciones"
   },
@@ -222,7 +216,7 @@
     "restart": "Volver a empezar",
     "notFound": "Esta canción no existe.",
     "loadError": "No se pudo cargar esta canción.",
-    "backHome": "Volver a Aprender",
+    "backHome": "Volver a Práctica de canciones",
     "hintWait": "La música te espera: toca las teclas resaltadas para continuar.",
     "mode": {
       "label": "Modo",
@@ -376,7 +370,7 @@
     "newCards": "Empezar de nuevo con tarjetas nuevas"
   },
   "mySongs": {
-    "backHome": "Volver a Aprender",
+    "backHome": "Volver a Práctica de canciones",
     "notFound": "Esta canción no está en Mis canciones.",
     "loadError": "No se pudo cargar esta canción.",
     "import": {
@@ -439,5 +433,14 @@
       "repeatsIgnored": "Las repeticiones se tocan una vez, tal como están escritas.",
       "outOfRange": "{count, plural, one {# nota quedaría} other {# notas quedarían}} fuera del teclado al transportar, así que se {count, plural, one {omite} other {omiten}}."
     }
+  },
+  "songPractice": {
+    "title": "Práctica de canciones",
+    "songs": "Canciones",
+    "songsIntro": "Practica canciones completas cuando quieras, en modo espera o a tempo.",
+    "mySongs": "Mis canciones",
+    "mySongsIntro": "Canciones que importaste. Se guardan en este navegador, en esta computadora.",
+    "mySongsEmpty": "Importa un archivo MIDI o MusicXML para practicar tu propia música.",
+    "importSong": "Importar una canción"
   }
 }
