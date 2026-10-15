@@ -633,7 +633,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 #### Phase 3 done when
 - [ ] Two-handed lessons grade both hands independently.
 - [ ] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note.
-- [ ] A user-provided MIDI/MusicXML file can be imported and practiced.
+- [x] A user-provided MIDI/MusicXML file can be imported and practiced. (verified 2026-10-15 on the Casio)
 - [ ] Chord names (e.g. C major / Do mayor / C-Dur) display correctly in every language and naming system.
 - [ ] (Optional) App runs as a standalone Windows desktop app.
 
