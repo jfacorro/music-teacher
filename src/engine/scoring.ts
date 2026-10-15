@@ -20,6 +20,8 @@ export const OUTCOME_WEIGHTS = { perfect: 1, good: 0.8, ok: 0.5, correct: 1, mis
 export const WRONG_PENALTY = 0.25;
 /** Accuracy needed for 1, 2 and 3 stars. */
 export const STAR_THRESHOLDS = [0.6, 0.8, 0.95] as const;
+/** The most stars a lesson or song can earn. */
+export const MAX_STARS = STAR_THRESHOLDS.length;
 
 export interface Tally {
   expected: number;

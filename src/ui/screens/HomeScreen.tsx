@@ -4,12 +4,14 @@ import { Link } from 'react-router';
 import { UNITS } from '../../content/courses';
 import { SONG_IDS } from '../../content/songs';
 import {
+  isUnitFinished,
   isUnitOpen,
   lessonStates,
   nextLessonToPlay,
   type LessonState,
   LessonStatus,
 } from '../../content/unlock';
+import { MAX_STARS } from '../../engine/scoring';
 import { useContentText } from '../../i18n/useContentText';
 import { useMySongs } from '../../storage/mySongs';
 import { resultKey, useProgress, ResultKind } from '../../storage/progress';
@@ -17,6 +19,8 @@ import { Stars } from '../components/Stars';
 import { StarsSize } from '../components/starsSize';
 
 const CHECK = '✓';
+const STAR = '★';
+const CHEVRON = '▸';
 
 /**
  * The learning path: what to do next, every unit's lessons with stars and locks, songs, and the
@@ -65,28 +69,18 @@ export function HomeScreen() {
 
       {UNITS.map((unit, index) => {
         const open = isUnitOpen(unit, states);
+        const finished = isUnitFinished(unit, states);
         const done = unit.lessons.filter(
           (l) => states.get(l.id)?.status === LessonStatus.Completed,
         ).length;
-        return (
-          <section key={unit.id} className={open ? 'card unit' : 'card unit is-locked'}>
-            <header className="unit__header">
-              <h2>
-                {t('home.unit', {
-                  number: index + 1,
-                  title: courseText(`units.${unit.id}.title`, unit.textVars),
-                })}
-              </h2>
-              <span className="muted">
-                {t('home.unitProgress', { done, total: unit.lessons.length })}
-              </span>
-            </header>
+        const title = t('home.unit', {
+          number: index + 1,
+          title: courseText(`units.${unit.id}.title`, unit.textVars),
+        });
+        const progress = t('home.unitProgress', { done, total: unit.lessons.length });
+        const contents = (
+          <>
             <p className="muted">{courseText(`units.${unit.id}.description`, unit.textVars)}</p>
-            {!open && unit.unlock && (
-              <p className="notice">
-                {t('home.unitLocked', { stars: unit.unlock.previousUnitMinStars })}
-              </p>
-            )}
             <ol className="path">
               {unit.lessons.map((lesson) => (
                 <PathItem
@@ -98,7 +92,51 @@ export function HomeScreen() {
                 />
               ))}
             </ol>
-          </section>
+          </>
+        );
+
+        // Units in progress stay open; finished and locked ones fold to one line, which opens
+        // them (e.g. to replay a lesson for more stars).
+        if (open && !finished) {
+          return (
+            <section key={unit.id} className="card unit">
+              <header className="unit__header">
+                <h2>{title}</h2>
+                <span className="muted">{progress}</span>
+              </header>
+              {contents}
+            </section>
+          );
+        }
+        const stars = unit.lessons.reduce(
+          (sum, lesson) => sum + (states.get(lesson.id)?.stars ?? 0),
+          0,
+        );
+        return (
+          <details key={unit.id} className={open ? 'card unit' : 'card unit is-locked'}>
+            <summary className="unit__header unit__summary" title={t('home.unitToggle')}>
+              <span className="unit__chevron" aria-hidden="true">
+                {CHEVRON}
+              </span>
+              <h2>{title}</h2>
+              <span className="unit__status muted">
+                {finished && <span aria-hidden="true">{CHECK}</span>}
+                <span>{progress}</span>
+                {finished && (
+                  <span>
+                    <span aria-hidden="true">{STAR}</span>{' '}
+                    {t('home.unitStars', { stars, total: unit.lessons.length * MAX_STARS })}
+                  </span>
+                )}
+              </span>
+              {!open && unit.unlock && (
+                <span className="notice unit__lock">
+                  {t('home.unitLocked', { stars: unit.unlock.previousUnitMinStars })}
+                </span>
+              )}
+            </summary>
+            {contents}
+          </details>
         );
       })}
 

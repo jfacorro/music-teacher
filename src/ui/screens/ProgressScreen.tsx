@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { MAX_STARS } from '../../engine/scoring';
 import { Link } from 'react-router';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
 import { skillProgress, SkillLevel } from '../../content/skills';
@@ -80,7 +81,7 @@ export function ProgressScreen() {
         />
         <Stat
           label={t('progress.stars')}
-          value={t('progress.outOf', { value: stars, total: LESSON_ORDER.length * 3 })}
+          value={t('progress.outOf', { value: stars, total: LESSON_ORDER.length * MAX_STARS })}
         />
         <Stat
           label={t('progress.streak')}

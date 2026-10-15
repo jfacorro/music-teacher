@@ -418,7 +418,7 @@ Note names differ by language, so the naming system is its **own setting**, defa
 
 ## 9. Screens
 
-1. **Learning path** (Learn, `/learn`) — course map with units and lessons, lock/unlock state, stars earned, "continue" button.
+1. **Learning path** (Learn, `/learn`) — course map with units and lessons, lock/unlock state, stars earned, "continue" button. Units in progress are open; finished and locked units fold to one line (finished: done count and stars; locked: what unlocks them), which opens them.
 2. **Lesson player** — the core screen:
    - Top: falling notes **or** sheet music (toggle).
    - Bottom: on-screen keyboard (zoomed to the lesson range; full 88 keys available), lighting expected keys and showing played keys.

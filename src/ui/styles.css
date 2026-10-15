@@ -852,6 +852,44 @@ input[type='range'] {
   opacity: 0.75;
 }
 
+/* A folded unit: its header line opens and closes it. */
+.unit__summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.unit__summary::-webkit-details-marker {
+  display: none;
+}
+
+.unit__summary h2 {
+  flex: 1;
+  margin: 0;
+}
+
+.unit[open] > .unit__summary {
+  margin-block-end: 0.75rem;
+}
+
+.unit__chevron {
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+
+.unit[open] .unit__chevron {
+  transform: rotate(90deg);
+}
+
+.unit__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.unit__lock {
+  flex-basis: 100%;
+}
+
 .path {
   list-style: none;
   margin: 0;

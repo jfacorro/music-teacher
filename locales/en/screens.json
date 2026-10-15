@@ -16,7 +16,9 @@
     "mySongs": "My songs",
     "mySongsIntro": "Songs you imported. They’re kept in this browser, on this computer.",
     "mySongsEmpty": "Import a MIDI or MusicXML file to practice your own music.",
-    "importSong": "Import a song"
+    "importSong": "Import a song",
+    "unitStars": "{stars} of {total} stars",
+    "unitToggle": "Show or hide the lessons"
   },
   "freePlay": {
     "title": "Free play",
