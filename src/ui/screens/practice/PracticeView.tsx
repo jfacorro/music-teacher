@@ -10,6 +10,7 @@ import { Markings } from '../../components/Markings';
 import { PracticeRun } from './PracticeRun';
 import { PracticeTools, SPEED_MAX } from './PracticeTools';
 import { ICONS } from '../../icons';
+import { VolumeButton } from '../../components/VolumeControls';
 import { NotationSelect, ViewToggle } from './ViewToggle';
 
 const MODES: readonly PracticeMode[] = [
@@ -117,14 +118,17 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
             </button>
           ))}
         </div>
-        <label className="checkbox">
-          <input
-            type="checkbox"
-            checked={metronome}
-            onChange={(e) => setMetronome(e.target.checked)}
-          />
-          {t('practice.metronome')}
-        </label>
+        <div className="practice__sound">
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={metronome}
+              onChange={(e) => setMetronome(e.target.checked)}
+            />
+            {t('practice.metronome')}
+          </label>
+          <VolumeButton />
+        </div>
       </div>
 
       <PracticeTools

@@ -1,4 +1,4 @@
-import { preloadAudio, setSoundTimingCorrection } from './audio/audio';
+import { preloadAudio, setSoundTimingCorrection, setVolumes } from './audio/audio';
 import { startKeySound } from './audio/keySound';
 import { initI18n } from './i18n';
 import { detectLanguage } from './i18n/languages';
@@ -21,6 +21,7 @@ export async function bootstrap(): Promise<void> {
   setDevInputEnabled(settings.devKeyboard);
   startKeySound();
   setSoundTimingCorrection(settings.soundTimingMs);
+  setVolumes({ metronome: settings.metronomeVolume, piano: settings.pianoVolume });
   preloadAudio(); // so the first key press isn't delayed by loading the audio library
 
   configureMidi({

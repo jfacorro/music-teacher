@@ -50,5 +50,12 @@
   "modal": {
     "close": "Close",
     "closeTip": "Close (Esc)"
+  },
+  "volume": {
+    "metronome": "Metronome volume",
+    "piano": "Piano volume",
+    "pianoHint": "The app’s piano: “Play it for me”, the other hand, and keys played on the computer or screen. A digital piano’s own sound has its own volume knob.",
+    "button": "Volume",
+    "tip": "Metronome and piano volume"
   }
 }

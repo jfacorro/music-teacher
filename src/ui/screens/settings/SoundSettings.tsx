@@ -4,6 +4,7 @@ import { measureClickTiming } from '../../../audio/calibrateTiming';
 import { setSoundTiming } from '../../../preferences';
 import { useSettings } from '../../../storage/settings';
 import { SoundDelay } from '../../components/SoundDelay';
+import { VolumeControls } from '../../components/VolumeControls';
 
 const TAPS = 12;
 const COUNT_IN = 4;
@@ -21,7 +22,7 @@ type Task =
   | { kind: typeof TapTask.Done; ms: number; taps: number }
   | { kind: typeof TapTask.Failed };
 
-/** Output delay readout and the tap-along timing correction for metronome clicks. */
+/** Volumes, the output delay readout and the tap-along timing correction for clicks. */
 export function SoundSettings() {
   const { t } = useTranslation('screens');
   const correction = useSettings((s) => s.soundTimingMs);
@@ -48,6 +49,7 @@ export function SoundSettings() {
   return (
     <section className="card">
       <h2>{t('settings.sound.heading')}</h2>
+      <VolumeControls />
       <SoundDelay />
       <p className="muted">{t('settings.sound.intro')}</p>
       <p>{t('settings.sound.correction', { ms: correction })}</p>

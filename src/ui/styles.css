@@ -472,27 +472,15 @@ input[aria-invalid='true'] {
   margin-block: 1rem;
 }
 
-.practice__options input[type='text'],
-input[type='number'] {
-  font: inherit;
-  padding: 0.45rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  max-width: 100%;
-}
-
-input[aria-invalid='true'] {
-  border-color: var(--problem);
-}
-
-.field__error {
-  color: var(--problem);
-}
-
-.checkbox {
+.practice__options .checkbox {
   margin: 0;
+}
+
+/* The metronome and its volume button stay side by side when the options wrap. */
+.practice__sound {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .practice__tools {
@@ -1506,4 +1494,44 @@ button.bars__bar:focus-visible {
 .song-setup__warnings ul {
   margin: 0.25rem 0 0;
   padding-inline-start: 1.25rem;
+}
+
+/* Volume */
+
+.volume-controls input[type='range'] {
+  flex: 1;
+  min-width: 8rem;
+}
+
+.volume-controls__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.volume-controls__value {
+  min-width: 3.5rem;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The practice screen's volume panel opens under its button. */
+.volume-button {
+  anchor-name: --volume-button;
+}
+
+.volume-popover {
+  position-anchor: --volume-button;
+  position-area: bottom span-right;
+  /* Near the right edge, it opens towards the left instead. */
+  position-try-fallbacks: flip-inline;
+  inset: auto;
+  margin: 0.4rem 0 0;
+  width: min(22rem, calc(100vw - 2rem));
+  padding: 1rem 1rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.2);
 }

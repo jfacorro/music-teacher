@@ -428,7 +428,7 @@ Note names differ by language, so the naming system is its **own setting**, defa
 3. **Results** — accuracy, timing breakdown, stars, per-measure heatmap, "retry" / "practice weak spots" / "next".
 4. **Free play** — shows notes played (names on keys and staff), identifies chords; note-naming quiz.
 5. **Progress** — streak, practice time per day, lessons completed, skill mastery.
-6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, metronome volume, theme.
+6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, metronome and piano volume (also from the 🔊 button on the practice screen; by default the click sits under the music), theme.
 7. **First launch** — pick language and note-naming system, then connect an input.
 8. **My songs** — import a MIDI or MusicXML file (file picker or drop), set it up (title, which hand plays each track, transposition, tempo), practice it like any song; its settings screen changes or deletes it.
 

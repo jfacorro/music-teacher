@@ -9,6 +9,7 @@
  * along (Settings) moves clicks earlier by the rest.
  */
 import type { NoteString } from '../theory/pitch';
+import { DEFAULT_VOLUMES, volumeDb, type Volumes } from './volume';
 
 export interface AudioEngine {
   /** Metronome click heard at `time` (performance.now() ms). */
@@ -22,17 +23,29 @@ export interface AudioEngine {
   stopAccompaniment(): void;
   /** Time from playing a sound to hearing it, as reported by the browser, ms. */
   outputDelayMs(): number;
+  setVolumes(volumes: Volumes): void;
 }
 
 /** Metronome clicks: higher on the first beat of the bar. */
 const ACCENT_CLICK: NoteString = 'E6';
 const BEAT_CLICK: NoteString = 'A5';
 
+/** Levels at 100 % volume, dB. */
+const CLICK_FULL_DB = -4;
+const PIANO_FULL_DB = -6;
+
 const MAX_LATE_S = 0.03;
 /** A note of the other hand may start late by this much (better late than missing). */
 const MAX_LATE_NOTE_S = 0.1;
 
 let timingCorrectionMs = 0;
+let volumes: Volumes = DEFAULT_VOLUMES;
+
+/** Metronome and piano volume (also before the audio has started). */
+export function setVolumes(next: Volumes): void {
+  volumes = next;
+  ready?.setVolumes(next);
+}
 
 /** Extra output delay to compensate, from tap-along calibration (ms; negative = later). */
 export function setSoundTimingCorrection(ms: number): void {
@@ -73,25 +86,30 @@ async function createEngine(): Promise<AudioEngine> {
   const click = new Tone.Synth({
     oscillator: { type: 'triangle' },
     envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.02 },
-    volume: -8,
   }).toDestination();
 
   // A simple synthesized piano: bright attack, decaying tone. (Sampled piano: later.)
   const piano = new Tone.PolySynth(Tone.Synth, {
     oscillator: { type: 'custom', partials: [1, 0.45, 0.25, 0.12, 0.08] },
     envelope: { attack: 0.004, decay: 1.6, sustain: 0.08, release: 0.6 },
-    volume: -12,
   }).toDestination();
-  // The other hand: the same sound, a little softer than the learner's own notes.
+  // Autoplay and the other hand: the same sound on its own synth, so stopping it doesn't cut
+  // the learner's own notes. Its notes play a little softer.
   const accompanist = new Tone.PolySynth(Tone.Synth, {
     oscillator: { type: 'custom', partials: [1, 0.45, 0.25, 0.12, 0.08] },
     envelope: { attack: 0.004, decay: 1.6, sustain: 0.08, release: 0.6 },
-    volume: -16,
   }).toDestination();
+  const applyVolumes = ({ metronome, piano: pianoVolume }: Volumes) => {
+    click.volume.value = CLICK_FULL_DB + volumeDb(metronome);
+    piano.volume.value = PIANO_FULL_DB + volumeDb(pianoVolume);
+    accompanist.volume.value = PIANO_FULL_DB + volumeDb(pianoVolume);
+  };
+  applyVolumes(volumes);
   const noteName = (midi: number) => Tone.Frequency(midi, 'midi').toNote();
 
   let lastClick = 0;
   return {
+    setVolumes: applyVolumes,
     outputDelayMs() {
       return (context.baseLatency + (context.outputLatency || 0)) * 1000;
     },

@@ -289,8 +289,8 @@ export function PracticeRun({
       if (event.code !== 'Space' && event.code !== 'Escape') return;
       if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
       if (isTypingTarget(event.target)) return;
-      // An open dialog (the results) handles its own keys: Escape closes it.
-      if (document.querySelector('dialog:modal')) return;
+      // An open dialog (the results) or panel (volume) handles its own keys: Escape closes it.
+      if (document.querySelector('dialog:modal, :popover-open')) return;
       event.preventDefault(); // no page scrolling
       // A focused button or checkbox would react to Space as well, when the key comes up.
       if (event.target instanceof HTMLElement && event.target !== document.body) {

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { SheetNotation } from '../content/lessons';
 import type { NamingSystem } from '../i18n/naming';
+import { DEFAULT_VOLUMES } from '../audio/volume';
 import { InputMode } from '../input/types';
 import { db } from './db';
 
@@ -19,6 +20,10 @@ export interface Settings {
   keySound: boolean;
   /** Clicks are played this much earlier to make up for output delay the browser misses, ms. */
   soundTimingMs: number;
+  /** Metronome clicks, 0–100 %. */
+  metronomeVolume: number;
+  /** The app's piano (autoplay, the other hand, computer and on-screen keys), 0–100 %. */
+  pianoVolume: number;
   midiInputId: string | null;
   midiInputName: string | null;
   /** Which instrument the app listens to (PLAN.md §8 Settings). */
@@ -42,6 +47,8 @@ export const DEFAULT_SETTINGS: Settings = {
   devKeyboard: true,
   keySound: true,
   soundTimingMs: 0,
+  metronomeVolume: DEFAULT_VOLUMES.metronome,
+  pianoVolume: DEFAULT_VOLUMES.piano,
   midiInputId: null,
   midiInputName: null,
   inputMode: InputMode.Auto,
