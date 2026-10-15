@@ -217,12 +217,14 @@ export function PracticeRun({
 
   // A rhythm's notes are all on one key: a single lane.
   const rhythmKey = score.notes[0]?.pitch.midi ?? 64;
+  // The keys of the hands being practiced, and of the other hand when it's played along.
+  const shown = otherHand ? score.notes : session.hands;
   const layout = useMemo(
     () =>
       rhythm
         ? keyboardLayout(rhythmKey, rhythmKey)
-        : keyboardLayout(...rangeForNotes(score.notes.map((note) => note.pitch.midi))),
-    [score, rhythm, rhythmKey],
+        : keyboardLayout(...rangeForNotes(shown.map((note) => note.pitch.midi))),
+    [shown, rhythm, rhythmKey],
   );
   // Light up the keys to play now: sounding notes that haven't been played yet. Outcomes
   // change with the session state, so recompute on both.

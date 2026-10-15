@@ -14,7 +14,9 @@ import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
 import { type Finger, Hand, type Score } from '../../engine/score';
 import { GradedMode, HandFilter } from '../../engine/session';
 import { describeValues, isValueOf } from '../../lib/values';
+import { ChordQuality } from '../../theory/chords';
 import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
+import { ScaleQuality, type TextVar } from '../textVars';
 import { ScoreError, parseInlineScore } from '../loaders/inlineScore';
 import { isSongId, loadSong, type SongId } from '../songs';
 
@@ -30,12 +32,15 @@ export type StepType = (typeof StepType)[keyof typeof StepType];
 export interface KeyHint {
   pitch: Pitch;
   finger?: Finger;
+  /** The hand that plays it, when it isn't the step's. */
+  hand?: Hand;
 }
 
 interface StepBase {
   /** Translation key under `steps.` in the lesson's locale file. */
   text: string;
-  textVars: Record<string, Pitch>;
+  /** Notes, chords and scales named in the text. */
+  textVars: Record<string, TextVar>;
 }
 
 /** The staves of a staff picture: treble, bass, or both (the grand staff). */
@@ -366,12 +371,34 @@ function staffNotes(input: unknown, location: string): StaffNotes {
   };
 }
 
-function textVars(input: unknown, location: string): Record<string, Pitch> {
+/**
+ * `"c": "C4"` names a note, `"cMajor": { "chord": "C4", "quality": "major" }` a chord, and
+ * `"cScale": { "scale": "C4", "quality": "major" }` a scale.
+ */
+function textVars(input: unknown, location: string): Record<string, TextVar> {
   if (input === undefined) return {};
   const data = object(input, location);
   return Object.fromEntries(
-    Object.entries(data).map(([name, note]) => [name, pitch(note, at(location, name))]),
+    Object.entries(data).map(([name, value]) => [name, textVar(value, at(location, name))]),
   );
+}
+
+function textVar(input: unknown, location: string): TextVar {
+  if (typeof input === 'string') return pitch(input, location);
+  const data = object(input, location);
+  if (data.chord !== undefined) {
+    if (!isValueOf(ChordQuality, data.quality)) {
+      throw new LessonError(at(location, 'quality'), `expected ${describeValues(ChordQuality)}`);
+    }
+    return { chord: pitch(data.chord, at(location, 'chord')), quality: data.quality };
+  }
+  if (data.scale !== undefined) {
+    if (!isValueOf(ScaleQuality, data.quality)) {
+      throw new LessonError(at(location, 'quality'), `expected ${describeValues(ScaleQuality)}`);
+    }
+    return { scale: pitch(data.scale, at(location, 'scale')), quality: data.quality };
+  }
+  throw new LessonError(location, 'expected a note, a chord or a scale');
 }
 
 function keyHints(input: unknown, location: string): KeyHint[] {
@@ -384,6 +411,12 @@ function keyHints(input: unknown, location: string): KeyHint[] {
         throw new LessonError(at(location, `[${i}] › finger`), 'expected 1–5');
       }
       hint.finger = data.finger as Finger;
+    }
+    if (data.hand !== undefined) {
+      if (!isValueOf(Hand, data.hand)) {
+        throw new LessonError(at(location, `[${i}] › hand`), `expected ${describeValues(Hand)}`);
+      }
+      hint.hand = data.hand;
     }
     return hint;
   });

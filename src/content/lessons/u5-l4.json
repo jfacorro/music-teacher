@@ -1,0 +1,58 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "intro"
+    },
+    {
+      "type": "exercise",
+      "text": "lightlyRow",
+      "mode": "wait",
+      "hands": "both",
+      "song": "lightly-row",
+      "textVars": {
+        "c3": "C3",
+        "g3": "G3"
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "lightlyRowInTime",
+      "mode": "tempo",
+      "hands": "both",
+      "song": "lightly-row",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "saints",
+      "mode": "wait",
+      "hands": "both",
+      "song": "when-the-saints",
+      "textVars": {
+        "c3": "C3",
+        "g3": "G3"
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "saintsInTime",
+      "mode": "tempo",
+      "hands": "both",
+      "song": "when-the-saints",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

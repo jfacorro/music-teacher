@@ -118,3 +118,31 @@ describe('summarize', () => {
     expect(summary.measures[1]).toMatchObject({ expected: 2, wrong: 1, accuracy: 1.75 / 2 });
   });
 });
+
+describe('summarize: both hands', () => {
+  it('grades each hand on its own when both were played', () => {
+    const score = scoreOf([
+      ['C4', 0],
+      ['D4', 1],
+      ['C3', 0, 1, 'L'],
+      ['G3', 1, 1, 'L'],
+    ]);
+    const note = (midi: number) => score.notes.find((n) => n.pitch.midi === midi)!;
+    const [c3, c4, d4] = [note(48), note(60), note(62)];
+    const outcomes = new Map<ScoreNote, NoteOutcome>([
+      [c3, { kind: OutcomeKind.Correct }],
+      [c4, { kind: OutcomeKind.Correct }],
+      [d4, { kind: OutcomeKind.Correct }],
+    ]);
+    const summary = summarize(score.notes, outcomes, [], score.measures);
+    expect(summary.hands?.map(({ hand, tally }) => [hand, tally.correct, tally.accuracy])).toEqual([
+      ['R', 2, 1],
+      ['L', 1, 0.5],
+    ]);
+  });
+
+  it('has no breakdown for one hand', () => {
+    const score = scoreOf([['C4', 0]]);
+    expect(summarize(score.notes, new Map(), [], score.measures).hands).toBeNull();
+  });
+});

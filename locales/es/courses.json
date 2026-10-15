@@ -15,6 +15,18 @@
     "u4": {
       "title": "La clave de fa y la mano izquierda",
       "description": "Notas de referencia en clave de fa, melodías para la mano izquierda y el pentagrama doble."
+    },
+    "u5": {
+      "title": "Las dos manos juntas",
+      "description": "Las dos manos a la vez: en la misma dirección y en espejo, y luego una melodía sobre notas de bajo."
+    },
+    "u6": {
+      "title": "Acordes",
+      "description": "Acordes mayores y menores, inversiones, los acordes I, IV y V, y formas de acompañar una melodía."
+    },
+    "u7": {
+      "title": "Escalas y digitación",
+      "description": "Las escalas de {c} mayor, {g} mayor y {f} mayor, con el paso del pulgar."
     }
   },
   "lessons": {
@@ -38,7 +50,21 @@
     "u4-l3": "Melodías con la mano izquierda",
     "u4-l4": "El pentagrama doble",
     "u4-l5": "Canciones con la mano izquierda",
-    "u4-l6": "Fuerte y suave"
+    "u4-l6": "Fuerte y suave",
+    "u5-l1": "En la misma dirección",
+    "u5-l2": "En espejo",
+    "u5-l3": "Melodía y bajo",
+    "u5-l4": "Canciones a dos manos",
+    "u6-l1": "Acordes mayores",
+    "u6-l2": "Acordes menores",
+    "u6-l3": "Inversiones",
+    "u6-l4": "I, IV y V",
+    "u6-l5": "Patrones de acompañamiento",
+    "u7-l1": "La escala de {c} mayor, mano derecha",
+    "u7-l2": "La escala de {c} mayor, mano izquierda",
+    "u7-l3": "La escala de {g} mayor",
+    "u7-l4": "La escala de {f} mayor",
+    "u7-l5": "Escalas a dos manos"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -52,6 +78,11 @@
     "treble-clef": "Leer en clave de sol",
     "bass-clef": "Leer en clave de fa",
     "grand-staff": "El pentagrama doble",
-    "dynamics": "Fuerte y suave"
+    "dynamics": "Fuerte y suave",
+    "hands-together": "Manos juntas",
+    "chords": "Acordes",
+    "accompaniment": "Acompañamiento",
+    "scales": "Escalas",
+    "thumb-under": "Paso del pulgar"
   }
 }

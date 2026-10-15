@@ -257,7 +257,8 @@
         "hint": "Click a bar to repeat it."
       },
       "extra": "Extra taps",
-      "show": "Results"
+      "show": "Results",
+      "hand": "{hand}: {accuracy}"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {

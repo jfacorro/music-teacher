@@ -4,7 +4,8 @@
  *   { "tempo": 100, "timeSignature": [4, 4], "markings": ["moderato", "mf"],
  *     "notes": [{ "note": "E4", "start": 0, "duration": 1, "hand": "R", "finger": 3 }, …],
  *     "dynamics": [{ "beat": 0, "mark": "p" }, { "beat": 8, "mark": "f" }],
- *     "hairpins": [{ "from": 4, "to": 8, "kind": "crescendo" }] }
+ *     "hairpins": [{ "from": 4, "to": 8, "kind": "crescendo" }],
+ *     "keyFifths": 1 }   (key signature: sharps positive, flats negative)
  *
  * Validates everything once at load time and reports problems with their location, e.g.
  * `song "ode-to-joy" › notes[3] › note: Invalid note "H4": …`.
@@ -41,6 +42,12 @@ export function parseInlineScore(input: unknown, location: string): Score {
 
   const markings = parseMarkings(data.markings, at(location, 'markings'));
   const dynamics = parseDynamics(data, location);
+  if (
+    data.keyFifths !== undefined &&
+    !(Number.isInteger(data.keyFifths) && Math.abs(data.keyFifths as number) <= 7)
+  ) {
+    throw new ScoreError(at(location, 'keyFifths'), 'expected a whole number from -7 to 7');
+  }
   return {
     tempo,
     timeSignature,
@@ -48,6 +55,7 @@ export function parseInlineScore(input: unknown, location: string): Score {
     measures: wholeMeasures(notes, timeSignature),
     ...(markings.length > 0 && { markings }),
     ...(dynamics && { dynamics }),
+    ...(data.keyFifths !== undefined && { keyFifths: data.keyFifths as number }),
   };
 }
 

@@ -1,0 +1,84 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "bass",
+      "textVars": {
+        "c3": "C3",
+        "g3": "G3"
+      },
+      "keys": [
+        {
+          "note": "C3",
+          "finger": 5,
+          "hand": "L"
+        },
+        {
+          "note": "G3",
+          "finger": 1,
+          "hand": "L"
+        },
+        {
+          "note": "C4",
+          "finger": 1,
+          "hand": "R"
+        },
+        {
+          "note": "D4",
+          "finger": 2,
+          "hand": "R"
+        },
+        {
+          "note": "E4",
+          "finger": 3,
+          "hand": "R"
+        },
+        {
+          "note": "F4",
+          "finger": 4,
+          "hand": "R"
+        },
+        {
+          "note": "G4",
+          "finger": 5,
+          "hand": "R"
+        }
+      ],
+      "hand": "R",
+      "range": ["C3", "C5"]
+    },
+    {
+      "type": "exercise",
+      "text": "auClair",
+      "mode": "wait",
+      "hands": "both",
+      "song": "au-clair-de-la-lune",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "auClairInTime",
+      "mode": "tempo",
+      "hands": "both",
+      "song": "au-clair-de-la-lune",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "odeToJoy",
+      "mode": "wait",
+      "hands": "both",
+      "song": "ode-to-joy",
+      "view": "sheet",
+      "notation": "names",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

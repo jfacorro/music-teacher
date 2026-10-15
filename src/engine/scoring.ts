@@ -1,6 +1,6 @@
 /** Accuracy, stars, timing and per-measure stats (PLAN.md §6.3). */
 import type { DynamicsSummary } from './dynamics';
-import type { Measure, ScoreNote } from './score';
+import { Hand, type Measure, type ScoreNote } from './score';
 import { timingOf, type Grade, type TimingWindows, Timing } from './timing';
 
 export const OutcomeKind = {
@@ -55,6 +55,11 @@ export interface Summary extends Tally {
   timing: TimingSummary | null;
   /** Null without dynamics in the score, or without a MIDI keyboard to measure them. */
   dynamics: DynamicsSummary | null;
+  /**
+   * Each hand on its own, when both were played (wrong keys belong to no hand, so they only
+   * count in the overall accuracy); null for one hand.
+   */
+  hands: { hand: Hand; tally: Tally }[] | null;
 }
 
 export function weightOf(outcome: NoteOutcome | undefined): number {
@@ -108,7 +113,24 @@ export function summarize(
     measures: perMeasure,
     timing: windows ? timingSummary(errorsMs, windows) : null,
     dynamics: null,
+    hands: byHand(notes, outcomes),
   };
+}
+
+function byHand(
+  notes: readonly ScoreNote[],
+  outcomes: ReadonlyMap<ScoreNote, NoteOutcome>,
+): Summary['hands'] {
+  const hands = [Hand.Right, Hand.Left].filter((hand) => notes.some((n) => n.hand === hand));
+  if (hands.length < 2) return null;
+  return hands.map((hand) => ({
+    hand,
+    tally: tally(
+      notes.filter((note) => note.hand === hand),
+      outcomes,
+      0,
+    ),
+  }));
 }
 
 export function timingSummary(errorsMs: readonly number[], windows: TimingWindows): TimingSummary {

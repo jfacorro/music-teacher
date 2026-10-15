@@ -4,6 +4,7 @@ import type { Summary } from '../../../engine/scoring';
 import { PracticeMode } from '../../../engine/session';
 import { formatPercent } from '../../../i18n/format';
 import { Stars } from '../../components/Stars';
+import { ICONS } from '../../icons';
 import { BarHeatmap } from './BarHeatmap';
 import { DynamicsBreakdown } from './DynamicsBreakdown';
 import { TimingBreakdown } from './TimingBreakdown';
@@ -46,6 +47,19 @@ export function ResultsCard({
         <span className="muted">{t('practice.results.accuracy')}</span>
         <strong>{formatPercent(summary.accuracy, i18n.language)}</strong>
       </p>
+      {summary.hands && (
+        <p className="results__hands">
+          {summary.hands.map(({ hand, tally }) => (
+            <span key={hand}>
+              <span aria-hidden="true">{ICONS[hand]}</span>{' '}
+              {t('practice.results.hand', {
+                hand: t(`practice.hands.${hand}`),
+                accuracy: formatPercent(tally.accuracy, i18n.language),
+              })}
+            </span>
+          ))}
+        </p>
+      )}
       <dl className="results__counts">
         {counts.map((key) => (
           <div key={key}>

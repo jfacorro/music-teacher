@@ -12,6 +12,7 @@ const loaders = {
   'au-clair-de-la-lune': () => import('./au-clair-de-la-lune.json'),
   'hot-cross-buns': () => import('./hot-cross-buns.json'),
   'mary-had-a-little-lamb': () => import('./mary-had-a-little-lamb.json'),
+  'jingle-bells': () => import('./jingle-bells.json'),
 } satisfies Record<string, () => Promise<{ default: unknown }>>;
 
 export type SongId = keyof typeof loaders;

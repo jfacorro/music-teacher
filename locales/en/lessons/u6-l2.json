@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "minor": "Lower the middle note of a major chord by one key (a semitone) and it becomes minor, with a darker sound: {cMajor} has {e}, {cMinor} has {eb}, the black key just below.",
+    "majorMinor": "Switch between {cMajor} and {cMinor}: only the middle finger moves. Listen to the change of color.",
+    "whiteMinors": "Three minor chords use only white keys: {dMinor}, {eMinor} and {aMinor}. The hand shape is the same as for major chords; the middle note is one key lower than in the major chord.",
+    "minors": "Play {dMinor}, {eMinor} and {aMinor}, keeping the 1-3-5 shape.",
+    "progression": "A short progression mixing major and minor chords: {cMajor}, {aMinor}, {dMinor}, {gMajor} and back to {cMajor}, in time."
+  }
+}

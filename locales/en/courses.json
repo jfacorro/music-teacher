@@ -15,6 +15,18 @@
     "u4": {
       "title": "The bass clef and the left hand",
       "description": "Landmark notes in the bass clef, left-hand melodies and the grand staff."
+    },
+    "u5": {
+      "title": "Hands together",
+      "description": "Both hands at once: moving the same way and in mirror image, then a melody over bass notes."
+    },
+    "u6": {
+      "title": "Chords",
+      "description": "Major and minor chords, inversions, the I, IV and V chords, and ways to accompany a melody."
+    },
+    "u7": {
+      "title": "Scales and fingering",
+      "description": "The {c} major, {g} major and {f} major scales, with the thumb passing under."
     }
   },
   "lessons": {
@@ -38,7 +50,21 @@
     "u4-l3": "Left-hand melodies",
     "u4-l4": "The grand staff",
     "u4-l5": "Left-hand songs",
-    "u4-l6": "Loud and soft"
+    "u4-l6": "Loud and soft",
+    "u5-l1": "Same direction",
+    "u5-l2": "Mirror image",
+    "u5-l3": "Melody and bass",
+    "u5-l4": "Songs for both hands",
+    "u6-l1": "Major chords",
+    "u6-l2": "Minor chords",
+    "u6-l3": "Inversions",
+    "u6-l4": "I, IV and V",
+    "u6-l5": "Accompaniment patterns",
+    "u7-l1": "The {c} major scale, right hand",
+    "u7-l2": "The {c} major scale, left hand",
+    "u7-l3": "The {g} major scale",
+    "u7-l4": "The {f} major scale",
+    "u7-l5": "Scales with both hands"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -52,6 +78,11 @@
     "treble-clef": "Reading the treble clef",
     "bass-clef": "Reading the bass clef",
     "grand-staff": "The grand staff",
-    "dynamics": "Loud and soft"
+    "dynamics": "Loud and soft",
+    "hands-together": "Hands together",
+    "chords": "Chords",
+    "accompaniment": "Accompaniment",
+    "scales": "Scales",
+    "thumb-under": "Thumb under"
   }
 }

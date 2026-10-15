@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "patterns": "Un acorde no tiene por qué tocarse todo a la vez. En bloque se pulsan todas las notas juntas; arpegiado, una detrás de otra; el bajo de Alberti, llamado así por Domenico Alberti, va grave, agudo, medio, agudo: {c} {g} {e} {g}.",
+    "block": "Acordes en bloque: cuatro tiempos en I, IV y V, y luego I.",
+    "broken": "Acordes arpegiados: los mismos acordes, nota por nota, subiendo y volviendo a la del medio.",
+    "alberti": "El bajo de Alberti: grave, agudo, medio, agudo, dos veces por compás.",
+    "melodyOverAlberti": "Añade una melodía lenta encima: la mano derecha sostiene notas largas mientras la izquierda mantiene el bajo de Alberti en movimiento."
+  }
+}

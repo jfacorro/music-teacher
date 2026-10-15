@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "leftScale": "The left hand plays the {cScale} with the fingers in the opposite order: 5 4 3 2 1, then the middle finger crosses over the thumb to {a}, and 2 1 to the top.",
+    "crossOver": "The tricky part: from {e}, play 3 2 1, cross 3 over to {a}, and come back with the thumb passing under to {g}.",
+    "up": "The whole scale going up with the left hand.",
+    "down": "And going down: 1 2 3, thumb under, 1 2 3 4 5.",
+    "upDown": "Up and down in time."
+  }
+}

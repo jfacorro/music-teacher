@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "leftScale": "La mano izquierda toca la {cScale} con los dedos en el orden contrario: 5 4 3 2 1, luego el dedo medio cruza por encima del pulgar hasta {a}, y 2 1 hasta arriba.",
+    "crossOver": "La parte difícil: desde {e}, toca 3 2 1, cruza el 3 hasta {a} y vuelve con el pulgar pasando por debajo hasta {g}.",
+    "up": "La escala entera hacia arriba con la mano izquierda.",
+    "down": "Y hacia abajo: 1 2 3, paso del pulgar, 1 2 3 4 5.",
+    "upDown": "Sube y baja a tiempo."
+  }
+}

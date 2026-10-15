@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "scale": "A scale is a row of notes going up or down, one key after another. The {cScale} uses all the white keys from {c} to the next {c}: eight notes for five fingers. The trick: after {e}, the thumb passes under the hand to play {f}. Fingers 1 2 3, thumb under, 1 2 3 4 5.",
+    "thumbUnder": "First the tricky part: {c}, {d}, {e}, and the thumb under to {f}. Coming back, the middle finger crosses over the thumb to {e}.",
+    "up": "The whole scale going up. Keep your wrist level as the thumb passes under.",
+    "down": "And going down: 5 4 3 2 1, then 3 crosses over the thumb, 2 1.",
+    "upDown": "Up and down in time, one note per click.",
+    "joyToTheWorld": "Scales are everywhere in music: the first line of “Joy to the World” is the {cScale} going down."
+  }
+}

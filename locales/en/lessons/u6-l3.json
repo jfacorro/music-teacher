@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "inversions": "The notes of a chord can be stacked in another order and it’s still the same chord. With {c} at the bottom ({c}, {e}, {g}), {cMajor} is in root position. Move {c} to the top ({e}, {g}, {c}) for the first inversion, then {e} too ({g}, {c}, {e}) for the second inversion.",
+    "climb": "Climb through the inversions of {cMajor} and back down. Fingers: 1-3-5 in root position, 1-2-5 in the first inversion, 1-3-5 in the second.",
+    "closeChords": "Inversions let chords change with small moves. Keep {cMajor} in root position, play {fMajor} as {c}, {f}, {a} and {gMajor} as {b}, {d}, {g}: the hand barely moves.",
+    "nearChords": "{cMajor}, {fMajor}, {gMajor} and {cMajor} with the close shapes. The thumb stays on {c}, except for {gMajor}, where it moves down to {b}.",
+    "nearChordsInTime": "Now in time, two beats per chord."
+  }
+}

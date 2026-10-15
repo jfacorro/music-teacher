@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "patterns": "A chord doesn’t have to be played all at once. Block chords press all the notes together; broken chords play them one after another; the Alberti bass, named after Domenico Alberti, goes lowest, highest, middle, highest: {c} {g} {e} {g}.",
+    "block": "Block chords: four beats on each of I, IV and V, then I.",
+    "broken": "Broken chords: the same chords, one note at a time, up and back to the middle.",
+    "alberti": "The Alberti bass: lowest, highest, middle, highest, twice per bar.",
+    "melodyOverAlberti": "Put a slow melody on top: the right hand holds long notes while the left hand keeps the Alberti bass moving."
+  }
+}

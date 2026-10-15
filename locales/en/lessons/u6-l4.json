@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "progression": "Many songs use just three chords. Built on the 1st, 4th and 5th notes of the {cScale}, they are {cMajor} (I), {fMajor} (IV) and {gMajor} (V). The left hand plays them close together: {c} {e} {g}, {c} {f} {a} and {b} {d} {g}, with fingers 5-3-1, 5-2-1 and 5-3-1.",
+    "leftHand": "I, IV, V and back to I with the left hand, a whole bar each.",
+    "leftHandInTime": "Now in time, two beats per chord.",
+    "jingleBells": "“Jingle Bells” with the melody in the right hand and I, IV and V in the left: one chord per bar.",
+    "jingleBellsInTime": "Now in time with the metronome."
+  }
+}

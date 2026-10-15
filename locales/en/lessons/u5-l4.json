@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "intro": "Two more songs with the melody in the right hand and bass notes in the left. Take them slowly first: the music waits for you.",
+    "lightlyRow": "“Lightly Row”: the left hand only plays {c3} and {g3}, one per bar.",
+    "lightlyRowInTime": "Now in time with the metronome.",
+    "saints": "“When the Saints Go Marching In”: the left hand starts alone on {c3} and moves to {g3} only in the last bar.",
+    "saintsInTime": "Now in time with the metronome."
+  }
+}

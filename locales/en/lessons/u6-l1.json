@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "triad": "A chord is several notes played together. The most common is the triad: three notes, skipping one white key between each. {c}, {e} and {g} make {cMajor}. Right hand: thumb, middle finger and little finger (1, 3 and 5).",
+    "cChord": "Play {cMajor} four times. Press the three keys together and lift them together.",
+    "fAndG": "Move the same hand shape and you get other major chords: {fMajor} starts on {f}, {gMajor} on {g}.",
+    "cfg": "Move the chord shape: {cMajor}, {fMajor}, {gMajor} and back to {cMajor}. Keep your hand in the same shape as it moves.",
+    "cfgInTime": "Now in time with the metronome, two beats per chord."
+  }
+}
