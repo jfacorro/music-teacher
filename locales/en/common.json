@@ -2,10 +2,10 @@
   "appTitle": "Piano Teacher",
   "nav": {
     "label": "Main",
-    "home": "Learn",
+    "learn": "Learn",
     "freePlay": "Free play",
-    "progress": "Progress",
-    "settings": "Settings"
+    "settings": "Settings",
+    "homeTip": "Your progress"
   },
   "midiBadge": {
     "connecting": "Connecting…",

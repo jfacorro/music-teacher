@@ -2,10 +2,10 @@
   "appTitle": "Profesor de piano",
   "nav": {
     "label": "Principal",
-    "home": "Aprender",
+    "learn": "Aprender",
     "freePlay": "Práctica libre",
-    "progress": "Progreso",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "homeTip": "Tu progreso"
   },
   "midiBadge": {
     "connecting": "Conectando…",

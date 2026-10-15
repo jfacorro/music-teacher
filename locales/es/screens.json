@@ -16,7 +16,9 @@
     "mySongs": "Mis canciones",
     "mySongsIntro": "Canciones que importaste. Se guardan en este navegador, en esta computadora.",
     "mySongsEmpty": "Importa un archivo MIDI o MusicXML para practicar tu propia música.",
-    "importSong": "Importar una canción"
+    "importSong": "Importar una canción",
+    "unitStars": "{stars} de {total} estrellas",
+    "unitToggle": "Mostrar u ocultar las lecciones"
   },
   "freePlay": {
     "title": "Práctica libre",
@@ -69,7 +71,9 @@
       "less": "Menos",
       "more": "Más"
     },
-    "deletedSong": "Canción eliminada"
+    "deletedSong": "Canción eliminada",
+    "letsGo": "¡Vamos!",
+    "letsGoTip": "Ir a tu camino de aprendizaje"
   },
   "settings": {
     "title": "Configuración",

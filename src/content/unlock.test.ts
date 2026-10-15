@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Unit } from './courses';
-import { isUnitOpen, lessonStates, nextLessonToPlay } from './unlock';
+import { isUnitFinished, isUnitOpen, lessonStates, nextLessonToPlay } from './unlock';
 
 const unit = (id: string, lessons: string[], minStars?: number): Unit => ({
   id,
@@ -63,6 +63,16 @@ describe('nextLessonToPlay', () => {
         lessonStates(units, (id) => all[id] ?? 0),
       ),
     ).toBeNull();
+  });
+});
+
+describe('isUnitFinished', () => {
+  it('needs every lesson of the unit done', () => {
+    const some = lessonStates(units, (id) => (id === 'a' || id === 'b' ? 1 : 0));
+    expect(isUnitFinished(units[0]!, some)).toBe(false);
+    const all = lessonStates(units, (id) => (['a', 'b', 'c'].includes(id) ? 1 : 0));
+    expect(isUnitFinished(units[0]!, all)).toBe(true);
+    expect(isUnitFinished(units[1]!, all)).toBe(false);
   });
 });
 

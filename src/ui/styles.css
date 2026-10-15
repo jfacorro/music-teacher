@@ -124,6 +124,12 @@ h3 {
 .app-title {
   font-weight: 700;
   font-size: 1.1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.app-title:hover {
+  color: var(--accent);
 }
 
 .app-nav {
@@ -821,6 +827,11 @@ input[type='range'] {
 
 /* Learning path */
 
+/* Spaced like the unit boxes below it. */
+.continue {
+  margin-block-end: 1rem;
+}
+
 .continue h2 {
   margin-block: 0.25rem 1rem;
 }
@@ -839,6 +850,44 @@ input[type='range'] {
 
 .unit.is-locked {
   opacity: 0.75;
+}
+
+/* A folded unit: its header line opens and closes it. */
+.unit__summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.unit__summary::-webkit-details-marker {
+  display: none;
+}
+
+.unit__summary h2 {
+  flex: 1;
+  margin: 0;
+}
+
+.unit[open] > .unit__summary {
+  margin-block-end: 0.75rem;
+}
+
+.unit__chevron {
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+
+.unit[open] .unit__chevron {
+  transform: rotate(90deg);
+}
+
+.unit__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.unit__lock {
+  flex-basis: 100%;
 }
 
 .path {
@@ -1448,6 +1497,31 @@ button.bars__bar:focus-visible {
 .modal__close:focus-visible {
   background: var(--lane-bg);
   color: var(--text);
+}
+
+/* The home screen: the title, and the way into the lessons. */
+.progress__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-block-end: 1rem;
+}
+
+.progress__header h1 {
+  margin: 0;
+}
+
+.button--big {
+  font-size: 1.75rem;
+  padding: 0.9rem 3rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
+}
+
+.button--big:hover {
+  filter: brightness(1.08);
 }
 
 /* Importing songs (My songs) */

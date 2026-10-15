@@ -60,6 +60,11 @@ export function nextLessonToPlay(
   return null;
 }
 
+/** Every lesson of the unit is done (at least one star). */
+export function isUnitFinished(unit: Unit, states: ReadonlyMap<string, LessonState>): boolean {
+  return unit.lessons.every((lesson) => states.get(lesson.id)?.status === LessonStatus.Completed);
+}
+
 export function isUnitOpen(unit: Unit, states: ReadonlyMap<string, LessonState>): boolean {
   return unit.lessons.some((lesson) => states.get(lesson.id)?.status !== LessonStatus.Locked);
 }
