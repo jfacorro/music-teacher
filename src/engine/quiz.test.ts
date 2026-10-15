@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseNote } from '../theory/pitch';
+import { pitchesOf } from '../theory/pitch';
 import { resolvePlayed } from './micAliases';
 import { quizCards, quizResult } from './quiz';
 import { parseRhythm, RhythmError } from './rhythm';
@@ -11,7 +11,7 @@ function seeded(seed: number) {
 }
 
 describe('quizCards', () => {
-  const notes = ['C4', 'D4', 'E4', 'F4'].map(parseNote);
+  const notes = pitchesOf('C4', 'D4', 'E4', 'F4');
 
   it('deals the requested number of cards, each note as evenly as possible', () => {
     const cards = quizCards(notes, 10, seeded(1));
@@ -25,7 +25,7 @@ describe('quizCards', () => {
       const cards = quizCards(notes, 20, seeded(seed));
       cards.slice(1).forEach((card, i) => expect(card.midi).not.toBe(cards[i]!.midi));
     }
-    expect(quizCards([parseNote('C4')], 3).map((card) => card.midi)).toEqual([60, 60, 60]);
+    expect(quizCards(pitchesOf('C4'), 3).map((card) => card.midi)).toEqual([60, 60, 60]);
     expect(quizCards([], 3)).toEqual([]);
   });
 

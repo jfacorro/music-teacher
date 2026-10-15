@@ -2,7 +2,7 @@ import { useCallback, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { screenKeyDown, screenKeyUp } from '../../input/dev/screenInput';
-import { parseNote, pitchFromMidi } from '../../theory/pitch';
+import { MIDDLE_C, pitchesOf, pitchFromMidi, type Pitch } from '../../theory/pitch';
 import { ChordName } from '../components/ChordName';
 import { HeldNotesDisplay } from '../components/HeldNotesDisplay';
 import { usePressedKeys } from '../hooks';
@@ -32,15 +32,13 @@ const QUIZ_CLEFS: readonly QuizClefs[] = [QuizClefs.Treble, QuizClefs.Bass, Quiz
 const QUIZ_CARDS = 10;
 
 /** The notes read on each staff: the lines and spaces, plus a ledger line or two. */
-const TREBLE = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5'].map(
-  parseNote,
-);
-const BASS = ['G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'].map(parseNote);
-const QUIZ_NOTES: Readonly<Record<QuizClefs, ReturnType<typeof parseNote>[]>> = {
-  treble: TREBLE,
-  bass: BASS,
+const TREBLE = pitchesOf('C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5');
+const BASS = pitchesOf('G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4');
+const QUIZ_NOTES: Readonly<Record<QuizClefs, Pitch[]>> = {
+  [QuizClefs.Treble]: TREBLE,
+  [QuizClefs.Bass]: BASS,
   // Middle C appears in both: keep it once (on the treble staff).
-  both: [...BASS.filter((note) => note.midi < 60), ...TREBLE],
+  [QuizClefs.Both]: [...BASS.filter((note) => note.midi < MIDDLE_C), ...TREBLE],
 };
 
 export function FreePlayScreen() {

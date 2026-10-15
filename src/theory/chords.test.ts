@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { identifyChord, identifyInterval, rootSpelling } from './chords';
-import { parseNote } from './pitch';
+import { pitchesOf, type NoteString } from './pitch';
 
-const midis = (...notes: string[]) => notes.map((note) => parseNote(note).midi);
+const midis = (...notes: NoteString[]) => pitchesOf(...notes).map((pitch) => pitch.midi);
 
 describe('identifyChord', () => {
-  it.each([
+  it.each<[NoteString[], unknown]>([
     [['C4', 'E4', 'G4'], { root: 0, quality: 'major', bass: 0 }],
     [['A3', 'C4', 'E4'], { root: 9, quality: 'minor', bass: 9 }],
     [['B3', 'D4', 'F4'], { root: 11, quality: 'diminished', bass: 11 }],
@@ -46,7 +46,7 @@ describe('identifyChord', () => {
 });
 
 describe('identifyInterval', () => {
-  it.each([
+  it.each<[NoteString[], string]>([
     [['C4', 'C#4'], 'minorSecond'],
     [['C4', 'E4'], 'majorThird'],
     [['C4', 'G4'], 'perfectFifth'],

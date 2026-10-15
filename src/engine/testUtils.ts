@@ -1,10 +1,11 @@
 /** Test helpers: build scores and scripted note events tersely. */
 import { parseInlineScore } from '../content/loaders/inlineScore';
 import { type NoteEvent, InputSource, NoteEventType } from '../input/types';
+import type { NoteString } from '../theory/pitch';
 import { Hand, type Score } from './score';
 
 /** `[note, start, duration = 1, hand = 'R']` per note. */
-export type NoteSpec = [string, number, number?, Hand?];
+export type NoteSpec = [NoteString, number, number?, Hand?];
 
 export function scoreOf(
   specs: NoteSpec[],

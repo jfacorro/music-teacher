@@ -8,6 +8,7 @@
  * (it depends on the sound device and drivers), so a timing correction measured by tapping
  * along (Settings) moves clicks earlier by the rest.
  */
+import type { NoteString } from '../theory/pitch';
 
 export interface AudioEngine {
   /** Metronome click heard at `time` (performance.now() ms). */
@@ -22,6 +23,10 @@ export interface AudioEngine {
   /** Time from playing a sound to hearing it, as reported by the browser, ms. */
   outputDelayMs(): number;
 }
+
+/** Metronome clicks: higher on the first beat of the bar. */
+const ACCENT_CLICK: NoteString = 'E6';
+const BEAT_CLICK: NoteString = 'A5';
 
 const MAX_LATE_S = 0.03;
 /** A note of the other hand may start late by this much (better late than missing). */
@@ -114,7 +119,7 @@ async function createEngine(): Promise<AudioEngine> {
       // Tone requires strictly increasing start times for the same synth.
       const when = Math.max(target, context.currentTime, lastClick + 0.001);
       lastClick = when;
-      click.triggerAttackRelease(accent ? 'E6' : 'A5', 0.03, when);
+      click.triggerAttackRelease(accent ? ACCENT_CLICK : BEAT_CLICK, 0.03, when);
     },
   };
 }

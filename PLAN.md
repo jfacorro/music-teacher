@@ -153,6 +153,7 @@ Pitches are **strings in authored content** and **numbers + spelling in code**:
 - Regex: `^([A-G])(##|#|bb|b)?(-?\d)$`.
 - Octave belongs to the letter, not the sounding key: `B#3` = MIDI 60, `Cb4` = MIDI 59.
 - Parsed and validated **once at load time**; invalid strings (e.g. `"H4"`, `"c4"`, `"C♯4"`) fail with an error naming the lesson and step.
+- Note strings written in code and tests have the type `NoteString` (step + accidental + octave as a template-literal type), so a typo such as `"H4"` or `"C#"` is a compile error. `pitchOf` / `pitchesOf` turn them into `Pitch`es. Middle C as a number is `MIDDLE_C`.
 
 **Rules:**
 
@@ -175,6 +176,7 @@ type Pitch = {
 
 // theory/pitch.ts
 declare function parseNote(s: string): Pitch;               // "Db4" → { midi: 61, step: 'D', alter: -1, octave: 4 }
+declare function pitchOf(s: NoteString): Pitch;             // the same, for notes written in code (checked by the compiler)
 declare function formatNote(p: Pitch): string;               // → "Db4" (canonical, for files/debugging)
 declare function pitchFromMidi(midi: number, ctx?: SpellingContext): Pitch;  // default spelling
 

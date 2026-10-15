@@ -15,7 +15,7 @@ import { subscribeNotes } from '../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../input/dev/screenInput';
 import { useLiveInput } from '../../input/liveStore';
 import { activityTimer, recordPracticeTime } from '../../storage/progress';
-import { pitchFromMidi, type Pitch } from '../../theory/pitch';
+import { MIDDLE_C, pitchFromMidi, type Pitch } from '../../theory/pitch';
 import { Stars } from '../components/Stars';
 import { usePressedKeys } from '../hooks';
 import { keyboardLayout, rangeForNotes } from '../keyboard/layout';
@@ -32,7 +32,7 @@ const NEXT_CARD_MS = 900;
 const HINT_AFTER = 2;
 
 const clefFor = (pitch: Pitch, clef: QuizClef): Clef =>
-  clef === QuizClef.Auto ? (pitch.midi >= 60 ? Clef.Treble : Clef.Bass) : clef;
+  clef === QuizClef.Auto ? (pitch.midi >= MIDDLE_C ? Clef.Treble : Clef.Bass) : clef;
 
 interface NoteQuizProps {
   notes: readonly Pitch[];

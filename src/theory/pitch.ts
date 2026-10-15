@@ -8,6 +8,8 @@ export type Accidentals = (typeof Accidentals)[keyof typeof Accidentals];
  * Pitch representation (PLAN.md §4 "Pitch representation").
  *
  * - Authored content uses canonical note strings: "C4", "F#3", "Db4" (C4 = middle C = MIDI 60).
+ *   Files are checked at run time (`parseNote`); notes written in code are `NoteString`s, which
+ *   the compiler checks (`pitchOf`, `pitchesOf`).
  * - Code uses `Pitch`: the MIDI number (for matching, arithmetic, layout) plus the spelling
  *   (step, alter, octave) for sheet music and note names.
  * - Played notes are plain MIDI numbers; `pitchFromMidi` picks a default spelling for them.
@@ -15,6 +17,11 @@ export type Accidentals = (typeof Accidentals)[keyof typeof Accidentals];
 
 export type Step = 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B';
 export type Alter = -2 | -1 | 0 | 1 | 2;
+type AccidentalSign = '' | '#' | '##' | 'b' | 'bb';
+type Octave = '-1' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+
+/** A canonical note string written in code ("C4", "F#3", "Bbb2"): a typo is a compile error. */
+export type NoteString = `${Step}${AccidentalSign}${Octave}`;
 
 export interface Pitch {
   readonly midi: number;
@@ -38,8 +45,14 @@ export const STEPS: readonly Step[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
 const STEP_SEMITONES: Record<Step, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 
-const ACCIDENTAL_TO_ALTER: Record<string, Alter> = { '': 0, '#': 1, '##': 2, b: -1, bb: -2 };
-const ALTER_TO_ACCIDENTAL: Record<Alter, string> = {
+const ACCIDENTAL_TO_ALTER: Record<AccidentalSign, Alter> = {
+  '': 0,
+  '#': 1,
+  '##': 2,
+  b: -1,
+  bb: -2,
+};
+const ALTER_TO_ACCIDENTAL: Record<Alter, AccidentalSign> = {
   [-2]: 'bb',
   [-1]: 'b',
   0: '',
@@ -92,13 +105,23 @@ export function parseNote(input: string): Pitch {
     );
   }
   const step = match[1] as Step;
-  const alter = ACCIDENTAL_TO_ALTER[match[2] ?? ''] as Alter;
+  const alter = ACCIDENTAL_TO_ALTER[(match[2] ?? '') as AccidentalSign];
   const octave = Number(match[3]);
   const midi = midiFor(step, alter, octave);
   if (midi < 0 || midi > 127) {
     throw new InvalidNoteError(input, 'outside the MIDI range 0–127');
   }
   return { midi, step, alter, octave };
+}
+
+/** The pitch of a note written in code. */
+export function pitchOf(note: NoteString): Pitch {
+  return parseNote(note);
+}
+
+/** The pitches of notes written in code. */
+export function pitchesOf(...notes: NoteString[]): Pitch[] {
+  return notes.map(pitchOf);
 }
 
 /** Canonical note string for files and debugging. Never shown to the user (see i18n/naming). */

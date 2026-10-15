@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { parseNote, pitchFromMidi } from '../theory/pitch';
+import { pitchFromMidi, pitchOf, type NoteString } from '../theory/pitch';
 import { NAMING_SYSTEMS, defaultNamingSystem, noteName, NamingSystem } from './naming';
 
-const name = (note: string, system: NamingSystem, octave = false) =>
-  noteName(parseNote(note), system, { octave });
+const name = (note: NoteString, system: NamingSystem, octave = false) =>
+  noteName(pitchOf(note), system, { octave });
 
 describe('noteName', () => {
-  it.each([
+  it.each<[NoteString, string, string, string]>([
     ['C4', 'C', 'Do', 'C'],
     ['D4', 'D', 'Re', 'D'],
     ['E4', 'E', 'Mi', 'E'],

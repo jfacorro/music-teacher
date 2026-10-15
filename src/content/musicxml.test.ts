@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { scoreOf } from '../engine/testUtils';
 import { loadSong, SONG_IDS } from './songs';
 import { DIVISIONS, noteCardXml, noteKey, scoreToMusicXml, Clef } from './musicxml';
-import { parseNote } from '../theory/pitch';
+import { pitchOf } from '../theory/pitch';
 import { Hand } from '../engine/score';
 
 /** The <note> elements of a staff, as short strings: "C4:quarter", "rest:half", "D4:eighth.". */
@@ -204,12 +204,12 @@ describe('scoreToMusicXml', () => {
   });
 
   it('writes a quiz card: one whole note on the chosen clef, with its accidental', () => {
-    const treble = noteCardXml(parseNote('F#4'), Clef.Treble);
+    const treble = noteCardXml(pitchOf('F#4'), Clef.Treble);
     expect(treble).toContain('<sign>G</sign>');
     expect(treble).toContain('<step>F</step><alter>1</alter><octave>4</octave>');
     expect(treble).toContain('<accidental>sharp</accidental>');
     expect(treble).toContain('<time print-object="no">');
-    const bass = noteCardXml(parseNote('C3'), Clef.Bass);
+    const bass = noteCardXml(pitchOf('C3'), Clef.Bass);
     expect(bass).toContain('<sign>F</sign>');
     expect(bass).not.toContain('<accidental>');
   });
