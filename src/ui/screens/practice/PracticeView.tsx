@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { preloadAudio } from '../../../audio/audio';
 import type { SongId } from '../../../content/songs';
 import type { Score } from '../../../engine/score';
-import type { HandFilter, LoopRange, PracticeMode } from '../../../engine/session';
-import { recordResult } from '../../../storage/progress';
-import type { ScoreView } from '../../../content/lessons';
+import { HandFilter, type LoopRange, PracticeMode } from '../../../engine/session';
+import { recordResult, ResultKind } from '../../../storage/progress';
+import { ScoreView } from '../../../content/lessons';
 import { useSettings } from '../../../storage/settings';
 import { Markings } from '../../components/Markings';
 import { PracticeRun } from './PracticeRun';
@@ -13,18 +13,18 @@ import { PracticeTools, SPEED_MAX } from './PracticeTools';
 import { ICONS } from '../../icons';
 import { NotationSelect, ViewToggle } from './ViewToggle';
 
-const MODES: readonly PracticeMode[] = ['wait', 'tempo'];
+const MODES: readonly PracticeMode[] = [PracticeMode.Wait, PracticeMode.Tempo];
 /** In the order of the hands on the keyboard: left, both, right. */
-const HANDS: readonly HandFilter[] = ['L', 'both', 'R'];
+const HANDS: readonly HandFilter[] = [HandFilter.Left, HandFilter.Both, HandFilter.Right];
 
 /** Song header and practice options; each combination of options is a fresh run. */
 export function PracticeView({ songId, score }: { songId: SongId; score: Score }) {
   const { t } = useTranslation('screens');
   const { t: ts } = useTranslation('songs');
-  const [mode, setMode] = useState<PracticeMode>('wait');
-  const [hands, setHands] = useState<HandFilter>('both');
+  const [mode, setMode] = useState<PracticeMode>(PracticeMode.Wait);
+  const [hands, setHands] = useState<HandFilter>(HandFilter.Both);
   const [metronome, setMetronome] = useState(false);
-  const [view, setView] = useState<ScoreView>('falling');
+  const [view, setView] = useState<ScoreView>(ScoreView.Falling);
   const [notation, setNotation] = useState(() => useSettings.getState().sheetNotation);
   const [speed, setSpeed] = useState(SPEED_MAX);
   const [loop, setLoop] = useState<LoopRange>({
@@ -44,7 +44,7 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
 
   const chooseMode = (next: PracticeMode) => {
     setMode(next);
-    setMetronome(next === 'tempo'); // a steady click only makes sense when playing along
+    setMetronome(next === PracticeMode.Tempo); // a steady click only makes sense when playing along
   };
 
   return (
@@ -61,7 +61,7 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
 
       <div className="practice__options">
         <ViewToggle view={view} onChange={setView} />
-        {view === 'sheet' && <NotationSelect notation={notation} onChange={setNotation} />}
+        {view === ScoreView.Sheet && <NotationSelect notation={notation} onChange={setNotation} />}
         <div className="segmented" role="radiogroup" aria-label={t('practice.mode.label')}>
           {MODES.map((value) => (
             <button
@@ -134,10 +134,10 @@ export function PracticeView({ songId, score }: { songId: SongId; score: Score }
         notation={notation}
         speed={speed}
         loop={looping ? loop : null}
-        otherHand={hands !== 'both' && otherHand}
+        otherHand={hands !== HandFilter.Both && otherHand}
         onLoopChange={chooseLoop}
         onFinish={(summary, durationMs) =>
-          void recordResult('song', songId, {
+          void recordResult(ResultKind.Song, songId, {
             stars: summary.stars,
             accuracy: summary.accuracy,
             durationMs,

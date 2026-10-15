@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson, nextLessonId } from '../courses';
 import { lessonExists, loadLesson } from '.';
-import { LessonError, parseLesson } from './lesson';
+import { LessonError, parseLesson, StepType } from './lesson';
 
 type LessonText = { steps?: Record<string, string> };
 const lessonTexts = import.meta.glob<LessonText>('/locales/*/lessons/*.json', {
@@ -152,7 +152,7 @@ describe('parseLesson', () => {
     });
     const rhythm = lesson.steps[5];
     expect(rhythm).toMatchObject({ view: 'sheet', metronome: true, score: { tempo: 90 } });
-    expect(rhythm?.type === 'rhythm' && rhythm.score.notes.map((n) => n.start)).toEqual([
+    expect(rhythm?.type === StepType.Rhythm && rhythm.score.notes.map((n) => n.start)).toEqual([
       0, 1, 2, 4, 4.5, 5, 7,
     ]);
     expect(lesson.steps[0]).toMatchObject({

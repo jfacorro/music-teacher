@@ -12,12 +12,13 @@ import { startAccompaniment } from '../../../audio/accompaniment';
 import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
 import { beatsPerMeasure, type Score, type ScoreNote } from '../../../engine/score';
-import type { Summary } from '../../../engine/scoring';
+import { type Summary, OutcomeKind } from '../../../engine/scoring';
 import {
   PracticeSession,
   type HandFilter,
   type LoopRange,
-  type PracticeMode,
+  PracticeMode,
+  SessionStatus,
 } from '../../../engine/session';
 import { Transport } from '../../../engine/transport';
 import { weakSpot } from '../../../engine/weakSpots';
@@ -26,7 +27,7 @@ import { isTypingTarget } from '../../../input/dev/devInput';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { subscribeNotes } from '../../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
-import { useInstrument } from '../../../input/routing';
+import { useInstrument, Instrument } from '../../../input/routing';
 import { groupByStart } from '../../../engine/matching/waitMatcher';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { useLiveInput } from '../../../input/liveStore';
@@ -35,14 +36,16 @@ import { toggleBars } from '../../barSelection';
 import { Modal } from '../../components/Modal';
 import { ICONS } from '../../icons';
 import { useActiveNotes, useAnimationFrame } from '../../hooks';
-import { FallingNotes, type NoteStyle } from '../../keyboard/FallingNotes';
+import { FallingNotes } from '../../keyboard/FallingNotes';
+import { KeyLabels, NoteStyle } from '../../keyboard/styles';
 import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
 import { TapPad } from '../../keyboard/TapPad';
-import type { ScoreView, SheetNotation } from '../../../content/lessons';
+import { ScoreView, type SheetNotation } from '../../../content/lessons';
 import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
 import { ResultsCard } from './ResultsCard';
+import { InputSource } from '../../../input/types';
 
 const SECONDS_VISIBLE = 3;
 /** Start with the first notes near the top, so they're visible before pressing Play. */
@@ -109,13 +112,16 @@ export function PracticeRun({
         loop,
         anyKey: rhythm,
         // Timing windows before the first note arrives: wider for the microphone.
-        defaultSource: useInstrument.getState().instrument === 'mic' ? 'mic' : 'midi',
+        defaultSource:
+          useInstrument.getState().instrument === Instrument.Mic
+            ? InputSource.Mic
+            : InputSource.Midi,
       }),
   );
   const state = useSyncExternalStore(session.subscribe, session.getState);
   /** Results the learner closed (they stay closed until the next run's). */
   const [dismissed, setDismissed] = useState<Summary | null>(null);
-  const running = state.status === 'playing' || state.status === 'waiting';
+  const running = state.status === SessionStatus.Playing || state.status === SessionStatus.Waiting;
 
   useEffect(() => subscribeNotes((event) => session.handleNote(event)), [session]);
   useEffect(() => () => session.pause(), [session]);
@@ -232,7 +238,9 @@ export function PracticeRun({
   const pressed = useMemo(
     () =>
       new Set(
-        held.map((note) => (note.source === 'mic' ? session.displayPitch(note.pitch) : note.pitch)),
+        held.map((note) =>
+          note.source === InputSource.Mic ? session.displayPitch(note.pitch) : note.pitch,
+        ),
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `state` signals new aliases
     [held, session, state],
@@ -248,11 +256,11 @@ export function PracticeRun({
     [names, rhythm],
   );
   const styleOf = useCallback(
-    (note: ScoreNote): NoteStyle => {
-      if (!session.isGraded(note)) return 'muted';
+    (note: ScoreNote): NoteStyle | undefined => {
+      if (!session.isGraded(note)) return NoteStyle.Muted;
       const outcome = session.outcomeOf(note);
       if (!outcome) return undefined;
-      return outcome.kind === 'missed' ? 'missed' : 'played';
+      return outcome.kind === OutcomeKind.Missed ? NoteStyle.Missed : NoteStyle.Played;
     },
     [session],
   );
@@ -262,7 +270,7 @@ export function PracticeRun({
       session.pause();
       return;
     }
-    if (state.status === 'ready' || state.status === 'finished')
+    if (state.status === SessionStatus.Ready || state.status === SessionStatus.Finished)
       startedAt.current = performance.now();
     // Audio may only start from a click; wait for it so the count-in's first click is heard.
     await startAudio().catch((error: unknown) => console.warn('No audio', error));
@@ -305,13 +313,13 @@ export function PracticeRun({
   // The microphone hears one note at a time: with it, any note of a chord counts.
   const listening = useInstrument((s) => s.instrument);
   const micChords =
-    listening === 'mic' &&
+    listening === Instrument.Mic &&
     !rhythm &&
     groupByStart(session.practiced).some((group) => group.notes.length > 1);
 
   const modeHint = rhythm
     ? t('practice.hintRhythm')
-    : mode === 'wait'
+    : mode === PracticeMode.Wait
       ? t('practice.hintWait')
       : t('practice.hint');
   const loopHint =
@@ -406,7 +414,7 @@ export function PracticeRun({
       )}
       <div className="practice__stage">
         <div className="practice__notes">
-          {view === 'sheet' ? (
+          {view === ScoreView.Sheet ? (
             <SheetMusic
               score={score}
               transport={transport}
@@ -450,7 +458,7 @@ export function PracticeRun({
             pressed={pressed}
             expected={expected}
             marks={state.marks}
-            labels="white"
+            labels={KeyLabels.White}
             labelFor={keyLabel}
             onKeyDown={screenKeyDown}
             onKeyUp={screenKeyUp}

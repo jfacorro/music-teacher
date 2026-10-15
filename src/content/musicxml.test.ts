@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { scoreOf } from '../engine/testUtils';
 import { loadSong, SONG_IDS } from './songs';
-import { DIVISIONS, noteCardXml, noteKey, scoreToMusicXml } from './musicxml';
+import { DIVISIONS, noteCardXml, noteKey, scoreToMusicXml, Clef } from './musicxml';
 import { parseNote } from '../theory/pitch';
+import { Hand } from '../engine/score';
 
 /** The <note> elements of a staff, as short strings: "C4:quarter", "rest:half", "D4:eighth.". */
 function written(xml: string, staff: number): string[] {
@@ -44,7 +45,7 @@ describe('scoreToMusicXml', () => {
     const { xml, staves } = scoreToMusicXml(
       scoreOf([
         ['E4', 0, 4],
-        ['C3', 0, 4, 'L'],
+        ['C3', 0, 4, Hand.Left],
       ]),
     );
     expect(staves).toEqual([
@@ -136,14 +137,14 @@ describe('scoreToMusicXml', () => {
   it('can leave out a hand’s staff', () => {
     const score = scoreOf([
       ['E4', 0, 4],
-      ['C3', 0, 4, 'L'],
+      ['C3', 0, 4, Hand.Left],
     ]);
-    const right = scoreToMusicXml(score, { hands: ['R'] });
+    const right = scoreToMusicXml(score, { hands: [Hand.Right] });
     expect(right.staves).toEqual([{ hand: 'R', number: 1 }]);
     expect(right.xml).not.toContain('<sign>F</sign>');
     expect(written(right.xml, 1)).toEqual(['E4:whole']);
 
-    const left = scoreToMusicXml(score, { hands: ['L'] });
+    const left = scoreToMusicXml(score, { hands: [Hand.Left] });
     expect(left.staves).toEqual([{ hand: 'L', number: 1 }]);
     expect(left.xml).toContain('<clef number="1"><sign>F</sign>');
     expect(written(left.xml, 1)).toEqual(['C3:whole']);
@@ -165,7 +166,7 @@ describe('scoreToMusicXml', () => {
 
   it('can draw a staff for a hand without notes, and pictures without rests or bar lines', () => {
     const score = scoreOf([['G4', 0, 4]]);
-    const both = scoreToMusicXml(score, { hands: ['R', 'L'] });
+    const both = scoreToMusicXml(score, { hands: [Hand.Right, Hand.Left] });
     expect(both.staves).toEqual([
       { hand: 'R', number: 1 },
       { hand: 'L', number: 2 },
@@ -173,7 +174,7 @@ describe('scoreToMusicXml', () => {
     expect(written(both.xml, 2)).toEqual(['rest:measure']);
     expect(both.xml).not.toContain('print-object="no"');
 
-    const picture = scoreToMusicXml(score, { hands: ['R', 'L'], illustration: true });
+    const picture = scoreToMusicXml(score, { hands: [Hand.Right, Hand.Left], illustration: true });
     expect(picture.xml).toContain('<note print-object="no"><rest measure="yes"/>');
     expect(picture.xml).toContain('<bar-style>none</bar-style>');
     expect(written(picture.xml.replaceAll(' print-object="no"', ''), 1)).toEqual(['G4:whole']);
@@ -203,12 +204,12 @@ describe('scoreToMusicXml', () => {
   });
 
   it('writes a quiz card: one whole note on the chosen clef, with its accidental', () => {
-    const treble = noteCardXml(parseNote('F#4'), 'treble');
+    const treble = noteCardXml(parseNote('F#4'), Clef.Treble);
     expect(treble).toContain('<sign>G</sign>');
     expect(treble).toContain('<step>F</step><alter>1</alter><octave>4</octave>');
     expect(treble).toContain('<accidental>sharp</accidental>');
     expect(treble).toContain('<time print-object="no">');
-    const bass = noteCardXml(parseNote('C3'), 'bass');
+    const bass = noteCardXml(parseNote('C3'), Clef.Bass);
     expect(bass).toContain('<sign>F</sign>');
     expect(bass).not.toContain('<accidental>');
   });
@@ -216,7 +217,7 @@ describe('scoreToMusicXml', () => {
   it('indexes every written note back to its score note', () => {
     const score = scoreOf([
       ['C4', 3, 2],
-      ['C3', 0, 4, 'L'],
+      ['C3', 0, 4, Hand.Left],
     ]);
     const { notes } = scoreToMusicXml(score);
     const c4 = score.notes.find((n) => n.pitch.midi === 60)!;

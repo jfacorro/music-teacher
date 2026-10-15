@@ -8,39 +8,41 @@ import { create } from 'zustand';
 import { useSettings } from '../storage/settings';
 import { setActiveSources } from './bus';
 import { pruneHeld } from './liveStore';
-import { useMic } from './mic/micInput';
-import { useMidi } from './midi/midiInput';
-import type { InputSourceKind } from './types';
+import { useMic, MicStatus } from './mic/micInput';
+import { useMidi, MidiConnection } from './midi/midiInput';
+import { InputMode, InputSource, Instrument } from './types';
 
-export type InputMode = 'auto' | 'midi' | 'mic';
-export type Instrument = 'midi' | 'mic' | null;
+// Defined with the input types (no dependencies), so the settings can use them too.
+export { InputMode, Instrument };
 
-export const INPUT_MODES: readonly InputMode[] = ['auto', 'midi', 'mic'];
+export const INPUT_MODES: readonly InputMode[] = [InputMode.Auto, InputMode.Midi, InputMode.Mic];
 
 export function activeInstrument(
   mode: InputMode,
   midiConnected: boolean,
   micOn: boolean,
-): Instrument {
-  if (mode !== 'auto') return mode;
-  if (midiConnected) return 'midi';
-  return micOn ? 'mic' : null;
+): Instrument | null {
+  if (mode !== InputMode.Auto) return mode;
+  if (midiConnected) return Instrument.Midi;
+  return micOn ? Instrument.Mic : null;
 }
 
-export const useInstrument = create<{ instrument: Instrument }>(() => ({ instrument: null }));
+export const useInstrument = create<{ instrument: Instrument | null }>(() => ({
+  instrument: null,
+}));
 
 export function startRouting(): () => void {
   let initialized = false;
   const update = () => {
     const instrument = activeInstrument(
       useSettings.getState().inputMode,
-      useMidi.getState().connection === 'connected',
-      useMic.getState().status === 'on',
+      useMidi.getState().connection === MidiConnection.Connected,
+      useMic.getState().status === MicStatus.On,
     );
     if (initialized && instrument === useInstrument.getState().instrument) return;
     initialized = true;
-    const isActive = (source: InputSourceKind) =>
-      source === 'dev' || source === 'screen' || source === instrument;
+    const isActive = (source: InputSource) =>
+      source === InputSource.Dev || source === InputSource.Screen || source === instrument;
     setActiveSources(isActive);
     pruneHeld(isActive);
     useInstrument.setState({ instrument });

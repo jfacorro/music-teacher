@@ -6,6 +6,7 @@ import { PracticeRun } from '../../practice/PracticeRun';
 import { NotationSelect, ViewToggle } from '../../practice/ViewToggle';
 import { useSettings } from '../../../../storage/settings';
 import { Markings } from '../../../components/Markings';
+import { ScoreView } from '../../../../content/lessons/lesson';
 
 interface ExerciseStepViewProps {
   step: ExerciseStep;
@@ -30,7 +31,7 @@ export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseS
       <div className="practice__options">
         <Markings markings={step.score.markings ?? []} />
         <ViewToggle view={view} onChange={setView} />
-        {view === 'sheet' && <NotationSelect notation={notation} onChange={setNotation} />}
+        {view === ScoreView.Sheet && <NotationSelect notation={notation} onChange={setNotation} />}
         <label className="checkbox">
           <input
             type="checkbox"

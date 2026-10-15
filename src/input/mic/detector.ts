@@ -12,6 +12,14 @@
  * 5. Note Off: the level stays under the gate for `releaseFrames` hops, or a new onset starts.
  */
 import { PitchDetector } from 'pitchy';
+import { NoteEventType } from '../types';
+
+const DetectorPhase = {
+  Idle: 'idle',
+  Attack: 'attack',
+  Sounding: 'sounding',
+} as const;
+type DetectorPhase = (typeof DetectorPhase)[keyof typeof DetectorPhase];
 
 export interface DetectorOptions {
   sampleRate: number;
@@ -30,7 +38,7 @@ export interface DetectorOptions {
 }
 
 export interface DetectedNote {
-  type: 'on' | 'off';
+  type: NoteEventType;
   midi: number;
   velocity: number;
   /** Seconds, on the same timeline as the `time` passed to `process`. */
@@ -86,9 +94,15 @@ const RELEASE_HOLD_S = 0.5;
 const VELOCITY_RANGE_DB = 40;
 
 type Phase =
-  | { kind: 'idle' }
-  | { kind: 'attack'; time: number; peakDb: number; frames: number; ringing: number | null }
-  | { kind: 'sounding'; midi: number; quietFrames: number };
+  | { kind: typeof DetectorPhase.Idle }
+  | {
+      kind: typeof DetectorPhase.Attack;
+      time: number;
+      peakDb: number;
+      frames: number;
+      ringing: number | null;
+    }
+  | { kind: typeof DetectorPhase.Sounding; midi: number; quietFrames: number };
 
 export class NoteDetector {
   private readonly options: Required<DetectorOptions>;
@@ -97,7 +111,7 @@ export class NoteDetector {
   private filled = 0;
   private readonly levels: number[] = [];
   private hopsSinceOnset = Infinity;
-  private phase: Phase = { kind: 'idle' };
+  private phase: Phase = { kind: DetectorPhase.Idle };
   private candidate: { midi: number; count: number; time: number; clarity: number } | null = null;
   private released: { midi: number; time: number } | null = null;
 
@@ -140,9 +154,9 @@ export class NoteDetector {
       db >= gateDb && db - recentMin >= onsetRiseDb && this.hopsSinceOnset >= MIN_ONSET_GAP;
     if (onset) {
       const onsetTime = time + attackOffset(samples) / sampleRate;
-      if (this.phase.kind === 'sounding') events.push(off(this.phase.midi, onsetTime));
-      const ringing = this.phase.kind === 'sounding' ? this.phase.midi : null;
-      this.phase = { kind: 'attack', time: onsetTime, peakDb: db, frames: 0, ringing };
+      if (this.phase.kind === DetectorPhase.Sounding) events.push(off(this.phase.midi, onsetTime));
+      const ringing = this.phase.kind === DetectorPhase.Sounding ? this.phase.midi : null;
+      this.phase = { kind: DetectorPhase.Attack, time: onsetTime, peakDb: db, frames: 0, ringing };
       this.candidate = null;
       this.hopsSinceOnset = 0;
       // The next onset must rise above this note, not above the silence before it (or the
@@ -189,7 +203,7 @@ export class NoteDetector {
     const phase = this.phase;
 
     switch (phase.kind) {
-      case 'attack':
+      case DetectorPhase.Attack:
         phase.frames++;
         phase.peakDb = Math.max(phase.peakDb, db);
         if (
@@ -200,13 +214,13 @@ export class NoteDetector {
               (candidate.clarity < CONFIDENT_CLARITY ? UNSURE_EXTRA_FRAMES : 0)
         ) {
           events.push(on(candidate.midi, phase.time, velocityFor(phase.peakDb, gateDb)));
-          this.phase = { kind: 'sounding', midi: candidate.midi, quietFrames: 0 };
+          this.phase = { kind: DetectorPhase.Sounding, midi: candidate.midi, quietFrames: 0 };
         } else if (phase.frames > MAX_ATTACK_FRAMES) {
-          this.phase = { kind: 'idle' };
+          this.phase = { kind: DetectorPhase.Idle };
         }
         break;
 
-      case 'idle': {
+      case DetectorPhase.Idle: {
         // A soft attack can slip under the onset detector; accept a clearly stable pitch,
         // unless it's the note that just ended, still fading.
         const fading =
@@ -216,19 +230,19 @@ export class NoteDetector {
           time - this.released.time < RELEASE_HOLD_S;
         if (candidate && candidate.count >= stableFrames + 1 && !fading) {
           events.push(on(candidate.midi, candidate.time, velocityFor(db, gateDb)));
-          this.phase = { kind: 'sounding', midi: candidate.midi, quietFrames: 0 };
+          this.phase = { kind: DetectorPhase.Sounding, midi: candidate.midi, quietFrames: 0 };
         }
         break;
       }
 
-      case 'sounding':
+      case DetectorPhase.Sounding:
         if (db < gateDb) {
           phase.quietFrames++;
           if (phase.quietFrames >= releaseFrames) {
             const quietSince = time - ((releaseFrames - 1) * hopSize) / sampleRate;
             events.push(off(phase.midi, quietSince));
             this.released = { midi: phase.midi, time };
-            this.phase = { kind: 'idle' };
+            this.phase = { kind: DetectorPhase.Idle };
           }
           break;
         }
@@ -243,7 +257,7 @@ export class NoteDetector {
         ) {
           events.push(off(phase.midi, candidate.time));
           events.push(on(candidate.midi, candidate.time, velocityFor(db, gateDb)));
-          this.phase = { kind: 'sounding', midi: candidate.midi, quietFrames: 0 };
+          this.phase = { kind: DetectorPhase.Sounding, midi: candidate.midi, quietFrames: 0 };
         }
         break;
     }
@@ -271,9 +285,9 @@ function velocityFor(peakDb: number, gateDb: number): number {
 }
 
 function on(midi: number, time: number, velocity: number): DetectedNote {
-  return { type: 'on', midi, velocity, time };
+  return { type: NoteEventType.On, midi, velocity, time };
 }
 
 function off(midi: number, time: number): DetectedNote {
-  return { type: 'off', midi, velocity: 0, time };
+  return { type: NoteEventType.Off, midi, velocity: 0, time };
 }

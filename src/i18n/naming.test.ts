@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseNote, pitchFromMidi } from '../theory/pitch';
-import { NAMING_SYSTEMS, defaultNamingSystem, noteName, type NamingSystem } from './naming';
+import { NAMING_SYSTEMS, defaultNamingSystem, noteName, NamingSystem } from './naming';
 
 const name = (note: string, system: NamingSystem, octave = false) =>
   noteName(parseNote(note), system, { octave });
@@ -31,16 +31,16 @@ describe('noteName', () => {
     ['Abb4', 'A𝄫', 'La𝄫', 'Asas'],
     ['Bbb4', 'B𝄫', 'Si𝄫', 'Heses'],
   ])('%s → %s / %s / %s', (note, english, solfege, german) => {
-    expect(name(note, 'english')).toBe(english);
-    expect(name(note, 'solfege')).toBe(solfege);
-    expect(name(note, 'german')).toBe(german);
+    expect(name(note, NamingSystem.English)).toBe(english);
+    expect(name(note, NamingSystem.Solfege)).toBe(solfege);
+    expect(name(note, NamingSystem.German)).toBe(german);
   });
 
   it('appends the octave number when asked', () => {
-    expect(name('C4', 'english', true)).toBe('C4');
-    expect(name('F#3', 'solfege', true)).toBe('Fa♯3');
-    expect(name('Bb2', 'german', true)).toBe('B2');
-    expect(name('Cb4', 'english', true)).toBe('C♭4');
+    expect(name('C4', NamingSystem.English, true)).toBe('C4');
+    expect(name('F#3', NamingSystem.Solfege, true)).toBe('Fa♯3');
+    expect(name('Bb2', NamingSystem.German, true)).toBe('B2');
+    expect(name('Cb4', NamingSystem.English, true)).toBe('C♭4');
   });
 
   it('gives all 12 pitch classes distinct names in every system', () => {

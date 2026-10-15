@@ -1,7 +1,7 @@
 /** Test helpers: build scores and scripted note events tersely. */
 import { parseInlineScore } from '../content/loaders/inlineScore';
-import type { NoteEvent } from '../input/types';
-import type { Hand, Score } from './score';
+import { type NoteEvent, InputSource, NoteEventType } from '../input/types';
+import { Hand, type Score } from './score';
 
 /** `[note, start, duration = 1, hand = 'R']` per note. */
 export type NoteSpec = [string, number, number?, Hand?];
@@ -15,7 +15,7 @@ export function scoreOf(
     {
       tempo,
       timeSignature,
-      notes: specs.map(([note, start, duration = 1, hand = 'R']) => ({
+      notes: specs.map(([note, start, duration = 1, hand = Hand.Right]) => ({
         note,
         start,
         duration,
@@ -29,15 +29,15 @@ export function scoreOf(
 export function noteOn(
   pitch: number,
   time: number,
-  source: NoteEvent['source'] = 'midi',
+  source: NoteEvent['source'] = InputSource.Midi,
 ): NoteEvent {
-  return { type: 'on', pitch, velocity: 100, time, source };
+  return { type: NoteEventType.On, pitch, velocity: 100, time, source };
 }
 
 export function noteOff(
   pitch: number,
   time: number,
-  source: NoteEvent['source'] = 'midi',
+  source: NoteEvent['source'] = InputSource.Midi,
 ): NoteEvent {
-  return { type: 'off', pitch, velocity: 0, time, source };
+  return { type: NoteEventType.Off, pitch, velocity: 0, time, source };
 }

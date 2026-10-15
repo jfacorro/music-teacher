@@ -1,12 +1,19 @@
 /** Accuracy, stars, timing and per-measure stats (PLAN.md §6.3). */
 import type { Measure, ScoreNote } from './score';
-import { timingOf, type Grade, type TimingWindows } from './timing';
+import { timingOf, type Grade, type TimingWindows, Timing } from './timing';
+
+export const OutcomeKind = {
+  Hit: 'hit',
+  Correct: 'correct',
+  Missed: 'missed',
+} as const;
+export type OutcomeKind = (typeof OutcomeKind)[keyof typeof OutcomeKind];
 
 export type NoteOutcome =
-  | { kind: 'hit'; grade: Grade; errorMs: number }
+  | { kind: typeof OutcomeKind.Hit; grade: Grade; errorMs: number }
   /** Wait mode: played, with no timing. */
-  | { kind: 'correct' }
-  | { kind: 'missed' };
+  | { kind: typeof OutcomeKind.Correct }
+  | { kind: typeof OutcomeKind.Missed };
 
 export const OUTCOME_WEIGHTS = { perfect: 1, good: 0.8, ok: 0.5, correct: 1, missed: 0 };
 /** Each wrong or extra key costs a quarter of a note. */
@@ -47,7 +54,9 @@ export interface Summary extends Tally {
 
 export function weightOf(outcome: NoteOutcome | undefined): number {
   if (!outcome) return 0;
-  return outcome.kind === 'hit' ? OUTCOME_WEIGHTS[outcome.grade] : OUTCOME_WEIGHTS[outcome.kind];
+  return outcome.kind === OutcomeKind.Hit
+    ? OUTCOME_WEIGHTS[outcome.grade]
+    : OUTCOME_WEIGHTS[outcome.kind];
 }
 
 export function accuracyOf(weights: number, wrong: number, expected: number): number {
@@ -86,7 +95,7 @@ export function summarize(
   });
   const errorsMs = notes.flatMap((note) => {
     const outcome = outcomes.get(note);
-    return outcome?.kind === 'hit' ? [outcome.errorMs] : [];
+    return outcome?.kind === OutcomeKind.Hit ? [outcome.errorMs] : [];
   });
   return {
     ...total,
@@ -97,13 +106,13 @@ export function summarize(
 }
 
 export function timingSummary(errorsMs: readonly number[], windows: TimingWindows): TimingSummary {
-  const count = (timing: string) =>
+  const count = (timing: Timing) =>
     errorsMs.filter((error) => timingOf(error, windows) === timing).length;
   return {
     errorsMs: [...errorsMs],
-    early: count('early'),
-    onTime: count('onTime'),
-    late: count('late'),
+    early: count(Timing.Early),
+    onTime: count(Timing.OnTime),
+    late: count(Timing.Late),
     meanMs:
       errorsMs.length === 0 ? 0 : errorsMs.reduce((sum, error) => sum + error, 0) / errorsMs.length,
     windows,
@@ -129,8 +138,8 @@ function tally(
   for (const note of notes) {
     const outcome = outcomes.get(note);
     weights += weightOf(outcome);
-    if (!outcome || outcome.kind === 'missed') result.missed++;
-    else if (outcome.kind === 'hit') result[outcome.grade]++;
+    if (!outcome || outcome.kind === OutcomeKind.Missed) result.missed++;
+    else if (outcome.kind === OutcomeKind.Hit) result[outcome.grade]++;
     else result.correct++;
   }
   result.accuracy = accuracyOf(weights, wrong, notes.length);

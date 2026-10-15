@@ -1,7 +1,14 @@
+export const MidiMessageKind = {
+  NoteOn: 'noteOn',
+  NoteOff: 'noteOff',
+  Sustain: 'sustain',
+} as const;
+export type MidiMessageKind = (typeof MidiMessageKind)[keyof typeof MidiMessageKind];
+
 export type MidiMessage =
-  | { kind: 'noteOn'; channel: number; note: number; velocity: number }
-  | { kind: 'noteOff'; channel: number; note: number; velocity: number }
-  | { kind: 'sustain'; channel: number; down: boolean };
+  | { kind: typeof MidiMessageKind.NoteOn; channel: number; note: number; velocity: number }
+  | { kind: typeof MidiMessageKind.NoteOff; channel: number; note: number; velocity: number }
+  | { kind: typeof MidiMessageKind.Sustain; channel: number; down: boolean };
 
 const NOTE_OFF = 0x80;
 const NOTE_ON = 0x90;
@@ -26,12 +33,14 @@ export function parseMidiMessage(data: ArrayLike<number>): MidiMessage | null {
     case NOTE_ON:
       // Note On with velocity 0 is a Note Off by convention.
       return data2 === 0
-        ? { kind: 'noteOff', channel, note: data1, velocity: 0 }
-        : { kind: 'noteOn', channel, note: data1, velocity: data2 };
+        ? { kind: MidiMessageKind.NoteOff, channel, note: data1, velocity: 0 }
+        : { kind: MidiMessageKind.NoteOn, channel, note: data1, velocity: data2 };
     case NOTE_OFF:
-      return { kind: 'noteOff', channel, note: data1, velocity: data2 };
+      return { kind: MidiMessageKind.NoteOff, channel, note: data1, velocity: data2 };
     case CONTROL_CHANGE:
-      return data1 === SUSTAIN_PEDAL ? { kind: 'sustain', channel, down: data2 >= 64 } : null;
+      return data1 === SUSTAIN_PEDAL
+        ? { kind: MidiMessageKind.Sustain, channel, down: data2 >= 64 }
+        : null;
     default:
       return null;
   }

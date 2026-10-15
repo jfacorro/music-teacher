@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import type { SheetNotation } from '../content/lessons';
+import { SheetNotation } from '../content/lessons';
 import type { NamingSystem } from '../i18n/naming';
-import type { InputMode } from '../input/routing';
+import { InputMode } from '../input/types';
 import { db } from './db';
 
 export interface Settings {
@@ -38,13 +38,13 @@ export const DEFAULT_SETTINGS: Settings = {
   language: null,
   namingSystem: null,
   showOctave: false,
-  sheetNotation: 'names',
+  sheetNotation: SheetNotation.Names,
   devKeyboard: true,
   keySound: true,
   soundTimingMs: 0,
   midiInputId: null,
   midiInputName: null,
-  inputMode: 'auto',
+  inputMode: InputMode.Auto,
   micEnabled: false,
   micDeviceId: null,
   micNoiseFloorDb: -65,

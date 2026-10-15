@@ -5,13 +5,20 @@
  */
 import type { ScoreNote } from '../score';
 
+export const WaitResultKind = {
+  Correct: 'correct',
+  Wrong: 'wrong',
+} as const;
+export type WaitResultKind = (typeof WaitResultKind)[keyof typeof WaitResultKind];
+
 export interface NoteGroup {
   start: number;
   notes: ScoreNote[];
 }
 
 export type WaitResult =
-  { kind: 'correct'; note: ScoreNote; groupComplete: boolean } | { kind: 'wrong'; pitch: number };
+  | { kind: typeof WaitResultKind.Correct; note: ScoreNote; groupComplete: boolean }
+  | { kind: typeof WaitResultKind.Wrong; pitch: number };
 
 export function groupByStart(notes: readonly ScoreNote[]): NoteGroup[] {
   const groups: NoteGroup[] = [];
@@ -58,7 +65,7 @@ export class WaitMatcher {
     this.held.add(pitch);
     const group = this.current;
     const note = group?.notes.find((n) => n.pitch.midi === pitch);
-    if (!group || !note) return { kind: 'wrong', pitch };
+    if (!group || !note) return { kind: WaitResultKind.Wrong, pitch };
 
     this.presses.set(pitch, time);
     const complete = anyNote || this.isSatisfied(group, chordToleranceMs);
@@ -66,7 +73,7 @@ export class WaitMatcher {
       this.index++;
       this.presses.clear();
     }
-    return { kind: 'correct', note, groupComplete: complete };
+    return { kind: WaitResultKind.Correct, note, groupComplete: complete };
   }
 
   release(pitch: number): void {

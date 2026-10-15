@@ -5,8 +5,12 @@ import { findLesson } from '../../../content/courses';
 import { lessonNamespace, loadLesson, type Lesson } from '../../../content/lessons';
 import { i18n } from '../../../i18n';
 import { LessonPlayer } from './LessonPlayer';
+import { LoadStatus } from '../../loadStatus';
 
-type LoadState = { status: 'loading' } | { status: 'ready'; lesson: Lesson } | { status: 'error' };
+type LoadState =
+  | { status: typeof LoadStatus.Loading }
+  | { status: typeof LoadStatus.Ready; lesson: Lesson }
+  | { status: typeof LoadStatus.Error };
 
 export function LessonScreen() {
   const { lessonId } = useParams();
@@ -26,16 +30,16 @@ export function LessonScreen() {
 
 function LessonLoader({ lessonId }: { lessonId: string }) {
   const { t } = useTranslation('screens');
-  const [state, setState] = useState<LoadState>({ status: 'loading' });
+  const [state, setState] = useState<LoadState>({ status: LoadStatus.Loading });
 
   useEffect(() => {
     let cancelled = false;
     // The lesson's text is its own namespace; load it alongside the lesson.
     Promise.all([loadLesson(lessonId), i18n.loadNamespaces(lessonNamespace(lessonId))]).then(
-      ([lesson]) => !cancelled && setState({ status: 'ready', lesson }),
+      ([lesson]) => !cancelled && setState({ status: LoadStatus.Ready, lesson }),
       (error: unknown) => {
         console.error(error);
-        if (!cancelled) setState({ status: 'error' });
+        if (!cancelled) setState({ status: LoadStatus.Error });
       },
     );
     return () => {
@@ -43,8 +47,8 @@ function LessonLoader({ lessonId }: { lessonId: string }) {
     };
   }, [lessonId]);
 
-  if (state.status === 'loading') return null;
-  if (state.status === 'error') {
+  if (state.status === LoadStatus.Loading) return null;
+  if (state.status === LoadStatus.Error) {
     return (
       <section className="screen">
         <p className="notice notice--problem">{t('lesson.loadError')}</p>

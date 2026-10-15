@@ -3,10 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { UNITS } from '../../content/courses';
 import { SONG_IDS } from '../../content/songs';
-import { isUnitOpen, lessonStates, nextLessonToPlay, type LessonState } from '../../content/unlock';
+import {
+  isUnitOpen,
+  lessonStates,
+  nextLessonToPlay,
+  type LessonState,
+  LessonStatus,
+} from '../../content/unlock';
 import { useContentText } from '../../i18n/useContentText';
-import { resultKey, useProgress } from '../../storage/progress';
+import { resultKey, useProgress, ResultKind } from '../../storage/progress';
 import { Stars } from '../components/Stars';
+import { StarsSize } from '../components/starsSize';
 
 const CHECK = '✓';
 
@@ -18,13 +25,13 @@ export function HomeScreen() {
   const results = useProgress((s) => s.results);
 
   const states = useMemo(
-    () => lessonStates(UNITS, (id) => results[resultKey('lesson', id)]?.bestStars ?? 0),
+    () => lessonStates(UNITS, (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0),
     [results],
   );
   const nextId = nextLessonToPlay(UNITS, states);
   const nextLesson = nextId ? UNITS.flatMap((u) => u.lessons).find((l) => l.id === nextId) : null;
   const started = Object.keys(results).some((key) => key.startsWith('lesson:'));
-  const songStars = (id: string) => results[resultKey('song', id)]?.bestStars ?? 0;
+  const songStars = (id: string) => results[resultKey(ResultKind.Song, id)]?.bestStars ?? 0;
 
   return (
     <section className="screen">
@@ -51,7 +58,9 @@ export function HomeScreen() {
 
       {UNITS.map((unit, index) => {
         const open = isUnitOpen(unit, states);
-        const done = unit.lessons.filter((l) => states.get(l.id)?.status === 'completed').length;
+        const done = unit.lessons.filter(
+          (l) => states.get(l.id)?.status === LessonStatus.Completed,
+        ).length;
         return (
           <section key={unit.id} className={open ? 'card unit' : 'card unit is-locked'}>
             <header className="unit__header">
@@ -97,7 +106,10 @@ export function HomeScreen() {
                 key={id}
                 title={ts(`${id}.title`)}
                 href={`/practice/${id}`}
-                state={{ status: stars > 0 ? 'completed' : 'available', stars }}
+                state={{
+                  status: stars > 0 ? LessonStatus.Completed : LessonStatus.Available,
+                  stars,
+                }}
               />
             );
           })}
@@ -123,9 +135,13 @@ function PathItem({
   return (
     <li className={className}>
       <span className="path__marker" aria-hidden="true">
-        {state.status === 'completed' ? CHECK : state.status === 'locked' ? <LockIcon /> : null}
+        {state.status === LessonStatus.Completed ? (
+          CHECK
+        ) : state.status === LessonStatus.Locked ? (
+          <LockIcon />
+        ) : null}
       </span>
-      {state.status === 'locked' ? (
+      {state.status === LessonStatus.Locked ? (
         <span className="path__title">
           {title}
           <span className="visually-hidden">{t('home.locked')}</span>
@@ -135,7 +151,7 @@ function PathItem({
           {title}
         </Link>
       )}
-      {state.stars > 0 && <Stars stars={state.stars} size="small" />}
+      {state.stars > 0 && <Stars stars={state.stars} size={StarsSize.Small} />}
     </li>
   );
 }

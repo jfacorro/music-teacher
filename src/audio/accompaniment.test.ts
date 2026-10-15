@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { scoreOf } from '../engine/testUtils';
 import { Transport } from '../engine/transport';
 import { startAccompaniment, type AccompanimentOptions } from './accompaniment';
+import { Hand } from '../engine/score';
 
 describe('startAccompaniment', () => {
   let now = 0;
@@ -20,10 +21,10 @@ describe('startAccompaniment', () => {
 
   /** Left-hand notes on beats 0–3 at 60 BPM (one beat per second). */
   const { notes } = scoreOf([
-    ['C3', 0, 1, 'L'],
-    ['E3', 1, 1, 'L'],
-    ['G3', 2, 1, 'L'],
-    ['C3', 3, 1, 'L'],
+    ['C3', 0, 1, Hand.Left],
+    ['E3', 1, 1, Hand.Left],
+    ['G3', 2, 1, Hand.Left],
+    ['C3', 3, 1, Hand.Left],
   ]);
 
   function start(options: Partial<AccompanimentOptions> = {}) {

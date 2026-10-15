@@ -12,36 +12,68 @@
  *
  * The UI calls `tick()` every animation frame and forwards every `NoteEvent` to `handleNote`.
  */
-import type { InputSourceKind, NoteEvent } from '../input/types';
+import { InputSource, type NoteEvent, NoteEventType } from '../input/types';
 import type { Pitch } from '../theory/pitch';
-import { TempoMatcher } from './matching/tempoMatcher';
+import { TempoMatcher, TempoResultKind } from './matching/tempoMatcher';
 import { resolvePlayed } from './micAliases';
-import { WaitMatcher } from './matching/waitMatcher';
+import { WaitMatcher, WaitResultKind } from './matching/waitMatcher';
+import { beatsPerMeasure, msToBeats, scoreEnd, Hand, type Score, type ScoreNote } from './score';
 import {
-  beatsPerMeasure,
-  msToBeats,
-  scoreEnd,
-  type Hand,
-  type Score,
-  type ScoreNote,
-} from './score';
-import { accuracyOf, summarize, weightOf, type NoteOutcome, type Summary } from './scoring';
+  accuracyOf,
+  summarize,
+  weightOf,
+  type NoteOutcome,
+  type Summary,
+  OutcomeKind,
+} from './scoring';
 import { chordToleranceFor, timingOf, windowsFor, type Grade, type Timing } from './timing';
 import type { Transport } from './transport';
 
-export type PracticeMode = 'wait' | 'tempo';
-export type HandFilter = 'both' | Hand;
-export type SessionStatus = 'ready' | 'playing' | 'waiting' | 'paused' | 'finished';
-export type KeyMark = 'correct' | 'wrong';
+export const FeedbackKind = {
+  Hit: 'hit',
+  Correct: 'correct',
+  Wrong: 'wrong',
+  Extra: 'extra',
+  Missed: 'missed',
+} as const;
+export type FeedbackKind = (typeof FeedbackKind)[keyof typeof FeedbackKind];
+
+export const HandFilter = {
+  Both: 'both',
+  Left: Hand.Left,
+  Right: Hand.Right,
+} as const;
+export type HandFilter = (typeof HandFilter)[keyof typeof HandFilter];
+
+export const PracticeMode = {
+  Wait: 'wait',
+  Tempo: 'tempo',
+} as const;
+export type PracticeMode = (typeof PracticeMode)[keyof typeof PracticeMode];
+
+export const SessionStatus = {
+  Ready: 'ready',
+  Playing: 'playing',
+  Waiting: 'waiting',
+  Paused: 'paused',
+  Finished: 'finished',
+} as const;
+export type SessionStatus = (typeof SessionStatus)[keyof typeof SessionStatus];
+
+export const KeyMark = {
+  Correct: 'correct',
+  Wrong: 'wrong',
+} as const;
+export type KeyMark = (typeof KeyMark)[keyof typeof KeyMark];
 
 export type Feedback =
-  | { kind: 'hit'; grade: Grade; timing: Timing }
-  | { kind: 'correct' }
+  | { kind: typeof FeedbackKind.Hit; grade: Grade; timing: Timing }
+  | { kind: typeof FeedbackKind.Correct }
   /** `expected`: the notes to play instead (spelled as written), for a hint. */
-  | { kind: 'wrong'; expected: Pitch[] }
+  | { kind: typeof FeedbackKind.Wrong; expected: Pitch[] }
   /** A key played when no note was due (rhythm exercises, where any key counts). */
-  | { kind: 'extra' }
-  | { kind: 'missed' };
+  | { kind: typeof FeedbackKind.Extra }
+  | { kind: typeof FeedbackKind.Missed };
 
 export interface SessionState {
   status: SessionStatus;
@@ -71,13 +103,13 @@ export interface SessionOptions {
   leadInSeconds: number;
   loop?: LoopRange | null;
   /** Input assumed for timing windows until the first note arrives. */
-  defaultSource?: InputSourceKind;
+  defaultSource?: InputSource;
   /** Rhythm exercises: any key counts as the next note; only timing matters. */
   anyKey?: boolean;
 }
 
 const INITIAL_STATE: SessionState = {
-  status: 'ready',
+  status: SessionStatus.Ready,
   countIn: null,
   streak: 0,
   feedback: null,
@@ -102,7 +134,7 @@ export class PracticeSession {
   /** The notes being graded: the selected hands, within the loop. */
   private practicedNotes: ScoreNote[] = [];
   private practicedSet: ReadonlySet<ScoreNote> = new Set();
-  private source: InputSourceKind;
+  private source: InputSource;
   private tempoMatcher!: TempoMatcher;
   private waitMatcher!: WaitMatcher;
   private outcomes = new Map<ScoreNote, NoteOutcome>();
@@ -117,10 +149,12 @@ export class PracticeSession {
     this.score = score;
     this.transport = transport;
     this.mode = options.mode;
-    this.source = options.defaultSource ?? 'midi';
+    this.source = options.defaultSource ?? InputSource.Midi;
     this.leadInSeconds = options.leadInSeconds;
     this.anyKey = options.anyKey ?? false;
-    this.hands = score.notes.filter((n) => options.hands === 'both' || n.hand === options.hands);
+    this.hands = score.notes.filter(
+      (n) => options.hands === HandFilter.Both || n.hand === options.hands,
+    );
     this.otherHand = score.notes.filter((n) => !this.hands.includes(n));
     this.setLoop(options.loop ?? null);
   }
@@ -146,7 +180,7 @@ export class PracticeSession {
 
   /** First count-in beat (tempo mode: one measure before the music), or null. */
   get countInFrom(): number | null {
-    return this.mode === 'tempo'
+    return this.mode === PracticeMode.Tempo
       ? this.musicStart - beatsPerMeasure(this.score.timeSignature)
       : null;
   }
@@ -163,22 +197,26 @@ export class PracticeSession {
    * after this beat may sound yet (e.g. the other hand). Infinity when the music won't stop.
    */
   get holdBeat(): number {
-    return this.mode === 'wait' ? (this.waitMatcher.current?.start ?? Infinity) : Infinity;
+    return this.mode === PracticeMode.Wait
+      ? (this.waitMatcher.current?.start ?? Infinity)
+      : Infinity;
   }
 
   // Controls
 
   play(): void {
-    if (this.state.status === 'finished') this.reset();
-    if (this.state.status === 'playing' || this.state.status === 'waiting') return;
+    if (this.state.status === SessionStatus.Finished) this.reset();
+    if (this.state.status === SessionStatus.Playing || this.state.status === SessionStatus.Waiting)
+      return;
     this.transport.play();
-    this.setState({ status: 'playing' });
+    this.setState({ status: SessionStatus.Playing });
   }
 
   pause(): void {
-    if (this.state.status !== 'playing' && this.state.status !== 'waiting') return;
+    if (this.state.status !== SessionStatus.Playing && this.state.status !== SessionStatus.Waiting)
+      return;
     this.transport.pause();
-    this.setState({ status: 'paused', countIn: null });
+    this.setState({ status: SessionStatus.Paused, countIn: null });
   }
 
   restart(): void {
@@ -204,13 +242,13 @@ export class PracticeSession {
   /** Plays slower or faster from where it is; before starting, moves to the new lead-in. */
   setTempo(tempo: number): void {
     this.transport.setTempo(tempo);
-    if (this.state.status === 'ready') this.transport.seek(this.startBeat);
+    if (this.state.status === SessionStatus.Ready) this.transport.seek(this.startBeat);
   }
 
   // Input and time
 
   handleNote(event: NoteEvent): void {
-    if (event.type === 'off') {
+    if (event.type === NoteEventType.Off) {
       const pitch = this.aliases.get(event.pitch) ?? event.pitch;
       this.aliases.delete(event.pitch);
       this.waitMatcher.release(pitch);
@@ -221,28 +259,29 @@ export class PracticeSession {
       }
       return;
     }
-    if (this.state.status !== 'playing' && this.state.status !== 'waiting') return;
+    if (this.state.status !== SessionStatus.Playing && this.state.status !== SessionStatus.Waiting)
+      return;
 
     this.source = event.source;
     const beat = this.transport.positionAt(event.time);
     const pitch = this.resolvePitch(event, beat);
     if (pitch !== event.pitch) this.aliases.set(event.pitch, pitch);
     const press = { ...event, pitch };
-    if (this.mode === 'tempo') this.handleTempoPress(press, beat);
+    if (this.mode === PracticeMode.Tempo) this.handleTempoPress(press, beat);
     else this.handleWaitPress(press, beat);
   }
 
   /** Call every animation frame. */
   tick(): void {
     const { status } = this.state;
-    if (status !== 'playing' && status !== 'waiting') return;
+    if (status !== SessionStatus.Playing && status !== SessionStatus.Waiting) return;
     const position = this.transport.position();
 
-    if (this.mode === 'tempo') {
+    if (this.mode === PracticeMode.Tempo) {
       const missed = this.tempoMatcher.advance(position, this.transport.tempo, this.windows());
-      for (const note of missed) this.outcomes.set(note, { kind: 'missed' });
+      for (const note of missed) this.outcomes.set(note, { kind: OutcomeKind.Missed });
       if (missed.length > 0)
-        this.setState({ streak: 0, feedback: this.feedback({ kind: 'missed' }) });
+        this.setState({ streak: 0, feedback: this.feedback({ kind: FeedbackKind.Missed }) });
 
       const from = this.countInFrom;
       const countIn =
@@ -252,17 +291,19 @@ export class PracticeSession {
       if (countIn !== this.state.countIn) this.setState({ countIn });
     } else {
       const group = this.waitMatcher.current;
-      if (group && status === 'playing' && position >= group.start) {
+      if (group && status === SessionStatus.Playing && position >= group.start) {
         this.transport.pause();
         this.transport.seek(group.start);
-        this.setState({ status: 'waiting' });
+        this.setState({ status: SessionStatus.Waiting });
       }
     }
 
     if (position < this.musicEnd) return;
-    const matched = this.mode === 'tempo' ? this.tempoMatcher.done : this.waitMatcher.done;
+    const matched =
+      this.mode === PracticeMode.Tempo ? this.tempoMatcher.done : this.waitMatcher.done;
     // When looping in tempo mode, time doesn't wait for notes still in their window.
-    if (this.loop && (matched || this.mode === 'tempo')) this.nextPass(this.loop, position);
+    if (this.loop && (matched || this.mode === PracticeMode.Tempo))
+      this.nextPass(this.loop, position);
     else if (matched) this.finish();
   }
 
@@ -297,18 +338,22 @@ export class PracticeSession {
     if (beat < this.musicStart - msToBeats(windows.ok, tempo)) return;
 
     const result = this.tempoMatcher.play(event.pitch, beat, tempo, windows);
-    if (result.kind === 'hit') {
-      const outcome: NoteOutcome = { kind: 'hit', grade: result.grade, errorMs: result.errorMs };
+    if (result.kind === TempoResultKind.Hit) {
+      const outcome: NoteOutcome = {
+        kind: OutcomeKind.Hit,
+        grade: result.grade,
+        errorMs: result.errorMs,
+      };
       this.outcomes.set(result.note, outcome);
-      if (event.source === 'mic') {
+      if (event.source === InputSource.Mic) {
         for (const note of this.tempoMatcher.takeChord(result.note)) {
           this.outcomes.set(note, outcome);
         }
       }
-      this.mark(event.pitch, 'correct', {
+      this.mark(event.pitch, KeyMark.Correct, {
         streak: this.state.streak + 1,
         feedback: this.feedback({
-          kind: 'hit',
+          kind: FeedbackKind.Hit,
           grade: result.grade,
           timing: timingOf(result.errorMs, windows),
         }),
@@ -324,31 +369,33 @@ export class PracticeSession {
       event.pitch,
       event.time,
       chordToleranceFor(event.source),
-      event.source === 'mic',
+      event.source === InputSource.Mic,
     );
-    if (result.kind === 'wrong') {
+    if (result.kind === WaitResultKind.Wrong) {
       if (!this.isUngradedNote(event.pitch, beat)) this.wrong(event.pitch, beat);
       return;
     }
     if (result.groupComplete && group) {
-      for (const note of group.notes) this.outcomes.set(note, { kind: 'correct' });
+      for (const note of group.notes) this.outcomes.set(note, { kind: OutcomeKind.Correct });
     }
-    this.mark(event.pitch, 'correct', {
+    this.mark(event.pitch, KeyMark.Correct, {
       streak: this.state.streak + 1,
-      feedback: this.feedback({ kind: 'correct' }),
+      feedback: this.feedback({ kind: FeedbackKind.Correct }),
     });
-    if (result.groupComplete && this.state.status === 'waiting') {
+    if (result.groupComplete && this.state.status === SessionStatus.Waiting) {
       this.transport.play();
-      this.setState({ status: 'playing' });
+      this.setState({ status: SessionStatus.Playing });
     }
   }
 
   private wrong(pitch: number, beat: number): void {
     this.wrongBeats.push(beat);
-    this.mark(pitch, 'wrong', {
+    this.mark(pitch, KeyMark.Wrong, {
       streak: 0,
       feedback: this.feedback(
-        this.anyKey ? { kind: 'extra' } : { kind: 'wrong', expected: this.expectedAt(beat) },
+        this.anyKey
+          ? { kind: FeedbackKind.Extra }
+          : { kind: FeedbackKind.Wrong, expected: this.expectedAt(beat) },
       ),
     });
   }
@@ -356,7 +403,7 @@ export class PracticeSession {
   /** The notes the learner should be playing around `beat`. */
   private expectedAt(beat: number): Pitch[] {
     const notes =
-      this.mode === 'tempo'
+      this.mode === PracticeMode.Tempo
         ? this.tempoMatcher.upcoming(beat, this.transport.tempo, this.windows())
         : this.waitMatcher.missing;
     return [...notes].sort((a, b) => a.pitch.midi - b.pitch.midi).map((note) => note.pitch);
@@ -367,9 +414,9 @@ export class PracticeSession {
    * microphone, an expected note it's easily confused with; otherwise itself.
    */
   private resolvePitch(event: NoteEvent, beat: number): number {
-    if (!this.anyKey && event.source !== 'mic') return event.pitch;
+    if (!this.anyKey && event.source !== InputSource.Mic) return event.pitch;
     const expected =
-      this.mode === 'tempo'
+      this.mode === PracticeMode.Tempo
         ? this.tempoMatcher
             .candidates(beat, this.transport.tempo, this.windows())
             .map((note) => note.pitch.midi)
@@ -410,14 +457,14 @@ export class PracticeSession {
   private finish(): void {
     this.transport.pause();
     this.setState({
-      status: 'finished',
+      status: SessionStatus.Finished,
       countIn: null,
       summary: summarize(
         this.hands,
         this.outcomes,
         this.wrongBeats,
         this.score.measures,
-        this.mode === 'tempo' ? this.windows() : undefined,
+        this.mode === PracticeMode.Tempo ? this.windows() : undefined,
       ),
     });
   }

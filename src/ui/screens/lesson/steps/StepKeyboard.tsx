@@ -5,6 +5,7 @@ import { pitchFromMidi } from '../../../../theory/pitch';
 import { usePressedKeys } from '../../../hooks';
 import { keyboardLayout, rangeForNotes } from '../../../keyboard/layout';
 import { PianoKeyboard, type ExpectedKey } from '../../../keyboard/PianoKeyboard';
+import { KeyLabels } from '../../../keyboard/styles';
 import type { KeyMark } from '../../../../engine/session';
 
 interface StepKeyboardProps {
@@ -36,7 +37,7 @@ export function StepKeyboard({ range, highlight, completed, marks }: StepKeyboar
         expected={highlight}
         completed={completed}
         marks={marks}
-        labels="white"
+        labels={KeyLabels.White}
         labelFor={label}
         onKeyDown={screenKeyDown}
         onKeyUp={screenKeyUp}

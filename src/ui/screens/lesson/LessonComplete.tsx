@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { UNITS, nextLessonId } from '../../../content/courses';
-import { lessonStates } from '../../../content/unlock';
-import { resultKey, useProgress } from '../../../storage/progress';
+import { lessonStates, LessonStatus } from '../../../content/unlock';
+import { resultKey, useProgress, ResultKind } from '../../../storage/progress';
 import { Stars } from '../../components/Stars';
 
 interface LessonCompleteProps {
@@ -15,10 +15,13 @@ interface LessonCompleteProps {
 export function LessonComplete({ lessonId, stars, onRestart }: LessonCompleteProps) {
   const { t } = useTranslation('screens');
   const results = useProgress((s) => s.results);
-  const best = results[resultKey('lesson', lessonId)]?.bestStars ?? stars;
+  const best = results[resultKey(ResultKind.Lesson, lessonId)]?.bestStars ?? stars;
   const next = nextLessonId(lessonId);
-  const states = lessonStates(UNITS, (id) => results[resultKey('lesson', id)]?.bestStars ?? 0);
-  const nextOpen = next !== null && states.get(next)?.status !== 'locked';
+  const states = lessonStates(
+    UNITS,
+    (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0,
+  );
+  const nextOpen = next !== null && states.get(next)?.status !== LessonStatus.Locked;
 
   return (
     <section className="results lesson__complete" aria-labelledby="lesson-complete">

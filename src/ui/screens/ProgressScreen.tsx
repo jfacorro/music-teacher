@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
-import { skillProgress } from '../../content/skills';
+import { skillProgress, SkillLevel } from '../../content/skills';
 import { isSongId } from '../../content/songs';
 import { formatDate, formatPercent, formatPracticeTime } from '../../i18n/format';
 import { useContentText } from '../../i18n/useContentText';
@@ -11,8 +11,10 @@ import {
   streakDays,
   totalPracticeMinutes,
   useProgress,
+  ResultKind,
 } from '../../storage/progress';
 import { Stars } from '../components/Stars';
+import { StarsSize } from '../components/starsSize';
 import { ActivityCalendar } from './ActivityCalendar';
 
 const RECENT_LIMIT = 10;
@@ -26,7 +28,7 @@ export function ProgressScreen() {
   const log = useProgress((s) => s.log);
   const days = useProgress((s) => s.days);
 
-  const lessonResults = LESSON_ORDER.map((id) => results[resultKey('lesson', id)]);
+  const lessonResults = LESSON_ORDER.map((id) => results[resultKey(ResultKind.Lesson, id)]);
   const completed = lessonResults.filter((result) => (result?.bestStars ?? 0) >= 1).length;
   const stars = lessonResults.reduce((sum, result) => sum + (result?.bestStars ?? 0), 0);
   const practiced = practicedDays(days);
@@ -36,7 +38,7 @@ export function ProgressScreen() {
   const skills = skillProgress(
     SKILLS,
     UNITS,
-    (id) => results[resultKey('lesson', id)]?.bestAccuracy ?? null,
+    (id) => results[resultKey(ResultKind.Lesson, id)]?.bestAccuracy ?? null,
   );
 
   const time = (ms: number) =>
@@ -44,8 +46,8 @@ export function ProgressScreen() {
       ? t('progress.underMinute')
       : formatPracticeTime(ms / 60_000, i18n.language);
 
-  const titleOf = (kind: 'lesson' | 'song', id: string) => {
-    if (kind === 'song') return isSongId(id) ? ts(`${id}.title`) : id;
+  const titleOf = (kind: ResultKind, id: string) => {
+    if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
     const found = findLesson(id);
     return found ? courseText(`lessons.${id}`, found.lesson.titleVars) : id;
   };
@@ -85,7 +87,7 @@ export function ProgressScreen() {
               </span>
               <span className="skill__level">
                 {t(`progress.skills.level.${skill.level}`)}
-                {skill.level !== 'notStarted' && (
+                {skill.level !== SkillLevel.NotStarted && (
                   <span className="muted"> {formatPercent(skill.mastery, i18n.language)}</span>
                 )}
               </span>
@@ -112,7 +114,7 @@ export function ProgressScreen() {
                     </td>
                     <td>{titleOf(entry.kind, entry.refId)}</td>
                     <td>
-                      <Stars stars={entry.stars} size="small" />
+                      <Stars stars={entry.stars} size={StarsSize.Small} />
                     </td>
                     <td className="muted">{formatPercent(entry.accuracy, i18n.language)}</td>
                   </tr>

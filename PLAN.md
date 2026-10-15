@@ -47,6 +47,7 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 | Mic input | Web Audio API (`getUserMedia` + `AudioWorklet`/`AnalyserNode`) |
 | Pitch detection (single note) | `pitchy` (McLeod Pitch Method) + custom onset detection |
 | Polyphonic detection | Not done: chords are checked with MIDI only (see §5.3) |
+| Enumerations | Constant objects with a type of the same name: `export const InputSource = { Midi: 'midi', … } as const`, used as `InputSource.Mic` (no string literals in code; `isValueOf` / `describeValues` in `src/lib/values.ts` check JSON data). Not TypeScript `enum`: `erasableSyntaxOnly` keeps the code plain JavaScript once types are erased, and the values stay plain strings in JSON and IndexedDB |
 | Audio output (demos, metronome) | Tone.js + Salamander piano samples |
 | MIDI file parsing | `@tonejs/midi` |
 | Sheet music rendering (Phase 2) | OpenSheetMusicDisplay (MusicXML) |

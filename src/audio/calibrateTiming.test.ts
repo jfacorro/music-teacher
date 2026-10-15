@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { emitNote, setActiveSources } from '../input/bus';
 import { noteOn } from '../engine/testUtils';
+import { InputSource } from '../input/types';
 
 const audio = vi.hoisted(() => ({ click: vi.fn(), noteOn: vi.fn(), noteOff: vi.fn() }));
 vi.mock('./audio', () => ({ startAudio: () => Promise.resolve(audio) }));
@@ -28,9 +29,9 @@ describe('measureClickTiming', () => {
     // the microphone (ignored), and one stray tap far from any click (unpaired).
     clicks
       .slice(2)
-      .forEach((time, i) => emitNote(noteOn(60, time + 70 + (i % 2 ? 5 : -5), 'midi')));
-    emitNote(noteOn(60, clicks[3]! + 10, 'mic'));
-    emitNote(noteOn(60, clicks[5]! + 600, 'dev'));
+      .forEach((time, i) => emitNote(noteOn(60, time + 70 + (i % 2 ? 5 : -5), InputSource.Midi)));
+    emitNote(noteOn(60, clicks[3]! + 10, InputSource.Mic));
+    emitNote(noteOn(60, clicks[5]! + 600, InputSource.Dev));
 
     await vi.advanceTimersByTimeAsync(10_000);
     const result = await pending;

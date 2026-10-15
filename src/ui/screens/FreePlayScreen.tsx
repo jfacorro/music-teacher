@@ -8,14 +8,27 @@ import { HeldNotesDisplay } from '../components/HeldNotesDisplay';
 import { usePressedKeys } from '../hooks';
 import { FULL_PIANO, keyboardLayout } from '../keyboard/layout';
 import { PianoKeyboard } from '../keyboard/PianoKeyboard';
+import { KeyLabels } from '../keyboard/styles';
 import { NoteQuiz } from '../quiz/NoteQuiz';
+import { QuizClef } from '../../content/lessons/lesson';
 
 const layout = keyboardLayout(...FULL_PIANO);
 
-type Mode = 'play' | 'quiz';
-type QuizClefs = 'treble' | 'bass' | 'both';
-const MODES: readonly Mode[] = ['play', 'quiz'];
-const QUIZ_CLEFS: readonly QuizClefs[] = ['treble', 'bass', 'both'];
+const FreePlayMode = {
+  Play: 'play',
+  Quiz: 'quiz',
+} as const;
+type FreePlayMode = (typeof FreePlayMode)[keyof typeof FreePlayMode];
+
+const QuizClefs = {
+  Treble: 'treble',
+  Bass: 'bass',
+  Both: 'both',
+} as const;
+type QuizClefs = (typeof QuizClefs)[keyof typeof QuizClefs];
+
+const MODES: readonly FreePlayMode[] = [FreePlayMode.Play, FreePlayMode.Quiz];
+const QUIZ_CLEFS: readonly QuizClefs[] = [QuizClefs.Treble, QuizClefs.Bass, QuizClefs.Both];
 const QUIZ_CARDS = 10;
 
 /** The notes read on each staff: the lines and spaces, plus a ledger line or two. */
@@ -32,8 +45,8 @@ const QUIZ_NOTES: Readonly<Record<QuizClefs, ReturnType<typeof parseNote>[]>> = 
 
 export function FreePlayScreen() {
   const { t } = useTranslation('screens');
-  const [mode, setMode] = useState<Mode>('play');
-  const [clefs, setClefs] = useState<QuizClefs>('treble');
+  const [mode, setMode] = useState<FreePlayMode>(FreePlayMode.Play);
+  const [clefs, setClefs] = useState<QuizClefs>(QuizClefs.Treble);
   const clefId = useId();
 
   return (
@@ -55,7 +68,7 @@ export function FreePlayScreen() {
             </button>
           ))}
         </div>
-        {mode === 'quiz' && (
+        {mode === FreePlayMode.Quiz && (
           <label className="inline-field" htmlFor={clefId}>
             {t('freePlay.quiz.clef')}
             <select
@@ -73,13 +86,13 @@ export function FreePlayScreen() {
         )}
       </div>
 
-      {mode === 'play' ? (
+      {mode === FreePlayMode.Play ? (
         <FreePlay />
       ) : (
         <>
           <p>{t('freePlay.quiz.intro')}</p>
           {/* New clefs, new cards. */}
-          <NoteQuiz key={clefs} notes={QUIZ_NOTES[clefs]} count={QUIZ_CARDS} clef="auto" />
+          <NoteQuiz key={clefs} notes={QUIZ_NOTES[clefs]} count={QUIZ_CARDS} clef={QuizClef.Auto} />
         </>
       )}
     </section>
@@ -104,7 +117,7 @@ function FreePlay() {
       <PianoKeyboard
         layout={layout}
         pressed={pressed}
-        labels="c"
+        labels={KeyLabels.C}
         labelFor={label}
         onKeyDown={screenKeyDown}
         onKeyUp={screenKeyUp}

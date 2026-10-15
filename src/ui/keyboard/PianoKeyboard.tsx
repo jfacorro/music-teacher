@@ -1,7 +1,7 @@
 import { useEffect, useRef, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Finger, Hand } from '../../engine/score';
-import type { KeyMark } from '../../engine/session';
+import { type Finger, Hand } from '../../engine/score';
+import { KeyMark } from '../../engine/session';
 import { pitchClass } from '../../theory/pitch';
 import {
   prepareCanvas,
@@ -11,8 +11,7 @@ import {
   useElementSize,
 } from '../canvas';
 import { BLACK_KEY_HEIGHT, keyAt, type KeyGeometry, type KeyboardLayout } from './layout';
-
-export type KeyLabels = 'none' | 'c' | 'white';
+import { KeyLabels } from './styles';
 
 export interface ExpectedKey {
   hand: Hand;
@@ -60,7 +59,7 @@ export function PianoKeyboard({
   expected,
   marks,
   completed,
-  labels = 'none',
+  labels = KeyLabels.None,
   labelFor,
   onKeyDown,
   onKeyUp,
@@ -169,10 +168,14 @@ function drawKeyboard(
   ctx.textBaseline = 'alphabetic';
 
   const handColor = (key: KeyGeometry) =>
-    expected?.get(key.midi)?.hand === 'L' ? colors.left : colors.right;
+    expected?.get(key.midi)?.hand === Hand.Left ? colors.left : colors.right;
   const pressedColor = (key: KeyGeometry) => {
     const mark = marks?.get(key.midi);
-    return mark === 'correct' ? colors.correct : mark === 'wrong' ? colors.wrong : colors.pressed;
+    return mark === KeyMark.Correct
+      ? colors.correct
+      : mark === KeyMark.Wrong
+        ? colors.wrong
+        : colors.pressed;
   };
 
   for (const key of layout.keys) {
@@ -199,7 +202,9 @@ function drawKeyboard(
     ctx.stroke();
 
     const showLabel =
-      labels === 'white' ? unit >= 14 : labels === 'c' && pitchClass(key.midi) === 0;
+      labels === KeyLabels.White
+        ? unit >= 14
+        : labels === KeyLabels.C && pitchClass(key.midi) === 0;
     let bottom = height - fontSize * 0.6;
     if (showLabel) {
       ctx.font = `600 ${fontSize}px system-ui, sans-serif`;

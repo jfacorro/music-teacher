@@ -5,6 +5,8 @@ import {
   retryMidiConnection,
   selectDevice,
   useMidi,
+  MidiAccessState,
+  MidiConnection,
 } from '../../../input/midi/midiInput';
 
 export function MidiSettings() {
@@ -24,28 +26,32 @@ export function MidiSettings() {
     <section className="card">
       <h2>{t('settings.midi.heading')}</h2>
 
-      {access === 'unsupported' && (
+      {access === MidiAccessState.Unsupported && (
         <p className="notice notice--problem">{t('settings.midi.unsupported')}</p>
       )}
 
-      {(access === 'idle' || access === 'requesting' || access === 'denied') && (
+      {(access === MidiAccessState.Idle ||
+        access === MidiAccessState.Requesting ||
+        access === MidiAccessState.Denied) && (
         <>
           <p>{t('settings.midi.intro')}</p>
-          {access === 'denied' && (
+          {access === MidiAccessState.Denied && (
             <p className="notice notice--problem">{t('settings.midi.denied')}</p>
           )}
           <button
             type="button"
             className="button button--primary"
-            disabled={access === 'requesting'}
+            disabled={access === MidiAccessState.Requesting}
             onClick={() => void enableMidi()}
           >
-            {access === 'requesting' ? t('settings.midi.requesting') : t('settings.midi.enable')}
+            {access === MidiAccessState.Requesting
+              ? t('settings.midi.requesting')
+              : t('settings.midi.enable')}
           </button>
         </>
       )}
 
-      {access === 'granted' && (
+      {access === MidiAccessState.Granted && (
         <>
           {devices.length > 0 && (
             <div className="field">
@@ -71,23 +77,25 @@ export function MidiSettings() {
             </div>
           )}
 
-          {connection === 'connected' && (
+          {connection === MidiConnection.Connected && (
             <p className="notice notice--ok" role="status">
               {t('settings.midi.connected', { device })}
             </p>
           )}
-          {connection === 'connecting' && (
+          {connection === MidiConnection.Connecting && (
             <p className="notice" role="status">
               {t('settings.midi.connecting', { device })}
             </p>
           )}
-          {connection === 'none' && <p className="notice">{t('settings.midi.noDevices')}</p>}
-          {connection === 'disconnected' && (
+          {connection === MidiConnection.None && (
+            <p className="notice">{t('settings.midi.noDevices')}</p>
+          )}
+          {connection === MidiConnection.Disconnected && (
             <p className="notice notice--problem" role="status">
               {t('settings.midi.disconnected', { device })}
             </p>
           )}
-          {connection === 'busy' && (
+          {connection === MidiConnection.Busy && (
             <>
               <p className="notice notice--problem" role="status">
                 {t('settings.midi.busy', { device })}
@@ -98,7 +106,7 @@ export function MidiSettings() {
             </>
           )}
 
-          {connection === 'connected' && (
+          {connection === MidiConnection.Connected && (
             <p className="muted">
               {t('settings.midi.sustain', { state: sustain ? 'down' : 'up' })}
             </p>

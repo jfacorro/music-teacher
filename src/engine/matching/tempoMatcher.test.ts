@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { scoreOf } from '../testUtils';
 import { MIC_WINDOWS, MIDI_WINDOWS } from '../timing';
-import { TempoMatcher } from './tempoMatcher';
+import { TempoMatcher, TempoResultKind } from './tempoMatcher';
+import { Hand } from '../score';
 
 // At 60 BPM one beat is one second, so beat offsets read as seconds.
 const TEMPO = 60;
@@ -59,7 +60,7 @@ describe('TempoMatcher', () => {
     const { notes } = scoreOf([
       ['C4', 0],
       ['E4', 0],
-      ['C3', 0, 1, 'L'],
+      ['C3', 0, 1, Hand.Left],
     ]);
     const matcher = new TempoMatcher(notes);
     for (const [pitch, beat] of [
@@ -122,9 +123,9 @@ describe('TempoMatcher', () => {
     ]);
     const matcher = new TempoMatcher(notes);
     const hit = matcher.play(C4, 0, TEMPO, MIDI_WINDOWS);
-    expect(hit.kind === 'hit' && matcher.takeChord(hit.note).map((n) => n.pitch.midi)).toEqual([
-      E4,
-    ]);
+    expect(
+      hit.kind === TempoResultKind.Hit && matcher.takeChord(hit.note).map((n) => n.pitch.midi),
+    ).toEqual([E4]);
     expect(matcher.upcoming(0.5, TEMPO, MIDI_WINDOWS).map((n) => n.pitch.midi)).toEqual([67]);
   });
 

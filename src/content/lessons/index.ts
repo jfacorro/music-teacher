@@ -23,14 +23,10 @@ export type {
   Lesson,
   LessonStep,
   ExplainStep,
-  StaffClef,
   StaffNotes,
   FindStep,
   ExerciseStep,
   QuizStep,
-  QuizClef,
   RhythmStep,
-  ScoreView,
-  SheetNotation,
 } from './lesson';
-export { SHEET_NOTATIONS } from './lesson';
+export { SHEET_NOTATIONS, QuizClef, ScoreView, SheetNotation, StaffClef, StepType } from './lesson';

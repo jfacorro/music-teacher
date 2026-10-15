@@ -3,6 +3,7 @@ import { parseNote } from '../theory/pitch';
 import { resolvePlayed } from './micAliases';
 import { quizCards, quizResult } from './quiz';
 import { parseRhythm, RhythmError } from './rhythm';
+import { InputSource } from '../input/types';
 
 /** A repeatable "random" sequence. */
 function seeded(seed: number) {
@@ -37,10 +38,10 @@ describe('quizCards', () => {
 
 describe('resolvePlayed', () => {
   it('lets the microphone’s octave and harmonic mix-ups count as the expected note', () => {
-    expect(resolvePlayed(72, 'mic', [60])).toBe(60);
-    expect(resolvePlayed(79, 'mic', [60])).toBe(60); // octave + fifth
-    expect(resolvePlayed(62, 'mic', [60])).toBe(62);
-    expect(resolvePlayed(72, 'midi', [60])).toBe(72); // MIDI is exact
+    expect(resolvePlayed(72, InputSource.Mic, [60])).toBe(60);
+    expect(resolvePlayed(79, InputSource.Mic, [60])).toBe(60); // octave + fifth
+    expect(resolvePlayed(62, InputSource.Mic, [60])).toBe(62);
+    expect(resolvePlayed(72, InputSource.Midi, [60])).toBe(72); // MIDI is exact
   });
 });
 

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useMic } from '../../../input/mic/micInput';
-import { useMidi } from '../../../input/midi/midiInput';
-import { INPUT_MODES, useInstrument } from '../../../input/routing';
+import { useMic, MicStatus } from '../../../input/mic/micInput';
+import { useMidi, MidiConnection } from '../../../input/midi/midiInput';
+import { INPUT_MODES, useInstrument, Instrument } from '../../../input/routing';
 import { setInputMode } from '../../../preferences';
 import { useSettings } from '../../../storage/settings';
 
@@ -11,15 +11,15 @@ export function InputSettings() {
   const mode = useSettings((s) => s.inputMode);
   const instrument = useInstrument((s) => s.instrument);
   const midiName = useMidi((s) => s.selectedName);
-  const midiConnected = useMidi((s) => s.connection === 'connected');
-  const micOn = useMic((s) => s.status === 'on');
+  const midiConnected = useMidi((s) => s.connection === MidiConnection.Connected);
+  const micOn = useMic((s) => s.status === MicStatus.On);
 
   const listening =
-    instrument === 'midi'
+    instrument === Instrument.Midi
       ? midiConnected
         ? { ok: true, text: t('settings.input.listening.midi', { device: midiName ?? '' }) }
         : { ok: false, text: t('settings.input.listening.midiOff') }
-      : instrument === 'mic'
+      : instrument === Instrument.Mic
         ? micOn
           ? { ok: true, text: t('settings.input.listening.mic') }
           : { ok: false, text: t('settings.input.listening.micOff') }

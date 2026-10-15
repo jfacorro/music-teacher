@@ -6,6 +6,7 @@
 import { subscribeRawNotes } from '../input/bus';
 import { delayOf, pairNotes, type TimedNote } from '../input/mic/calibration';
 import { startAudio } from './audio';
+import { NoteEventType, InputSource } from '../input/types';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -43,7 +44,7 @@ export async function measureClickTiming({
   const tapped: TimedNote[] = [];
   const stop = subscribeRawNotes((event) => {
     // The microphone has its own delay; it's calibrated separately.
-    if (event.type === 'on' && event.source !== 'mic') {
+    if (event.type === NoteEventType.On && event.source !== InputSource.Mic) {
       tapped.push({ time: event.time, pitch: event.pitch });
     }
   });

@@ -4,13 +4,14 @@ import { findLesson } from '../../../content/courses';
 import { lessonNamespace, type Lesson } from '../../../content/lessons';
 import { lessonResult, type StepResult } from '../../../content/lessons/result';
 import { useContentText } from '../../../i18n/useContentText';
-import { recordResult } from '../../../storage/progress';
+import { recordResult, ResultKind } from '../../../storage/progress';
 import { LessonComplete } from './LessonComplete';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
 import { FindStepView } from './steps/FindStepView';
 import { QuizStepView } from './steps/QuizStepView';
 import { RhythmStepView } from './steps/RhythmStepView';
+import { StepType } from '../../../content/lessons/lesson';
 
 /** Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms. */
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
@@ -36,7 +37,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   useEffect(() => {
     if (!finished || recorded.current) return;
     recorded.current = true;
-    void recordResult('lesson', lesson.id, {
+    void recordResult(ResultKind.Lesson, lesson.id, {
       ...result,
       durationMs: performance.now() - startedAt,
     });
@@ -62,7 +63,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
     });
   const markDone = (stepIndex: number) => setDone((prev) => new Set(prev).add(stepIndex));
   const next = () => setIndex((i) => i + 1);
-  const canContinue = step?.type === 'explain' || done.has(index);
+  const canContinue = step?.type === StepType.Explain || done.has(index);
 
   return (
     <section className="screen lesson">
@@ -88,8 +89,10 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         <LessonComplete lessonId={lesson.id} stars={result.stars} onRestart={restart} />
       ) : (
         <>
-          {step?.type === 'explain' && <ExplainStepView key={index} step={step} text={text} />}
-          {step?.type === 'find' && (
+          {step?.type === StepType.Explain && (
+            <ExplainStepView key={index} step={step} text={text} />
+          )}
+          {step?.type === StepType.Find && (
             <FindStepView
               key={index}
               step={step}
@@ -100,7 +103,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               }}
             />
           )}
-          {step?.type === 'quiz' && (
+          {step?.type === StepType.Quiz && (
             <QuizStepView
               key={index}
               step={step}
@@ -112,7 +115,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               onContinue={next}
             />
           )}
-          {step?.type === 'rhythm' && (
+          {step?.type === StepType.Rhythm && (
             <RhythmStepView
               key={index}
               step={step}
@@ -124,7 +127,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               onContinue={next}
             />
           )}
-          {step?.type === 'exercise' && (
+          {step?.type === StepType.Exercise && (
             <ExerciseStepView
               key={index}
               step={step}

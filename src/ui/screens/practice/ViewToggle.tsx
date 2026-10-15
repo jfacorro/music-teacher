@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useId } from 'react';
-import { SHEET_NOTATIONS, type ScoreView, type SheetNotation } from '../../../content/lessons';
+import { SHEET_NOTATIONS, ScoreView, type SheetNotation } from '../../../content/lessons';
 import { ICONS } from '../../icons';
 
-const VIEWS: readonly ScoreView[] = ['falling', 'sheet'];
+const VIEWS: readonly ScoreView[] = [ScoreView.Falling, ScoreView.Sheet];
 
 /** Sheet music level: note names, no names, both staves. */
 export function NotationSelect({

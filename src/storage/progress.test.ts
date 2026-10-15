@@ -16,6 +16,7 @@ import {
   streakDays,
   totalPracticeMinutes,
   useProgress,
+  ResultKind,
 } from './progress';
 
 const at = (date: string, time = '18:00') => new Date(`${date}T${time}:00`).getTime();
@@ -174,9 +175,24 @@ describe('recordResult', () => {
   });
 
   it('saves results so they survive a reload', async () => {
-    await recordResult('lesson', 'u1-l1', { stars: 3, accuracy: 1, durationMs: 60_000 }, 1000);
-    await recordResult('song', 'ode-to-joy', { stars: 1, accuracy: 0.7, durationMs: 30_000 }, 2000);
-    await recordResult('lesson', 'u1-l1', { stars: 2, accuracy: 0.9, durationMs: 50_000 }, 3000);
+    await recordResult(
+      ResultKind.Lesson,
+      'u1-l1',
+      { stars: 3, accuracy: 1, durationMs: 60_000 },
+      1000,
+    );
+    await recordResult(
+      ResultKind.Song,
+      'ode-to-joy',
+      { stars: 1, accuracy: 0.7, durationMs: 30_000 },
+      2000,
+    );
+    await recordResult(
+      ResultKind.Lesson,
+      'u1-l1',
+      { stars: 2, accuracy: 0.9, durationMs: 50_000 },
+      3000,
+    );
 
     useProgress.setState({ results: {}, log: [] }); // as after a restart
     await loadProgress();

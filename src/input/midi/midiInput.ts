@@ -1,15 +1,30 @@
 import { create } from 'zustand';
 import { HeldNotes } from '../bus';
-import { parseMidiMessage } from './parse';
+import { parseMidiMessage, MidiMessageKind } from './parse';
+import { InputSource } from '../types';
 
-export type MidiAccessState = 'unsupported' | 'idle' | 'requesting' | 'granted' | 'denied';
+export const MidiAccessState = {
+  Unsupported: 'unsupported',
+  Idle: 'idle',
+  Requesting: 'requesting',
+  Granted: 'granted',
+  Denied: 'denied',
+} as const;
+export type MidiAccessState = (typeof MidiAccessState)[keyof typeof MidiAccessState];
 
 /**
  * - none: nothing selected and nothing available
  * - busy: the port couldn't be opened, typically because another app holds it (Windows)
  * - disconnected: the selected device isn't plugged in; reconnects automatically
  */
-export type MidiConnection = 'none' | 'connecting' | 'connected' | 'busy' | 'disconnected';
+export const MidiConnection = {
+  None: 'none',
+  Connecting: 'connecting',
+  Connected: 'connected',
+  Busy: 'busy',
+  Disconnected: 'disconnected',
+} as const;
+export type MidiConnection = (typeof MidiConnection)[keyof typeof MidiConnection];
 
 export interface MidiDevice {
   id: string;
@@ -32,17 +47,17 @@ export function isMidiSupported(): boolean {
 }
 
 export const useMidi = create<MidiState>(() => ({
-  access: isMidiSupported() ? 'idle' : 'unsupported',
+  access: isMidiSupported() ? MidiAccessState.Idle : MidiAccessState.Unsupported,
   devices: [],
   selectedId: null,
   selectedName: null,
-  connection: 'none',
+  connection: MidiConnection.None,
   sustain: false,
 }));
 
 let access: MIDIAccess | null = null;
 let port: MIDIInput | null = null;
-const held = new HeldNotes('midi');
+const held = new HeldNotes(InputSource.Midi);
 let onDeviceSelected: ((device: { id: string; name: string }) => void) | undefined;
 
 /** Restores the remembered device and registers how to persist a new choice. */
@@ -67,20 +82,20 @@ export async function midiPermission(): Promise<PermissionState | 'unknown'> {
 
 export async function enableMidi(): Promise<void> {
   if (!isMidiSupported()) {
-    useMidi.setState({ access: 'unsupported' });
+    useMidi.setState({ access: MidiAccessState.Unsupported });
     return;
   }
   if (access) return;
-  useMidi.setState({ access: 'requesting' });
+  useMidi.setState({ access: MidiAccessState.Requesting });
   try {
     access = await navigator.requestMIDIAccess({ sysex: false });
   } catch (error) {
     console.warn('MIDI access was not granted', error);
-    useMidi.setState({ access: 'denied' });
+    useMidi.setState({ access: MidiAccessState.Denied });
     return;
   }
   access.addEventListener('statechange', handleStateChange);
-  useMidi.setState({ access: 'granted', devices: listDevices() });
+  useMidi.setState({ access: MidiAccessState.Granted, devices: listDevices() });
   await connectPreferred();
 }
 
@@ -92,25 +107,25 @@ export async function selectDevice(id: string): Promise<void> {
   useMidi.setState({ selectedId: id, selectedName: name });
   if (name) onDeviceSelected?.({ id, name });
 
-  if (!input || input.state !== 'connected') {
-    useMidi.setState({ connection: 'disconnected' });
+  if (!input || input.state !== MidiConnection.Connected) {
+    useMidi.setState({ connection: MidiConnection.Disconnected });
     return;
   }
-  useMidi.setState({ connection: 'connecting' });
+  useMidi.setState({ connection: MidiConnection.Connecting });
   try {
     await input.open();
   } catch (error) {
     console.warn(`Could not open MIDI input "${input.name}"`, error);
-    useMidi.setState({ connection: 'busy' });
+    useMidi.setState({ connection: MidiConnection.Busy });
     return;
   }
   if (input.connection !== 'open') {
-    useMidi.setState({ connection: 'busy' });
+    useMidi.setState({ connection: MidiConnection.Busy });
     return;
   }
   input.addEventListener('midimessage', handleMessage);
   port = input;
-  useMidi.setState({ connection: 'connected' });
+  useMidi.setState({ connection: MidiConnection.Connected });
 }
 
 export function retryMidiConnection(): void {
@@ -124,7 +139,7 @@ function listDevices(): MidiDevice[] {
     id: input.id,
     name: input.name ?? input.id,
     manufacturer: input.manufacturer ?? '',
-    available: input.state === 'connected',
+    available: input.state === MidiConnection.Connected,
   }));
 }
 
@@ -144,7 +159,9 @@ async function connectPreferred(): Promise<void> {
   if (device) {
     await selectDevice(device.id);
   } else {
-    useMidi.setState({ connection: useMidi.getState().selectedId ? 'disconnected' : 'none' });
+    useMidi.setState({
+      connection: useMidi.getState().selectedId ? MidiConnection.Disconnected : MidiConnection.None,
+    });
   }
 }
 
@@ -162,15 +179,15 @@ function handleStateChange(event: MIDIConnectionEvent): void {
   if (event.port?.type !== 'input') return;
   useMidi.setState({ devices: listDevices() });
 
-  if (port && event.port.id === port.id && event.port.state === 'disconnected') {
+  if (port && event.port.id === port.id && event.port.state === MidiConnection.Disconnected) {
     port.removeEventListener('midimessage', handleMessage);
     held.releaseAll();
     port = null;
-    useMidi.setState({ connection: 'disconnected', sustain: false });
+    useMidi.setState({ connection: MidiConnection.Disconnected, sustain: false });
     return;
   }
   const { connection } = useMidi.getState();
-  if (connection === 'disconnected' || connection === 'none') {
+  if (connection === MidiConnection.Disconnected || connection === MidiConnection.None) {
     void connectPreferred();
   }
 }
@@ -179,13 +196,13 @@ function handleMessage(event: MIDIMessageEvent): void {
   const message = event.data && parseMidiMessage(event.data);
   if (!message) return;
   switch (message.kind) {
-    case 'noteOn':
+    case MidiMessageKind.NoteOn:
       held.on(message.note, message.velocity, event.timeStamp);
       break;
-    case 'noteOff':
+    case MidiMessageKind.NoteOff:
       held.off(message.note, event.timeStamp);
       break;
-    case 'sustain':
+    case MidiMessageKind.Sustain:
       useMidi.setState({ sustain: message.down });
       break;
   }

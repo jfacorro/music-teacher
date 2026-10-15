@@ -1,4 +1,4 @@
-import type { LessonStep } from './lesson';
+import { type LessonStep, StepType } from './lesson';
 
 export interface StepResult {
   stars: number;
@@ -13,7 +13,7 @@ export function lessonResult(
   steps: readonly LessonStep[],
   results: ReadonlyMap<number, StepResult>,
 ): StepResult {
-  const graded = steps.flatMap((step, index) => (step.type === 'explain' ? [] : [index]));
+  const graded = steps.flatMap((step, index) => (step.type === StepType.Explain ? [] : [index]));
   if (graded.length === 0) return { stars: 3, accuracy: 1 };
   const outcomes = graded.map((index) => results.get(index) ?? { stars: 0, accuracy: 0 });
   return {

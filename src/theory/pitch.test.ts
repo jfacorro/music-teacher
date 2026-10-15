@@ -10,6 +10,7 @@ import {
   parseNote,
   pitchFromMidi,
   type Alter,
+  Accidentals,
 } from './pitch';
 
 describe('parseNote', () => {
@@ -89,7 +90,7 @@ describe('pitchFromMidi', () => {
   it('maps every piano key back to the same MIDI number', () => {
     for (let midi = PIANO_LOWEST; midi <= PIANO_HIGHEST; midi++) {
       const sharp = pitchFromMidi(midi);
-      const flat = pitchFromMidi(midi, { accidentals: 'flats' });
+      const flat = pitchFromMidi(midi, { accidentals: Accidentals.Flats });
       expect(sharp.midi).toBe(midi);
       expect(flat.midi).toBe(midi);
       expect(parseNote(formatNote(sharp)).midi).toBe(midi);
@@ -103,13 +104,15 @@ describe('pitchFromMidi', () => {
   });
 
   it('spells with flats when asked or in a flat key', () => {
-    expect(formatNote(pitchFromMidi(61, { accidentals: 'flats' }))).toBe('Db4');
+    expect(formatNote(pitchFromMidi(61, { accidentals: Accidentals.Flats }))).toBe('Db4');
     expect(formatNote(pitchFromMidi(70, { keyFifths: -1 }))).toBe('Bb4');
     expect(formatNote(pitchFromMidi(70, { keyFifths: 2 }))).toBe('A#4');
   });
 
   it('lets an explicit preference override the key signature', () => {
-    expect(formatNote(pitchFromMidi(61, { keyFifths: -3, accidentals: 'sharps' }))).toBe('C#4');
+    expect(formatNote(pitchFromMidi(61, { keyFifths: -3, accidentals: Accidentals.Sharps }))).toBe(
+      'C#4',
+    );
   });
 
   it('handles octave boundaries', () => {

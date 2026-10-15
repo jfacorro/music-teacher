@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { formatPercent } from '../../../i18n/format';
 import { startMicMidiComparison } from '../../../input/mic/calibrate';
 import type { Comparison } from '../../../input/mic/calibration';
-import { useMic } from '../../../input/mic/micInput';
+import { useMic, MicStatus } from '../../../input/mic/micInput';
 import { downloadBlob, startMicRecording, type MicRecording } from '../../../input/mic/recording';
-import { useMidi } from '../../../input/midi/midiInput';
+import { useMidi, MidiConnection } from '../../../input/midi/midiInput';
 import { setMicCalibration } from '../../../preferences';
 import { useSettings } from '../../../storage/settings';
 
@@ -15,8 +15,8 @@ import { useSettings } from '../../../storage/settings';
  */
 export function MicCheck() {
   const { t, i18n } = useTranslation('screens');
-  const micOn = useMic((s) => s.status === 'on');
-  const midiOn = useMidi((s) => s.connection === 'connected');
+  const micOn = useMic((s) => s.status === MicStatus.On);
+  const midiOn = useMidi((s) => s.connection === MidiConnection.Connected);
   const latencyMs = useSettings((s) => s.micLatencyMs);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<Comparison | null>(null);

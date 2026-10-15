@@ -1,14 +1,18 @@
 /** Notes on a staff, side by side, for lesson explanations (e.g. the landmark notes). */
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { StaffClef } from '../../content/lessons';
+import { StaffClef } from '../../content/lessons';
 import { scoreToMusicXml } from '../../content/musicxml';
-import type { Hand, Score } from '../../engine/score';
+import { Hand, type Score } from '../../engine/score';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import type { Pitch } from '../../theory/pitch';
 import { StaticStaff } from './StaticStaff';
 
-const STAVES: Record<StaffClef, Hand[]> = { treble: ['R'], bass: ['L'], grand: ['R', 'L'] };
+const STAVES: Record<StaffClef, Hand[]> = {
+  treble: [Hand.Right],
+  bass: [Hand.Left],
+  grand: [Hand.Right, Hand.Left],
+};
 
 interface StaffPictureProps {
   clef: StaffClef;
@@ -25,7 +29,7 @@ export function StaffPicture({ clef, notes, names }: StaffPictureProps) {
     // Each note a whole note in its own (invisible) bar; on the grand staff, middle C and up go
     // on the treble staff.
     const hand = (pitch: Pitch): Hand =>
-      clef === 'grand' ? (pitch.midi >= 60 ? 'R' : 'L') : STAVES[clef][0]!;
+      clef === StaffClef.Grand ? (pitch.midi >= 60 ? Hand.Right : Hand.Left) : STAVES[clef][0]!;
     const score: Score = {
       tempo: 60,
       timeSignature: [4, 4],

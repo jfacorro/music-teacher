@@ -1,3 +1,9 @@
+export const Accidentals = {
+  Sharps: 'sharps',
+  Flats: 'flats',
+} as const;
+export type Accidentals = (typeof Accidentals)[keyof typeof Accidentals];
+
 /**
  * Pitch representation (PLAN.md §4 "Pitch representation").
  *
@@ -19,7 +25,7 @@ export interface Pitch {
 
 export interface SpellingContext {
   /** Explicit preference; wins over `keyFifths`. */
-  accidentals?: 'sharps' | 'flats';
+  accidentals?: Accidentals;
   /** Key signature as in MusicXML `<fifths>`: negative = flats, positive = sharps. */
   keyFifths?: number;
 }
@@ -106,7 +112,7 @@ export function pitchFromMidi(midi: number, context: SpellingContext = {}): Pitc
     throw new RangeError(`MIDI note ${midi} is outside 0–127`);
   }
   const useFlats = context.accidentals
-    ? context.accidentals === 'flats'
+    ? context.accidentals === Accidentals.Flats
     : (context.keyFifths ?? 0) < 0;
   const [step, alter] = (useFlats ? FLAT_SPELLINGS : SHARP_SPELLINGS)[pitchClass(midi)]!;
   // Default spellings never cross an octave boundary (no B# or Cb), so the octave is direct.

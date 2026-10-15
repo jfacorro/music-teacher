@@ -1,5 +1,11 @@
 import { useEffect, useState, type RefObject } from 'react';
 
+export const ColorScheme = {
+  Light: 'light',
+  Dark: 'dark',
+} as const;
+export type ColorScheme = (typeof ColorScheme)[keyof typeof ColorScheme];
+
 export interface Size {
   width: number;
   height: number;
@@ -40,7 +46,7 @@ export function prepareCanvas(
 }
 
 /** Changes whenever the light/dark color scheme changes, to trigger a redraw. */
-export function useColorScheme(): 'light' | 'dark' {
+export function useColorScheme(): ColorScheme {
   const query = '(prefers-color-scheme: dark)';
   const [dark, setDark] = useState(() => window.matchMedia(query).matches);
   useEffect(() => {
@@ -49,7 +55,7 @@ export function useColorScheme(): 'light' | 'dark' {
     media.addEventListener('change', onChange);
     return () => media.removeEventListener('change', onChange);
   }, []);
-  return dark ? 'dark' : 'light';
+  return dark ? ColorScheme.Dark : ColorScheme.Light;
 }
 
 /** Reads CSS custom properties (e.g. `--key-white`) so canvases follow the theme. */

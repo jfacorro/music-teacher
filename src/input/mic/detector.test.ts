@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { NoteDetector, levelDb, type DetectedNote } from './detector';
+import { NoteEventType } from '../types';
 
 const SAMPLE_RATE = 48_000;
 const HOP = 512;
@@ -52,7 +53,7 @@ function detect(signal: Float32Array, gateDb = GATE_DB): DetectedNote[] {
   return events;
 }
 
-const ons = (events: DetectedNote[]) => events.filter((e) => e.type === 'on');
+const ons = (events: DetectedNote[]) => events.filter((e) => e.type === NoteEventType.On);
 
 describe('NoteDetector', () => {
   it('detects a single note with its onset time and releases it', () => {

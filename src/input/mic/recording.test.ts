@@ -3,6 +3,7 @@ import { emitNote, setActiveSources } from '../bus';
 import { noteOn } from '../../engine/testUtils';
 import type { RecordingFile } from './recording';
 import { bytesFromDataUrl, decodeWav } from './wav';
+import { InputSource } from '../types';
 
 const mic = vi.hoisted(() => ({
   listener: null as ((samples: Float32Array, time: number, rate: number) => void) | null,
@@ -23,9 +24,9 @@ describe('startMicRecording', () => {
 
     // Two hops of audio starting at 1000 ms, 8 kHz.
     mic.listener!(new Float32Array(4).fill(0.5), 1000, 8000);
-    emitNote(noteOn(60, 1010, 'midi'));
-    emitNote(noteOn(60, 1045, 'mic'));
-    emitNote(noteOn(62, 1050, 'dev')); // not part of a recording
+    emitNote(noteOn(60, 1010, InputSource.Midi));
+    emitNote(noteOn(60, 1045, InputSource.Mic));
+    emitNote(noteOn(62, 1050, InputSource.Dev)); // not part of a recording
     mic.listener!(new Float32Array(4).fill(-0.5), 1000.5, 8000);
 
     const recording = recorder.stop()!;

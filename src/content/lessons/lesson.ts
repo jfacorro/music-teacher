@@ -11,11 +11,21 @@
  * - rhythm:   tap any key along with a rhythm pattern (see engine/rhythm.ts)
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
-import type { Finger, Hand, Score } from '../../engine/score';
-import type { HandFilter, PracticeMode } from '../../engine/session';
+import { type Finger, Hand, type Score } from '../../engine/score';
+import { HandFilter, PracticeMode } from '../../engine/session';
+import { describeValues, isValueOf } from '../../lib/values';
 import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
 import { ScoreError, parseInlineScore } from '../loaders/inlineScore';
 import { isSongId, loadSong, type SongId } from '../songs';
+
+export const StepType = {
+  Explain: 'explain',
+  Find: 'find',
+  Exercise: 'exercise',
+  Quiz: 'quiz',
+  Rhythm: 'rhythm',
+} as const;
+export type StepType = (typeof StepType)[keyof typeof StepType];
 
 export interface KeyHint {
   pitch: Pitch;
@@ -29,7 +39,12 @@ interface StepBase {
 }
 
 /** The staves of a staff picture: treble, bass, or both (the grand staff). */
-export type StaffClef = 'treble' | 'bass' | 'grand';
+export const StaffClef = {
+  Treble: 'treble',
+  Bass: 'bass',
+  Grand: 'grand',
+} as const;
+export type StaffClef = (typeof StaffClef)[keyof typeof StaffClef];
 
 export interface StaffNotes {
   clef: StaffClef;
@@ -39,7 +54,7 @@ export interface StaffNotes {
 }
 
 export interface ExplainStep extends StepBase {
-  type: 'explain';
+  type: typeof StepType.Explain;
   keys: KeyHint[];
   hand: Hand;
   range: [number, number] | null;
@@ -48,25 +63,38 @@ export interface ExplainStep extends StepBase {
 }
 
 export interface FindStep extends StepBase {
-  type: 'find';
+  type: typeof StepType.Find;
   notes: Pitch[];
   range: [number, number] | null;
 }
 
 /** How the music is shown: falling notes or sheet music. */
-export type ScoreView = 'falling' | 'sheet';
+export const ScoreView = {
+  Falling: 'falling',
+  Sheet: 'sheet',
+} as const;
+export type ScoreView = (typeof ScoreView)[keyof typeof ScoreView];
 
 /**
  * Sheet music levels (PLAN.md §2.2): note names under the notes; no names; both staves
  * (the full grand staff even when practicing one hand). The first two show only the staff of
  * the hand being practiced.
  */
-export type SheetNotation = 'names' | 'plain' | 'grand';
+export const SheetNotation = {
+  Names: 'names',
+  Plain: 'plain',
+  Grand: 'grand',
+} as const;
+export type SheetNotation = (typeof SheetNotation)[keyof typeof SheetNotation];
 
-export const SHEET_NOTATIONS: readonly SheetNotation[] = ['names', 'plain', 'grand'];
+export const SHEET_NOTATIONS: readonly SheetNotation[] = [
+  SheetNotation.Names,
+  SheetNotation.Plain,
+  SheetNotation.Grand,
+];
 
 export interface ExerciseStep extends StepBase {
-  type: 'exercise';
+  type: typeof StepType.Exercise;
   /** The view the exercise starts in (the learner can switch). */
   view: ScoreView;
   /** The sheet music level it starts with; null = the learner's default (Settings). */
@@ -81,10 +109,15 @@ export interface ExerciseStep extends StepBase {
 }
 
 /** The staff a quiz card is shown on; "auto": treble from middle C up, bass below. */
-export type QuizClef = 'treble' | 'bass' | 'auto';
+export const QuizClef = {
+  Treble: 'treble',
+  Bass: 'bass',
+  Auto: 'auto',
+} as const;
+export type QuizClef = (typeof QuizClef)[keyof typeof QuizClef];
 
 export interface QuizStep extends StepBase {
-  type: 'quiz';
+  type: typeof StepType.Quiz;
   /** The notes the cards are drawn from. */
   notes: Pitch[];
   /** How many cards. */
@@ -94,7 +127,7 @@ export interface QuizStep extends StepBase {
 }
 
 export interface RhythmStep extends StepBase {
-  type: 'rhythm';
+  type: typeof StepType.Rhythm;
   /** The pattern as a score: a note per tap, on the line of a one-line rhythm staff. */
   score: Score;
   view: ScoreView;
@@ -145,29 +178,29 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
   };
 
   switch (data.type) {
-    case 'explain':
+    case StepType.Explain:
       return {
         ...base,
-        type: 'explain',
+        type: StepType.Explain,
         keys: keyHints(data.keys ?? [], at(location, 'keys')),
-        hand: data.hand === 'L' ? 'L' : 'R',
+        hand: data.hand === Hand.Left ? Hand.Left : Hand.Right,
         range: range(data.range, at(location, 'range')),
         staff: data.staff === undefined ? null : staffNotes(data.staff, at(location, 'staff')),
       };
-    case 'find': {
+    case StepType.Find: {
       if (!Array.isArray(data.notes) || data.notes.length === 0) {
         throw new LessonError(at(location, 'notes'), 'expected a non-empty array of notes');
       }
       return {
         ...base,
-        type: 'find',
+        type: StepType.Find,
         notes: data.notes.map((note, i) => pitch(note, at(location, `notes[${i}]`))),
         range: range(data.range, at(location, 'range')),
       };
     }
-    case 'exercise':
-      return { ...base, type: 'exercise', ...(await exercise(data, location)) };
-    case 'quiz': {
+    case StepType.Exercise:
+      return { ...base, type: StepType.Exercise, ...(await exercise(data, location)) };
+    case StepType.Quiz: {
       if (!Array.isArray(data.notes) || data.notes.length === 0) {
         throw new LessonError(at(location, 'notes'), 'expected a non-empty array of notes');
       }
@@ -175,21 +208,21 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
       if (typeof count !== 'number' || !Number.isInteger(count) || count < 1 || count > 50) {
         throw new LessonError(at(location, 'count'), 'expected a whole number from 1 to 50');
       }
-      const clef = data.clef ?? 'auto';
-      if (clef !== 'treble' && clef !== 'bass' && clef !== 'auto') {
-        throw new LessonError(at(location, 'clef'), 'expected "treble", "bass" or "auto"');
+      const clef = data.clef ?? QuizClef.Auto;
+      if (!isValueOf(QuizClef, clef)) {
+        throw new LessonError(at(location, 'clef'), `expected ${describeValues(QuizClef)}`);
       }
       return {
         ...base,
-        type: 'quiz',
+        type: StepType.Quiz,
         notes: data.notes.map((note, i) => pitch(note, at(location, `notes[${i}]`))),
         count,
         clef,
         pass: passRule(data, location),
       };
     }
-    case 'rhythm':
-      return { ...base, type: 'rhythm', ...rhythm(data, location) };
+    case StepType.Rhythm:
+      return { ...base, type: StepType.Rhythm, ...rhythm(data, location) };
     default:
       throw new LessonError(
         at(location, 'type'),
@@ -219,7 +252,7 @@ function rhythm(
       {
         tempo: data.tempo,
         timeSignature,
-        notes: notes.map((note) => ({ ...note, note: RHYTHM_NOTE, hand: 'R' })),
+        notes: notes.map((note) => ({ ...note, note: RHYTHM_NOTE, hand: Hand.Right })),
       },
       location,
     );
@@ -227,9 +260,9 @@ function rhythm(
     if (error instanceof ScoreError) throw new LessonError(error.location, error.message);
     throw error;
   }
-  const view = data.view ?? 'sheet';
-  if (view !== 'falling' && view !== 'sheet') {
-    throw new LessonError(at(location, 'view'), 'expected "falling" or "sheet"');
+  const view = data.view ?? ScoreView.Sheet;
+  if (!isValueOf(ScoreView, view)) {
+    throw new LessonError(at(location, 'view'), `expected ${describeValues(ScoreView)}`);
   }
   return {
     score,
@@ -243,12 +276,12 @@ async function exercise(
   data: Record<string, unknown>,
   location: string,
 ): Promise<Omit<ExerciseStep, keyof StepBase | 'type'>> {
-  if (data.mode !== 'wait' && data.mode !== 'tempo') {
-    throw new LessonError(at(location, 'mode'), 'expected "wait" or "tempo"');
+  if (!isValueOf(PracticeMode, data.mode)) {
+    throw new LessonError(at(location, 'mode'), `expected ${describeValues(PracticeMode)}`);
   }
-  const hands = data.hands ?? 'both';
-  if (hands !== 'both' && hands !== 'R' && hands !== 'L') {
-    throw new LessonError(at(location, 'hands'), 'expected "both", "R" or "L"');
+  const hands = data.hands ?? HandFilter.Both;
+  if (!isValueOf(HandFilter, hands)) {
+    throw new LessonError(at(location, 'hands'), `expected ${describeValues(HandFilter)}`);
   }
 
   let score: Score;
@@ -274,20 +307,20 @@ async function exercise(
     score = { ...score, tempo: data.tempo };
   }
 
-  const view = data.view ?? 'falling';
-  if (view !== 'falling' && view !== 'sheet') {
-    throw new LessonError(at(location, 'view'), 'expected "falling" or "sheet"');
+  const view = data.view ?? ScoreView.Falling;
+  if (!isValueOf(ScoreView, view)) {
+    throw new LessonError(at(location, 'view'), `expected ${describeValues(ScoreView)}`);
   }
 
   const notation = data.notation ?? null;
-  if (notation !== null && !SHEET_NOTATIONS.includes(notation as SheetNotation)) {
-    throw new LessonError(at(location, 'notation'), 'expected "names", "plain" or "grand"');
+  if (notation !== null && !isValueOf(SheetNotation, notation)) {
+    throw new LessonError(at(location, 'notation'), `expected ${describeValues(SheetNotation)}`);
   }
 
   return {
     mode: data.mode,
     view,
-    notation: notation as SheetNotation | null,
+    notation,
     hands,
     score,
     song,
@@ -307,8 +340,8 @@ function passRule(data: Record<string, unknown>, location: string): { minStars: 
 
 function staffNotes(input: unknown, location: string): StaffNotes {
   const data = object(input, location);
-  if (data.clef !== 'treble' && data.clef !== 'bass' && data.clef !== 'grand') {
-    throw new LessonError(at(location, 'clef'), 'expected "treble", "bass" or "grand"');
+  if (!isValueOf(StaffClef, data.clef)) {
+    throw new LessonError(at(location, 'clef'), `expected ${describeValues(StaffClef)}`);
   }
   if (!Array.isArray(data.notes) || data.notes.length === 0) {
     throw new LessonError(at(location, 'notes'), 'expected a non-empty array of notes');

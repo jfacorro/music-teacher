@@ -7,20 +7,21 @@ import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { GraphicalNote, OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { DIVISIONS, noteKey, scoreToMusicXml } from '../../content/musicxml';
-import type { SheetNotation } from '../../content/lessons';
-import type { Hand, Score, ScoreNote } from '../../engine/score';
-import type { HandFilter, LoopRange } from '../../engine/session';
+import { SheetNotation } from '../../content/lessons';
+import { Hand, type Score, type ScoreNote } from '../../engine/score';
+import { HandFilter, type LoopRange } from '../../engine/session';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import type { Transport } from '../../engine/transport';
 import { useBarSelection } from '../barSelection';
 import { readCssColors, useColorScheme } from '../canvas';
 import { useAnimationFrame } from '../hooks';
-import type { NoteStyle } from '../keyboard/FallingNotes';
+import { NoteStyle } from '../keyboard/styles';
+import { LoadStatus } from '../loadStatus';
 
 interface SheetMusicProps {
   score: Score;
   transport: Transport;
-  styleOf?: (note: ScoreNote) => NoteStyle;
+  styleOf?: (note: ScoreNote) => NoteStyle | undefined;
   /** Changes whenever note outcomes may have changed, to recolor. */
   outcomesVersion?: unknown;
   notation: SheetNotation;
@@ -78,7 +79,7 @@ export function SheetMusic({
   const scrollerRef = useRef<HTMLDivElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const rendered = useRef<Rendered | null>(null);
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [status, setStatus] = useState<LoadStatus>(LoadStatus.Loading);
   const [bars, setBars] = useState<BarBox[]>([]);
   const scheme = useColorScheme();
   const names = useNoteNames();
@@ -86,11 +87,17 @@ export function SheetMusic({
   const music = useMemo(() => {
     if (rhythm) return scoreToMusicXml(score, { rhythm: true });
     const staves: Hand[] | undefined =
-      notation === 'grand' ? ['R', 'L'] : hands === 'both' ? undefined : [hands];
+      notation === SheetNotation.Grand
+        ? [Hand.Right, Hand.Left]
+        : hands === HandFilter.Both
+          ? undefined
+          : [hands];
     return scoreToMusicXml(score, {
       hands: staves,
       noteLabel:
-        notation === 'names' ? (note) => names.name(note.pitch, { octave: false }) : undefined,
+        notation === SheetNotation.Names
+          ? (note) => names.name(note.pitch, { octave: false })
+          : undefined,
     });
   }, [score, notation, hands, names, rhythm]);
 
@@ -99,7 +106,7 @@ export function SheetMusic({
     const host = hostRef.current;
     if (!host) return;
     let cancelled = false;
-    setStatus('loading');
+    setStatus(LoadStatus.Loading);
     rendered.current = null;
 
     (async () => {
@@ -134,10 +141,10 @@ export function SheetMusic({
       osmd.cursor.show();
       rendered.current = { osmd, graphics: indexGraphics(osmd, notes), applied: new Map(), colors };
       setBars(barBoxes(osmd));
-      setStatus('ready');
+      setStatus(LoadStatus.Ready);
     })().catch((error: unknown) => {
       console.error('Could not render the sheet music', error);
-      if (!cancelled) setStatus('error');
+      if (!cancelled) setStatus(LoadStatus.Error);
     });
 
     return () => {
@@ -150,15 +157,15 @@ export function SheetMusic({
   // Color notes by outcome.
   useEffect(() => {
     const sheet = rendered.current;
-    if (!sheet || status !== 'ready') return;
+    if (!sheet || status !== LoadStatus.Ready) return;
     for (const [note, graphicals] of sheet.graphics) {
       const style = styleOf?.(note);
       const color =
-        style === 'played'
+        style === NoteStyle.Played
           ? sheet.colors.played
-          : style === 'missed'
+          : style === NoteStyle.Missed
             ? sheet.colors.missed
-            : style === 'muted'
+            : style === NoteStyle.Muted
               ? sheet.colors.muted
               : sheet.colors.music;
       if (sheet.applied.get(note) === color) continue;
@@ -228,10 +235,10 @@ export function SheetMusic({
           style={{ left: from.left, width: to.right - from.left }}
         />
       )}
-      {status === 'loading' && (
+      {status === LoadStatus.Loading && (
         <p className="muted sheet-music__status">{t('practice.sheetLoading')}</p>
       )}
-      {status === 'error' && (
+      {status === LoadStatus.Error && (
         <p className="notice notice--problem sheet-music__status">{t('practice.sheetError')}</p>
       )}
       <div ref={hostRef} className="sheet-music__host" />
