@@ -616,9 +616,13 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Imported song titles are kept as-is (user content, not translated); all import UI is localized (English, Spanish), and the glossary has the new terms.
 - Simplifications, shown as notes when they apply: timing is rounded to sixteenth notes (the sheet-music writer's grid, so triplets and played-in MIDI are approximated); the first tempo and time signature are used; repeats are played once, as written. A pickup bar is padded to a whole bar. The key signature now reaches the sheet music (`Score.keyFifths`).
 
-**3.3 Dynamics (MIDI only)**
-- Use velocity for `p` / `f` / crescendo exercises; dynamics shown in results.
-- Sustain pedal (CC64) support and display.
+**3.3 Dynamics (MIDI only)** — ✔ done
+- Scores can mark levels (`"dynamics": [{ "beat": 0, "mark": "p" }]`, pp … ff) and hairpins (`"hairpins": [{ "from": 4, "to": 8, "kind": "crescendo" }]`). The sheet music draws them under the top staff, and MusicXML import keeps them (`<dynamics>`, `<wedge>`).
+- Grading (`engine/dynamics.ts`), MIDI only: the velocity of each note played on a MIDI keyboard is kept. A passage is right if its average velocity is in the level's band (generous, overlapping bands, since keyboards differ in touch) or clearly louder/softer (≥ 10) than the passage before, as written. A hairpin is right if its last notes are ≥ 10 louder (crescendo) or softer (diminuendo) than its first. Hairpin notes don't count towards the passages around them.
+- Results show each passage and hairpin with a loudness meter and a verdict ("Just right", "Too loud", "Got louder"…); through the microphone they say dynamics need a MIDI keyboard. Stars stay about the notes; a lesson exercise can also require the dynamics (`"pass": { "minStars": 1, "dynamics": true }`).
+- While playing, a box next to the controls shows the level or hairpin now and how hard the last MIDI note was played against the level's band.
+- Content: lesson u4-l6 "Loud and soft" (p then f, crescendo/diminuendo, Ode to Joy with mf, p, cresc. and f); new skill "dynamics"; Ode to Joy has dynamics.
+- Sustain pedal (CC64): a "Pedal" indicator on the practice screen and in free play, lit while the pedal is down (shown when a MIDI keyboard is connected).
 
 **3.4 Content: Units 5–7**
 - Hands together: parallel and contrary motion, melody + single bass notes, then melody + simple chords.

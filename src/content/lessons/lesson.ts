@@ -105,7 +105,8 @@ export interface ExerciseStep extends StepBase {
   /** The song this exercise plays, if any (for its title). */
   song: SongId | null;
   metronome: boolean;
-  pass: { minStars: number };
+  /** `dynamics`: the loud and soft parts must be played as written too (on a MIDI keyboard). */
+  pass: { minStars: number; dynamics: boolean };
 }
 
 /** The staff a quiz card is shown on; "auto": treble from middle C up, bass below. */
@@ -325,8 +326,20 @@ async function exercise(
     score,
     song,
     metronome: data.metronome === true,
-    pass: passRule(data, location),
+    pass: { ...passRule(data, location), dynamics: passDynamics(data, score, location) },
   };
+}
+
+function passDynamics(data: Record<string, unknown>, score: Score, location: string): boolean {
+  const pass = object(data.pass ?? {}, at(location, 'pass'));
+  if (pass.dynamics === undefined) return false;
+  if (typeof pass.dynamics !== 'boolean') {
+    throw new LessonError(at(location, 'pass › dynamics'), 'expected true or false');
+  }
+  if (pass.dynamics && !score.dynamics) {
+    throw new LessonError(at(location, 'pass › dynamics'), 'the score has no dynamics');
+  }
+  return pass.dynamics;
 }
 
 function passRule(data: Record<string, unknown>, location: string): { minStars: number } {

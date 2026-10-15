@@ -38,6 +38,20 @@
     "mp": "mp, mezzo-piano: moderately soft.",
     "mf": "mf, mezzo-forte: moderately loud.",
     "f": "f, forte: loud.",
-    "ff": "ff, fortissimo: very loud."
+    "ff": "ff, fortissimo: very loud.",
+    "crescendo": "cresc., crescendo: gradually louder (also drawn as a widening hairpin).",
+    "diminuendo": "dim., diminuendo: gradually softer (also drawn as a narrowing hairpin)."
+  },
+  "dynamicNames": {
+    "pp": "very soft",
+    "p": "soft",
+    "mp": "moderately soft",
+    "mf": "moderately loud",
+    "f": "loud",
+    "ff": "very loud"
+  },
+  "hairpins": {
+    "crescendo": "getting louder",
+    "diminuendo": "getting softer"
   }
 }

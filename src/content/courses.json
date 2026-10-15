@@ -115,6 +115,10 @@
         {
           "id": "u4-l5",
           "skills": ["bass-clef", "lh-position", "steady-tempo"]
+        },
+        {
+          "id": "u4-l6",
+          "skills": ["dynamics", "rh-position"]
         }
       ]
     }

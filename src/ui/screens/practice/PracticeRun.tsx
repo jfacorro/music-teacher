@@ -44,6 +44,8 @@ import { TapPad } from '../../keyboard/TapPad';
 import { ScoreView, type SheetNotation } from '../../../content/lessons';
 import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
+import { DynamicsNow } from './DynamicsNow';
+import { PedalIndicator } from '../../components/PedalIndicator';
 import { ResultsCard } from './ResultsCard';
 import { InputSource } from '../../../input/types';
 
@@ -382,6 +384,9 @@ export function PracticeRun({
         <p className="muted" aria-live="polite">
           {hint ?? (loopHint || modeHint)}
         </p>
+        {score.dynamics && !rhythm && (
+          <DynamicsNow dynamics={score.dynamics} transport={transport} />
+        )}
       </div>
 
       {micChords && <p className="notice practice__notice">{t('practice.micChords')}</p>}
@@ -398,6 +403,7 @@ export function PracticeRun({
               void togglePlay();
             }}
             onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
+            hasDynamics={score.dynamics !== undefined}
           >
             {weak || extraActions ? (
               <>
@@ -444,6 +450,9 @@ export function PracticeRun({
             />
           )}
           {!state.summary && <FeedbackBadge feedback={state.feedback} streak={state.streak} />}
+          <div className="stage-status">
+            <PedalIndicator />
+          </div>
           {state.countIn !== null && (
             <div className="count-in" aria-live="assertive">
               {state.countIn}

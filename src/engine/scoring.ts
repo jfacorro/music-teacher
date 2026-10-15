@@ -1,4 +1,5 @@
 /** Accuracy, stars, timing and per-measure stats (PLAN.md §6.3). */
+import type { DynamicsSummary } from './dynamics';
 import type { Measure, ScoreNote } from './score';
 import { timingOf, type Grade, type TimingWindows, Timing } from './timing';
 
@@ -52,6 +53,8 @@ export interface Summary extends Tally {
   measures: Tally[];
   /** Null in wait mode, where timing isn't graded. */
   timing: TimingSummary | null;
+  /** Null without dynamics in the score, or without a MIDI keyboard to measure them. */
+  dynamics: DynamicsSummary | null;
 }
 
 export function weightOf(outcome: NoteOutcome | undefined): number {
@@ -104,6 +107,7 @@ export function summarize(
     stars: starsFor(total.accuracy),
     measures: perMeasure,
     timing: windows ? timingSummary(errorsMs, windows) : null,
+    dynamics: null,
   };
 }
 

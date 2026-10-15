@@ -6,6 +6,7 @@
  * Simplifications that fit the current content: each hand plays one line at a time (notes
  * that start together form a chord); durations are multiples of a sixteenth note.
  */
+import { HairpinKind } from '../engine/dynamics';
 import { beatsPerMeasure, Hand, type Score, type ScoreNote } from '../engine/score';
 import type { Pitch } from '../theory/pitch';
 
@@ -67,6 +68,14 @@ interface Event {
   notes: ScoreNote[]; // empty = rest
 }
 
+/** A dynamic or a hairpin's start or end, written under the top staff. */
+interface Direction {
+  at: number; // divisions
+  /** At the same spot: a hairpin's end (0), then a level (1), then a hairpin's start (2). */
+  order: number;
+  xml: string;
+}
+
 export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): MusicXmlResult {
   const hands = [Hand.Right, Hand.Left].filter((hand) =>
     options.hands ? options.hands.includes(hand) : score.notes.some((n) => n.hand === hand),
@@ -81,16 +90,30 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
     events: eventsFor(score.notes.filter((n) => n.hand === staff.hand)),
   }));
 
+  const directions = options.illustration ? [] : directionsFor(score, staves[0]);
+
   const measures: string[] = [];
   for (let m = 0; m < measureCount; m++) {
     const from = m * measureDivs;
     const to = from + measureDivs;
+    const last = m === measureCount - 1;
     const parts: string[] = [];
     if (m === 0) parts.push(attributes(score, staves, options.rhythm ?? false));
     linesByStaff.forEach(({ staff, events }, i) => {
       if (i > 0) parts.push(`<backup><duration>${measureDivs}</duration></backup>`);
+      // Directions go with the top staff; the last bar also takes any after the music ends.
+      const inBar = i === 0 ? directions.filter((d) => d.at >= from && (d.at < to || last)) : [];
       parts.push(
-        ...measureNotes(events, staff, from, to, index, options.noteLabel, options.rhythm ?? false),
+        ...measureNotes(
+          events,
+          staff,
+          from,
+          to,
+          index,
+          options.noteLabel,
+          options.rhythm ?? false,
+          inBar,
+        ),
       );
     });
     if (options.illustration) parts.push(NO_BAR_LINE);
@@ -137,18 +160,45 @@ function measureNotes(
   index: Map<string, ScoreNote>,
   noteLabel: MusicXmlOptions['noteLabel'],
   rhythm: boolean,
+  directions: readonly Direction[],
 ): string[] {
   const out: string[] = [];
+  let pending = 0;
+  /** Writes the directions up to `at`, before what's written there. */
+  const flush = (at: number) => {
+    while (pending < directions.length && directions[pending]!.at <= at) {
+      out.push(directions[pending++]!.xml);
+    }
+  };
+  /** Rests from `start` to `end`, split where a direction falls inside them. */
+  const restsBetween = (start: number, end: number) => {
+    let at = start;
+    flush(at);
+    while (at < end) {
+      const next = directions[pending];
+      const stop = next && next.at < end ? next.at : end;
+      out.push(...rests(stop - at, staff));
+      at = stop;
+      flush(at);
+    }
+  };
+
   const inMeasure = events.filter((e) => e.start < to && e.end > from);
   if (inMeasure.length === 0) {
-    out.push(rest(to - from, staff, true));
+    if (directions.some((d) => d.at > from && d.at < to)) restsBetween(from, to);
+    else {
+      flush(from);
+      out.push(rest(to - from, staff, true));
+    }
+    flush(Infinity);
     return out;
   }
   let cursor = from;
   for (const event of inMeasure) {
     const start = Math.max(event.start, from);
     const end = Math.min(event.end, to);
-    if (start > cursor) out.push(...rests(start - cursor, staff));
+    if (start > cursor) restsBetween(cursor, start);
+    flush(start);
     const pieces = split(end - start);
     let at = start;
     pieces.forEach((value, i) => {
@@ -172,8 +222,36 @@ function measureNotes(
     });
     cursor = end;
   }
-  if (cursor < to) out.push(...rests(to - cursor, staff));
+  if (cursor < to) restsBetween(cursor, to);
+  flush(Infinity);
   return out;
+}
+
+/** The score's dynamics and hairpins as MusicXML directions for `staff`, by position. */
+function directionsFor(score: Score, staff: StaffInfo | undefined): Direction[] {
+  if (!staff || !score.dynamics) return [];
+  const direction = (type: string) =>
+    `<direction placement="below"><direction-type>${type}</direction-type>` +
+    `<staff>${staff.number}</staff></direction>`;
+  const divs = (beat: number) => Math.round(beat * DIVISIONS);
+  const directions: Direction[] = [
+    ...score.dynamics.marks.map((mark) => ({
+      at: divs(mark.beat),
+      order: 1,
+      xml: direction(`<dynamics><${mark.dynamic}/></dynamics>`),
+    })),
+    ...score.dynamics.hairpins.flatMap((hairpin) => [
+      {
+        at: divs(hairpin.start),
+        order: 2,
+        xml: direction(
+          `<wedge type="${hairpin.kind === HairpinKind.Crescendo ? 'crescendo' : 'diminuendo'}"/>`,
+        ),
+      },
+      { at: divs(hairpin.end), order: 0, xml: direction('<wedge type="stop"/>') },
+    ]),
+  ];
+  return directions.sort((a, b) => a.at - b.at || a.order - b.order);
 }
 
 /** A length in divisions as written note values (longest first). */

@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "intro": "Music isn’t always played at the same loudness. A p (piano) under the notes means soft; an f (forte) means loud. On a digital piano, how hard you press a key decides how loud it sounds: press gently for soft, firmly for loud. Right thumb on middle {c}.",
+    "softThenLoud": "Play up softly (p), then back down loudly (f). The box next to the play button shows how loud to play, and how hard you pressed the last key.",
+    "hairpins": "Music can also get louder or softer little by little. A crescendo (cresc., or a hairpin that opens) means gradually louder; a diminuendo (dim., or a hairpin that closes) means gradually softer.",
+    "crescendo": "Start soft and get louder on the way up to the long note, play it loudly, then get softer on the way back down.",
+    "odeToJoy": "Now a whole tune: the first half moderately loud (mf), the second half soft (p), getting louder at the end, up to loud (f)."
+  }
+}

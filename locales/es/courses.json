@@ -37,7 +37,8 @@
     "u4-l2": "Líneas y espacios en clave de fa",
     "u4-l3": "Melodías con la mano izquierda",
     "u4-l4": "El pentagrama doble",
-    "u4-l5": "Canciones con la mano izquierda"
+    "u4-l5": "Canciones con la mano izquierda",
+    "u4-l6": "Fuerte y suave"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -50,6 +51,7 @@
     "steady-tempo": "Tocar a tiempo",
     "treble-clef": "Leer en clave de sol",
     "bass-clef": "Leer en clave de fa",
-    "grand-staff": "El pentagrama doble"
+    "grand-staff": "El pentagrama doble",
+    "dynamics": "Fuerte y suave"
   }
 }

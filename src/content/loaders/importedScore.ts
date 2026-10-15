@@ -64,6 +64,7 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
       keyFifths,
       notes: playable,
       measures: wholeMeasures(playable, music.timeSignature),
+      ...(music.dynamics && { dynamics: music.dynamics }),
     },
     outOfRange,
   };

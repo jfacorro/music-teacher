@@ -314,7 +314,25 @@
     "songSettings": "Ajustes de la canción",
     "songSettingsTip": "Cambia las manos, la tonalidad o el tempo, o elimina la canción",
     "noNotes": "Esta canción no tiene notas para tocar: elige una mano para al menos una pista en sus ajustes.",
-    "hintAutoplay": "La aplicación toca la música por ti: mira las teclas y escucha. Pulsa Tocar para empezar."
+    "hintAutoplay": "La aplicación toca la música por ti: mira las teclas y escucha. Pulsa Tocar para empezar.",
+    "dynamics": {
+      "heading": "Fuerte y suave",
+      "bar": "Compás {bar}",
+      "bars": "Compases {first}–{last}",
+      "short": {
+        "crescendo": "cresc.",
+        "diminuendo": "dim."
+      },
+      "right": "Justo",
+      "tooLoud": "Demasiado fuerte",
+      "tooSoft": "Demasiado suave",
+      "louder": "Subió de volumen",
+      "notLouder": "No subió de volumen",
+      "softer": "Bajó de volumen",
+      "notSofter": "No bajó de volumen",
+      "midiOnly": "Las partes fuertes y suaves se comprueban con un teclado MIDI: el micrófono no sabe con qué fuerza se tocó una tecla.",
+      "nowTip": "Qué tan fuerte tocar ahora, y con qué fuerza tocaste la última nota"
+    }
   },
   "lesson": {
     "notFound": "Esta lección no existe.",
@@ -338,7 +356,8 @@
       "back": "Volver al paso anterior",
       "continue": "Pasar al siguiente paso",
       "skip": "Saltar este paso por ahora"
-    }
+    },
+    "passDynamics": "Toca las partes fuertes y suaves como están escritas (se comprueba con un teclado MIDI)."
   },
   "welcome": {
     "title": "Bienvenido a Profesor de piano",

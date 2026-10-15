@@ -38,6 +38,20 @@
     "mp": "mp, mezzo piano: medianamente suave.",
     "mf": "mf, mezzo forte: medianamente fuerte.",
     "f": "f, forte: fuerte.",
-    "ff": "ff, fortissimo: muy fuerte."
+    "ff": "ff, fortissimo: muy fuerte.",
+    "crescendo": "cresc., crescendo: cada vez más fuerte (también se dibuja como un regulador que se abre).",
+    "diminuendo": "dim., diminuendo: cada vez más suave (también se dibuja como un regulador que se cierra)."
+  },
+  "dynamicNames": {
+    "pp": "muy suave",
+    "p": "suave",
+    "mp": "medio suave",
+    "mf": "medio fuerte",
+    "f": "fuerte",
+    "ff": "muy fuerte"
+  },
+  "hairpins": {
+    "crescendo": "cada vez más fuerte",
+    "diminuendo": "cada vez más suave"
   }
 }

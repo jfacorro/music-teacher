@@ -180,6 +180,43 @@ describe('scoreToMusicXml', () => {
     expect(written(picture.xml.replaceAll(' print-object="no"', ''), 1)).toEqual(['G4:whole']);
   });
 
+  it('writes dynamics and hairpins under the top staff, where they fall', () => {
+    const score = scoreOf([
+      ['C4', 0, 4],
+      ['D4', 4, 2],
+      ['E4', 6, 2],
+      ['F4', 8, 4],
+    ]);
+    score.dynamics = {
+      marks: [
+        { beat: 0, dynamic: 'p' },
+        { beat: 8, dynamic: 'f' },
+      ],
+      hairpins: [{ start: 4, end: 8, kind: 'crescendo' }],
+    };
+    const { xml } = scoreToMusicXml(score);
+    /** What each bar writes, in order: a dynamic, a wedge, or a note. */
+    const bars = [...xml.matchAll(/<measure .*?<\/measure>/g)].map((bar) =>
+      [...bar[0].matchAll(/<dynamics><(\w+)\/>|<wedge type="(\w+)"\/>|<step>(\w)<\/step>/g)].map(
+        ([, dynamic, wedge, step]) => dynamic ?? (wedge ? `wedge:${wedge}` : step),
+      ),
+    );
+    expect(bars).toEqual([
+      ['p', 'C'],
+      ['wedge:crescendo', 'D', 'E'],
+      ['wedge:stop', 'f', 'F'],
+    ]);
+    expect(xml).toContain('<direction placement="below">');
+  });
+
+  it('places a dynamic inside a rest by splitting the rest', () => {
+    const score = scoreOf([['C4', 0, 1]]);
+    score.dynamics = { marks: [{ beat: 2, dynamic: 'mf' }], hairpins: [] };
+    const { xml } = scoreToMusicXml(score);
+    expect(written(xml, 1)).toEqual(['C4:quarter', 'rest:quarter', 'rest:half']);
+    expect(xml.indexOf('<mf/>')).toBeGreaterThan(xml.lastIndexOf('<type>quarter</type>'));
+  });
+
   it('writes rhythm on a one-line percussion staff', () => {
     const { xml } = scoreToMusicXml(
       scoreOf([

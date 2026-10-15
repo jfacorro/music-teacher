@@ -314,7 +314,25 @@
     "songSettings": "Song settings",
     "songSettingsTip": "Change the hands, key or tempo, or delete the song",
     "noNotes": "This song has no notes to play: choose a hand for at least one track in its settings.",
-    "hintAutoplay": "The app plays the music for you: watch the keys and listen. Press Play to start."
+    "hintAutoplay": "The app plays the music for you: watch the keys and listen. Press Play to start.",
+    "dynamics": {
+      "heading": "Loud and soft",
+      "bar": "Bar {bar}",
+      "bars": "Bars {first}–{last}",
+      "short": {
+        "crescendo": "cresc.",
+        "diminuendo": "dim."
+      },
+      "right": "Just right",
+      "tooLoud": "Too loud",
+      "tooSoft": "Too soft",
+      "louder": "Got louder",
+      "notLouder": "Didn’t get louder",
+      "softer": "Got softer",
+      "notSofter": "Didn’t get softer",
+      "midiOnly": "Loud and soft parts are checked on a MIDI keyboard: the microphone can’t tell how hard a key was pressed.",
+      "nowTip": "How loud to play now, and how hard you played the last note"
+    }
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",
@@ -338,7 +356,8 @@
       "back": "Go back to the previous step",
       "continue": "Go on to the next step",
       "skip": "Skip this step for now"
-    }
+    },
+    "passDynamics": "Play the loud and soft parts as written (checked on a MIDI keyboard)."
   },
   "welcome": {
     "title": "Welcome to Piano Teacher",

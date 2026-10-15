@@ -16,6 +16,10 @@ system setting (`src/i18n/naming.ts`).
 | German letter names                           | German letters                            | letras alemanas                        |
 | Solfège                                       | solfège                                   | solfeo                                 |
 | Sustain pedal                                 | sustain pedal                             | pedal de resonancia                    |
+| Dynamics (loud and soft)                      | loud and soft (dynamics)                  | fuerte y suave (dinámica)              |
+| Crescendo / diminuendo                        | crescendo (cresc.) / diminuendo (dim.)    | crescendo (cresc.) / diminuendo (dim.) |
+| Hairpin (crescendo/diminuendo sign)           | hairpin                                   | regulador                              |
+| Pedal down / up                               | down / up                                 | pisado / suelto                        |
 | Velocity (how hard a key is hit)              | velocity                                  | velocidad                              |
 | Digital piano                                 | digital piano                             | piano digital                          |
 | MIDI keyboard                                 | MIDI keyboard                             | teclado MIDI                           |

@@ -1,0 +1,248 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "intro",
+      "textVars": {
+        "c": "C4"
+      },
+      "keys": [
+        {
+          "note": "C4",
+          "finger": 1
+        },
+        {
+          "note": "D4",
+          "finger": 2
+        },
+        {
+          "note": "E4",
+          "finger": 3
+        },
+        {
+          "note": "F4",
+          "finger": 4
+        },
+        {
+          "note": "G4",
+          "finger": 5
+        }
+      ],
+      "hand": "R",
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "exercise",
+      "text": "softThenLoud",
+      "mode": "wait",
+      "hands": "R",
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "F4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "G4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "F4",
+            "start": 8,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 9,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 10,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 11,
+            "duration": 5,
+            "hand": "R",
+            "finger": 1
+          }
+        ],
+        "dynamics": [
+          {
+            "beat": 0,
+            "mark": "p"
+          },
+          {
+            "beat": 8,
+            "mark": "f"
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1,
+        "dynamics": true
+      }
+    },
+    {
+      "type": "explain",
+      "text": "hairpins"
+    },
+    {
+      "type": "exercise",
+      "text": "crescendo",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "names",
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "F4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "G4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "F4",
+            "start": 8,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 9,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 10,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 11,
+            "duration": 5,
+            "hand": "R",
+            "finger": 1
+          }
+        ],
+        "dynamics": [
+          {
+            "beat": 0,
+            "mark": "p"
+          },
+          {
+            "beat": 4,
+            "mark": "f"
+          },
+          {
+            "beat": 11,
+            "mark": "p"
+          }
+        ],
+        "hairpins": [
+          {
+            "from": 0,
+            "to": 4,
+            "kind": "crescendo"
+          },
+          {
+            "from": 8,
+            "to": 11,
+            "kind": "diminuendo"
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1,
+        "dynamics": true
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "odeToJoy",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "names",
+      "song": "ode-to-joy",
+      "pass": {
+        "minStars": 1,
+        "dynamics": true
+      }
+    }
+  ]
+}

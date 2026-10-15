@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "intro": "La música no siempre suena igual de fuerte. Una p (piano) bajo las notas significa suave; una f (forte), fuerte. En un piano digital, la fuerza con que pulsas una tecla decide qué tan fuerte suena: pulsa con suavidad para suave y con firmeza para fuerte. Pulgar derecho en el {c} central.",
+    "softThenLoud": "Sube suave (p) y baja fuerte (f). El recuadro junto al botón de reproducir muestra qué tan fuerte tocar y con qué fuerza pulsaste la última tecla.",
+    "hairpins": "La música también puede ir subiendo o bajando de volumen poco a poco. Un crescendo (cresc., o un regulador que se abre) significa cada vez más fuerte; un diminuendo (dim., o un regulador que se cierra), cada vez más suave.",
+    "crescendo": "Empieza suave y ve subiendo hasta la nota larga, tócala fuerte y luego ve bajando al volver.",
+    "odeToJoy": "Ahora una melodía completa: la primera mitad medio fuerte (mf), la segunda suave (p), subiendo al final hasta fuerte (f)."
+  }
+}

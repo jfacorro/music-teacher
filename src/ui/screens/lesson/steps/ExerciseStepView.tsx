@@ -7,6 +7,7 @@ import { NotationSelect, ViewToggle } from '../../practice/ViewToggle';
 import { useSettings } from '../../../../storage/settings';
 import { Markings } from '../../../components/Markings';
 import { ScoreView } from '../../../../content/lessons/lesson';
+import type { Summary } from '../../../../engine/scoring';
 
 interface ExerciseStepViewProps {
   step: ExerciseStep;
@@ -23,7 +24,10 @@ export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseS
   const [notation, setNotation] = useState(
     () => step.notation ?? useSettings.getState().sheetNotation,
   );
-  const passes = (stars: number) => stars >= step.pass.minStars;
+  // Without a MIDI keyboard there are no dynamics to check: the notes decide.
+  const passes = (summary: Summary) =>
+    summary.stars >= step.pass.minStars &&
+    (!step.pass.dynamics || summary.dynamics === null || summary.dynamics.ok);
 
   return (
     <div className="lesson__step">
@@ -43,6 +47,7 @@ export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseS
         {step.pass.minStars > 0 && (
           <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
         )}
+        {step.pass.dynamics && <span className="muted">{t('lesson.passDynamics')}</span>}
       </div>
       <PracticeRun
         score={step.score}
@@ -52,10 +57,10 @@ export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseS
         view={view}
         notation={notation}
         onFinish={(summary) =>
-          onResult({ stars: summary.stars, accuracy: summary.accuracy }, passes(summary.stars))
+          onResult({ stars: summary.stars, accuracy: summary.accuracy }, passes(summary))
         }
         resultsActions={(summary) =>
-          passes(summary.stars) ? (
+          passes(summary) ? (
             <button
               type="button"
               className="button button--primary"
