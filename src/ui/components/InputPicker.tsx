@@ -13,6 +13,40 @@ const DotState = {
 } as const;
 type DotState = (typeof DotState)[keyof typeof DotState];
 
+interface Badge {
+  text: string;
+  state: DotState;
+}
+
+/** Until the browser grants MIDI access, the badge shows the access state. */
+const MIDI_ACCESS_BADGES = {
+  [MidiAccessState.Unsupported]: { key: 'midiBadge.unsupported', state: DotState.Off },
+  [MidiAccessState.Idle]: { key: 'midiBadge.off', state: DotState.Off },
+  [MidiAccessState.Requesting]: { key: 'midiBadge.connecting', state: DotState.Pending },
+  [MidiAccessState.Denied]: { key: 'midiBadge.denied', state: DotState.Problem },
+} as const satisfies Record<
+  Exclude<MidiAccessState, typeof MidiAccessState.Granted>,
+  { key: string; state: DotState }
+>;
+
+/** Once it's granted, the badge shows the keyboard's connection. */
+const MIDI_CONNECTION_DOTS: Record<MidiConnection, DotState> = {
+  [MidiConnection.None]: DotState.Off,
+  [MidiConnection.Connecting]: DotState.Pending,
+  [MidiConnection.Connected]: DotState.Ok,
+  [MidiConnection.Busy]: DotState.Problem,
+  [MidiConnection.Disconnected]: DotState.Problem,
+};
+
+const MIC_DOTS: Record<MicStatus, DotState> = {
+  [MicStatus.On]: DotState.Ok,
+  [MicStatus.Starting]: DotState.Pending,
+  [MicStatus.Denied]: DotState.Problem,
+  [MicStatus.Error]: DotState.Problem,
+  [MicStatus.Unsupported]: DotState.Off,
+  [MicStatus.Off]: DotState.Off,
+};
+
 /**
  * Always in the header: which instrument the app listens to, with its status, and a menu to
  * switch between MIDI, the microphone and automatic. Choosing one turns it on if needed.
@@ -26,43 +60,24 @@ export function InputPicker() {
   const deviceName = useMidi((s) => s.selectedName);
   const micStatus = useMic((s) => s.status);
 
-  const midi: { text: string; state: DotState } =
-    access === MidiAccessState.Unsupported
-      ? { text: t('midiBadge.unsupported'), state: DotState.Off }
-      : access === MidiAccessState.Denied
-        ? { text: t('midiBadge.denied'), state: DotState.Problem }
-        : access === MidiAccessState.Requesting
-          ? { text: t('midiBadge.connecting'), state: DotState.Pending }
-          : access !== MidiAccessState.Granted
-            ? { text: t('midiBadge.off'), state: DotState.Off }
-            : connection === MidiConnection.Connected
-              ? { text: deviceName ?? t('inputPicker.midi'), state: DotState.Ok }
-              : connection === MidiConnection.Connecting
-                ? { text: t('midiBadge.connecting'), state: DotState.Pending }
-                : connection === MidiConnection.Busy
-                  ? { text: t('midiBadge.busy'), state: DotState.Problem }
-                  : connection === MidiConnection.Disconnected
-                    ? { text: t('midiBadge.disconnected'), state: DotState.Problem }
-                    : { text: t('midiBadge.none'), state: DotState.Off };
-  const mic: { text: string; state: DotState } =
-    micStatus === MicStatus.On
-      ? { text: t('micBadge.on'), state: DotState.Ok }
-      : micStatus === MicStatus.Starting
-        ? { text: t('micBadge.starting'), state: DotState.Pending }
-        : micStatus === MicStatus.Denied
-          ? { text: t('micBadge.denied'), state: DotState.Problem }
-          : micStatus === MicStatus.Error
-            ? { text: t('micBadge.error'), state: DotState.Problem }
-            : micStatus === MicStatus.Unsupported
-              ? { text: t('micBadge.unsupported'), state: DotState.Off }
-              : { text: t('micBadge.off'), state: DotState.Off };
+  const midi: Badge =
+    access !== MidiAccessState.Granted
+      ? { text: t(MIDI_ACCESS_BADGES[access].key), state: MIDI_ACCESS_BADGES[access].state }
+      : {
+          text:
+            connection === MidiConnection.Connected
+              ? (deviceName ?? t('inputPicker.midi'))
+              : t(`midiBadge.${connection}`),
+          state: MIDI_CONNECTION_DOTS[connection],
+        };
+  const mic: Badge = { text: t(`micBadge.${micStatus}`), state: MIC_DOTS[micStatus] };
 
   // Automatic mode shows what it's listening to right now.
   const active = instrument === Instrument.Midi ? midi : instrument === Instrument.Mic ? mic : null;
   const labels: Record<InputMode, string> = {
-    auto: t('inputPicker.auto', { status: active?.text ?? t('inputPicker.nothing') }),
-    midi: midi.text,
-    mic: mic.text,
+    [InputMode.Auto]: t('inputPicker.auto', { status: active?.text ?? t('inputPicker.nothing') }),
+    [InputMode.Midi]: midi.text,
+    [InputMode.Mic]: mic.text,
   };
   const state =
     mode === InputMode.Midi
