@@ -12,7 +12,7 @@
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
 import { type Finger, Hand, type Score } from '../../engine/score';
-import { HandFilter, PracticeMode } from '../../engine/session';
+import { GradedMode, HandFilter } from '../../engine/session';
 import { describeValues, isValueOf } from '../../lib/values';
 import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
 import { ScoreError, parseInlineScore } from '../loaders/inlineScore';
@@ -99,7 +99,7 @@ export interface ExerciseStep extends StepBase {
   view: ScoreView;
   /** The sheet music level it starts with; null = the learner's default (Settings). */
   notation: SheetNotation | null;
-  mode: PracticeMode;
+  mode: GradedMode;
   hands: HandFilter;
   score: Score;
   /** The song this exercise plays, if any (for its title). */
@@ -276,8 +276,8 @@ async function exercise(
   data: Record<string, unknown>,
   location: string,
 ): Promise<Omit<ExerciseStep, keyof StepBase | 'type'>> {
-  if (!isValueOf(PracticeMode, data.mode)) {
-    throw new LessonError(at(location, 'mode'), `expected ${describeValues(PracticeMode)}`);
+  if (!isValueOf(GradedMode, data.mode)) {
+    throw new LessonError(at(location, 'mode'), `expected ${describeValues(GradedMode)}`);
   }
   const hands = data.hands ?? HandFilter.Both;
   if (!isValueOf(HandFilter, hands)) {

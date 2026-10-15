@@ -12,7 +12,11 @@ import { PracticeTools, SPEED_MAX } from './PracticeTools';
 import { ICONS } from '../../icons';
 import { NotationSelect, ViewToggle } from './ViewToggle';
 
-const MODES: readonly PracticeMode[] = [PracticeMode.Wait, PracticeMode.Tempo];
+const MODES: readonly PracticeMode[] = [
+  PracticeMode.Wait,
+  PracticeMode.Tempo,
+  PracticeMode.Autoplay,
+];
 /** In the order of the hands on the keyboard: left, both, right. */
 const HANDS: readonly HandFilter[] = [HandFilter.Left, HandFilter.Both, HandFilter.Right];
 

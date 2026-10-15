@@ -262,6 +262,7 @@ Instead, the microphone stays a single-note input, and with it **any note of a c
 |---|---|
 | **Wait mode** | The cursor stops at each note/chord until the correct key(s) are pressed. No timing pressure. Wrong notes are flagged but don't advance. |
 | **Tempo mode** | Music plays at a fixed tempo with count-in and metronome. Notes are graded for correctness and timing. |
+| **Play it for me** (autoplay, 🤖) | The app plays the selected hands by itself (and the other hand if chosen), at the chosen speed, lighting the keys as they sound, in either view; loops repeat. Nothing is graded and no result is saved. Songs only: lessons use the graded modes (`GradedMode`). |
 | **Loop** (Phase 2) | Repeat a selected range of measures. |
 | **Slow-down** (Phase 2) | Tempo slider 40–100%. |
 | **Hand selection** | Right only / left only / both. The non-selected hand can be auto-played as accompaniment (Phase 2+). |

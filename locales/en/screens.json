@@ -223,7 +223,8 @@
     "mode": {
       "label": "Mode",
       "wait": "Wait for me",
-      "tempo": "Play along"
+      "tempo": "Play along",
+      "autoplay": "Play it for me"
     },
     "hands": {
       "label": "Hands",
@@ -307,13 +308,15 @@
         "both": "Practice both hands",
         "R": "Practice the right hand only",
         "L": "Practice the left hand only"
-      }
+      },
+      "autoplay": "Play it for me: the app plays the music, so you can watch and listen"
     },
     "micChords": "With the microphone, any note of a chord counts for the whole chord. Connect a MIDI keyboard to check every note.",
     "tempoInfo": "{bpm} BPM",
     "songSettings": "Song settings",
     "songSettingsTip": "Change the hands, key or tempo, or delete the song",
-    "noNotes": "This song has no notes to play: choose a hand for at least one track in its settings."
+    "noNotes": "This song has no notes to play: choose a hand for at least one track in its settings.",
+    "hintAutoplay": "The app plays the music for you: watch the keys and listen. Press Play to start."
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",

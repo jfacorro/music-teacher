@@ -223,7 +223,8 @@
     "mode": {
       "label": "Modo",
       "wait": "Espérame",
-      "tempo": "Tocar a tempo"
+      "tempo": "Tocar a tempo",
+      "autoplay": "Tócala por mí"
     },
     "hands": {
       "label": "Manos",
@@ -307,13 +308,15 @@
         "both": "Practicar con las dos manos",
         "R": "Practicar solo la mano derecha",
         "L": "Practicar solo la mano izquierda"
-      }
+      },
+      "autoplay": "Tócala por mí: la aplicación toca la música para que mires y escuches"
     },
     "micChords": "Con el micrófono, cualquier nota de un acorde cuenta como el acorde entero. Conecta un teclado MIDI para comprobar cada nota.",
     "tempoInfo": "{bpm} BPM",
     "songSettings": "Ajustes de la canción",
     "songSettingsTip": "Cambia las manos, la tonalidad o el tempo, o elimina la canción",
-    "noNotes": "Esta canción no tiene notas para tocar: elige una mano para al menos una pista en sus ajustes."
+    "noNotes": "Esta canción no tiene notas para tocar: elige una mano para al menos una pista en sus ajustes.",
+    "hintAutoplay": "La aplicación toca la música por ti: mira las teclas y escucha. Pulsa Tocar para empezar."
   },
   "lesson": {
     "notFound": "Esta lección no existe.",

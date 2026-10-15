@@ -32,6 +32,7 @@ system setting (`src/i18n/naming.ts`).
 | Start over                                    | start over                                | volver a empezar                       |
 | Wait mode                                     | wait for me                               | espérame                               |
 | Tempo mode                                    | play along                                | tocar a tempo                          |
+| Autoplay mode (the app plays the music)       | play it for me                            | tócala por mí                          |
 | Metronome                                     | metronome                                 | metrónomo                              |
 | Count-in                                      | count-in                                  | entrada (del metrónomo)                |
 | Right / left hand                             | right / left hand                         | mano derecha / izquierda               |

@@ -515,3 +515,37 @@ describe('PracticeSession: loop and tempo', () => {
     expect(t.transport.position()).toBeCloseTo(-0.5);
   });
 });
+
+describe('PracticeSession: autoplay', () => {
+  it('plays through without counting in, grading or results', () => {
+    const t = setup(melody, { mode: PracticeMode.Autoplay });
+    expect(t.session.countInFrom).toBeNull();
+    t.session.play();
+    t.at(0.5);
+    t.press(G4); // the learner playing along changes nothing
+    t.release(G4);
+    expect(t.session.getState()).toMatchObject({ status: 'playing', feedback: null, streak: 0 });
+    expect(t.session.getState().marks.size).toBe(0);
+    t.at(2.5);
+    expect(t.session.outcomeOf(t.score.notes[0]!)).toBeUndefined();
+    t.at(3.01);
+    expect(t.session.getState()).toMatchObject({ status: 'finished', summary: null });
+  });
+
+  it('repeats the loop without scoring it', () => {
+    const t = setup(melody, { mode: PracticeMode.Autoplay, loop: { first: 0, last: 0 } });
+    t.session.play();
+    t.at(4.25);
+    expect(t.transport.position()).toBeCloseTo(0.25);
+    expect(t.session.getState()).toMatchObject({ status: 'playing', lastPass: null });
+  });
+
+  it('starts again after finishing', () => {
+    const t = setup(melody, { mode: PracticeMode.Autoplay });
+    t.session.play();
+    t.at(3.01);
+    t.session.play();
+    expect(t.session.getState().status).toBe('playing');
+    expect(t.transport.position()).toBeLessThan(0);
+  });
+});
