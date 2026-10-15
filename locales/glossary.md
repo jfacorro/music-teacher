@@ -32,6 +32,7 @@ system setting (`src/i18n/naming.ts`).
 | Start over                                    | start over                                | volver a empezar                       |
 | Wait mode                                     | wait for me                               | espérame                               |
 | Tempo mode                                    | play along                                | tocar a tempo                          |
+| Autoplay mode (the app plays the music)       | play it for me                            | tócala por mí                          |
 | Metronome                                     | metronome                                 | metrónomo                              |
 | Count-in                                      | count-in                                  | entrada (del metrónomo)                |
 | Right / left hand                             | right / left hand                         | mano derecha / izquierda               |
@@ -83,6 +84,15 @@ system setting (`src/i18n/naming.ts`).
 | Card (quiz)                                   | card                                      | tarjeta                                |
 | Tap (rhythm exercises)                        | tap                                       | toque                                  |
 | Extra tap                                     | extra tap                                 | toque de más                           |
+| Imported songs (library)                      | My songs                                  | Mis canciones                          |
+| Import (a file)                               | import                                    | importar                               |
+| Track (of a MIDI file or score)               | track                                     | pista                                  |
+| Transpose                                     | transpose                                 | transportar                            |
+| Semitone                                      | semitone                                  | semitono                               |
+| Key (tonality)                                | key                                       | tonalidad                              |
+| Range (lowest to highest note)                | range                                     | registro                               |
+| Sixteenth note                                | sixteenth note                            | semicorchea                            |
+| Triplet                                       | triplet                                   | tresillo                               |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
 their explanations are translated (`theory.json` › `markings`).

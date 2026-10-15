@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { isSongId, loadSong, type SongId } from '../../../content/songs';
 import type { Score } from '../../../engine/score';
+import { ResultKind } from '../../../storage/progress';
 import { PracticeView } from './PracticeView';
 import { LoadStatus } from '../../loadStatus';
 
@@ -28,6 +29,7 @@ export function PracticeScreen() {
 
 function SongLoader({ songId }: { songId: SongId }) {
   const { t } = useTranslation('screens');
+  const { t: ts } = useTranslation('songs');
   const [state, setState] = useState<LoadState>({ status: LoadStatus.Loading });
 
   useEffect(() => {
@@ -53,5 +55,12 @@ function SongLoader({ songId }: { songId: SongId }) {
       </section>
     );
   }
-  return <PracticeView songId={songId} score={state.score} />;
+  return (
+    <PracticeView
+      title={ts(`${songId}.title`)}
+      composer={ts(`${songId}.composer`)}
+      score={state.score}
+      result={{ kind: ResultKind.Song, id: songId }}
+    />
+  );
 }

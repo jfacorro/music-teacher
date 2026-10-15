@@ -11,13 +11,17 @@ import {
   LessonStatus,
 } from '../../content/unlock';
 import { useContentText } from '../../i18n/useContentText';
+import { useMySongs } from '../../storage/mySongs';
 import { resultKey, useProgress, ResultKind } from '../../storage/progress';
 import { Stars } from '../components/Stars';
 import { StarsSize } from '../components/starsSize';
 
 const CHECK = '✓';
 
-/** The learning path: what to do next, every unit's lessons with stars and locks, songs. */
+/**
+ * The learning path: what to do next, every unit's lessons with stars and locks, songs, and the
+ * learner's own songs.
+ */
 export function HomeScreen() {
   const { t } = useTranslation('screens');
   const { t: ts } = useTranslation('songs');
@@ -32,6 +36,9 @@ export function HomeScreen() {
   const nextLesson = nextId ? UNITS.flatMap((u) => u.lessons).find((l) => l.id === nextId) : null;
   const started = Object.keys(results).some((key) => key.startsWith('lesson:'));
   const songStars = (id: string) => results[resultKey(ResultKind.Song, id)]?.bestStars ?? 0;
+  const mySongs = useMySongs((s) => s.songs);
+  const mySongStars = (id: number) =>
+    results[resultKey(ResultKind.MySong, String(id))]?.bestStars ?? 0;
 
   return (
     <section className="screen">
@@ -114,6 +121,36 @@ export function HomeScreen() {
             );
           })}
         </ol>
+      </section>
+
+      <section className="card unit">
+        <h2>{t('home.mySongs')}</h2>
+        <p className="muted">
+          {mySongs.length > 0 ? t('home.mySongsIntro') : t('home.mySongsEmpty')}
+        </p>
+        {mySongs.length > 0 && (
+          <ol className="path">
+            {mySongs.map((song) => {
+              const stars = mySongStars(song.id);
+              return (
+                <PathItem
+                  key={song.id}
+                  title={song.title}
+                  href={`/practice/my/${song.id}`}
+                  state={{
+                    status: stars > 0 ? LessonStatus.Completed : LessonStatus.Available,
+                    stars,
+                  }}
+                />
+              );
+            })}
+          </ol>
+        )}
+        <div className="button-row unit__actions">
+          <Link className="button" to="/my-songs/import">
+            {t('home.importSong')}
+          </Link>
+        </div>
       </section>
     </section>
   );

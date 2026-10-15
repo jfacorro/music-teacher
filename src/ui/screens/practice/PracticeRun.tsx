@@ -119,6 +119,7 @@ export function PracticeRun({
       }),
   );
   const state = useSyncExternalStore(session.subscribe, session.getState);
+  const autoplay = mode === PracticeMode.Autoplay;
   /** Results the learner closed (they stay closed until the next run's). */
   const [dismissed, setDismissed] = useState<Summary | null>(null);
   const running = state.status === SessionStatus.Playing || state.status === SessionStatus.Waiting;
@@ -191,25 +192,26 @@ export function PracticeRun({
       ),
     [transport, session, score],
   );
+  // The other hand, or in autoplay the practiced hands (and the other one if chosen).
   useEffect(
     () =>
       startAccompaniment(
         transport,
         () => ({
-          enabled: otherHandOn.current,
-          notes: session.otherHand,
+          enabled: autoplay || otherHandOn.current,
+          notes: autoplay ? (otherHandOn.current ? score.notes : session.hands) : session.otherHand,
           from: session.musicStart,
           until: Math.min(session.holdBeat, session.musicEnd),
         }),
         (note, start, end) => audioIfReady()?.accompany(note.pitch.midi, start, end),
         soundLeadMs,
       ),
-    [transport, session],
+    [transport, session, score, autoplay],
   );
   // Waiting for a key keeps the other hand ringing; stopping silences it.
   useEffect(() => {
-    if (!running || !otherHand) audioIfReady()?.stopAccompaniment();
-  }, [running, otherHand]);
+    if (!running || !(otherHand || autoplay)) audioIfReady()?.stopAccompaniment();
+  }, [running, otherHand, autoplay]);
 
   // A rhythm's notes are all on one key: a single lane.
   const rhythmKey = score.notes[0]?.pitch.midi ?? 64;
@@ -287,8 +289,8 @@ export function PracticeRun({
       if (event.code !== 'Space' && event.code !== 'Escape') return;
       if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
       if (isTypingTarget(event.target)) return;
-      // An open dialog (the results) handles its own keys: Escape closes it.
-      if (document.querySelector('dialog:modal')) return;
+      // An open dialog (the results) or panel (volume) handles its own keys: Escape closes it.
+      if (document.querySelector('dialog:modal, :popover-open')) return;
       event.preventDefault(); // no page scrolling
       // A focused button or checkbox would react to Space as well, when the key comes up.
       if (event.target instanceof HTMLElement && event.target !== document.body) {
@@ -315,13 +317,16 @@ export function PracticeRun({
   const micChords =
     listening === Instrument.Mic &&
     !rhythm &&
+    !autoplay &&
     groupByStart(session.practiced).some((group) => group.notes.length > 1);
 
   const modeHint = rhythm
     ? t('practice.hintRhythm')
     : mode === PracticeMode.Wait
       ? t('practice.hintWait')
-      : t('practice.hint');
+      : autoplay
+        ? t('practice.hintAutoplay')
+        : t('practice.hint');
   const loopHint =
     loop &&
     [

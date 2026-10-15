@@ -1,4 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
+import type { ImportedMusic } from '../content/loaders/importedMusic';
+import type { ImportOptions } from '../content/loaders/importedScore';
 import type { ResultKind } from './progress';
 
 interface KeyValueRow {
@@ -6,7 +8,7 @@ interface KeyValueRow {
   value: unknown;
 }
 
-/** Best result so far for a lesson or song; `key` is "lesson:<id>" or "song:<id>". */
+/** Best result so far for a lesson or song; `key` is "lesson:<id>", "song:<id>" or "mySong:<id>". */
 export interface ResultRow {
   key: string;
   bestStars: number;
@@ -35,11 +37,25 @@ export interface PracticeDayRow {
   ms: number;
 }
 
+/** A song the learner imported ("My songs"), with their choices for practicing it. */
+export interface MySongRow {
+  id?: number;
+  /** User content: kept as written, never translated. */
+  title: string;
+  composer: string | null;
+  fileName: string;
+  /** ms since epoch */
+  addedAt: number;
+  music: ImportedMusic;
+  options: ImportOptions;
+}
+
 export const db = new Dexie('piano-teacher') as Dexie & {
   settings: EntityTable<KeyValueRow, 'key'>;
   results: EntityTable<ResultRow, 'key'>;
   practiceLog: EntityTable<PracticeLogRow, 'id'>;
   practiceDays: EntityTable<PracticeDayRow, 'day'>;
+  mySongs: EntityTable<MySongRow, 'id'>;
 };
 
 db.version(1).stores({
@@ -65,6 +81,10 @@ db.version(3)
       .table<PracticeDayRow>('practiceDays')
       .bulkPut([...days].map(([day, ms]) => ({ day, ms })));
   });
+
+db.version(4).stores({
+  mySongs: '++id',
+});
 
 /** Local calendar day, e.g. "2026-10-13". */
 export function dayOf(time: number): string {

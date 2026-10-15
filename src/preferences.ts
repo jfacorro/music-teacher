@@ -1,11 +1,11 @@
 /** User preference changes that touch more than the stored settings. */
-import { setSoundTimingCorrection } from './audio/audio';
+import { setSoundTimingCorrection, setVolumes } from './audio/audio';
 import { changeLanguage } from './i18n';
 import { detectLanguage } from './i18n/languages';
 import { setDevInputEnabled } from './input/dev/devInput';
 import { setMicDelay, setMicGate, startMic, stopMic } from './input/mic/micInput';
 import type { InputMode } from './input/routing';
-import { updateSettings, useSettings } from './storage/settings';
+import { type Settings, updateSettings, useSettings } from './storage/settings';
 
 /** `null` follows the browser's language. */
 export function setLanguagePreference(language: string | null): void {
@@ -22,6 +22,13 @@ export function setSoundTiming(ms: number): void {
   const soundTimingMs = Math.round(ms);
   updateSettings({ soundTimingMs });
   setSoundTimingCorrection(soundTimingMs);
+}
+
+/** Metronome and/or piano volume, 0–100 %: saved, and heard right away. */
+export function setVolume(patch: Partial<Pick<Settings, 'metronomeVolume' | 'pianoVolume'>>): void {
+  updateSettings(patch);
+  const { metronomeVolume, pianoVolume } = useSettings.getState();
+  setVolumes({ metronome: metronomeVolume, piano: pianoVolume });
 }
 
 export function setInputMode(inputMode: InputMode): void {

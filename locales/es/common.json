@@ -50,5 +50,12 @@
   "modal": {
     "close": "Cerrar",
     "closeTip": "Cerrar (Esc)"
+  },
+  "volume": {
+    "metronome": "Volumen del metrónomo",
+    "piano": "Volumen del piano",
+    "pianoHint": "El piano de la aplicación: «Tócala por mí», la otra mano y las teclas tocadas en la computadora o en la pantalla. El sonido de un piano digital tiene su propio control de volumen.",
+    "button": "Volumen",
+    "tip": "Volumen del metrónomo y del piano"
   }
 }

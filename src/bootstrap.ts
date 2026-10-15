@@ -1,4 +1,4 @@
-import { preloadAudio, setSoundTimingCorrection } from './audio/audio';
+import { preloadAudio, setSoundTimingCorrection, setVolumes } from './audio/audio';
 import { startKeySound } from './audio/keySound';
 import { initI18n } from './i18n';
 import { detectLanguage } from './i18n/languages';
@@ -7,12 +7,13 @@ import { startLiveTracking } from './input/liveStore';
 import { micPermission, setMicDelay, setMicGate, startMic } from './input/mic/micInput';
 import { configureMidi, enableMidi, midiPermission } from './input/midi/midiInput';
 import { startRouting } from './input/routing';
+import { loadMySongs } from './storage/mySongs';
 import { loadProgress } from './storage/progress';
 import { loadSettings, updateSettings } from './storage/settings';
 
 /** Everything that must be ready before the first render. */
 export async function bootstrap(): Promise<void> {
-  const [settings] = await Promise.all([loadSettings(), loadProgress()]);
+  const [settings] = await Promise.all([loadSettings(), loadProgress(), loadMySongs()]);
   await initI18n(settings.language ?? detectLanguage(navigator.languages));
 
   startLiveTracking();
@@ -20,6 +21,7 @@ export async function bootstrap(): Promise<void> {
   setDevInputEnabled(settings.devKeyboard);
   startKeySound();
   setSoundTimingCorrection(settings.soundTimingMs);
+  setVolumes({ metronome: settings.metronomeVolume, piano: settings.pianoVolume });
   preloadAudio(); // so the first key press isn't delayed by loading the audio library
 
   configureMidi({

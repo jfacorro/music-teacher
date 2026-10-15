@@ -5,6 +5,8 @@
  * - Tempo mode: the music plays at a steady tempo after a one-measure count-in; notes are
  *   graded on timing and missed once their window passes.
  * - Wait mode: the music stops at each note or chord until the right keys are pressed.
+ * - Autoplay: the music plays by itself at a steady tempo, to watch and listen; nothing is
+ *   graded and there are no results.
  * - The microphone hears one note at a time, so with it any note of a chord counts for the
  *   whole chord (in both modes).
  * - Loop: only a range of measures is practiced, over and over; each time through ends with
@@ -45,9 +47,17 @@ export const HandFilter = {
 } as const;
 export type HandFilter = (typeof HandFilter)[keyof typeof HandFilter];
 
-export const PracticeMode = {
+/** Modes that grade the learner's playing (the ones lessons use). */
+export const GradedMode = {
   Wait: 'wait',
   Tempo: 'tempo',
+} as const;
+export type GradedMode = (typeof GradedMode)[keyof typeof GradedMode];
+
+export const PracticeMode = {
+  ...GradedMode,
+  /** The app plays the music by itself. */
+  Autoplay: 'autoplay',
 } as const;
 export type PracticeMode = (typeof PracticeMode)[keyof typeof PracticeMode];
 
@@ -261,6 +271,7 @@ export class PracticeSession {
     }
     if (this.state.status !== SessionStatus.Playing && this.state.status !== SessionStatus.Waiting)
       return;
+    if (this.mode === PracticeMode.Autoplay) return; // nothing to grade
 
     this.source = event.source;
     const beat = this.transport.positionAt(event.time);
@@ -289,7 +300,7 @@ export class PracticeSession {
           ? Math.floor(position - from) + 1
           : null;
       if (countIn !== this.state.countIn) this.setState({ countIn });
-    } else {
+    } else if (this.mode === PracticeMode.Wait) {
       const group = this.waitMatcher.current;
       if (group && status === SessionStatus.Playing && position >= group.start) {
         this.transport.pause();
@@ -299,6 +310,11 @@ export class PracticeSession {
     }
 
     if (position < this.musicEnd) return;
+    if (this.mode === PracticeMode.Autoplay) {
+      if (this.loop) this.transport.seek(this.loop.start + (position - this.loop.end));
+      else this.stop();
+      return;
+    }
     const matched =
       this.mode === PracticeMode.Tempo ? this.tempoMatcher.done : this.waitMatcher.done;
     // When looping in tempo mode, time doesn't wait for notes still in their window.
@@ -467,6 +483,12 @@ export class PracticeSession {
         this.mode === PracticeMode.Tempo ? this.windows() : undefined,
       ),
     });
+  }
+
+  /** The end of autoplay: finished, without results. */
+  private stop(): void {
+    this.transport.pause();
+    this.setState({ status: SessionStatus.Finished, countIn: null });
   }
 
   /** The end of the loop: scores this time through and jumps back, keeping the beat. */

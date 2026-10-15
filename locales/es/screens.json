@@ -12,7 +12,11 @@
     "allDone": "¡Terminaste todas las lecciones disponibles! Repite lecciones para conseguir más estrellas o practica las canciones de abajo.",
     "unitProgress": "{done} de {total} hechas",
     "unitLocked": "{stars, plural, one {Consigue al menos # estrella en cada lección de la unidad anterior para desbloquear esta.} other {Consigue al menos # estrellas en cada lección de la unidad anterior para desbloquear esta.}}",
-    "locked": "(bloqueada)"
+    "locked": "(bloqueada)",
+    "mySongs": "Mis canciones",
+    "mySongsIntro": "Canciones que importaste. Se guardan en este navegador, en esta computadora.",
+    "mySongsEmpty": "Importa un archivo MIDI o MusicXML para practicar tu propia música.",
+    "importSong": "Importar una canción"
   },
   "freePlay": {
     "title": "Práctica libre",
@@ -64,7 +68,8 @@
       "none": "{date}: sin práctica",
       "less": "Menos",
       "more": "Más"
-    }
+    },
+    "deletedSong": "Canción eliminada"
   },
   "settings": {
     "title": "Configuración",
@@ -218,7 +223,8 @@
     "mode": {
       "label": "Modo",
       "wait": "Espérame",
-      "tempo": "Tocar a tempo"
+      "tempo": "Tocar a tempo",
+      "autoplay": "Tócala por mí"
     },
     "hands": {
       "label": "Manos",
@@ -302,9 +308,15 @@
         "both": "Practicar con las dos manos",
         "R": "Practicar solo la mano derecha",
         "L": "Practicar solo la mano izquierda"
-      }
+      },
+      "autoplay": "Tócala por mí: la aplicación toca la música para que mires y escuches"
     },
-    "micChords": "Con el micrófono, cualquier nota de un acorde cuenta como el acorde entero. Conecta un teclado MIDI para comprobar cada nota."
+    "micChords": "Con el micrófono, cualquier nota de un acorde cuenta como el acorde entero. Conecta un teclado MIDI para comprobar cada nota.",
+    "tempoInfo": "{bpm} BPM",
+    "songSettings": "Ajustes de la canción",
+    "songSettingsTip": "Cambia las manos, la tonalidad o el tempo, o elimina la canción",
+    "noNotes": "Esta canción no tiene notas para tocar: elige una mano para al menos una pista en sus ajustes.",
+    "hintAutoplay": "La aplicación toca la música por ti: mira las teclas y escucha. Pulsa Tocar para empezar."
   },
   "lesson": {
     "notFound": "Esta lección no existe.",
@@ -358,5 +370,70 @@
     "results": "Resultados del test",
     "firstTry": "{count} de {total} a la primera",
     "newCards": "Empezar de nuevo con tarjetas nuevas"
+  },
+  "mySongs": {
+    "backHome": "Volver a Aprender",
+    "notFound": "Esta canción no está en Mis canciones.",
+    "loadError": "No se pudo cargar esta canción.",
+    "import": {
+      "title": "Importar una canción",
+      "intro": "Elige un archivo MIDI (.mid) o MusicXML (.musicxml, .xml o .mxl), por ejemplo uno exportado desde un programa de notación. Tus canciones se guardan en este navegador, en esta computadora.",
+      "choose": "Elegir un archivo",
+      "drop": "O suelta el archivo aquí.",
+      "reading": "Leyendo el archivo…",
+      "errors": {
+        "unknownFormat": "Este archivo no es MIDI ni MusicXML.",
+        "unreadable": "No se pudo leer este archivo. Puede estar dañado o guardado en un formato que esta aplicación no admite.",
+        "noNotes": "Este archivo no tiene notas para tocar.",
+        "tooLarge": "Este archivo es demasiado grande para ser una pieza de piano."
+      }
+    },
+    "setup": {
+      "importTitle": "Prepara la canción",
+      "editTitle": "Ajustes de la canción",
+      "file": "De {fileName}",
+      "title": "Título",
+      "composer": "Compositor (opcional)",
+      "tracks": "Pistas",
+      "tracksHint": "Elige qué mano toca cada pista. Las pistas que no se tocan se omiten.",
+      "track": "Pista",
+      "notes": "Notas",
+      "range": "Registro",
+      "hand": "Mano",
+      "handFor": "Mano para {track}",
+      "trackNumber": "Pista {number}",
+      "trackStaff": "{name}, pentagrama {staff}",
+      "hands": {
+        "R": "Mano derecha",
+        "L": "Mano izquierda",
+        "split": "Ambas manos (divididas en el {c} central)",
+        "none": "No se toca"
+      },
+      "transpose": "Transportar",
+      "originalKey": "Tonalidad original",
+      "semitones": "{count, plural, one {{signed} semitono} other {{signed} semitonos}}",
+      "tempo": "Tempo (BPM)",
+      "tempoFromFile": "El archivo indica {bpm}.",
+      "tempoRange": "Elige un tempo entre {min} y {max}.",
+      "summary": "{notes, plural, one {# nota} other {# notas}} en {bars, plural, one {# compás} other {# compases}}",
+      "noHands": "Elige una mano para al menos una pista.",
+      "saveAndPractice": "Guardar y practicar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "chooseAnother": "Elegir otro archivo",
+      "delete": "Eliminar canción",
+      "deleteTitle": "¿Eliminar «{title}»?",
+      "deleteText": "La canción se quita de Mis canciones. Tu historial de práctica se conserva.",
+      "deleteConfirm": "Eliminar",
+      "keep": "Conservarla"
+    },
+    "warnings": {
+      "heading": "Para que sepas",
+      "timingRounded": "Las notas se alinearon a la semicorchea más cercana, así que los tresillos y el ritmo tocado a mano son aproximados.",
+      "tempoChanges": "El tempo cambia durante la pieza: se usa el primero en toda ella.",
+      "timeSignatureChanges": "El compás cambia durante la pieza: los compases siguen el primero.",
+      "repeatsIgnored": "Las repeticiones se tocan una vez, tal como están escritas.",
+      "outOfRange": "{count, plural, one {# nota quedaría} other {# notas quedarían}} fuera del teclado al transportar, así que se {count, plural, one {omite} other {omiten}}."
+    }
   }
 }

@@ -13,7 +13,10 @@ export const ICONS = {
   sheet: String.fromCodePoint(0x1f3bc), // 🎼 musical score
   wait: String.fromCodePoint(0x23f3), // ⏳ the music takes its time
   tempo: String.fromCodePoint(0x23f1, 0xfe0f), // ⏱️ timed
+  autoplay: String.fromCodePoint(0x1f916), // 🤖 the app plays by itself
   L: String.fromCodePoint(0x1faf2), // 🫲 leftwards hand
   both: String.fromCodePoint(0x1f64c), // 🙌 both hands raised
   R: String.fromCodePoint(0x1faf1), // 🫱 rightwards hand
+  settings: String.fromCodePoint(0x2699, 0xfe0f), // ⚙️ gear
+  volume: String.fromCodePoint(0x1f50a), // 🔊 speaker
 } as const;

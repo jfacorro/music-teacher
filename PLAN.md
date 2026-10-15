@@ -50,11 +50,12 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 | Enumerations | Constant objects with a type of the same name: `export const InputSource = { Midi: 'midi', … } as const`, used as `InputSource.Mic` (no string literals in code; `isValueOf` / `describeValues` in `src/lib/values.ts` check JSON data). Not TypeScript `enum`: `erasableSyntaxOnly` keeps the code plain JavaScript once types are erased, and the values stay plain strings in JSON and IndexedDB |
 | Audio output (demos, metronome) | Tone.js + Salamander piano samples |
 | MIDI file parsing | `@tonejs/midi` |
+| MusicXML import | The browser's `DOMParser`; `.mxl` (ZIP) read with `DecompressionStream`, no ZIP library |
 | Sheet music rendering (Phase 2) | OpenSheetMusicDisplay (MusicXML) |
 | Falling notes / keyboard | HTML Canvas (custom renderer) |
 | Localization | i18next + react-i18next with ICU message format (`i18next-icu`) for plurals/gender; `Intl.*` APIs for numbers, dates, durations, percentages |
 | i18n tooling | `eslint-plugin-i18next` (no hard-coded strings), key-parity check script, pseudo-locale for testing |
-| Tests | Vitest (unit), Playwright (smoke/E2E) |
+| Tests | Vitest (unit; jsdom for the MusicXML parser tests), Playwright (smoke/E2E) |
 | Desktop wrapper (Phase 3, optional) | Electron |
 
 ---
@@ -107,7 +108,7 @@ src/
     lessons/            lesson JSON files (contain translation keys, not text)
     songs/              MusicXML / MIDI files
     courses.json        course/unit tree, unlock rules
-    loaders/            MusicXML + MIDI → Score converters
+    loaders/            inline JSON scores; MusicXML + MIDI files → imported music → Score
   audio/                Tone.js sampler, metronome, demo playback
   i18n/
     index.ts            i18next setup, language detection, fallback
@@ -116,7 +117,7 @@ src/
   ui/
     components/         Keyboard, FallingNotes, SheetMusic, FeedbackBadge, ...
     screens/            Home, LessonPlayer, Results, FreePlay, Progress, Settings
-  storage/              Dexie DB, progress + settings repositories
+  storage/              Dexie DB, progress + settings repositories, imported songs
   theory/
     pitch.ts            Pitch type, parse/format of note strings ("Db4"), MIDI ↔ Pitch, default spelling
     intervals.ts        intervals, transposition
@@ -261,6 +262,7 @@ Instead, the microphone stays a single-note input, and with it **any note of a c
 |---|---|
 | **Wait mode** | The cursor stops at each note/chord until the correct key(s) are pressed. No timing pressure. Wrong notes are flagged but don't advance. |
 | **Tempo mode** | Music plays at a fixed tempo with count-in and metronome. Notes are graded for correctness and timing. |
+| **Play it for me** (autoplay, 🤖) | The app plays the selected hands by itself (and the other hand if chosen), at the chosen speed, lighting the keys as they sound, in either view; loops repeat. Nothing is graded and no result is saved. Songs only: lessons use the graded modes (`GradedMode`). |
 | **Loop** (Phase 2) | Repeat a selected range of measures. |
 | **Slow-down** (Phase 2) | Tempo slider 40–100%. |
 | **Hand selection** | Right only / left only / both. The non-selected hand can be auto-played as accompaniment (Phase 2+). |
@@ -426,8 +428,9 @@ Note names differ by language, so the naming system is its **own setting**, defa
 3. **Results** — accuracy, timing breakdown, stars, per-measure heatmap, "retry" / "practice weak spots" / "next".
 4. **Free play** — shows notes played (names on keys and staff), identifies chords; note-naming quiz.
 5. **Progress** — streak, practice time per day, lessons completed, skill mastery.
-6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, metronome volume, theme.
+6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, metronome and piano volume (also from the 🔊 button on the practice screen; by default the click sits under the music), theme.
 7. **First launch** — pick language and note-naming system, then connect an input.
+8. **My songs** — import a MIDI or MusicXML file (file picker or drop), set it up (title, which hand plays each track, transposition, tempo), practice it like any song; its settings screen changes or deletes it.
 
 All text on every screen comes from translation files (§8); note names and chord names follow the selected naming system.
 
@@ -604,11 +607,13 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - With the microphone, any note of a chord counts for the whole chord, in wait and tempo modes (`WaitMatcher.press(…, anyNote)`, `TempoMatcher.takeChord`); MIDI still needs every note.
 - Practice shows a tip when listening through the microphone to music with chords.
 
-**3.2 Song import**
-- Import `.mid` and `.musicxml` / `.mxl` files from disk.
-- Track/staff → hand assignment UI; transpose; tempo override.
-- Imported songs stored in IndexedDB and shown in a "My songs" library.
-- Imported song titles are kept as-is (user content, not translated); all import UI is localized.
+**3.2 Song import** — ✔ done
+- Import `.mid`, `.musicxml` / `.xml` and `.mxl` files (file picker or drag and drop, up to 10 MB), told apart by their content (`content/loaders/importFile.ts`). MIDI: one track per channel and instrument, drum tracks left out, notes spelled from the key signature. MusicXML: one track per staff of each part, written spelling and fingering kept, ties joined, grace/cue/unpitched notes left out.
+- Track/staff → hand assignment UI: right, left, both (split at middle C) or not played. Suggested: a part on two staves → right/left; otherwise the highest track → right, the lowest → left; a single track is split if it has notes on both sides of middle C.
+- Transpose ±12 semitones (respelled in the new key; notes that would leave the 88 keys are left out and counted); tempo override (20–300 BPM).
+- Imported songs stored in IndexedDB (`mySongs`, database version 4) and shown in "My songs" on the Learn screen; practiced with all the practice tools, results saved as `mySong:<id>`. Their settings screen changes them or deletes them (the practice history is kept, shown as "Deleted song").
+- Imported song titles are kept as-is (user content, not translated); all import UI is localized (English, Spanish), and the glossary has the new terms.
+- Simplifications, shown as notes when they apply: timing is rounded to sixteenth notes (the sheet-music writer's grid, so triplets and played-in MIDI are approximated); the first tempo and time signature are used; repeats are played once, as written. A pickup bar is padded to a whole bar. The key signature now reaches the sheet music (`Score.keyFifths`).
 
 **3.3 Dynamics (MIDI only)**
 - Use velocity for `p` / `f` / crescendo exercises; dynamics shown in results.
@@ -629,7 +634,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 #### Phase 3 done when
 - [ ] Two-handed lessons grade both hands independently.
 - [ ] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note.
-- [ ] A user-provided MIDI/MusicXML file can be imported and practiced.
+- [x] A user-provided MIDI/MusicXML file can be imported and practiced. (verified 2026-10-15 on the Casio)
 - [ ] Chord names (e.g. C major / Do mayor / C-Dur) display correctly in every language and naming system.
 - [ ] (Optional) App runs as a standalone Windows desktop app.
 
