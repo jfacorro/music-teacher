@@ -4,6 +4,7 @@
  * per minute.
  */
 import type { Pitch } from '../theory/pitch';
+import type { ScoreDynamics } from './dynamics';
 import type { Marking } from './markings';
 
 export const Hand = {
@@ -37,6 +38,8 @@ export interface Score {
   markings?: Marking[];
   /** Key signature as in MusicXML `<fifths>` (negative = flats); C major when absent. */
   keyFifths?: number;
+  /** Loud and soft: levels from a beat on, and crescendos and diminuendos. */
+  dynamics?: ScoreDynamics;
 }
 
 export function beatsPerMeasure([numerator, denominator]: [number, number]): number {

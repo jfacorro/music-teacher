@@ -96,3 +96,51 @@ describe('markings', () => {
     );
   });
 });
+
+describe('dynamics', () => {
+  it('reads levels and hairpins, sorted', () => {
+    const score = parseInlineScore(
+      {
+        ...valid,
+        dynamics: [
+          { beat: 4, mark: 'f' },
+          { beat: 0, mark: 'p' },
+        ],
+        hairpins: [{ from: 2, to: 4, kind: 'crescendo' }],
+      },
+      'test',
+    );
+    expect(score.dynamics).toEqual({
+      marks: [
+        { beat: 0, dynamic: 'p' },
+        { beat: 4, dynamic: 'f' },
+      ],
+      hairpins: [{ start: 2, end: 4, kind: 'crescendo' }],
+    });
+    expect(parseInlineScore(valid, 'test')).not.toHaveProperty('dynamics');
+  });
+
+  it('rejects what isn’t a dynamic or a hairpin, with its location', () => {
+    expect(() =>
+      parseInlineScore({ ...valid, dynamics: [{ beat: 0, mark: 'allegro' }] }, 'song'),
+    ).toThrow('song › dynamics[0] › mark: expected a dynamic: pp, p, mp, mf, f or ff');
+    expect(() =>
+      parseInlineScore({ ...valid, hairpins: [{ from: 4, to: 2, kind: 'crescendo' }] }, 'song'),
+    ).toThrow('song › hairpins[0] › to: expected a number > 4');
+    expect(() =>
+      parseInlineScore({ ...valid, hairpins: [{ from: 0, to: 2, kind: 'louder' }] }, 'song'),
+    ).toThrow('song › hairpins[0] › kind: expected "crescendo" or "diminuendo"');
+    expect(() =>
+      parseInlineScore(
+        {
+          ...valid,
+          hairpins: [
+            { from: 0, to: 4, kind: 'crescendo' },
+            { from: 2, to: 6, kind: 'diminuendo' },
+          ],
+        },
+        'song',
+      ),
+    ).toThrow('song › hairpins: hairpins must not overlap');
+  });
+});

@@ -276,5 +276,26 @@
       "hand": "L",
       "finger": 5
     }
+  ],
+  "dynamics": [
+    {
+      "beat": 0,
+      "mark": "mf"
+    },
+    {
+      "beat": 16,
+      "mark": "p"
+    },
+    {
+      "beat": 28,
+      "mark": "f"
+    }
+  ],
+  "hairpins": [
+    {
+      "from": 24,
+      "to": 28,
+      "kind": "crescendo"
+    }
   ]
 }

@@ -5,6 +5,7 @@
  * Positions and durations are in beats (quarter notes), rounded to sixteenth notes: the finest
  * value the sheet music writes (`musicxml.ts`).
  */
+import type { ScoreDynamics } from '../../engine/dynamics';
 import { type Finger, Hand } from '../../engine/score';
 import { MIDDLE_C, type Pitch } from '../../theory/pitch';
 
@@ -54,6 +55,8 @@ export interface ImportedMusic {
   /** Only tracks with notes; at least one. */
   tracks: ImportedTrack[];
   warnings: ImportWarning[];
+  /** Loud and soft, as written (MusicXML only; songs saved before this have none). */
+  dynamics?: ScoreDynamics;
 }
 
 export const ImportErrorCode = {

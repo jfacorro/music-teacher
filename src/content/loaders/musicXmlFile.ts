@@ -7,6 +7,13 @@
  * once, as written. A pickup bar is padded to a whole bar, so the bars line up with the time
  * signature.
  */
+import {
+  type DynamicMark,
+  type Hairpin,
+  HairpinKind,
+  type ScoreDynamics,
+} from '../../engine/dynamics';
+import { isDynamic, isMarking } from '../../engine/markings';
 import { beatsPerMeasure, type Finger } from '../../engine/score';
 import { type Alter, makePitch, type Pitch, type Step, STEPS } from '../../theory/pitch';
 import {
@@ -17,6 +24,7 @@ import {
   ImportErrorCode,
   ImportFormat,
   ImportWarning,
+  IMPORT_GRID,
   quantize,
 } from './importedMusic';
 
@@ -42,6 +50,9 @@ interface Context {
   meters: Set<string>;
   tempos: number[];
   repeats: boolean;
+  /** Dynamics and hairpins as written, in beats (before padding a pickup bar). */
+  marks: DynamicMark[];
+  hairpins: Hairpin[];
 }
 
 interface Part {
@@ -79,6 +90,8 @@ export function parseMusicXml(text: string): ImportedMusic {
     meters: new Set(),
     tempos: [],
     repeats: false,
+    marks: [],
+    hairpins: [],
   };
   const parts = childrenOf(root, 'part').map((part, index) =>
     readPart(part, partNames.get(part.getAttribute('id')) ?? null, context, index === 0),
@@ -126,6 +139,7 @@ export function parseMusicXml(text: string): ImportedMusic {
     tempo: Math.round(context.tempos[0] ?? DEFAULT_TEMPO),
     timeSignature,
     keyFifths: context.keyFifths ?? 0,
+    ...dynamicsOf(context, pickup),
     tracks,
     warnings,
   };
@@ -137,6 +151,8 @@ function readPart(element: Element, name: string | null, context: Context, first
   let barStart = 0;
   /** Notes tied over to a following one, by `${staff}|${midi}`. */
   const tied = new Map<string, ImportedNote>();
+  /** Where an open crescendo or diminuendo started. */
+  let wedge: { start: number; kind: HairpinKind } | null = null;
 
   for (const measure of childrenOf(element, 'measure')) {
     let cursor = 0; // beats from the start of the bar
@@ -158,6 +174,10 @@ function readPart(element: Element, name: string | null, context: Context, first
         case 'sound': {
           const tempo = tempoOf(item);
           if (first && tempo !== null) context.tempos.push(tempo);
+          if (item.tagName === 'direction') {
+            const at = barStart + cursor + durationOf(item, divisions, 'offset');
+            wedge = readDynamics(item, at, wedge, context);
+          }
           break;
         }
         case 'barline':
@@ -277,8 +297,61 @@ function tempoOf(item: Element): number | null {
   return perMinute * unit * (childOf(metronome, 'beat-unit-dot') ? 1.5 : 1);
 }
 
-function durationOf(item: Element, divisions: number): number {
-  return (numberOf(childOf(item, 'duration')) ?? 0) / divisions;
+function durationOf(item: Element, divisions: number, child = 'duration'): number {
+  return (numberOf(childOf(item, child)) ?? 0) / divisions;
+}
+
+/** Reads a direction's dynamics and wedges at `at`; returns the wedge still open. */
+function readDynamics(
+  direction: Element,
+  at: number,
+  open: { start: number; kind: HairpinKind } | null,
+  context: Context,
+): { start: number; kind: HairpinKind } | null {
+  let wedge = open;
+  for (const type of childrenOf(direction, 'direction-type')) {
+    for (const level of childOf(type, 'dynamics')?.children ?? []) {
+      if (isMarking(level.tagName) && isDynamic(level.tagName)) {
+        context.marks.push({ beat: at, dynamic: level.tagName });
+      }
+    }
+    const mark = childOf(type, 'wedge');
+    const kind = mark?.getAttribute('type');
+    if (kind === 'crescendo' || kind === 'diminuendo') {
+      wedge = {
+        start: at,
+        kind: kind === 'crescendo' ? HairpinKind.Crescendo : HairpinKind.Diminuendo,
+      };
+    } else if (kind === 'stop' && wedge) {
+      if (at > wedge.start)
+        context.hairpins.push({ start: wedge.start, end: at, kind: wedge.kind });
+      wedge = null;
+    }
+  }
+  return wedge;
+}
+
+/**
+ * The dynamics on the sixteenth-note grid, moved like the notes for a pickup bar: one level
+ * per beat (the last written), hairpins that don't overlap.
+ */
+function dynamicsOf(context: Context, pickup: number): { dynamics?: ScoreDynamics } {
+  const snap = (beat: number) => Math.round((beat + pickup) / IMPORT_GRID) * IMPORT_GRID;
+  const byBeat = new Map<number, DynamicMark>();
+  for (const mark of context.marks) {
+    byBeat.set(snap(mark.beat), { beat: snap(mark.beat), dynamic: mark.dynamic });
+  }
+  const marks = [...byBeat.values()].sort((a, b) => a.beat - b.beat);
+  const hairpins: Hairpin[] = [];
+  for (const hairpin of [...context.hairpins].sort((a, b) => a.start - b.start)) {
+    const start = snap(hairpin.start);
+    const end = snap(hairpin.end);
+    const previous = hairpins.at(-1);
+    if (end > start && (!previous || start >= previous.end)) {
+      hairpins.push({ start, end, kind: hairpin.kind });
+    }
+  }
+  return marks.length > 0 || hairpins.length > 0 ? { dynamics: { marks, hairpins } } : {};
 }
 
 function childrenOf(element: Element | undefined, name: string): Element[] {

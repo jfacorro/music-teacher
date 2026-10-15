@@ -58,5 +58,10 @@
     "pianoHint": "The app’s piano: “Play it for me”, the other hand, and keys played on the computer or screen. A digital piano’s own sound has its own volume knob.",
     "button": "Volume",
     "tip": "Metronome and piano volume"
+  },
+  "pedal": {
+    "label": "Pedal",
+    "down": "Sustain pedal down",
+    "up": "Sustain pedal up"
   }
 }

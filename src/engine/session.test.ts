@@ -549,3 +549,42 @@ describe('PracticeSession: autoplay', () => {
     expect(t.transport.position()).toBeLessThan(0);
   });
 });
+
+describe('PracticeSession: dynamics', () => {
+  const soft: NoteSpec[] = [
+    ['C4', 0],
+    ['D4', 1],
+  ];
+  const withDynamics = (specs: NoteSpec[], options: Partial<SessionOptions> = {}) => {
+    const t = setup(specs, options);
+    t.score.dynamics = { marks: [{ beat: 0, dynamic: 'p' }], hairpins: [] };
+    return t;
+  };
+
+  it('grades how hard the notes were played on a MIDI keyboard', () => {
+    const t = withDynamics(soft, { mode: PracticeMode.Wait });
+    t.session.play();
+    for (const pitch of [C4, D4]) {
+      t.at(t.score.notes.find((n) => n.pitch.midi === pitch)!.start);
+      t.session.handleNote({ ...noteOn(pitch, t.now), velocity: 100 });
+      t.release(pitch);
+    }
+    t.at(2.01);
+    expect(t.session.getState().summary?.dynamics).toMatchObject({
+      passages: [{ dynamic: 'p', velocity: 100, ok: false }],
+      ok: false,
+    });
+  });
+
+  it('has no dynamics to report through the microphone', () => {
+    const t = withDynamics(soft, { mode: PracticeMode.Wait });
+    t.session.play();
+    for (const pitch of [C4, D4]) {
+      t.at(t.score.notes.find((n) => n.pitch.midi === pitch)!.start);
+      t.session.handleNote(noteOn(pitch, t.now, InputSource.Mic));
+      t.session.handleNote(noteOff(pitch, t.now + 100, InputSource.Mic));
+    }
+    t.at(2.01);
+    expect(t.session.getState().summary?.dynamics).toBeNull();
+  });
+});

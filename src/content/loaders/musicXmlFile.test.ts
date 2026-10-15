@@ -234,6 +234,37 @@ describe('parseMusicXml', () => {
     ]);
   });
 
+  it('keeps dynamics and hairpins, moved like the notes of a pickup bar', () => {
+    const dynamic = (level: string, offset = '') =>
+      `<direction placement="below"><direction-type><dynamics><${level}/></dynamics></direction-type>${offset}</direction>`;
+    const wedge = (type: string) =>
+      `<direction><direction-type><wedge type="${type}"/></direction-type></direction>`;
+    const music = parseMusicXml(
+      piece(
+        `<measure number="0" implicit="yes">${attributes(
+          '<divisions>2</divisions><time><beats>4</beats><beat-type>4</beat-type></time>',
+        )}${dynamic('p')}${n('G4', 2)}</measure>`,
+        measure(wedge('crescendo'), n('C5', 4), n('D5', 4)),
+        measure(
+          wedge('stop'),
+          dynamic('f'),
+          n('E5', 4),
+          dynamic('mf', '<offset>2</offset>'),
+          n('F5', 4),
+        ),
+      ),
+    );
+    // The pickup (one beat) is padded to a whole bar: everything moves 3 beats later.
+    expect(music.dynamics).toEqual({
+      marks: [
+        { beat: 3, dynamic: 'p' },
+        { beat: 8, dynamic: 'f' },
+        { beat: 11, dynamic: 'mf' }, // after E5 (2 beats), plus its offset of 1 beat
+      ],
+      hairpins: [{ start: 4, end: 8, kind: 'crescendo' }],
+    });
+  });
+
   it('rejects what it can’t read', () => {
     const code = (text: string) => {
       try {

@@ -37,7 +37,8 @@
     "u4-l2": "Lines and spaces in the bass clef",
     "u4-l3": "Left-hand melodies",
     "u4-l4": "The grand staff",
-    "u4-l5": "Left-hand songs"
+    "u4-l5": "Left-hand songs",
+    "u4-l6": "Loud and soft"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -50,6 +51,7 @@
     "steady-tempo": "Playing in time",
     "treble-clef": "Reading the treble clef",
     "bass-clef": "Reading the bass clef",
-    "grand-staff": "The grand staff"
+    "grand-staff": "The grand staff",
+    "dynamics": "Loud and soft"
   }
 }

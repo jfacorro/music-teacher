@@ -2,13 +2,16 @@
  * Loads inline JSON scores (PLAN.md §7):
  *
  *   { "tempo": 100, "timeSignature": [4, 4], "markings": ["moderato", "mf"],
- *     "notes": [{ "note": "E4", "start": 0, "duration": 1, "hand": "R", "finger": 3 }, …] }
+ *     "notes": [{ "note": "E4", "start": 0, "duration": 1, "hand": "R", "finger": 3 }, …],
+ *     "dynamics": [{ "beat": 0, "mark": "p" }, { "beat": 8, "mark": "f" }],
+ *     "hairpins": [{ "from": 4, "to": 8, "kind": "crescendo" }] }
  *
  * Validates everything once at load time and reports problems with their location, e.g.
  * `song "ode-to-joy" › notes[3] › note: Invalid note "H4": …`.
  */
 import { type Finger, Hand, type Score, type ScoreNote, wholeMeasures } from '../../engine/score';
-import { isMarking, type Marking } from '../../engine/markings';
+import { isMarking, isDynamic, type Marking } from '../../engine/markings';
+import { type Hairpin, HairpinKind, type ScoreDynamics } from '../../engine/dynamics';
 import { describeValues, isValueOf } from '../../lib/values';
 import { InvalidNoteError, parseNote } from '../../theory/pitch';
 
@@ -37,13 +40,52 @@ export function parseInlineScore(input: unknown, location: string): Score {
     .sort((a, b) => a.start - b.start || a.pitch.midi - b.pitch.midi);
 
   const markings = parseMarkings(data.markings, at(location, 'markings'));
+  const dynamics = parseDynamics(data, location);
   return {
     tempo,
     timeSignature,
     notes,
     measures: wholeMeasures(notes, timeSignature),
     ...(markings.length > 0 && { markings }),
+    ...(dynamics && { dynamics }),
   };
+}
+
+function parseDynamics(data: Record<string, unknown>, location: string): ScoreDynamics | null {
+  if (data.dynamics === undefined && data.hairpins === undefined) return null;
+  const marks = list(data.dynamics, at(location, 'dynamics')).map((input, index) => {
+    const where = at(location, `dynamics[${index}]`);
+    const mark = expectObject(input, where);
+    const beat = expectNumber(mark.beat, at(where, 'beat'), { min: 0 });
+    if (!isMarking(mark.mark) || !isDynamic(mark.mark)) {
+      throw new ScoreError(at(where, 'mark'), 'expected a dynamic: pp, p, mp, mf, f or ff');
+    }
+    return { beat, dynamic: mark.mark };
+  });
+  const hairpins: Hairpin[] = list(data.hairpins, at(location, 'hairpins')).map((input, index) => {
+    const where = at(location, `hairpins[${index}]`);
+    const hairpin = expectObject(input, where);
+    const start = expectNumber(hairpin.from, at(where, 'from'), { min: 0 });
+    const end = expectNumber(hairpin.to, at(where, 'to'), { min: start, exclusive: true });
+    if (!isValueOf(HairpinKind, hairpin.kind)) {
+      throw new ScoreError(at(where, 'kind'), `expected ${describeValues(HairpinKind)}`);
+    }
+    return { start, end, kind: hairpin.kind };
+  });
+  hairpins.sort((a, b) => a.start - b.start);
+  hairpins.forEach((hairpin, index) => {
+    const next = hairpins[index + 1];
+    if (next && next.start < hairpin.end) {
+      throw new ScoreError(at(location, 'hairpins'), 'hairpins must not overlap');
+    }
+  });
+  return { marks: marks.sort((a, b) => a.beat - b.beat), hairpins };
+}
+
+function list(input: unknown, location: string): unknown[] {
+  if (input === undefined) return [];
+  if (!Array.isArray(input)) throw new ScoreError(location, 'expected an array');
+  return input;
 }
 
 function parseMarkings(input: unknown, location: string): Marking[] {

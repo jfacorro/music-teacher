@@ -5,6 +5,7 @@ import { screenKeyDown, screenKeyUp } from '../../input/dev/screenInput';
 import { MIDDLE_C, pitchesOf, pitchFromMidi, type Pitch } from '../../theory/pitch';
 import { ChordName } from '../components/ChordName';
 import { HeldNotesDisplay } from '../components/HeldNotesDisplay';
+import { PedalIndicator } from '../components/PedalIndicator';
 import { usePressedKeys } from '../hooks';
 import { FULL_PIANO, keyboardLayout } from '../keyboard/layout';
 import { PianoKeyboard } from '../keyboard/PianoKeyboard';
@@ -110,7 +111,10 @@ function FreePlay() {
   return (
     <>
       <p>{t('freePlay.intro')}</p>
-      <HeldNotesDisplay />
+      <div className="free-play__held">
+        <HeldNotesDisplay />
+        <PedalIndicator />
+      </div>
       <ChordName />
       <PianoKeyboard
         layout={layout}

@@ -9,12 +9,15 @@
  *   graded and there are no results.
  * - The microphone hears one note at a time, so with it any note of a chord counts for the
  *   whole chord (in both modes).
+ * - Dynamics: how hard each note was played on a MIDI keyboard is kept, and the summary says
+ *   whether the loud and soft parts were played as written.
  * - Loop: only a range of measures is practiced, over and over; each time through ends with
  *   a quick score instead of the results.
  *
  * The UI calls `tick()` every animation frame and forwards every `NoteEvent` to `handleNote`.
  */
 import { InputSource, type NoteEvent, NoteEventType } from '../input/types';
+import { summarizeDynamics } from './dynamics';
 import type { Pitch } from '../theory/pitch';
 import { TempoMatcher, TempoResultKind } from './matching/tempoMatcher';
 import { resolvePlayed } from './micAliases';
@@ -148,6 +151,8 @@ export class PracticeSession {
   private tempoMatcher!: TempoMatcher;
   private waitMatcher!: WaitMatcher;
   private outcomes = new Map<ScoreNote, NoteOutcome>();
+  /** How hard each note was played, for notes played on a MIDI keyboard. */
+  private velocities = new Map<ScoreNote, number>();
   private wrongBeats: number[] = [];
   private feedbackId = 0;
   /** Held microphone pitch → the expected pitch it was read as. */
@@ -361,6 +366,7 @@ export class PracticeSession {
         errorMs: result.errorMs,
       };
       this.outcomes.set(result.note, outcome);
+      this.keepVelocity(result.note, event);
       if (event.source === InputSource.Mic) {
         for (const note of this.tempoMatcher.takeChord(result.note)) {
           this.outcomes.set(note, outcome);
@@ -391,6 +397,7 @@ export class PracticeSession {
       if (!this.isUngradedNote(event.pitch, beat)) this.wrong(event.pitch, beat);
       return;
     }
+    this.keepVelocity(result.note, event);
     if (result.groupComplete && group) {
       for (const note of group.notes) this.outcomes.set(note, { kind: OutcomeKind.Correct });
     }
@@ -402,6 +409,11 @@ export class PracticeSession {
       this.transport.play();
       this.setState({ status: SessionStatus.Playing });
     }
+  }
+
+  /** Only a MIDI keyboard reports how hard a key was hit. */
+  private keepVelocity(note: ScoreNote, event: NoteEvent): void {
+    if (event.source === InputSource.Midi) this.velocities.set(note, event.velocity);
   }
 
   private wrong(pitch: number, beat: number): void {
@@ -472,17 +484,20 @@ export class PracticeSession {
 
   private finish(): void {
     this.transport.pause();
-    this.setState({
-      status: SessionStatus.Finished,
-      countIn: null,
-      summary: summarize(
-        this.hands,
-        this.outcomes,
-        this.wrongBeats,
-        this.score.measures,
-        this.mode === PracticeMode.Tempo ? this.windows() : undefined,
-      ),
-    });
+    const summary = summarize(
+      this.hands,
+      this.outcomes,
+      this.wrongBeats,
+      this.score.measures,
+      this.mode === PracticeMode.Tempo ? this.windows() : undefined,
+    );
+    summary.dynamics = summarizeDynamics(
+      this.score.dynamics,
+      this.hands,
+      this.velocities,
+      this.score.measures,
+    );
+    this.setState({ status: SessionStatus.Finished, countIn: null, summary });
   }
 
   /** The end of autoplay: finished, without results. */
@@ -505,6 +520,7 @@ export class PracticeSession {
     this.tempoMatcher = new TempoMatcher(this.practicedNotes);
     this.waitMatcher = new WaitMatcher(this.practicedNotes);
     this.outcomes = new Map();
+    this.velocities = new Map();
     this.wrongBeats = [];
   }
 

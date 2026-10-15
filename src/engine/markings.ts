@@ -14,7 +14,7 @@ export function isMarking(value: unknown): value is Marking {
   return typeof value === 'string' && ALL.includes(value);
 }
 
-export function isDynamic(marking: Marking): boolean {
+export function isDynamic(marking: Marking): marking is (typeof DYNAMIC_MARKINGS)[number] {
   return (DYNAMIC_MARKINGS as readonly string[]).includes(marking);
 }
 
