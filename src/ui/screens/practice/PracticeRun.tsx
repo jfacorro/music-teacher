@@ -27,6 +27,7 @@ import { useNoteNames } from '../../../i18n/useNoteNames';
 import { subscribeNotes } from '../../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
 import { useInstrument } from '../../../input/routing';
+import { groupByStart } from '../../../engine/matching/waitMatcher';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { useLiveInput } from '../../../input/liveStore';
 import { activityTimer, recordPracticeTime } from '../../../storage/progress';
@@ -301,6 +302,13 @@ export function PracticeRun({
   const resultsOpen = state.summary !== null && dismissed !== state.summary;
   const extraActions = state.summary ? (resultsActions?.(state.summary) ?? null) : null;
 
+  // The microphone hears one note at a time: with it, any note of a chord counts.
+  const listening = useInstrument((s) => s.instrument);
+  const micChords =
+    listening === 'mic' &&
+    !rhythm &&
+    groupByStart(session.practiced).some((group) => group.notes.length > 1);
+
   const modeHint = rhythm
     ? t('practice.hintRhythm')
     : mode === 'wait'
@@ -362,6 +370,8 @@ export function PracticeRun({
           {hint ?? (loopHint || modeHint)}
         </p>
       </div>
+
+      {micChords && <p className="notice practice__notice">{t('practice.micChords')}</p>}
 
       {/* Results float over the page; closed, the music stays with its colored notes. */}
       {state.summary && resultsOpen && (

@@ -114,6 +114,20 @@ describe('TempoMatcher', () => {
     expect(upcoming(5)).toEqual([]);
   });
 
+  it('takes the rest of a chord', () => {
+    const { notes } = scoreOf([
+      ['C4', 0],
+      ['E4', 0],
+      ['G4', 1],
+    ]);
+    const matcher = new TempoMatcher(notes);
+    const hit = matcher.play(C4, 0, TEMPO, MIDI_WINDOWS);
+    expect(hit.kind === 'hit' && matcher.takeChord(hit.note).map((n) => n.pitch.midi)).toEqual([
+      E4,
+    ]);
+    expect(matcher.upcoming(0.5, TEMPO, MIDI_WINDOWS).map((n) => n.pitch.midi)).toEqual([67]);
+  });
+
   it('uses wider windows for the microphone', () => {
     const matcher = new TempoMatcher(scoreOf([['C4', 0]]).notes);
     expect(play(matcher, C4, 0.18, MIC_WINDOWS)).toMatchObject({ kind: 'hit', grade: 'ok' });

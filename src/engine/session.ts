@@ -5,6 +5,8 @@
  * - Tempo mode: the music plays at a steady tempo after a one-measure count-in; notes are
  *   graded on timing and missed once their window passes.
  * - Wait mode: the music stops at each note or chord until the right keys are pressed.
+ * - The microphone hears one note at a time, so with it any note of a chord counts for the
+ *   whole chord (in both modes).
  * - Loop: only a range of measures is practiced, over and over; each time through ends with
  *   a quick score instead of the results.
  *
@@ -296,11 +298,13 @@ export class PracticeSession {
 
     const result = this.tempoMatcher.play(event.pitch, beat, tempo, windows);
     if (result.kind === 'hit') {
-      this.outcomes.set(result.note, {
-        kind: 'hit',
-        grade: result.grade,
-        errorMs: result.errorMs,
-      });
+      const outcome: NoteOutcome = { kind: 'hit', grade: result.grade, errorMs: result.errorMs };
+      this.outcomes.set(result.note, outcome);
+      if (event.source === 'mic') {
+        for (const note of this.tempoMatcher.takeChord(result.note)) {
+          this.outcomes.set(note, outcome);
+        }
+      }
       this.mark(event.pitch, 'correct', {
         streak: this.state.streak + 1,
         feedback: this.feedback({
@@ -316,7 +320,12 @@ export class PracticeSession {
 
   private handleWaitPress(event: NoteEvent, beat: number): void {
     const group = this.waitMatcher.current;
-    const result = this.waitMatcher.press(event.pitch, event.time, chordToleranceFor(event.source));
+    const result = this.waitMatcher.press(
+      event.pitch,
+      event.time,
+      chordToleranceFor(event.source),
+      event.source === 'mic',
+    );
     if (result.kind === 'wrong') {
       if (!this.isUngradedNote(event.pitch, beat)) this.wrong(event.pitch, beat);
       return;

@@ -37,6 +37,13 @@ export class TempoMatcher {
     return { kind: 'hit', note: best.note, grade, errorMs: best.errorMs };
   }
 
+  /** Takes the other pending notes that start with `note` (the rest of its chord). */
+  takeChord(note: ScoreNote): ScoreNote[] {
+    const together = this.pending.filter((other) => Math.abs(other.start - note.start) < 1e-9);
+    this.pending = this.pending.filter((other) => !together.includes(other));
+    return together;
+  }
+
   /** Notes still waiting to be played whose window includes `beat`. */
   candidates(beat: number, tempo: number, windows: TimingWindows): ScoreNote[] {
     return this.pending.filter(
