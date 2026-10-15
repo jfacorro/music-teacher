@@ -3,20 +3,14 @@
     "title": "Your learning path",
     "checkKeyboard": "Check your keyboard",
     "unit": "Unit {number}: {title}",
-    "songs": "Songs",
-    "songsIntro": "Practice whole songs any time, in wait or play-along mode.",
     "startLabel": "Start here",
     "continueLabel": "Up next",
     "start": "Start",
     "continue": "Continue",
-    "allDone": "You’ve finished every lesson so far! Replay lessons for more stars, or practice the songs below.",
+    "allDone": "You’ve finished every lesson so far! Replay lessons for more stars, or practice whole songs in Song practice.",
     "unitProgress": "{done} of {total} done",
     "unitLocked": "{stars, plural, one {Earn at least # star in every lesson of the previous unit to unlock this one.} other {Earn at least # stars in every lesson of the previous unit to unlock this one.}}",
     "locked": "(locked)",
-    "mySongs": "My songs",
-    "mySongsIntro": "Songs you imported. They’re kept in this browser, on this computer.",
-    "mySongsEmpty": "Import a MIDI or MusicXML file to practice your own music.",
-    "importSong": "Import a song",
     "unitStars": "{stars} of {total} stars",
     "unitToggle": "Show or hide the lessons"
   },
@@ -222,7 +216,7 @@
     "restart": "Start over",
     "notFound": "This song doesn’t exist.",
     "loadError": "Couldn’t load this song.",
-    "backHome": "Back to Learn",
+    "backHome": "Back to Song practice",
     "hintWait": "The music waits for you: play the highlighted keys to continue.",
     "mode": {
       "label": "Mode",
@@ -376,7 +370,7 @@
     "newCards": "Start again with new cards"
   },
   "mySongs": {
-    "backHome": "Back to Learn",
+    "backHome": "Back to Song practice",
     "notFound": "This song isn’t in My songs.",
     "loadError": "Couldn’t load this song.",
     "import": {
@@ -439,5 +433,14 @@
       "repeatsIgnored": "Repeats are played once, as written.",
       "outOfRange": "{count, plural, one {# note would be} other {# notes would be}} off the keyboard after transposing, so {count, plural, one {it’s} other {they’re}} left out."
     }
+  },
+  "songPractice": {
+    "title": "Song practice",
+    "songs": "Songs",
+    "songsIntro": "Practice whole songs any time, in wait or play-along mode.",
+    "mySongs": "My songs",
+    "mySongsIntro": "Songs you imported. They’re kept in this browser, on this computer.",
+    "mySongsEmpty": "Import a MIDI or MusicXML file to practice your own music.",
+    "importSong": "Import a song"
   }
 }
