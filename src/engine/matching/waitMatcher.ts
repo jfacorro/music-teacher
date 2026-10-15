@@ -50,14 +50,18 @@ export class WaitMatcher {
     return this.index >= this.groups.length;
   }
 
-  press(pitch: number, time: number, chordToleranceMs: number): WaitResult {
+  /**
+   * @param anyNote any key of the group completes it (the microphone hears one note at a
+   *   time, so it can't check whole chords)
+   */
+  press(pitch: number, time: number, chordToleranceMs: number, anyNote = false): WaitResult {
     this.held.add(pitch);
     const group = this.current;
     const note = group?.notes.find((n) => n.pitch.midi === pitch);
     if (!group || !note) return { kind: 'wrong', pitch };
 
     this.presses.set(pitch, time);
-    const complete = this.isSatisfied(group, chordToleranceMs);
+    const complete = anyNote || this.isSatisfied(group, chordToleranceMs);
     if (complete) {
       this.index++;
       this.presses.clear();

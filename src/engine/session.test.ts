@@ -7,6 +7,7 @@ const C3 = 48;
 const C4 = 60;
 const D4 = 62;
 const E4 = 64;
+const G4 = 67;
 
 /** 60 BPM: one beat per second, so positions read as seconds. */
 function setup(specs: NoteSpec[], options: Partial<SessionOptions> = {}) {
@@ -328,6 +329,50 @@ describe('PracticeSession: wait mode', () => {
     t.at(0.5);
     expect(t.session.getState().status).toBe('playing');
     expect(t.session.outcomeOf(t.score.notes[0]!)).toEqual({ kind: 'correct' });
+  });
+});
+
+describe('PracticeSession: chords with the microphone', () => {
+  const chord: NoteSpec[] = [
+    ['C4', 0],
+    ['E4', 0],
+    ['G4', 0],
+    ['D4', 1],
+  ];
+  const micPress = (t: ReturnType<typeof setup>, pitch: number) =>
+    t.session.handleNote(noteOn(pitch, t.now, 'mic'));
+
+  it('counts any note of a chord for the whole chord in tempo mode', () => {
+    const t = setup(chord);
+    t.session.play();
+    t.at(0.02);
+    micPress(t, E4);
+    for (const note of t.score.notes.slice(0, 3)) {
+      expect(t.session.outcomeOf(note)).toMatchObject({ kind: 'hit', grade: 'perfect' });
+    }
+    t.at(3);
+    expect(t.session.getState().summary).toMatchObject({ expected: 4, perfect: 3, missed: 1 });
+  });
+
+  it('moves on after any note of a chord in wait mode', () => {
+    const t = setup(chord, { mode: 'wait' });
+    t.session.play();
+    t.at(0);
+    micPress(t, G4);
+    expect(t.session.getState().status).toBe('playing');
+    expect(t.score.notes.slice(0, 3).map((note) => t.session.outcomeOf(note)?.kind)).toEqual([
+      'correct',
+      'correct',
+      'correct',
+    ]);
+  });
+
+  it('still wants every note of a chord from a MIDI keyboard', () => {
+    const t = setup(chord, { mode: 'wait' });
+    t.session.play();
+    t.at(0);
+    t.press(G4);
+    expect(t.session.getState().status).toBe('waiting');
   });
 });
 

@@ -303,7 +303,8 @@
         "R": "Practice the right hand only",
         "L": "Practice the left hand only"
       }
-    }
+    },
+    "micChords": "With the microphone, any note of a chord counts for the whole chord. Connect a MIDI keyboard to check every note."
   },
   "lesson": {
     "notFound": "This lesson doesn’t exist.",

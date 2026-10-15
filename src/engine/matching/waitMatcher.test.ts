@@ -101,6 +101,17 @@ describe('WaitMatcher', () => {
     expect(missing()).toEqual([C3, E4]); // played together or held: E4 is needed again
   });
 
+  it('can let any key of a chord complete it (for the microphone)', () => {
+    const matcher = new WaitMatcher(
+      scoreOf([
+        ['C3', 0, 1, 'L'],
+        ['E4', 0],
+      ]).notes,
+    );
+    expect(matcher.press(E4, 1000, TOLERANCE, true)).toMatchObject({ groupComplete: true });
+    expect(matcher.done).toBe(true);
+  });
+
   it('needs a fresh press for a repeated note, even if the key is still down', () => {
     const matcher = new WaitMatcher(
       scoreOf([

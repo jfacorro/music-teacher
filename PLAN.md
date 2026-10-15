@@ -26,7 +26,7 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 | Topic | Decision |
 |---|---|
 | Primary hardware | Casio CDP-S110 BK — 88 keys, USB-MIDI (class compliant, no driver), velocity sensitive, built-in speakers |
-| Input methods | **MIDI** (primary) **and microphone** (single notes in MVP, chords in Phase 3) |
+| Input methods | **MIDI** (primary) **and microphone** (single notes; chords need MIDI, see §5.3) |
 | Notation | Both: falling notes first, then sheet music with gradual transition |
 | Learner level | Piano beginner with some prior music experience |
 | Platform | Local web app on `localhost`, Chrome/Edge (Web MIDI support) |
@@ -46,7 +46,7 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 | MIDI input | Web MIDI API (`navigator.requestMIDIAccess`) |
 | Mic input | Web Audio API (`getUserMedia` + `AudioWorklet`/`AnalyserNode`) |
 | Pitch detection (single note) | `pitchy` (McLeod Pitch Method) + custom onset detection |
-| Polyphonic detection (Phase 3) | Template matching against expected notes (FFT/chroma); `@spotify/basic-pitch` (TF.js) for open transcription |
+| Polyphonic detection | Not done: chords are checked with MIDI only (see §5.3) |
 | Audio output (demos, metronome) | Tone.js + Salamander piano samples |
 | MIDI file parsing | `@tonejs/midi` |
 | Sheet music rendering (Phase 2) | OpenSheetMusicDisplay (MusicXML) |
@@ -229,10 +229,11 @@ Pipeline:
 
 Supported range for mic detection: roughly **C2–C7** (very low notes need longer analysis windows; the curriculum stays within this range).
 
-### 5.3 Microphone — chords (Phase 3)
+### 5.3 Microphone — chords
 
-- **Guided verification (lessons):** we know what notes are expected, so compute the energy at each expected note's fundamental + harmonics (FFT / chroma) and decide whether the chord was played. Robust and cheap.
-- **Open transcription (free play, song import):** Spotify Basic Pitch model via TF.js running locally.
+**Decided (2026-10-16): no chord detection through the microphone.** The learner practices on a MIDI keyboard, which reports every key of a chord exactly. Detecting chords from audio was prototyped (guided by the expected notes: FFT, harmonic attribution) and would be unreliable where it matters: semitones in the bass can't be told apart without ~0.5 s windows, a lower note's harmonics land exactly on octaves and fifths, and ringing or pedaled notes blur it. Open transcription (Spotify Basic Pitch, TF.js) would add several MB and ~0.5–1 s of delay for a rough result.
+
+Instead, the microphone stays a single-note input, and with it **any note of a chord counts for the whole chord** (wait mode moves on, tempo mode grades the chord by that note). Exercises with chords show a tip while listening through the microphone: connect a MIDI keyboard to check every note.
 
 ### 5.4 Mic calibration
 
@@ -591,15 +592,14 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 ### Phase 3 — Both hands, chords, songs & desktop
 
-**Goal:** full two-handed playing, chords (including via mic), bring-your-own songs, and optional desktop packaging.
+**Goal:** full two-handed playing, chords (checked with MIDI), bring-your-own songs, and optional desktop packaging.
 
 #### Scope
 
-**3.1 Polyphonic mic detection**
-- Guided chord verification: FFT/chroma energy at expected pitches + harmonics; threshold tuned by calibration.
-- Basic Pitch (TF.js) for open transcription in free play and imported songs; runs in a Web Worker.
-- Free play chord identification works with the mic.
-- ✅ *Checkpoint: compare mic chord detection against MIDI ground truth on the Casio.*
+**3.1 Chords and the microphone** — ✔ done (reduced scope, see §5.3)
+- ~~Guided chord verification, Basic Pitch transcription, free play chords with the mic~~: dropped after prototyping; chords are checked with MIDI.
+- With the microphone, any note of a chord counts for the whole chord, in wait and tempo modes (`WaitMatcher.press(…, anyNote)`, `TempoMatcher.takeChord`); MIDI still needs every note.
+- Practice shows a tip when listening through the microphone to music with chords.
 
 **3.2 Song import**
 - Import `.mid` and `.musicxml` / `.mxl` files from disk.
@@ -625,7 +625,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Phase 3 done when
 - [ ] Two-handed lessons grade both hands independently.
-- [ ] Mic mode can verify triads in lessons.
+- [ ] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note.
 - [ ] A user-provided MIDI/MusicXML file can be imported and practiced.
 - [ ] Chord names (e.g. C major / Do mayor / C-Dur) display correctly in every language and naming system.
 - [ ] (Optional) App runs as a standalone Windows desktop app.

@@ -303,7 +303,8 @@
         "R": "Practicar solo la mano derecha",
         "L": "Practicar solo la mano izquierda"
       }
-    }
+    },
+    "micChords": "Con el micrófono, cualquier nota de un acorde cuenta como el acorde entero. Conecta un teclado MIDI para comprobar cada nota."
   },
   "lesson": {
     "notFound": "Esta lección no existe.",
