@@ -418,7 +418,7 @@ Note names differ by language, so the naming system is its **own setting**, defa
 
 ## 9. Screens
 
-1. **Home / Learning path** — course map with units and lessons, lock/unlock state, stars earned, "continue" button.
+1. **Learning path** (Learn, `/learn`) — course map with units and lessons, lock/unlock state, stars earned, "continue" button.
 2. **Lesson player** — the core screen:
    - Top: falling notes **or** sheet music (toggle).
    - Bottom: on-screen keyboard (zoomed to the lesson range; full 88 keys available), lighting expected keys and showing played keys.
@@ -427,7 +427,7 @@ Note names differ by language, so the naming system is its **own setting**, defa
    - Indicator showing active input (MIDI / mic) and connection status.
 3. **Results** — accuracy, timing breakdown, stars, per-measure heatmap, "retry" / "practice weak spots" / "next".
 4. **Free play** — shows notes played (names on keys and staff), identifies chords; note-naming quiz.
-5. **Progress** — streak, practice time per day, lessons completed, skill mastery.
+5. **Progress** — the home screen (`/`, also opened from the app's name in the header): streak, practice time per day, lessons completed, skill mastery; a new learner gets a button to start learning.
 6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, metronome and piano volume (also from the 🔊 button on the practice screen; by default the click sits under the music), theme.
 7. **First launch** — pick language and note-naming system, then connect an input.
 8. **My songs** — import a MIDI or MusicXML file (file picker or drop), set it up (title, which hand plays each track, transposition, tempo), practice it like any song; its settings screen changes or deletes it.

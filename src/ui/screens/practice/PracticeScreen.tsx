@@ -20,7 +20,7 @@ export function PracticeScreen() {
     return (
       <section className="screen">
         <p className="notice notice--problem">{t('practice.notFound')}</p>
-        <Link to="/">{t('practice.backHome')}</Link>
+        <Link to="/learn">{t('practice.backHome')}</Link>
       </section>
     );
   }
@@ -51,7 +51,7 @@ function SongLoader({ songId }: { songId: SongId }) {
     return (
       <section className="screen">
         <p className="notice notice--problem">{t('practice.loadError')}</p>
-        <Link to="/">{t('practice.backHome')}</Link>
+        <Link to="/learn">{t('practice.backHome')}</Link>
       </section>
     );
   }

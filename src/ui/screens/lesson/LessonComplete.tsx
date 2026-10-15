@@ -38,7 +38,7 @@ export function LessonComplete({ lessonId, stars, onRestart }: LessonCompletePro
             {t('lesson.next')}
           </Link>
         ) : (
-          <Link className="button button--primary" to="/">
+          <Link className="button button--primary" to="/learn">
             {t('lesson.backHome')}
           </Link>
         )}

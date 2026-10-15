@@ -69,7 +69,8 @@
       "less": "Menos",
       "more": "Más"
     },
-    "deletedSong": "Canción eliminada"
+    "deletedSong": "Canción eliminada",
+    "startLearning": "Empezar a aprender"
   },
   "settings": {
     "title": "Configuración",

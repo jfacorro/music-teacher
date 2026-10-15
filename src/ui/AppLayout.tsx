@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet } from 'react-router';
+import { Link, NavLink, Outlet } from 'react-router';
 import { useSettings } from '../storage/settings';
 import { InputPicker } from './components/InputPicker';
 import { WelcomeScreen } from './screens/WelcomeScreen';
@@ -16,13 +16,13 @@ export function AppLayout() {
   return (
     <div className="app">
       <header className="app-header">
-        <span className="app-title">{t('appTitle')}</span>
+        {/* The app's name leads home: the progress screen. */}
+        <Link className="app-title" to="/" title={t('nav.homeTip')}>
+          {t('appTitle')}
+        </Link>
         <nav className="app-nav" aria-label={t('nav.label')}>
-          <NavLink to="/" end>
-            {t('nav.home')}
-          </NavLink>
+          <NavLink to="/learn">{t('nav.learn')}</NavLink>
           <NavLink to="/free-play">{t('nav.freePlay')}</NavLink>
-          <NavLink to="/progress">{t('nav.progress')}</NavLink>
           <NavLink to="/settings">{t('nav.settings')}</NavLink>
         </nav>
         <InputPicker />

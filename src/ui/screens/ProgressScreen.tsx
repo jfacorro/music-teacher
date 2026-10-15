@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
 import { skillProgress, SkillLevel } from '../../content/skills';
 import { isSongId } from '../../content/songs';
@@ -61,7 +62,14 @@ export function ProgressScreen() {
   return (
     <section className="screen progress">
       <h1>{t('progress.title')}</h1>
-      {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
+      {log.length === 0 && practiced.length === 0 && (
+        <div className="card progress__empty">
+          <p>{t('progress.empty')}</p>
+          <Link className="button button--primary" to="/learn">
+            {t('progress.startLearning')}
+          </Link>
+        </div>
+      )}
 
       <div className="stat-grid">
         <Stat

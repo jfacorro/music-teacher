@@ -124,6 +124,12 @@ h3 {
 .app-title {
   font-weight: 700;
   font-size: 1.1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.app-title:hover {
+  color: var(--accent);
 }
 
 .app-nav {
@@ -1448,6 +1454,10 @@ button.bars__bar:focus-visible {
 .modal__close:focus-visible {
   background: var(--lane-bg);
   color: var(--text);
+}
+
+.progress__empty {
+  margin-block-end: 1rem;
 }
 
 /* Importing songs (My songs) */

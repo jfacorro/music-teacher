@@ -21,7 +21,7 @@ export function LessonScreen() {
     return (
       <section className="screen">
         <p className="notice notice--problem">{t('lesson.notFound')}</p>
-        <Link to="/">{t('lesson.backHome')}</Link>
+        <Link to="/learn">{t('lesson.backHome')}</Link>
       </section>
     );
   }
@@ -52,7 +52,7 @@ function LessonLoader({ lessonId }: { lessonId: string }) {
     return (
       <section className="screen">
         <p className="notice notice--problem">{t('lesson.loadError')}</p>
-        <Link to="/">{t('lesson.backHome')}</Link>
+        <Link to="/learn">{t('lesson.backHome')}</Link>
       </section>
     );
   }

@@ -21,7 +21,7 @@ export function MySongScreen() {
         <p className="notice notice--problem">
           {state.status === LoadStatus.Error ? t('mySongs.loadError') : t('mySongs.notFound')}
         </p>
-        <Link to="/">{t('mySongs.backHome')}</Link>
+        <Link to="/learn">{t('mySongs.backHome')}</Link>
       </section>
     );
   }
@@ -65,7 +65,7 @@ function SongSettings({ song, id }: { song: MySongRow; id: number }) {
               className="button button--danger"
               onClick={async () => {
                 await deleteMySong(id);
-                await navigate('/');
+                await navigate('/learn');
               }}
             >
               {t('mySongs.setup.deleteConfirm')}

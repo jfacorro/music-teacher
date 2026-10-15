@@ -69,7 +69,8 @@
       "less": "Less",
       "more": "More"
     },
-    "deletedSong": "Deleted song"
+    "deletedSong": "Deleted song",
+    "startLearning": "Start learning"
   },
   "settings": {
     "title": "Settings",

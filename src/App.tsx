@@ -15,14 +15,14 @@ const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      { index: true, element: <HomeScreen /> },
+      { index: true, element: <ProgressScreen /> },
+      { path: 'learn', element: <HomeScreen /> },
       { path: 'free-play', element: <FreePlayScreen /> },
       { path: 'practice/:songId', element: <PracticeScreen /> },
       { path: 'practice/my/:songId', element: <MySongPracticeScreen /> },
       { path: 'my-songs/import', element: <ImportSongScreen /> },
       { path: 'my-songs/:songId', element: <MySongScreen /> },
       { path: 'lesson/:lessonId', element: <LessonScreen /> },
-      { path: 'progress', element: <ProgressScreen /> },
       { path: 'settings', element: <SettingsScreen /> },
     ],
   },
