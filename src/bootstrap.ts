@@ -10,6 +10,7 @@ import { startRouting } from './input/routing';
 import { loadMySongs } from './storage/mySongs';
 import { loadProgress } from './storage/progress';
 import { loadSettings, updateSettings } from './storage/settings';
+import { loadSightReading } from './storage/sightReading';
 import { loadTodayPlan } from './storage/todayPlan';
 
 /** Everything that must be ready before the first render. */
@@ -19,6 +20,7 @@ export async function bootstrap(): Promise<void> {
     loadProgress(),
     loadMySongs(),
     loadTodayPlan(),
+    loadSightReading(),
   ]);
   await initI18n(settings.language ?? detectLanguage(navigator.languages));
 

@@ -13,6 +13,19 @@ export async function saveRecording(key: string, recording: Recording, now = Dat
   }
 }
 
+/** Drops the kept recordings whose key starts with `prefix`, except `key` (e.g. old drills). */
+export async function dropRecordings(prefix: string, key: string) {
+  try {
+    await db.recordings
+      .where('key')
+      .startsWith(prefix)
+      .and((row) => row.key !== key)
+      .delete();
+  } catch (error) {
+    console.error('Could not drop old recordings', error);
+  }
+}
+
 export async function loadRecording(key: string): Promise<Recording | null> {
   try {
     return (await db.recordings.get(key))?.recording ?? null;

@@ -7,7 +7,11 @@ import { isSongId } from '../../content/songs';
 import { useMySongs } from '../../storage/mySongs';
 import { formatDate, formatPercent, formatPracticeTime } from '../../i18n/format';
 import { useContentText } from '../../i18n/useContentText';
+import { isValueOf } from '../../lib/values';
+import { DrillLevel } from '../../content/sightReading';
+import { useDrillLevelName } from './sightReading/useDrillLevelName';
 import {
+  exerciseAccuracies,
   longestStreak,
   practicedDays,
   resultKey,
@@ -43,7 +47,9 @@ export function ProgressScreen() {
     SKILLS,
     UNITS,
     (id) => results[resultKey(ResultKind.Lesson, id)]?.bestAccuracy ?? null,
+    exerciseAccuracies(log),
   );
+  const levelName = useDrillLevelName();
 
   const time = (ms: number) =>
     ms > 0 && ms < 60_000
@@ -54,6 +60,11 @@ export function ProgressScreen() {
 
   const titleOf = (kind: ResultKind, id: string) => {
     if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
+    if (kind === ResultKind.Drill) {
+      return isValueOf(DrillLevel, id)
+        ? t('sightReading.logTitle', { level: levelName(id) })
+        : t('sightReading.title');
+    }
     if (kind === ResultKind.MySong) {
       return mySongs.find((song) => String(song.id) === id)?.title ?? t('progress.deletedSong');
     }
@@ -111,7 +122,9 @@ export function ProgressScreen() {
                 )}
               </span>
               <span className="muted skill__lessons">
-                {t('progress.skills.lessons', { played: skill.played, total: skill.lessons })}
+                {skill.lessons > 0
+                  ? t('progress.skills.lessons', { played: skill.played, total: skill.lessons })
+                  : t('progress.skills.drills', { count: skill.played })}
               </span>
             </li>
           ))}

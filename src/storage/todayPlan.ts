@@ -8,10 +8,11 @@ import { SKILLS, UNITS } from '../content/courses';
 import { skillProgress } from '../content/skills';
 import { SONG_IDS, SONG_UNITS } from '../content/songs';
 import { type Suggestion, suggestPractice, targetKey } from '../content/suggestions';
+import { openDrillLevels } from '../content/sightReading';
 import { lessonStates } from '../content/unlock';
 import { dayOf, db, type ResultRow } from './db';
 import { useMySongs } from './mySongs';
-import { resultKey, ResultKind, useProgress } from './progress';
+import { exerciseAccuracies, resultKey, ResultKind, useProgress } from './progress';
 
 export interface PlanItem extends Suggestion {
   /** When it was suggested: playing it from then on ticks it. */
@@ -48,12 +49,13 @@ function save(plan: TodayPlan): void {
 
 /** Suggestions from the progress saved so far. */
 function suggestNow(now: number, exclude?: ReadonlySet<string>): Suggestion[] {
-  const { results } = useProgress.getState();
+  const { results, log } = useProgress.getState();
   const lessonResult = (id: string) => results[resultKey(ResultKind.Lesson, id)];
   const unitIndex = new Map(UNITS.map((unit, index) => [unit.id, index]));
+  const states = lessonStates(UNITS, (id) => lessonResult(id)?.bestStars ?? 0);
   return suggestPractice({
     units: UNITS,
-    states: lessonStates(UNITS, (id) => lessonResult(id)?.bestStars ?? 0),
+    states,
     results,
     songs: [
       ...SONG_IDS.map((id) => ({
@@ -65,7 +67,13 @@ function suggestNow(now: number, exclude?: ReadonlySet<string>): Suggestion[] {
         unit: null,
       })),
     ],
-    skills: skillProgress(SKILLS, UNITS, (id) => lessonResult(id)?.bestAccuracy ?? null),
+    skills: skillProgress(
+      SKILLS,
+      UNITS,
+      (id) => lessonResult(id)?.bestAccuracy ?? null,
+      exerciseAccuracies(log),
+    ),
+    drillLevels: openDrillLevels(UNITS, states),
     now,
     exclude,
   });

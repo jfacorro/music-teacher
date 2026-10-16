@@ -4,6 +4,7 @@ import { ResultKind } from '../storage/progress';
 import type { Skill, Unit } from './courses';
 import { DAY_MS } from './review';
 import { skillProgress } from './skills';
+import { DrillLevel } from './sightReading';
 import { type SongChoice, suggestPractice, SuggestionKind } from './suggestions';
 import { lessonStates } from './unlock';
 
@@ -54,7 +55,7 @@ function result(key: string, stars: number, accuracy: number, days: number, extr
   };
 }
 
-function suggest(rows: ResultRow[], exclude?: string[]) {
+function suggest(rows: ResultRow[], exclude?: string[], drillLevels: DrillLevel[] = []) {
   const results = Object.fromEntries(rows.map((row) => [row.key, row]));
   const starsOf = (id: string) => results[`lesson:${id}`]?.bestStars ?? 0;
   return suggestPractice({
@@ -65,6 +66,7 @@ function suggest(rows: ResultRow[], exclude?: string[]) {
     skills: skillProgress(['keyboard', 'chords'], units, (id) =>
       results[`lesson:${id}`] ? results[`lesson:${id}`]!.bestAccuracy : null,
     ),
+    drillLevels,
     now: NOW,
     exclude: exclude && new Set(exclude),
   }).map((s) => [s.kind, `${s.target.kind}:${s.target.id}`, ...(s.bars ? [s.bars] : [])]);
@@ -136,5 +138,17 @@ describe('suggestPractice', () => {
     const targets = suggestions.map(([, target]) => target);
     expect(targets).not.toContain('lesson:b');
     expect(new Set(targets).size).toBe(targets.length);
+  });
+
+  it('suggests a drill at the highest level open, unless one was played lately', () => {
+    const levels = [DrillLevel.Treble, DrillLevel.TrebleRhythm];
+    const drills = (rows: ResultRow[]) =>
+      suggest(rows, undefined, levels).filter(([kind]) => kind === SuggestionKind.Drill);
+    expect(drills([])).toEqual([[SuggestionKind.Drill, 'drill:trebleRhythm']]);
+    expect(drills([result('drill:treble', 2, 0.85, 1)])).toEqual([]);
+    expect(drills([result('drill:treble', 2, 0.85, 3)])).toEqual([
+      [SuggestionKind.Drill, 'drill:trebleRhythm'],
+    ]);
+    expect(suggest([]).some(([kind]) => kind === SuggestionKind.Drill)).toBe(false);
   });
 });

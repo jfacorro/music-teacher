@@ -41,6 +41,17 @@ describe('skillProgress', () => {
     expect(level(0.95)).toBe('mastered');
   });
 
+  it('counts the latest exercises of a skill practiced outside lessons', () => {
+    const drills = (skill: string) => (skill === 'sight-reading' ? [0.9, 0.7] : []);
+    expect(skillProgress(['sight-reading'], [unit], () => 1, drills)[0]).toEqual({
+      skill: 'sight-reading',
+      lessons: 0,
+      played: 2,
+      mastery: 0.8,
+      level: 'good',
+    });
+  });
+
   it('reports a skill no lesson practices as not started', () => {
     expect(skillProgress(['rests'], [unit], () => 1)[0]).toMatchObject({
       lessons: 0,
