@@ -33,6 +33,8 @@ npm run desktop        # build and open it in a window
 npm run desktop:dist   # build the Windows installer: release/Piano-Teacher-Setup-<version>.exe
 ```
 
+The newest installer is also on GitHub: after every merge into `main`, CI builds it and publishes it as the [Latest build](https://github.com/jfacorro/piano-teacher/releases/tag/latest-build) release (`Piano-Teacher-Setup.exe`).
+
 The desktop app is the same app in its own window: it works without a server or a browser,
 and uses MIDI and the microphone without asking. It keeps its data separately from the
 browser; to move your progress, settings and songs between them, use **Settings → Your
@@ -61,6 +63,10 @@ both on, and MIDI tells you how accurately the microphone hears each key. Saved 
 | `npm run format`       | Format everything with Prettier                    |
 | `npm run desktop`      | Build and open the desktop app                     |
 | `npm run desktop:dist` | Build the Windows installer into `release/`        |
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs `npm run check` on every pull request and merge. After a merge into `main`, a Windows job builds the installer (version `0.1.<run number>`) and replaces the **Latest build** release with it.
 
 ## Project structure
 

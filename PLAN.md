@@ -637,6 +637,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Native menu (Piano Teacher: reload, full screen, quit; View: zoom, developer tools), hidden until Alt is pressed, in the app's language (`locales/<lang>/desktop.json`; the page tells the menu when the language changes). The window title is the page's. The installer offers English and Spanish.
 - Windows installer via electron-builder (`npm run desktop:dist` → `release/Piano-Teacher-Setup-<version>.exe`, unsigned); `npm run desktop` opens the app from a fresh build. The web version is unchanged (`npm run dev`).
 - The browser and the app keep separate data: **Settings → Your data** exports everything (settings, results, practice history, imported songs) to a file and imports it back, replacing what's there (`storage/backup.ts`).
+- CI (`.github/workflows/ci.yml`): every pull request and merge runs `npm run check` on Linux; after a merge into `main`, a Windows job builds the installer (version `0.1.<run number>`) and publishes it as the **Latest build** release (`latest-build` tag, `Piano-Teacher-Setup.exe`), replacing the previous one.
 - `PIANO_TEACHER_SMOKE=1 npx electron .` opens the app hidden and reports what works (secure page, MIDI inputs, microphone permission, storage), then quits.
 
 #### Phase 3 done when
