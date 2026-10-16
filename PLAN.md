@@ -638,8 +638,8 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Windows installer via electron-builder.
 
 #### Phase 3 done when
-- [ ] Two-handed lessons grade both hands independently.
-- [ ] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note.
+- [x] Two-handed lessons grade both hands independently. (verified 2026-10-16 on the Casio: each hand's score includes its own misses and wrong keys)
+- [x] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note. (verified 2026-10-16 with the microphone, lesson u6-l1)
 - [x] A user-provided MIDI/MusicXML file can be imported and practiced. (verified 2026-10-15 on the Casio)
 - [x] Chord names (e.g. C major / Do mayor / C-Dur) display correctly in every language and naming system. (`i18n/chordNames.test.ts`, and lesson texts checked in English and Spanish)
 - [ ] (Optional) App runs as a standalone Windows desktop app.
