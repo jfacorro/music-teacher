@@ -610,6 +610,8 @@
     "logTitle": "Ear training: {level}",
     "progress": "Question {current} of {total}",
     "results": "Results",
-    "reference": "Play middle {c} first"
+    "reference": "Play middle {c} first",
+    "allNotes": "All 12 notes",
+    "allNotesTip": "Every key from middle C to the C above, black keys included, whatever the course has reached"
   }
 }

@@ -90,27 +90,39 @@ const SCALES_FROM: readonly (readonly [string, readonly number[]])[] = [
   ['u7', [60, 62, 64, 65, 67, 69, 70, 72]],
 ];
 
-/** What the questions can use, from the units finished. */
+/** What the questions can use. */
 export interface EarRange {
-  /** Lowest first. */
+  /** For single notes and intervals, lowest first. */
   keys: readonly number[];
-  /** Scales for melodies, each within `keys`. */
+  /** Interval sizes asked, semitones. */
+  intervals: readonly number[];
+  /** Scales for melodies (as far as the course has reached). */
   scales: readonly (readonly number[])[];
 }
 
-export function earRange(finishedUnits: ReadonlySet<string>): EarRange {
-  const keys = KEYS_FROM.flatMap(([unit, added]) => (finishedUnits.has(unit) ? added : [])).sort(
+/** Every key from middle C to the C above. */
+const ALL_NOTES = Array.from({ length: 13 }, (_, i) => MIDDLE_C + i);
+/** Up to a fifth, leaving out the tritone (hard to hear and to sing). */
+const COURSE_INTERVALS = [1, 2, 3, 4, 5, 7];
+/** Every interval up to an octave. */
+const ALL_INTERVALS = Array.from({ length: 12 }, (_, i) => i + 1);
+
+/**
+ * What questions use, from the units finished; with `allNotes`, single notes and intervals use
+ * every key of the octave from middle C, and intervals up to an octave, whatever the course
+ * has reached (melodies stay in the scales taught).
+ */
+export function earRange(finishedUnits: ReadonlySet<string>, allNotes = false): EarRange {
+  const taught = KEYS_FROM.flatMap(([unit, added]) => (finishedUnits.has(unit) ? added : [])).sort(
     (a, b) => a - b,
   );
   const scales = SCALES_FROM.filter(([unit]) => finishedUnits.has(unit)).map(([, scale]) =>
-    scale.filter((key) => keys.includes(key)),
+    scale.filter((key) => taught.includes(key)),
   );
-  return { keys, scales };
+  return allNotes
+    ? { keys: ALL_NOTES, intervals: ALL_INTERVALS, scales }
+    : { keys: taught, intervals: COURSE_INTERVALS, scales };
 }
-
-/** Intervals go up to a fifth, leaving out the tritone (hard to hear and to sing). */
-const LARGEST_INTERVAL = 7;
-const TRITONE = 6;
 
 /** Chords of Unit 6: the white-key major and minor chords from middle C up, and C minor. */
 const CHORDS: readonly (readonly [readonly number[], ChordKind])[] = [
@@ -154,7 +166,7 @@ export function earQuestions(
     case EarLevel.Intervals: {
       const pairs = range.keys.flatMap((low) =>
         range.keys
-          .filter((high) => high > low && high - low <= LARGEST_INTERVAL && high - low !== TRITONE)
+          .filter((high) => high > low && range.intervals.includes(high - low))
           .map((high) => [low, high]),
       );
       return dealEvenly(random, pairs, count, (a, b) => a[0] === b[0] && a[1] === b[1]).map(

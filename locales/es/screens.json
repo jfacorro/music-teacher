@@ -610,6 +610,8 @@
     "logTitle": "Oído musical: {level}",
     "progress": "Pregunta {current} de {total}",
     "results": "Resultados",
-    "reference": "Tocar primero el {c} central"
+    "reference": "Tocar primero el {c} central",
+    "allNotes": "Las 12 notas",
+    "allNotesTip": "Todas las teclas del do central al do siguiente, negras incluidas, llegue donde llegue el curso"
   }
 }

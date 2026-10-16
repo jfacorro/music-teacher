@@ -99,6 +99,21 @@ describe('ear training levels', () => {
     }
   });
 
+  it('use every key of the octave from middle C, and intervals up to an octave, when asked', () => {
+    const all = earRange(unitsUpTo('u1'), true);
+    expect(all.keys).toEqual([60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72]);
+    expect(all.intervals).toContain(6);
+    expect(all.intervals).toContain(12);
+    // Melodies stay in the scales taught.
+    expect(all.scales).toEqual(rangeUpTo('u1').scales);
+    const sizes = new Set(
+      Array.from({ length: 20 }, (_, seed) =>
+        earQuestions(EarLevel.Intervals, all, seededRandom(seed)),
+      ).flatMap((questions) => questions.map((q) => q.notes[1]! - q.notes[0]!)),
+    );
+    expect(sizes.has(12)).toBe(true);
+  });
+
   it('use more keys as the course goes on, black keys included', () => {
     expect(rangeUpTo('u1').keys).toEqual([60, 62, 64, 65, 67]);
     expect(rangeUpTo('u3').keys).toEqual([60, 62, 64, 65, 67, 69, 71, 72]);

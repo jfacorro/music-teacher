@@ -16,7 +16,12 @@ import { useNoteNames } from '../../../i18n/useNoteNames';
 import { MIDDLE_C, pitchFromMidi } from '../../../theory/pitch';
 import { useContentText } from '../../../i18n/useContentText';
 import { isValueOf } from '../../../lib/values';
-import { chooseEarLevel, setEarReference, useEarTraining } from '../../../storage/earTraining';
+import {
+  chooseEarLevel,
+  setEarAllNotes,
+  setEarReference,
+  useEarTraining,
+} from '../../../storage/earTraining';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
 import { EarExercise } from './EarExercise';
 import { useEarLevelName } from './useEarLevelName';
@@ -33,9 +38,13 @@ export function EarTrainingScreen() {
   );
   const open = useMemo(() => openEarLevels(UNITS, states), [states]);
   const finished = UNITS.filter((unit) => isUnitFinished(unit, states)).map((unit) => unit.id);
+  const allNotes = useEarTraining((s) => s.allNotes);
   // Only a new list of units finished makes new questions.
   const finishedKey = finished.join(' ');
-  const range = useMemo(() => earRange(new Set(finishedKey.split(' '))), [finishedKey]);
+  const range = useMemo(
+    () => earRange(new Set(finishedKey.split(' ')), allNotes),
+    [finishedKey, allNotes],
+  );
   return open.length === 0 ? <Locked /> : <Exercises open={open} range={range} />;
 }
 
@@ -67,6 +76,7 @@ function Exercises({ open, range }: { open: readonly EarLevel[]; range: EarRange
   const { t } = useTranslation('screens');
   const names = useNoteNames();
   const reference = useEarTraining((s) => s.reference);
+  const allNotes = useEarTraining((s) => s.allNotes);
   const levelName = useEarLevelName();
   const unitTitle = useUnitTitle();
   const levelId = useId();
@@ -123,9 +133,19 @@ function Exercises({ open, range }: { open: readonly EarLevel[]; range: EarRange
             })}
           </label>
         )}
+        {(level === EarLevel.Notes || level === EarLevel.Intervals) && (
+          <label className="checkbox" title={t('earTraining.allNotesTip')}>
+            <input
+              type="checkbox"
+              checked={allNotes}
+              onChange={(e) => setEarAllNotes(e.target.checked)}
+            />
+            {t('earTraining.allNotes')}
+          </label>
+        )}
       </div>
       <EarExercise
-        key={`${level} ${range.keys.join(' ')}`}
+        key={`${level} ${range.keys.join(' ')} ${range.intervals.join(' ')}`}
         level={level}
         range={range}
         reference={reference}
