@@ -528,7 +528,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 #### Phase 1 done when
 - [x] Casio connects over USB and every key is detected correctly. (verified 2026-10-12)
 - [x] Mic mode reliably detects single notes in the C3–C6 range after calibration. (verified 2026-10-15: threshold 12 dB and "Correct the delay" give ≥ 90% heard correctly live in the Microphone check; middle C is recognized reliably in lessons)
-- [ ] All Unit 1–2 lessons are playable in wait and tempo modes, with either input.
+- [x] All Unit 1–2 lessons are playable in wait and tempo modes, with either input. (verified 2026-10-16)
 - [x] Scores and stars persist across browser restarts.
 - [x] Engine has unit tests for matching and scoring.
 - [x] The whole app works in every supported language: no hard-coded strings (lint passes), key parity passes, pseudo-locale shows no untranslated text or broken layouts.
