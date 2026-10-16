@@ -54,7 +54,7 @@
         "good": "Bien",
         "mastered": "Dominada"
       },
-      "drills": "{count, plural, =0 {Ningún ejercicio aún} one {# ejercicio} other {# ejercicios}}"
+      "exercises": "{count, plural, =0 {Ningún ejercicio aún} one {# ejercicio} other {# ejercicios}}"
     },
     "activity": {
       "heading": "Práctica en el último año",
@@ -517,7 +517,8 @@
       "weakSpot": "Punto débil",
       "song": "Canción",
       "skill": "Reforzar una habilidad",
-      "drill": "Lectura a primera vista"
+      "drill": "Lectura a primera vista",
+      "ear": "Oído musical"
     },
     "details": {
       "next": "Sigue donde lo dejaste.",
@@ -528,7 +529,9 @@
       "song": "{days, plural, one {No la tocas desde ayer.} other {No la tocas desde hace # días.}}",
       "skill": "Tu habilidad más débil por ahora: {skill}.",
       "newDrill": "Música nueva para leer a primera vista.",
-      "drill": "{days, plural, one {Música nueva para leer: tu último ejercicio fue ayer.} other {Música nueva para leer: tu último ejercicio fue hace # días.}}"
+      "drill": "{days, plural, one {Música nueva para leer: tu último ejercicio fue ayer.} other {Música nueva para leer: tu último ejercicio fue hace # días.}}",
+      "newEar": "Escucha y tócalo de vuelta.",
+      "ear": "{days, plural, one {Escucha y tócalo de vuelta: la última vez fue ayer.} other {Escucha y tócalo de vuelta: la última vez fue hace # días.}}"
     },
     "done": "hecha",
     "allDone": "Todo listo por hoy. ¡Buen trabajo!",
@@ -556,5 +559,59 @@
     "hintWait": "Lee cada nota en el pentagrama y tócala: la música te espera.",
     "hintTempo": "Sigue a tempo y lee por delante: la música no espera.",
     "logTitle": "Lectura a primera vista: {level}"
+  },
+  "earTraining": {
+    "title": "Oído musical",
+    "intro": "Escucha y luego toca lo que oíste.",
+    "level": "Nivel",
+    "levels": {
+      "notes": "Notas sueltas",
+      "intervals": "Dos notas (intervalos)",
+      "melodies": "Melodías cortas",
+      "chords": "Acordes mayores o menores"
+    },
+    "lockedLevel": "{level} (después de «{unit}»)",
+    "locked": "El oído musical se abre cuando terminas la unidad «{unit}».",
+    "toLessons": "Ir a las lecciones",
+    "begin": "Empezar a escuchar",
+    "start": {
+      "notes": "Oirás el {c} central y luego otra nota: búscala en el teclado.",
+      "intervals": "Oirás dos notas, una tras otra: tócalas empezando por la tecla iluminada.",
+      "melodies": "Oirás una melodía corta: tócala empezando por la tecla iluminada.",
+      "chords": "Oirás un acorde: tócalo sobre la fundamental iluminada, o elige mayor o menor.",
+      "notesAlone": "Oirás una nota: búscala en el teclado."
+    },
+    "listen": "Escucha…",
+    "ask": {
+      "notes": "¿Qué nota era? (Primero sonó el {c} central.)",
+      "intervals": "Toca las dos notas, empezando por la tecla iluminada.",
+      "melodies": "Toca la melodía, empezando por la tecla iluminada.",
+      "chords": "Toca el acorde sobre la fundamental iluminada, o elige mayor o menor.",
+      "chordsMic": "¿Mayor o menor? Elige uno.",
+      "notesAlone": "¿Qué nota era?"
+    },
+    "wrong": "Esa no: tocaste {note}.",
+    "wrongChord": "No exactamente.",
+    "hint": "La respuesta está iluminada: vuelve a escuchar si quieres.",
+    "right": {
+      "note": "Bien: {note}.",
+      "interval": "Bien: de {from} a {to}, una {interval}.",
+      "melody": "¡Bien, esa es la melodía!",
+      "chord": "Bien: {chord}."
+    },
+    "quality": {
+      "major": "Mayor",
+      "minor": "Menor"
+    },
+    "chooseLabel": "Mayor o menor",
+    "hearAgain": "Escuchar otra vez",
+    "againTip": "Vuelve a tocar la pregunta",
+    "firstTry": "{count} de {total, plural, one {# pregunta} other {# preguntas}} bien a la primera.",
+    "logTitle": "Oído musical: {level}",
+    "progress": "Pregunta {current} de {total}",
+    "results": "Resultados",
+    "reference": "Tocar primero el {c} central",
+    "allNotes": "Las 12 notas",
+    "allNotesTip": "Todas las teclas del do central al do siguiente, negras incluidas, llegue donde llegue el curso"
   }
 }

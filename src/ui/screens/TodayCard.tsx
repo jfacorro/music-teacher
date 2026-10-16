@@ -19,6 +19,8 @@ import { barsParam } from '../barSelection';
 import { isValueOf } from '../../lib/values';
 import { DrillLevel } from '../../content/sightReading';
 import { useDrillLevelName } from './sightReading/useDrillLevelName';
+import { EarLevel } from '../../content/earTraining';
+import { useEarLevelName } from './earTraining/useEarLevelName';
 
 const CHECK = '✓';
 
@@ -29,6 +31,7 @@ const CHECK = '✓';
 function hrefOf(item: PlanItem): string {
   const { kind, id } = item.target;
   if (kind === ResultKind.Drill) return `/sight-reading?level=${id}`;
+  if (kind === ResultKind.Ear) return `/ear-training?level=${id}`;
   const path =
     kind === ResultKind.Lesson
       ? `/lesson/${id}`
@@ -52,6 +55,7 @@ export function TodayCard() {
   const mySongs = useMySongs((s) => s.songs);
   const [nothingMore, setNothingMore] = useState(false);
   const levelName = useDrillLevelName();
+  const earLevelName = useEarLevelName();
 
   useEffect(() => ensureTodayPlan(), []);
 
@@ -61,6 +65,9 @@ export function TodayCard() {
     if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
     if (kind === ResultKind.Drill) {
       return isValueOf(DrillLevel, id) ? levelName(id) : t('sightReading.title');
+    }
+    if (kind === ResultKind.Ear) {
+      return isValueOf(EarLevel, id) ? earLevelName(id) : t('earTraining.title');
     }
     if (kind === ResultKind.MySong) {
       return mySongs.find((song) => String(song.id) === id)?.title ?? t('progress.deletedSong');
@@ -86,6 +93,10 @@ export function TodayCard() {
         return item.lastPlayedAt === undefined
           ? t('today.details.newDrill')
           : t('today.details.drill', { days: daysSince(item) });
+      case SuggestionKind.Ear:
+        return item.lastPlayedAt === undefined
+          ? t('today.details.newEar')
+          : t('today.details.ear', { days: daysSince(item) });
       case SuggestionKind.Skill:
         return t('today.details.skill', { skill: courseText(`skills.${item.skill ?? ''}`) });
     }

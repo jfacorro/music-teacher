@@ -686,10 +686,19 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Storage: results by level (`drill:<level>`, with the practice log); the level chosen and the recent drills in the settings table (key `sightReading`). The database stays at version 5. The skill's mastery is the average accuracy of the last 10 drills. The Today card suggests a drill at the highest level open when none was played for 2 days.
 - Built as: `content/sightReading.ts` (levels and the generator; pure, tested), `lib/random.ts` (seeded random numbers), `storage/sightReading.ts`, `ui/screens/sightReading/`.
 
-**4.4 Ear training**
+**4.4 Ear training** — ✔ done (verified 2026-10-17 on the Casio, with MIDI and with the microphone)
 - Exercises that play something and ask for it back on the keyboard: a single note (after hearing middle C as a reference), an interval above a given note, a short melody (3–5 notes), major or minor chord (answered by playing it or by choosing).
 - Levels follow the curriculum; the answer is checked like any played note, with MIDI or the microphone (the microphone stops listening while the app plays, so it doesn't hear itself).
 - Results feed a new "ear training" skill.
+- Levels, each opening when the unit that teaches its keys is finished: single notes, and two notes in a row from the lit one (Unit 1); short melodies of 3 to 5 notes, growing over an exercise, from the lit first note (Unit 2); major or minor chords on a lit root, C to A plus C minor (Unit 6).
+- The keys grow with the course, in the octave from middle C: the right hand's first position C–G (Unit 1), up to the C above (Unit 3), E♭ (Unit 6), F♯ and B♭ (Unit 7). Intervals go up to a fifth, never a tritone; melodies move along C major, and G or F major once their scales are taught. A test checks every level, at every stage of the course, against the keys the lessons up to then use.
+- Single notes come after middle C as a reference (relative pitch); "Play middle C first" can be turned off for a harder challenge, and is remembered.
+- "All 12 notes" (off by default, remembered) asks single notes and intervals over every key from middle C to the C above, and intervals up to an octave, whatever the course has reached; melodies stay in the scales taught.
+- An exercise is 10 questions (6 melodies), each played once by itself and again on "Hear it again"; keys wait while it plays. Wrong keys say which note they were; after two misses the answer lights up. A right answer names what was heard ("C up to E, a major third", "D minor") and the next question plays. Scored like the note quiz: questions right without a miss. Chords can be played (any voicing, once three notes are down) or chosen; with the microphone, which hears one note at a time, they're chosen.
+- The microphone drops notes that start while the app is playing a question, until its sound has died away (`ignoreMicUntil`).
+- Storage: results by level (`ear:<level>`, with the practice log); the level chosen last and both choices in the settings table (key `earTraining`). The skill's mastery is the average accuracy of the last 10 exercises. The Today card suggests ear training at the highest level open when none was done for 2 days.
+- To fit the new item on one line, Settings became a gear at the end of the top bar.
+- Built as: `content/earTraining.ts` (levels, questions, answers; pure, tested), `storage/earTraining.ts`, `ui/screens/earTraining/`.
 
 **4.5 Appearance and comfort**
 - Theme: light, dark, or follow the system (now it always follows the system).
@@ -706,7 +715,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - [x] A run can be played back and compared with the written music, with MIDI and with the microphone.
 - [ ] Sight-reading drills only use what has been taught, and are never the same twice.
   - [ ] TODO (user): once Unit 3 is finished, play a few drills on the Casio (MIDI): they should read well from the sheet, sound like little tunes and fit under the hand; try "New drill", "Try again" and each open level.
-- [ ] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
+- [x] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
 - [ ] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
 - [ ] All new text is in English and Spanish.
 

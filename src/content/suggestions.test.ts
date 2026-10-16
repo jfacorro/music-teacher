@@ -4,6 +4,7 @@ import { ResultKind } from '../storage/progress';
 import type { Skill, Unit } from './courses';
 import { DAY_MS } from './review';
 import { skillProgress } from './skills';
+import { EarLevel } from './earTraining';
 import { DrillLevel } from './sightReading';
 import { type SongChoice, suggestPractice, SuggestionKind } from './suggestions';
 import { lessonStates } from './unlock';
@@ -55,7 +56,12 @@ function result(key: string, stars: number, accuracy: number, days: number, extr
   };
 }
 
-function suggest(rows: ResultRow[], exclude?: string[], drillLevels: DrillLevel[] = []) {
+function suggest(
+  rows: ResultRow[],
+  exclude?: string[],
+  drillLevels: DrillLevel[] = [],
+  earLevels: EarLevel[] = [],
+) {
   const results = Object.fromEntries(rows.map((row) => [row.key, row]));
   const starsOf = (id: string) => results[`lesson:${id}`]?.bestStars ?? 0;
   return suggestPractice({
@@ -67,6 +73,7 @@ function suggest(rows: ResultRow[], exclude?: string[], drillLevels: DrillLevel[
       results[`lesson:${id}`] ? results[`lesson:${id}`]!.bestAccuracy : null,
     ),
     drillLevels,
+    earLevels,
     now: NOW,
     exclude: exclude && new Set(exclude),
   }).map((s) => [s.kind, `${s.target.kind}:${s.target.id}`, ...(s.bars ? [s.bars] : [])]);
@@ -150,5 +157,13 @@ describe('suggestPractice', () => {
       [SuggestionKind.Drill, 'drill:trebleRhythm'],
     ]);
     expect(suggest([]).some(([kind]) => kind === SuggestionKind.Drill)).toBe(false);
+  });
+
+  it('suggests ear training at the highest level open, unless done lately', () => {
+    const levels = [EarLevel.Notes, EarLevel.Intervals];
+    const ear = (rows: ResultRow[]) =>
+      suggest(rows, undefined, [], levels).filter(([kind]) => kind === SuggestionKind.Ear);
+    expect(ear([])).toEqual([[SuggestionKind.Ear, 'ear:intervals']]);
+    expect(ear([result('ear:notes', 3, 1, 0)])).toEqual([]);
   });
 });

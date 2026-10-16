@@ -1,7 +1,8 @@
 /**
  * Today's practice (PLAN.md milestone 4.1): a short session picked from where the learner is —
  * the next lesson, a lesson due for review, a weak spot to loop, a song not played for a while,
- * a sight-reading drill now and then (milestone 4.3), and a lesson for the weakest skill.
+ * a sight-reading drill and ear training now and then (milestones 4.3 and 4.4), and a lesson
+ * for the weakest skill.
  *
  * Only what the learner has reached is suggested: never a locked lesson, a song above their
  * level, or a skill they haven't started; reviews and weak spots come from what they've played.
@@ -11,6 +12,7 @@ import type { ResultRow } from '../storage/db';
 import { resultKey, ResultKind } from '../storage/progress';
 import type { Skill, Unit } from './courses';
 import { DAY_MS, reviewOf } from './review';
+import type { EarLevel } from './earTraining';
 import type { DrillLevel } from './sightReading';
 import { type SkillProgress, SkillLevel } from './skills';
 import { STAR_THRESHOLDS } from '../engine/scoring';
@@ -22,11 +24,12 @@ export const SuggestionKind = {
   WeakSpot: 'weakSpot',
   Song: 'song',
   Drill: 'drill',
+  Ear: 'ear',
   Skill: 'skill',
 } as const;
 export type SuggestionKind = (typeof SuggestionKind)[keyof typeof SuggestionKind];
 
-/** A lesson, a song, an imported song or a drill level, as its results are saved. */
+/** A lesson, a song, an imported song, or a drill or ear-training level, as saved. */
 export interface PracticeTarget {
   kind: ResultKind;
   id: string;
@@ -39,7 +42,7 @@ export interface Suggestion {
   bars?: LoopRange;
   /** Skill: the one to strengthen. */
   skill?: Skill;
-  /** Review, weak spot, song and drill: when it was last played (ms), if ever. */
+  /** Review, weak spot, song, drill and ear training: when last played (ms), if ever. */
   lastPlayedAt?: number;
 }
 
@@ -57,6 +60,8 @@ export interface PracticeInput {
   skills: readonly SkillProgress[];
   /** Sight-reading levels open, easiest first. */
   drillLevels: readonly DrillLevel[];
+  /** Ear-training levels open, easiest first. */
+  earLevels: readonly EarLevel[];
   now: number;
   /** Targets not to suggest again (by result key), e.g. already in today's plan. */
   exclude?: ReadonlySet<string>;
@@ -67,7 +72,7 @@ export const MAX_SUGGESTIONS = 5;
 export const WEAK_SPOT_DAYS = 14;
 /** A song played more recently than this isn't "not played for a while". */
 export const SONG_REST_DAYS = 3;
-/** A drill is suggested when none was played for this long. */
+/** A drill (or ear training) is suggested when none was played for this long. */
 export const DRILL_REST_DAYS = 2;
 const THREE_STARS = STAR_THRESHOLDS[2];
 
@@ -138,20 +143,18 @@ export function suggestPractice(input: PracticeInput): Suggestion[] {
     }),
   );
 
-  // A sight-reading drill now and then, at the highest level open.
-  const drillLevel = input.drillLevels.at(-1);
-  if (drillLevel) {
-    const lastDrill = input.drillLevels
-      .map((level) => resultOf({ kind: ResultKind.Drill, id: level })?.lastPlayedAt ?? 0)
+  // A sight-reading drill and ear training now and then, at the highest level open.
+  const exercise = (kind: SuggestionKind, resultKind: ResultKind, levels: readonly string[]) => {
+    const level = levels.at(-1);
+    if (!level) return;
+    const last = levels
+      .map((id) => resultOf({ kind: resultKind, id })?.lastPlayedAt ?? 0)
       .reduce((latest, at) => Math.max(latest, at), 0);
-    if (now - lastDrill >= DRILL_REST_DAYS * DAY_MS) {
-      add({
-        kind: SuggestionKind.Drill,
-        target: { kind: ResultKind.Drill, id: drillLevel },
-        ...(lastDrill > 0 && { lastPlayedAt: lastDrill }),
-      });
-    }
-  }
+    if (now - last < DRILL_REST_DAYS * DAY_MS) return;
+    add({ kind, target: { kind: resultKind, id: level }, ...(last > 0 && { lastPlayedAt: last }) });
+  };
+  exercise(SuggestionKind.Drill, ResultKind.Drill, input.drillLevels);
+  exercise(SuggestionKind.Ear, ResultKind.Ear, input.earLevels);
 
   // The weakest skill started: its lesson played least well (short of three stars), or else an
   // open one not played yet. Lessons already played at three-star accuracy aren't suggested.

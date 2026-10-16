@@ -54,7 +54,7 @@
         "good": "Good",
         "mastered": "Mastered"
       },
-      "drills": "{count, plural, =0 {No drills yet} one {# drill} other {# drills}}"
+      "exercises": "{count, plural, =0 {No exercises yet} one {# exercise} other {# exercises}}"
     },
     "activity": {
       "heading": "Practice in the last year",
@@ -517,7 +517,8 @@
       "weakSpot": "Weak spot",
       "song": "Song",
       "skill": "Strengthen a skill",
-      "drill": "Sight-reading"
+      "drill": "Sight-reading",
+      "ear": "Ear training"
     },
     "details": {
       "next": "Pick up where you left off.",
@@ -528,7 +529,9 @@
       "song": "{days, plural, one {Not played since yesterday.} other {Not played for # days.}}",
       "skill": "Your weakest skill so far: {skill}.",
       "newDrill": "Fresh music to read at sight.",
-      "drill": "{days, plural, one {Fresh music to read: your last drill was yesterday.} other {Fresh music to read: your last drill was # days ago.}}"
+      "drill": "{days, plural, one {Fresh music to read: your last drill was yesterday.} other {Fresh music to read: your last drill was # days ago.}}",
+      "newEar": "Listen and play it back.",
+      "ear": "{days, plural, one {Listen and play it back: last done yesterday.} other {Listen and play it back: last done # days ago.}}"
     },
     "done": "done",
     "allDone": "All done for today. Nice work!",
@@ -556,5 +559,59 @@
     "hintWait": "Read each note on the staff and play it: the music waits for you.",
     "hintTempo": "Keep going in time and read ahead: the music doesn’t wait.",
     "logTitle": "Sight-reading: {level}"
+  },
+  "earTraining": {
+    "title": "Ear training",
+    "intro": "Listen, then play back what you heard.",
+    "level": "Level",
+    "levels": {
+      "notes": "Single notes",
+      "intervals": "Two notes (intervals)",
+      "melodies": "Short melodies",
+      "chords": "Major or minor chords"
+    },
+    "lockedLevel": "{level} (after “{unit}”)",
+    "locked": "Ear training opens when you finish the unit “{unit}”.",
+    "toLessons": "Go to the lessons",
+    "begin": "Start listening",
+    "start": {
+      "notes": "You’ll hear middle {c}, then another note: find it on the keyboard.",
+      "intervals": "You’ll hear two notes, one after the other: play them back, starting on the lit key.",
+      "melodies": "You’ll hear a short melody: play it back, starting on the lit key.",
+      "chords": "You’ll hear a chord: play it on the lit root, or choose major or minor.",
+      "notesAlone": "You’ll hear a note: find it on the keyboard."
+    },
+    "listen": "Listen…",
+    "ask": {
+      "notes": "Which note was it? (Middle {c} came first.)",
+      "intervals": "Play both notes, starting on the lit key.",
+      "melodies": "Play the melody back, starting on the lit key.",
+      "chords": "Play the chord on the lit root, or choose major or minor.",
+      "chordsMic": "Major or minor? Choose one.",
+      "notesAlone": "Which note was it?"
+    },
+    "wrong": "Not that one: you played {note}.",
+    "wrongChord": "Not quite.",
+    "hint": "The answer is lit: listen again if you like.",
+    "right": {
+      "note": "Right: {note}.",
+      "interval": "Right: {from} up to {to}, a {interval}.",
+      "melody": "Right, that’s the melody!",
+      "chord": "Right: {chord}."
+    },
+    "quality": {
+      "major": "Major",
+      "minor": "Minor"
+    },
+    "chooseLabel": "Major or minor",
+    "hearAgain": "Hear it again",
+    "againTip": "Play the question again",
+    "firstTry": "{count} of {total, plural, one {# question} other {# questions}} right the first time.",
+    "logTitle": "Ear training: {level}",
+    "progress": "Question {current} of {total}",
+    "results": "Results",
+    "reference": "Play middle {c} first",
+    "allNotes": "All 12 notes",
+    "allNotesTip": "Every key from middle C to the C above, black keys included, whatever the course has reached"
   }
 }

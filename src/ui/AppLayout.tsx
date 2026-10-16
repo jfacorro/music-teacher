@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet } from 'react-router';
 import { useSettings } from '../storage/settings';
 import { InputPicker } from './components/InputPicker';
+import { ICONS } from './icons';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
 export function AppLayout() {
@@ -24,10 +25,19 @@ export function AppLayout() {
           <NavLink to="/learn">{t('nav.learn')}</NavLink>
           <NavLink to="/songs">{t('nav.songs')}</NavLink>
           <NavLink to="/sight-reading">{t('nav.sightReading')}</NavLink>
+          <NavLink to="/ear-training">{t('nav.earTraining')}</NavLink>
           <NavLink to="/free-play">{t('nav.freePlay')}</NavLink>
-          <NavLink to="/settings">{t('nav.settings')}</NavLink>
         </nav>
         <InputPicker />
+        {/* Settings as a gear, so the main places fit on one line. */}
+        <NavLink
+          className="app-settings"
+          to="/settings"
+          aria-label={t('nav.settings')}
+          title={t('nav.settings')}
+        >
+          <span aria-hidden="true">{ICONS.settings}</span>
+        </NavLink>
       </header>
       <main className="app-main">{firstLaunchDone ? <Outlet /> : <WelcomeScreen />}</main>
     </div>

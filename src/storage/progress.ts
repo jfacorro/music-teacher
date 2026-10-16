@@ -18,6 +18,8 @@ export const ResultKind = {
   MySong: 'mySong',
   /** A sight-reading drill: saved by level (its id), each drill being new. */
   Drill: 'drill',
+  /** An ear-training exercise: saved by level (its id). */
+  Ear: 'ear',
 } as const;
 export type ResultKind = (typeof ResultKind)[keyof typeof ResultKind];
 
@@ -44,6 +46,7 @@ export const resultKey = (kind: ResultKind, id: string) => `${kind}:${id}`;
 /** Skills practiced by exercises of their own, and the results that count for them. */
 const EXERCISE_RESULTS: Partial<Readonly<Record<Skill, ResultKind>>> = {
   'sight-reading': ResultKind.Drill,
+  'ear-training': ResultKind.Ear,
 };
 /** How many of the latest exercises count for a skill's mastery. */
 export const EXERCISE_RUNS = 10;
