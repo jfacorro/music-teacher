@@ -174,6 +174,7 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
             weakBars: weakSpot(summary.measures),
           })
         }
+        recordingKey={resultKey(result.kind, result.id)}
         onLoopPass={(count) => {
           if (count >= LOOP_PASSES_PRACTICED) markPracticed(resultKey(result.kind, result.id));
         }}

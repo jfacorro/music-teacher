@@ -671,6 +671,10 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Every practice run is recorded (the notes played: time, key, velocity, input).
 - After a run: **Listen** plays it back with the app's piano, in time with the falling notes or the sheet music cursor; **Compare** draws the played notes over the written ones, so rushing, dragging, wrong keys and (with MIDI) uneven dynamics show at a glance.
 - The latest recording of each lesson and song is kept (and exported with the backup); older ones are dropped.
+- Wait and play-along runs are recorded (not "Play it for me", nor rhythm steps); in a loop, each time through is kept. Keys are placed on the music's timeline (beats), so playback follows the tempo chosen; the microphone's notes are kept as the session read them (an octave off counts as the note expected).
+- Compare grades the keys the way the run was graded, with the same matchers, so it agrees with the results: right, early, late (tempo mode), wrong keys, missed notes; keys of the other hand and the count-in are shown but not graded. With MIDI, a strip below shows how hard each key was played.
+- Storage: a `recordings` table keyed by song or lesson step (`song:<id>`, `mySong:<id>`, `lesson:<id>:<step>`), so the database is at version 5; backups made before it still import.
+- Built as: `engine/recording.ts` (the recorder and the comparison; pure, tested), `storage/recordings.ts`, `ui/screens/practice/useRunRecording.ts` (records, keeps and plays back) and `CompareChart.tsx`. Listen and Compare sit in the controls between runs and on the results card; playing back has no metronome and lights up the keys played.
 
 **4.3 Sight-reading drills**
 - A generator of short melodies (2–4 bars) using only what the learner has been taught: the notes and clefs of finished units, note values up to their level (quarters and halves first; then rests, eighths; then the left hand, both hands, key signatures).

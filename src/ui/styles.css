@@ -1821,3 +1821,142 @@ button.bars__bar:focus-visible {
 .today__footer p {
   margin-block: 0 0.5rem;
 }
+
+/* Dialogs as wide as the screen allows (the comparison chart). */
+.modal--wide {
+  inline-size: min(1100px, calc(100% - 2rem));
+}
+
+.compare-card {
+  padding: 1.25rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+.compare-card h2 {
+  margin-block-end: 0.25rem;
+}
+
+/* Compare: the written notes and the keys played, on one chart. */
+.compare__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.compare__chart {
+  display: block;
+}
+
+.compare__row {
+  fill: var(--surface);
+}
+
+.compare__row--black {
+  fill: var(--lane-bg);
+}
+
+.compare__bar {
+  stroke: var(--grid-measure);
+  stroke-width: 1;
+}
+
+.compare__label {
+  fill: var(--muted);
+  font-size: 10px;
+}
+
+.compare__written {
+  fill: var(--muted);
+  opacity: 0.45;
+}
+
+.compare__written--missed {
+  fill: none;
+  opacity: 1;
+  stroke: var(--key-wrong);
+  stroke-dasharray: 3 2;
+}
+
+.compare__played--right {
+  fill: var(--note-played);
+  stroke: var(--note-played);
+}
+
+.compare__played--early {
+  fill: var(--pending);
+  stroke: var(--pending);
+}
+
+.compare__played--late {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.compare__played--wrong {
+  fill: var(--key-wrong);
+  stroke: var(--key-wrong);
+}
+
+.compare__played--ungraded {
+  fill: var(--muted);
+  stroke: var(--muted);
+  opacity: 0.6;
+}
+
+.compare__loudness {
+  stroke-width: 2;
+}
+
+.compare__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+}
+
+.compare__legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.compare__swatch {
+  display: inline-block;
+  inline-size: 1.4rem;
+  block-size: 0.6rem;
+  border-radius: 2px;
+}
+
+.compare__swatch--written {
+  background: var(--muted);
+  opacity: 0.45;
+}
+
+.compare__swatch--right {
+  background: var(--note-played);
+}
+
+.compare__swatch--early {
+  background: var(--pending);
+}
+
+.compare__swatch--late {
+  background: var(--accent);
+}
+
+.compare__swatch--wrong {
+  background: var(--key-wrong);
+}
+
+.compare__swatch--ungraded {
+  background: var(--muted);
+  opacity: 0.6;
+}
+
+.compare__swatch--missed {
+  border: 1px dashed var(--key-wrong);
+}

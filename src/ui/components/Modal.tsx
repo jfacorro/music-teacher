@@ -6,6 +6,8 @@ interface ModalProps {
   labelledBy: string;
   /** Called when the learner closes it: the close button, Escape, or a click outside. */
   onClose: () => void;
+  /** As wide as the screen allows (e.g. a chart), instead of a narrow card. */
+  wide?: boolean;
   children: ReactNode;
 }
 
@@ -13,7 +15,7 @@ interface ModalProps {
  * A window floating over the page, with the rest dimmed: the browser's modal dialog, so focus
  * stays inside and Escape closes it.
  */
-export function Modal({ labelledBy, onClose, children }: ModalProps) {
+export function Modal({ labelledBy, onClose, wide = false, children }: ModalProps) {
   const { t } = useTranslation();
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -29,7 +31,7 @@ export function Modal({ labelledBy, onClose, children }: ModalProps) {
   return (
     <dialog
       ref={ref}
-      className="modal"
+      className={wide ? 'modal modal--wide' : 'modal'}
       aria-labelledby={labelledBy}
       tabIndex={-1}
       onCancel={(event) => {

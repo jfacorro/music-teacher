@@ -137,6 +137,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
                 if (passed) markDone(index);
               }}
               onContinue={next}
+              recordingKey={`lesson:${lesson.id}:${index}`}
             />
           )}
 

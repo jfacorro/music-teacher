@@ -17,8 +17,11 @@ export interface AudioEngine {
   /** Piano-like note, right now. */
   noteOn(midi: number, velocity: number): void;
   noteOff(midi: number): void;
-  /** A note of the other hand, heard from `start` to `end` (performance.now() ms). */
-  accompany(midi: number, start: number, end: number): void;
+  /**
+   * A note of the other hand (or of a recording played back), heard from `start` to `end`
+   * (performance.now() ms), as loud as `velocity` (0–1).
+   */
+  accompany(midi: number, start: number, end: number, velocity?: number): void;
   /** Silences the other hand (on pause or restart). */
   stopAccompaniment(): void;
   /** Time from playing a sound to hearing it, as reported by the browser, ms. */
@@ -119,12 +122,17 @@ async function createEngine(): Promise<AudioEngine> {
     noteOff(midi) {
       piano.triggerRelease(noteName(midi), context.currentTime);
     },
-    accompany(midi, start, end) {
+    accompany(midi, start, end, velocity = 0.7) {
       const from = audioTimeFor(context, start - timingCorrectionMs);
       if (from < context.currentTime - MAX_LATE_NOTE_S) return;
       const when = Math.max(from, context.currentTime);
       const until = audioTimeFor(context, end - timingCorrectionMs);
-      accompanist.triggerAttackRelease(noteName(midi), Math.max(0.05, until - when), when, 0.7);
+      accompanist.triggerAttackRelease(
+        noteName(midi),
+        Math.max(0.05, until - when),
+        when,
+        velocity,
+      );
     },
     stopAccompaniment() {
       accompanist.releaseAll();

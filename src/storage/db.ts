@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { ImportedMusic } from '../content/loaders/importedMusic';
 import type { ImportOptions } from '../content/loaders/importedScore';
+import type { Recording } from '../engine/recording';
 import type { LoopRange } from '../engine/session';
 import type { ResultKind } from './progress';
 
@@ -56,12 +57,22 @@ export interface MySongRow {
   options: ImportOptions;
 }
 
+/** The latest finished run of a song or lesson exercise, to listen to and compare. */
+export interface RecordingRow {
+  /** "song:<id>", "mySong:<id>" or "lesson:<id>:<step>". */
+  key: string;
+  /** ms since epoch */
+  recordedAt: number;
+  recording: Recording;
+}
+
 export const db = new Dexie('piano-teacher') as Dexie & {
   settings: EntityTable<KeyValueRow, 'key'>;
   results: EntityTable<ResultRow, 'key'>;
   practiceLog: EntityTable<PracticeLogRow, 'id'>;
   practiceDays: EntityTable<PracticeDayRow, 'day'>;
   mySongs: EntityTable<MySongRow, 'id'>;
+  recordings: EntityTable<RecordingRow, 'key'>;
 };
 
 db.version(1).stores({
@@ -90,6 +101,10 @@ db.version(3)
 
 db.version(4).stores({
   mySongs: '++id',
+});
+
+db.version(5).stores({
+  recordings: 'key',
 });
 
 /** Local calendar day, e.g. "2026-10-13". */

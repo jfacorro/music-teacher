@@ -15,9 +15,17 @@ interface ExerciseStepViewProps {
   /** A finished run's result, and whether it meets the step's pass rule. */
   onResult: (result: StepResult, passed: boolean) => void;
   onContinue: () => void;
+  /** Where its latest finished run is kept (see PracticeRun). */
+  recordingKey?: string;
 }
 
-export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseStepViewProps) {
+export function ExerciseStepView({
+  step,
+  text,
+  onResult,
+  onContinue,
+  recordingKey,
+}: ExerciseStepViewProps) {
   const { t } = useTranslation('screens');
   const [metronome, setMetronome] = useState(step.metronome);
   const [view, setView] = useState(step.view);
@@ -56,6 +64,7 @@ export function ExerciseStepView({ step, text, onResult, onContinue }: ExerciseS
         metronome={metronome}
         view={view}
         notation={notation}
+        recordingKey={recordingKey}
         onFinish={(summary) =>
           onResult({ stars: summary.stars, accuracy: summary.accuracy }, passes(summary))
         }

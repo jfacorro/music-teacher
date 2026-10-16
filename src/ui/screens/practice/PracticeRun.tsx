@@ -44,6 +44,8 @@ import { TapPad } from '../../keyboard/TapPad';
 import { ScoreView, type SheetNotation } from '../../../content/lessons';
 import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
+import { CompareChart } from './CompareChart';
+import { useRunRecording } from './useRunRecording';
 import { DynamicsNow } from './DynamicsNow';
 import { PedalIndicator } from '../../components/PedalIndicator';
 import { ResultsCard } from './ResultsCard';
@@ -84,6 +86,11 @@ interface PracticeRunProps {
   onLoopPass?: (count: number) => void;
   /** Extra buttons on the results card (e.g. Continue in a lesson). */
   resultsActions?: (summary: Summary) => ReactNode;
+  /**
+   * Where the latest finished run is kept, to listen to and compare with the music (e.g.
+   * "song:ode-to-joy"); none: runs aren't recorded.
+   */
+  recordingKey?: string;
 }
 
 /** One practice run: session, transport, input, metronome and the stage. */
@@ -103,6 +110,7 @@ export function PracticeRun({
   onFinish,
   onLoopPass,
   resultsActions,
+  recordingKey,
 }: PracticeRunProps) {
   const { t, i18n } = useTranslation('screens');
   const names = useNoteNames();
@@ -128,8 +136,13 @@ export function PracticeRun({
   /** Results the learner closed (they stay closed until the next run's). */
   const [dismissed, setDismissed] = useState<Summary | null>(null);
   const running = state.status === SessionStatus.Playing || state.status === SessionStatus.Waiting;
+  /** Between runs (not paused in one): the last run can be listened to and compared. */
+  const between = state.status === SessionStatus.Ready || state.status === SessionStatus.Finished;
+  const [comparing, setComparing] = useState(false);
 
   useEffect(() => subscribeNotes((event) => session.handleNote(event)), [session]);
+  // After the session hears each key, so it's recorded as the session read it.
+  const run = useRunRecording({ key: recordingKey, session, transport, mode, hands });
   useEffect(() => () => session.pause(), [session]);
   useAnimationFrame(() => session.tick());
   // Hidden pages get no animation frames, so nothing would be checked: pause instead of
@@ -183,13 +196,14 @@ export function PracticeRun({
     if (state.summary) finished.current?.(state.summary, performance.now() - startedAt.current);
   }, [state.summary]);
 
-  // The metronome and the other hand read the latest choices without restarting.
+  // The metronome and the other hand read the latest choices without restarting. Playing a
+  // recording back has no metronome.
   const metronomeOn = useRef(metronome);
   const otherHandOn = useRef(otherHand);
   useEffect(() => {
-    metronomeOn.current = metronome;
+    metronomeOn.current = metronome && !run.listening;
     otherHandOn.current = otherHand;
-  }, [metronome, otherHand]);
+  }, [metronome, otherHand, run.listening]);
   useEffect(
     () =>
       startMetronome(
@@ -255,13 +269,15 @@ export function PracticeRun({
   const held = useLiveInput((s) => s.held);
   const pressed = useMemo(
     () =>
-      new Set(
-        held.map((note) =>
+      new Set([
+        ...held.map((note) =>
           note.source === InputSource.Mic ? session.displayPitch(note.pitch) : note.pitch,
         ),
-      ),
+        // Playing a recording back lights up its keys.
+        ...run.playbackKeys,
+      ]),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `state` signals new aliases
-    [held, session, state],
+    [held, session, state, run.playbackKeys],
   );
 
   const keyLabel = useCallback(
@@ -283,7 +299,16 @@ export function PracticeRun({
     [session],
   );
 
+  const listen = () => {
+    metronomeOn.current = false; // before the first beat is scheduled
+    void run.listen();
+  };
+
   const togglePlay = async () => {
+    if (run.listening) {
+      run.stop();
+      return;
+    }
     if (running) {
       session.pause();
       return;
@@ -363,14 +388,14 @@ export function PracticeRun({
           type="button"
           className="button button--primary button--icon"
           onClick={() => void togglePlay()}
-          aria-label={running ? t('practice.pause') : t('practice.play')}
+          aria-label={running || run.listening ? t('practice.pause') : t('practice.play')}
           aria-keyshortcuts="Space"
           title={t('practice.tips.withKey', {
-            action: running ? t('practice.pause') : t('practice.play'),
+            action: running || run.listening ? t('practice.pause') : t('practice.play'),
             key: t('practice.keys.space'),
           })}
         >
-          <span aria-hidden="true">{running ? ICONS.pause : ICONS.play}</span>
+          <span aria-hidden="true">{running || run.listening ? ICONS.pause : ICONS.play}</span>
         </button>
         <button
           type="button"
@@ -385,6 +410,34 @@ export function PracticeRun({
         >
           <span aria-hidden="true">{ICONS.restart}</span>
         </button>
+        {between && run.recording && (
+          <>
+            <button
+              type="button"
+              className="button"
+              title={
+                run.listening ? t('practice.recording.stopTip') : t('practice.recording.listenTip')
+              }
+              onClick={() => (run.listening ? run.stop() : listen())}
+            >
+              <span className="button__icon" aria-hidden="true">
+                {run.listening ? ICONS.stop : ICONS.listen}
+              </span>
+              {run.listening ? t('practice.recording.stop') : t('practice.recording.listen')}
+            </button>
+            <button
+              type="button"
+              className="button"
+              title={t('practice.recording.compareTip')}
+              onClick={() => setComparing(true)}
+            >
+              <span className="button__icon" aria-hidden="true">
+                {ICONS.compare}
+              </span>
+              {t('practice.recording.compare')}
+            </button>
+          </>
+        )}
         {state.summary && !resultsOpen && (
           <button
             type="button"
@@ -419,8 +472,34 @@ export function PracticeRun({
             onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
             hasDynamics={score.dynamics !== undefined}
           >
-            {weak || extraActions ? (
+            {weak || extraActions || run.recording ? (
               <>
+                {run.recording && (
+                  <>
+                    <button
+                      type="button"
+                      className="button"
+                      title={t('practice.recording.listenTip')}
+                      onClick={() => {
+                        setDismissed(state.summary);
+                        listen();
+                      }}
+                    >
+                      {t('practice.recording.listen')}
+                    </button>
+                    <button
+                      type="button"
+                      className="button"
+                      title={t('practice.recording.compareTip')}
+                      onClick={() => {
+                        setDismissed(state.summary);
+                        setComparing(true);
+                      }}
+                    >
+                      {t('practice.recording.compare')}
+                    </button>
+                  </>
+                )}
                 {weak && onLoopChange && (
                   <button
                     type="button"
@@ -435,6 +514,15 @@ export function PracticeRun({
               </>
             ) : null}
           </ResultsCard>
+        </Modal>
+      )}
+      {comparing && run.recording && (
+        <Modal labelledBy="compare-heading" wide onClose={() => setComparing(false)}>
+          <section className="compare-card">
+            <h2 id="compare-heading">{t('practice.recording.heading')}</h2>
+            <p className="muted">{t('practice.recording.intro')}</p>
+            <CompareChart notes={score.notes} recording={run.recording} measures={score.measures} />
+          </section>
         </Modal>
       )}
       <div className="practice__stage">

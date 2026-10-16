@@ -8,7 +8,16 @@ import { db } from './db';
 export const BACKUP_FORMAT = 'piano-teacher-backup';
 export const BACKUP_VERSION = 1;
 
-const TABLES = ['settings', 'results', 'practiceLog', 'practiceDays', 'mySongs'] as const;
+const TABLES = [
+  'settings',
+  'results',
+  'practiceLog',
+  'practiceDays',
+  'mySongs',
+  'recordings',
+] as const;
+/** Tables added after the first backups: a file without them still imports (as empty). */
+const LATER_TABLES: readonly TableName[] = ['recordings'];
 type TableName = (typeof TABLES)[number];
 
 export interface Backup {
@@ -45,10 +54,20 @@ export function parseBackup(input: unknown): Backup {
   }
   if (data.version !== BACKUP_VERSION) throw new BackupError(`version ${String(data.version)}`);
   const tables = data.tables as Partial<Backup['tables']> | undefined;
-  if (!tables || !TABLES.every((name) => Array.isArray(tables[name]))) {
+  if (
+    !tables ||
+    !TABLES.every(
+      (name) => Array.isArray(tables[name]) || (LATER_TABLES.includes(name) && !tables[name]),
+    )
+  ) {
     throw new BackupError('missing tables');
   }
-  return data as Backup;
+  return {
+    ...(data as Backup),
+    tables: Object.fromEntries(
+      TABLES.map((name) => [name, tables[name] ?? []]),
+    ) as Backup['tables'],
+  };
 }
 
 /** Replaces everything the app keeps with the backup's contents (reload afterwards). */
