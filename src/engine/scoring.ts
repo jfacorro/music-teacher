@@ -56,8 +56,8 @@ export interface Summary extends Tally {
   /** Null without dynamics in the score, or without a MIDI keyboard to measure them. */
   dynamics: DynamicsSummary | null;
   /**
-   * Each hand on its own, when both were played (wrong keys belong to no hand, so they only
-   * count in the overall accuracy); null for one hand.
+   * Each hand on its own, when both were played, with the wrong keys put down to each hand;
+   * null for one hand.
    */
   hands: { hand: Hand; tally: Tally }[] | null;
 }
@@ -84,6 +84,7 @@ export function starsFor(accuracy: number): 0 | 1 | 2 | 3 {
  * @param outcomes what happened to each note (absent = not played, counts as missed)
  * @param wrongBeats beat position of each wrong or extra key press
  * @param windows the timing windows, to break timing down (tempo mode)
+ * @param wrongHands the hand each wrong key is put down to, in the order of `wrongBeats`
  */
 export function summarize(
   notes: readonly ScoreNote[],
@@ -91,6 +92,7 @@ export function summarize(
   wrongBeats: readonly number[],
   measures: readonly Measure[],
   windows?: TimingWindows,
+  wrongHands: readonly Hand[] = [],
 ): Summary {
   const total = tally(notes, outcomes, wrongBeats.length);
   const perMeasure = measures.map((measure, index) => {
@@ -113,13 +115,14 @@ export function summarize(
     measures: perMeasure,
     timing: windows ? timingSummary(errorsMs, windows) : null,
     dynamics: null,
-    hands: byHand(notes, outcomes),
+    hands: byHand(notes, outcomes, wrongHands),
   };
 }
 
 function byHand(
   notes: readonly ScoreNote[],
   outcomes: ReadonlyMap<ScoreNote, NoteOutcome>,
+  wrongHands: readonly Hand[],
 ): Summary['hands'] {
   const hands = [Hand.Right, Hand.Left].filter((hand) => notes.some((n) => n.hand === hand));
   if (hands.length < 2) return null;
@@ -128,7 +131,7 @@ function byHand(
     tally: tally(
       notes.filter((note) => note.hand === hand),
       outcomes,
-      0,
+      wrongHands.filter((wrongHand) => wrongHand === hand).length,
     ),
   }));
 }

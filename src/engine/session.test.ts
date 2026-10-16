@@ -588,3 +588,29 @@ describe('PracticeSession: dynamics', () => {
     expect(t.session.getState().summary?.dynamics).toBeNull();
   });
 });
+
+describe('PracticeSession: wrong keys of each hand', () => {
+  it('puts a wrong key down to the hand playing the nearest note', () => {
+    const t = setup(
+      [
+        ['C4', 0],
+        ['C3', 0, 1, Hand.Left],
+      ],
+      { mode: PracticeMode.Wait },
+    );
+    t.session.play();
+    t.at(0);
+    t.press(50); // D3, a key off the left hand's C3
+    t.release(50);
+    t.press(C3);
+    t.press(C4);
+    t.release(C3);
+    t.release(C4);
+    t.at(1.01);
+    const hands = t.session.getState().summary?.hands;
+    expect(hands?.map(({ hand, tally }) => [hand, tally.wrong, tally.accuracy])).toEqual([
+      [Hand.Right, 0, 1],
+      [Hand.Left, 1, 0.75],
+    ]);
+  });
+});
