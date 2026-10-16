@@ -662,6 +662,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
   - a **weak spot**: the bars to loop from a recent run that went badly, opening the song or lesson with those bars repeating;
   - a **song** not played for a while, at the learner's level;
   - the **skill** with the lowest mastery, through one of its lessons.
+- Only what the learner has reached is suggested: never a locked lesson, a song above their level (see 4.6), or a skill they haven't started; reviews and weak spots come only from lessons and songs already played.
 - The suggestions change as the learner plays; finished ones are ticked for the day.
 - Storage: each result keeps its review interval and the weak bars of its latest run (database version 5, kept in backups).
 
