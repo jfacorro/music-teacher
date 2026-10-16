@@ -709,7 +709,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - The on-screen keyboard sits on a dark keybed, as a piano's keys do (a dark edge on top, dark gaps between white keys, a darker lip at their front), so the keys stand out in the light theme too.
 - Stored with the other settings (`theme`, `keyHeight`, `keysShown`), so backups include them. Built as `ui/appearance.ts`, `ui/keyboard/layout.ts › keyboardRange`, `ui/screens/settings/AppearanceSettings.tsx`.
 
-**4.6 Content: more songs**
+**4.6 Content: more songs** — ✔ done (verified 2026-10-17 on the Casio: the new songs sound right and fit the hands)
 - Six or more public-domain songs spread over the levels, several for both hands (e.g. "Minuet in G", "Für Elise" opening, "Brahms' Lullaby", "Amazing Grace", "Greensleeves", "Twinkle, Twinkle"), each with fingering, markings and dynamics.
 - Song practice shows each song's level (the unit it fits after) and sorts by it.
 - All titles and texts translated; new terms in the glossary.
@@ -724,7 +724,8 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
   - [ ] TODO (user): once Unit 3 is finished, play a few drills on the Casio (MIDI): they should read well from the sheet, sound like little tunes and fit under the hand; try "New drill", "Try again" and each open level.
 - [x] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
 - [x] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
-- [ ] All new text is in English and Spanish.
+- [x] All new text is in English and Spanish.
+  - [ ] TODO (user): once Unit 7 is finished, go through Unit 8's lessons on the Casio (the black keys' names, accidental quizzes, the natural sign, A minor with "Greensleeves", neighbor notes with "Für Elise").
 
 ---
 
