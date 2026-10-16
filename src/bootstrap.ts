@@ -10,10 +10,16 @@ import { startRouting } from './input/routing';
 import { loadMySongs } from './storage/mySongs';
 import { loadProgress } from './storage/progress';
 import { loadSettings, updateSettings } from './storage/settings';
+import { loadTodayPlan } from './storage/todayPlan';
 
 /** Everything that must be ready before the first render. */
 export async function bootstrap(): Promise<void> {
-  const [settings] = await Promise.all([loadSettings(), loadProgress(), loadMySongs()]);
+  const [settings] = await Promise.all([
+    loadSettings(),
+    loadProgress(),
+    loadMySongs(),
+    loadTodayPlan(),
+  ]);
   await initI18n(settings.language ?? detectLanguage(navigator.languages));
 
   startLiveTracking();

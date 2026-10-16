@@ -655,7 +655,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Scope
 
-**4.1 Practice suggestions**
+**4.1 Practice suggestions** — ✔ done (verified 2026-10-16 with real progress: the suggestions fit, and playing one ticks it off)
 - A **Today** card on the home screen (Progress) with a short session of 3–5 suggestions, each one tap away:
   - the next lesson on the learning path;
   - a **review**: a finished lesson due again, spaced by how well it went (e.g. 1★ after 3 days, 2★ after 7, 3★ after 14; doubling after each good review);
@@ -664,7 +664,8 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
   - the **skill** with the lowest mastery, through one of its lessons.
 - Only what the learner has reached is suggested: never a locked lesson, a song above their level (see 4.6), or a skill they haven't started; reviews and weak spots come only from lessons and songs already played.
 - The suggestions change as the learner plays; finished ones are ticked for the day.
-- Storage: each result keeps its review interval and the weak bars of its latest run (database version 5, kept in backups).
+- Storage: each result keeps its review schedule (`reviewDays`, `reviewDue`; results saved before get one from their best stars) and, for songs, the weak bars of its latest run; today's plan is saved in the settings table (key `today`). No new tables, so the database stays at version 4; all of it is in backups.
+- Built as: `content/review.ts` (the schedule), `content/suggestions.ts` (what to suggest; pure, tested), `storage/todayPlan.ts` (the day's plan; an item is done once played since it was suggested — a finished run, or three times through a weak spot's bars), `ui/screens/TodayCard.tsx`. Songs know their level (`SONG_UNITS`: the unit whose lessons first use them, kept in step by a test). A song opens with bars repeating from its address (`/practice/<song>?bars=5-6`).
 
 **4.2 Record and play back**
 - Every practice run is recorded (the notes played: time, key, velocity, input).

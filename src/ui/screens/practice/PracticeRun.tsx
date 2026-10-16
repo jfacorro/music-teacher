@@ -80,6 +80,8 @@ interface PracticeRunProps {
   hint?: string;
   /** Called once when the run ends, with its results and how long it took (ms). */
   onFinish?: (summary: Summary, durationMs: number) => void;
+  /** Called each time through the repeated bars, with how many times so far. */
+  onLoopPass?: (count: number) => void;
   /** Extra buttons on the results card (e.g. Continue in a lesson). */
   resultsActions?: (summary: Summary) => ReactNode;
 }
@@ -99,6 +101,7 @@ export function PracticeRun({
   onLoopChange,
   hint,
   onFinish,
+  onLoopPass,
   resultsActions,
 }: PracticeRunProps) {
   const { t, i18n } = useTranslation('screens');
@@ -161,6 +164,15 @@ export function PracticeRun({
     );
   }, [session, loopFirst, loopLast]);
   useEffect(() => session.setTempo((score.tempo * speed) / 100), [session, score, speed]);
+
+  const passed = useRef(onLoopPass);
+  useEffect(() => {
+    passed.current = onLoopPass;
+  });
+  const passes = state.lastPass?.count ?? 0;
+  useEffect(() => {
+    if (passes > 0) passed.current?.(passes);
+  }, [passes]);
 
   const finished = useRef(onFinish);
   const startedAt = useRef(0);

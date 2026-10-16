@@ -1,9 +1,13 @@
 import { useEffect, useState, type ReactNode } from 'react';
+import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { preloadAudio } from '../../../audio/audio';
 import type { Score } from '../../../engine/score';
 import { HandFilter, type LoopRange, PracticeMode } from '../../../engine/session';
-import { recordResult, type ResultKind } from '../../../storage/progress';
+import { weakSpot } from '../../../engine/weakSpots';
+import { recordResult, resultKey, type ResultKind } from '../../../storage/progress';
+import { markPracticed } from '../../../storage/todayPlan';
+import { parseBars } from '../../barSelection';
 import { ScoreView } from '../../../content/lessons';
 import { useSettings } from '../../../storage/settings';
 import { Markings } from '../../components/Markings';
@@ -31,7 +35,13 @@ interface PracticeViewProps {
   actions?: ReactNode;
 }
 
-/** Song header and practice options; each combination of options is a fresh run. */
+/** Times through the repeated bars that count as practicing them (for today's plan). */
+const LOOP_PASSES_PRACTICED = 3;
+
+/**
+ * Song header and practice options; each combination of options is a fresh run. The address
+ * can ask for bars to repeat from the start (`?bars=5-6`, counted from 1).
+ */
 export function PracticeView({ title, composer, score, result, actions }: PracticeViewProps) {
   const { t } = useTranslation('screens');
   const [mode, setMode] = useState<PracticeMode>(PracticeMode.Wait);
@@ -40,11 +50,12 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
   const [view, setView] = useState<ScoreView>(ScoreView.Falling);
   const [notation, setNotation] = useState(() => useSettings.getState().sheetNotation);
   const [speed, setSpeed] = useState(SPEED_MAX);
-  const [loop, setLoop] = useState<LoopRange>({
-    first: 0,
-    last: Math.min(1, score.measures.length - 1),
-  });
-  const [looping, setLooping] = useState(false);
+  const [params] = useSearchParams();
+  const [asked] = useState(() => parseBars(params.get('bars'), score.measures.length));
+  const [loop, setLoop] = useState<LoopRange>(
+    () => asked ?? { first: 0, last: Math.min(1, score.measures.length - 1) },
+  );
+  const [looping, setLooping] = useState(asked !== null);
   const [otherHand, setOtherHand] = useState(false);
 
   /** null: stop repeating (keeping the bars for next time). */
@@ -160,8 +171,12 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
             stars: summary.stars,
             accuracy: summary.accuracy,
             durationMs,
+            weakBars: weakSpot(summary.measures),
           })
         }
+        onLoopPass={(count) => {
+          if (count >= LOOP_PASSES_PRACTICED) markPracticed(resultKey(result.kind, result.id));
+        }}
       />
     </section>
   );

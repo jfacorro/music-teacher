@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { ImportedMusic } from '../content/loaders/importedMusic';
 import type { ImportOptions } from '../content/loaders/importedScore';
+import type { LoopRange } from '../engine/session';
 import type { ResultKind } from './progress';
 
 interface KeyValueRow {
@@ -17,6 +18,11 @@ export interface ResultRow {
   /** First time it was finished with at least one star (ms since epoch). */
   completedAt: number | null;
   lastPlayedAt: number;
+  /** Spaced review (content/review.ts); absent on results saved before reviews existed. */
+  reviewDays?: number;
+  reviewDue?: number;
+  /** Songs: the bars of the latest run that need work (engine/weakSpots.ts), if any. */
+  weakBars?: LoopRange | null;
 }
 
 /** One finished lesson or song, for streaks and practice time. */

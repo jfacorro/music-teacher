@@ -36,6 +36,9 @@ describe('mergeResult', () => {
       attempts: 1,
       completedAt: 100,
       lastPlayedAt: 100,
+      // Two stars: the first review comes after a week.
+      reviewDays: 7,
+      reviewDue: 100 + 7 * 24 * 60 * 60 * 1000,
     });
     const second = mergeResult('lesson:a', first, { stars: 1, accuracy: 0.9, durationMs: 1 }, 200);
     expect(second).toMatchObject({
@@ -44,6 +47,30 @@ describe('mergeResult', () => {
       attempts: 2,
       completedAt: 100,
       lastPlayedAt: 200,
+    });
+  });
+
+  it('keeps the weak bars of the latest song run', () => {
+    const weak = mergeResult(
+      'song:a',
+      undefined,
+      { stars: 1, accuracy: 0.7, durationMs: 1, weakBars: { first: 2, last: 3 } },
+      100,
+    );
+    expect(weak.weakBars).toEqual({ first: 2, last: 3 });
+    const better = mergeResult(
+      'song:a',
+      weak,
+      { stars: 3, accuracy: 1, durationMs: 1, weakBars: null },
+      200,
+    );
+    expect(better.weakBars).toBeNull();
+    // Lessons don't report weak bars: what was there stays.
+    expect(
+      mergeResult('song:a', weak, { stars: 1, accuracy: 0.7, durationMs: 1 }, 200).weakBars,
+    ).toEqual({
+      first: 2,
+      last: 3,
     });
   });
 
