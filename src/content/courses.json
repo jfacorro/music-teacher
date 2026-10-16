@@ -218,6 +218,40 @@
           "skills": ["scales", "hands-together"]
         }
       ]
+    },
+    {
+      "id": "u8",
+      "textVars": {
+        "a": "A4"
+      },
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u8-l1",
+          "skills": ["accidentals"]
+        },
+        {
+          "id": "u8-l2",
+          "skills": ["accidentals", "treble-clef", "bass-clef"]
+        },
+        {
+          "id": "u8-l3",
+          "skills": ["accidentals"]
+        },
+        {
+          "id": "u8-l4",
+          "titleVars": {
+            "a": "A4"
+          },
+          "skills": ["minor-keys", "accidentals"]
+        },
+        {
+          "id": "u8-l5",
+          "skills": ["accidentals", "minor-keys"]
+        }
+      ]
     }
   ]
 }

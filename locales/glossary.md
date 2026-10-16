@@ -111,6 +111,14 @@ system setting (`src/i18n/naming.ts`).
 | Range (lowest to highest note)                | range                                                | registro                                           |
 | Sixteenth note                                | sixteenth note                                       | semicorchea                                        |
 | Triplet                                       | triplet                                              | tresillo                                           |
+| Half step (to the very next key)              | half step (semitone)                                 | semitono                                           |
+| Minor key / relative minor                    | minor key / relative minor                           | tonalidad menor / relativo menor                   |
+| Leading note (raised seventh)                 | leading note (the seventh, raised)                   | sensible (la séptima, elevada)                     |
+| Neighbor note                                 | neighbor note                                        | nota vecina                                        |
+| 3/4 time                                      | 3/4 time                                             | compás de 3/4                                      |
+| Dotted half / dotted quarter note             | dotted half note / dotted quarter note               | blanca con puntillo / negra con puntillo           |
+| Minuet                                        | minuet                                               | minueto                                            |
+| Lullaby                                       | lullaby                                              | canción de cuna                                    |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
 their explanations are translated (`theory.json` › `markings`).

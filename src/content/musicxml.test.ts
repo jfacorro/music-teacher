@@ -3,7 +3,7 @@ import { scoreOf } from '../engine/testUtils';
 import { loadSong, SONG_IDS } from './songs';
 import { DIVISIONS, noteCardXml, noteKey, scoreToMusicXml, Clef } from './musicxml';
 import { pitchOf } from '../theory/pitch';
-import { Hand } from '../engine/score';
+import { beatsPerMeasure, Hand } from '../engine/score';
 
 /** The <note> elements of a staff, as short strings: "C4:quarter", "rest:half", "D4:eighth.". */
 function written(xml: string, staff: number): string[] {
@@ -266,7 +266,7 @@ describe('scoreToMusicXml', () => {
   it.each(SONG_IDS)('converts the song %s, filling every bar exactly', async (id) => {
     const score = await loadSong(id);
     const { xml, staves } = scoreToMusicXml(score);
-    const bar = 4 * DIVISIONS;
+    const bar = beatsPerMeasure(score.timeSignature) * DIVISIONS;
     for (const measure of xml.match(/<measure .*?<\/measure>/g)!) {
       for (const { number } of staves) {
         const durations = [...measure.matchAll(/<note>(.*?)<\/note>/g)]

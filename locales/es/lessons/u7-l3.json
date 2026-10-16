@@ -4,6 +4,8 @@
     "up": "La {gScale} hacia arriba. El dedo 4 toca la tecla negra.",
     "down": "Y hacia abajo.",
     "leftHand": "Ahora con la mano izquierda, empezando en el {g} debajo del {c} central, con la misma digitación que la {cScale} con la izquierda.",
-    "inTime": "Mano derecha, arriba y abajo a tiempo."
+    "inTime": "Mano derecha, arriba y abajo a tiempo.",
+    "amazingGrace": "«Sublime gracia», en {g} mayor. Empieza en el último pulso del primer compás, y algunas notas largas se mantienen más allá de la barra de compás.",
+    "amazingGraceInTime": "Ahora a tempo con el metrónomo."
   }
 }

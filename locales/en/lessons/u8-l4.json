@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "minor": "{a} minor uses the same white keys as {c} major, but its home note is {a}, and it sounds darker. These are its first five notes.",
+    "leadingNote": "Minor pieces often raise the seventh note, {g}, to {gSharp}: a half step below {a}, it leans back home. {a} minor has no key signature, so the sharp is written in the music each time.",
+    "findMinor": "Find the five notes, and {gSharp} just below them.",
+    "minorTune": "A short tune in {a} minor. The thumb plays {gSharp}; finger 2 is on {a}.",
+    "greensleeves": "“Greensleeves”, an English tune more than 400 years old, in {a} minor. Watch for the sharps: {gSharp}, and {fSharp} on the way back up.",
+    "greensleevesBoth": "Now with the left hand: one long note in each bar."
+  }
+}

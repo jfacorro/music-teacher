@@ -1,15 +1,28 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { SONG_IDS } from '../../content/songs';
+import { UNITS } from '../../content/courses';
+import { SONG_IDS, SONG_UNITS } from '../../content/songs';
+import { useContentText } from '../../i18n/useContentText';
 import { LessonStatus } from '../../content/unlock';
 import { useMySongs } from '../../storage/mySongs';
 import { resultKey, ResultKind, useProgress } from '../../storage/progress';
 import { PathItem } from '../components/PathItem';
 
-/** Song practice: the built-in songs and the learner's own (imported) songs, with their stars. */
+/** The built-in songs by level: the units that teach them, in course order. */
+const SONGS_BY_UNIT = UNITS.map((unit, index) => ({
+  unit,
+  number: index + 1,
+  songs: SONG_IDS.filter((id) => SONG_UNITS[id] === unit.id),
+})).filter(({ songs }) => songs.length > 0);
+
+/**
+ * Song practice: the built-in songs, by the unit they belong to, and the learner's own
+ * (imported) songs, with their stars.
+ */
 export function SongsScreen() {
   const { t } = useTranslation('screens');
   const { t: ts } = useTranslation('songs');
+  const courseText = useContentText('courses');
   const results = useProgress((s) => s.results);
   const mySongs = useMySongs((s) => s.songs);
   const starsOf = (kind: ResultKind, id: string) => results[resultKey(kind, id)]?.bestStars ?? 0;
@@ -25,16 +38,26 @@ export function SongsScreen() {
       <section className="card unit">
         <h2>{t('songPractice.songs')}</h2>
         <p className="muted">{t('songPractice.songsIntro')}</p>
-        <ol className="path">
-          {SONG_IDS.map((id) => (
-            <PathItem
-              key={id}
-              title={ts(`${id}.title`)}
-              href={`/practice/${id}`}
-              state={stateOf(starsOf(ResultKind.Song, id))}
-            />
-          ))}
-        </ol>
+        {SONGS_BY_UNIT.map(({ unit, number, songs }) => (
+          <section key={unit.id} className="songs__level">
+            <h3>
+              {t('songPractice.level', {
+                number,
+                unit: courseText(`units.${unit.id}.title`, unit.textVars),
+              })}
+            </h3>
+            <ol className="path">
+              {songs.map((id) => (
+                <PathItem
+                  key={id}
+                  title={ts(`${id}.title`)}
+                  href={`/practice/${id}`}
+                  state={stateOf(starsOf(ResultKind.Song, id))}
+                />
+              ))}
+            </ol>
+          </section>
+        ))}
       </section>
 
       <section className="card unit">

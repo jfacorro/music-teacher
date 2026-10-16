@@ -713,6 +713,9 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Six or more public-domain songs spread over the levels, several for both hands (e.g. "Minuet in G", "Für Elise" opening, "Brahms' Lullaby", "Amazing Grace", "Greensleeves", "Twinkle, Twinkle"), each with fingering, markings and dynamics.
 - Song practice shows each song's level (the unit it fits after) and sorts by it.
 - All titles and texts translated; new terms in the glossary.
+- Unit 8, sharps, flats and naturals (5 lessons), added so the songs that need more black keys are taught first: the half step and each black key's two names (find them as sharps and as flats, a chromatic climb); accidentals in the music (treble and bass quizzes); the natural sign (an accidental lasts to the end of the bar; a one-bar staff picture shows it, `"bar": true`); A minor and its raised seventh, G♯ (a tune, then "Greensleeves"); neighbor notes (E–D♯–E, slowly then flowing, then "Für Elise"). New skills: accidentals, minor keys. Ear training's notes reach all 12 after it.
+- Six songs, each closing a lesson of its unit (the unit a song first appears in is its level): "Twinkle, Twinkle, Little Star" (Unit 3, right hand), "Brahms' Lullaby" (Unit 5, after a 3/4 warm-up that introduces dotted notes), "Amazing Grace" and "Minuet in G" (Unit 7, G major; "Amazing Grace" fits better there than in Unit 6, as its tune in C dips below middle C), "Greensleeves" and "Für Elise", the opening, written in 3/4 (Unit 8). Melodies checked against public-domain transcriptions; the arrangements and their fingering are our own.
+- Song practice lists the songs by unit ("Unit 3: Reading the treble clef"), in course order. A test checks that every song uses only the black keys, time signatures and key signatures its unit has taught by then.
 
 #### Phase 4 done when
 - [x] The home screen suggests a daily session that follows progress, including reviews of lessons due again and a weak spot to loop.

@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "written": "En la partitura, un sostenido o un bemol escrito justo antes de una nota es una alteración. Está en la misma línea o espacio que la nota que cambia.",
+    "quizTreble": "Toca las notas con alteraciones.",
+    "bass": "Lo mismo en clave de fa, para la mano izquierda.",
+    "quizBass": "Y en clave de fa."
+  }
+}

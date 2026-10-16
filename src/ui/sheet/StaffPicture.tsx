@@ -19,15 +19,22 @@ interface StaffPictureProps {
   notes: readonly Pitch[];
   /** Write each note's name under it. */
   names: boolean;
+  /** All in one bar, so accidentals carry on (see StaffNotes). */
+  bar?: boolean;
 }
 
-export function StaffPicture({ clef, notes, names }: StaffPictureProps) {
+/** Notes in one bar: quarter notes, so up to four fit. */
+const BAR_BEATS = 4;
+/** A bar's width for one note (see StaticStaff). */
+const NOTE_WIDTH = 3;
+
+export function StaffPicture({ clef, notes, names, bar = false }: StaffPictureProps) {
   const { t } = useTranslation('screens');
   const noteNames = useNoteNames();
 
   const xml = useMemo(() => {
-    // Each note a whole note in its own (invisible) bar; on the grand staff, middle C and up go
-    // on the treble staff.
+    // Each note a whole note in its own (invisible) bar, or quarter notes sharing bars; on the
+    // grand staff, middle C and up go on the treble staff.
     const hand = (pitch: Pitch): Hand =>
       clef === StaffClef.Grand
         ? pitch.midi >= MIDDLE_C
@@ -37,19 +44,33 @@ export function StaffPicture({ clef, notes, names }: StaffPictureProps) {
     const score: Score = {
       tempo: 60,
       timeSignature: [4, 4],
-      notes: notes.map((pitch, i) => ({ pitch, start: i * 4, duration: 4, hand: hand(pitch) })),
-      measures: notes.map((_, i) => ({ start: i * 4, length: 4 })),
+      notes: notes.map((pitch, i) => ({
+        pitch,
+        start: bar ? i : i * BAR_BEATS,
+        duration: bar ? 1 : BAR_BEATS,
+        hand: hand(pitch),
+      })),
+      measures: Array.from(
+        { length: bar ? Math.ceil(notes.length / BAR_BEATS) : notes.length },
+        (_, i) => ({ start: i * BAR_BEATS, length: BAR_BEATS }),
+      ),
     };
     return scoreToMusicXml(score, {
       hands: STAVES[clef],
       illustration: true,
       noteLabel: names ? (note) => noteNames.name(note.pitch) : undefined,
     }).xml;
-  }, [clef, notes, names, noteNames]);
+  }, [clef, notes, names, noteNames, bar]);
 
   return (
     <div className="staff-picture">
-      <StaticStaff xml={xml} label={t('lesson.staffPicture')} barWidth={3} spacePx={12} />
+      <StaticStaff
+        xml={xml}
+        label={t('lesson.staffPicture')}
+        // As wide per note either way.
+        barWidth={bar ? NOTE_WIDTH * Math.min(notes.length, BAR_BEATS) : NOTE_WIDTH}
+        spacePx={12}
+      />
     </div>
   );
 }

@@ -1,0 +1,159 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "halfStep",
+      "textVars": {
+        "c": "C4",
+        "cSharp": "C#4",
+        "e": "E4",
+        "f": "F4"
+      },
+      "keys": [
+        {
+          "note": "C4"
+        },
+        {
+          "note": "C#4"
+        },
+        {
+          "note": "E4"
+        },
+        {
+          "note": "F4"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "explain",
+      "text": "twoNames",
+      "textVars": {
+        "d": "D4",
+        "e": "E4",
+        "dSharp": "D#4",
+        "eFlat": "Eb4"
+      },
+      "keys": [
+        {
+          "note": "C#4"
+        },
+        {
+          "note": "D#4"
+        },
+        {
+          "note": "F#4"
+        },
+        {
+          "note": "G#4"
+        },
+        {
+          "note": "A#4"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "find",
+      "text": "findSharps",
+      "textVars": {
+        "cSharp": "C#4",
+        "dSharp": "D#4",
+        "fSharp": "F#4",
+        "gSharp": "G#4",
+        "aSharp": "A#4"
+      },
+      "notes": ["C#4", "D#4", "F#4", "G#4", "A#4"],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "find",
+      "text": "findFlats",
+      "textVars": {
+        "dFlat": "Db4",
+        "eFlat": "Eb4",
+        "gFlat": "Gb4",
+        "aFlat": "Ab4",
+        "bFlat": "Bb4"
+      },
+      "notes": ["Db4", "Eb4", "Gb4", "Ab4", "Bb4"],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "exercise",
+      "text": "chromatic",
+      "textVars": {
+        "c": "C4",
+        "g": "G4",
+        "f": "F4"
+      },
+      "mode": "wait",
+      "hands": "R",
+      "score": {
+        "tempo": 72,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "C#4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D#4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "E4",
+            "start": 4,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "F4",
+            "start": 5,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "F#4",
+            "start": 6,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 7,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

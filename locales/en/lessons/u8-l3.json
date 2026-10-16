@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "natural": "An accidental lasts until the end of the bar: every {f} after {fSharp} in that bar is sharp too, without another sign. The natural sign (♮) cancels it: back to the white key, {f}.",
+    "naturalTune": "Read it from the staff: {fSharp} first, then a natural sign brings back {f} in the same bar.",
+    "naturalInTime": "Now in time with the metronome."
+  }
+}

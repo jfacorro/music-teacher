@@ -568,6 +568,32 @@
       "pass": {
         "minStars": 1
       }
+    },
+    {
+      "type": "exercise",
+      "text": "minuet",
+      "textVars": {
+        "g": "G4",
+        "f": "F4",
+        "fSharp": "F#4"
+      },
+      "song": "minuet-in-g",
+      "mode": "wait",
+      "hands": "both",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "minuetInTime",
+      "song": "minuet-in-g",
+      "mode": "tempo",
+      "hands": "both",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
     }
   ]
 }

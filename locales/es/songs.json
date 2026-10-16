@@ -26,5 +26,29 @@
   "jingle-bells": {
     "title": "Jingle Bells",
     "composer": "James Lord Pierpont"
+  },
+  "twinkle-twinkle": {
+    "title": "Estrellita, ¿dónde estás?",
+    "composer": "Canción popular francesa"
+  },
+  "brahms-lullaby": {
+    "title": "Canción de cuna de Brahms",
+    "composer": "Johannes Brahms"
+  },
+  "amazing-grace": {
+    "title": "Sublime gracia",
+    "composer": "Himno estadounidense"
+  },
+  "minuet-in-g": {
+    "title": "Minueto en sol",
+    "composer": "Christian Petzold"
+  },
+  "greensleeves": {
+    "title": "Greensleeves",
+    "composer": "Canción popular inglesa"
+  },
+  "fur-elise": {
+    "title": "Para Elisa (comienzo)",
+    "composer": "Ludwig van Beethoven"
   }
 }

@@ -4,6 +4,10 @@
     "lightlyRow": "“Lightly Row”: the left hand only plays {c3} and {g3}, one per bar.",
     "lightlyRowInTime": "Now in time with the metronome.",
     "saints": "“When the Saints Go Marching In”: the left hand starts alone on {c3} and moves to {g3} only in the last bar.",
-    "saintsInTime": "Now in time with the metronome."
+    "saintsInTime": "Now in time with the metronome.",
+    "threeFour": "The next song is in 3/4 time: three beats in each bar, the first a little stronger. And two new note lengths: a dot adds half a note’s length, so a dotted half note lasts three beats, and a dotted quarter note a beat and a half.",
+    "threeFourWarmUp": "Count one, two, three with the metronome: long, short, then a dotted half note for the whole bar.",
+    "brahms": "“Brahms’ Lullaby”, gently: the left hand plays one long note in each bar.",
+    "brahmsInTime": "Now in time with the metronome, softly."
   }
 }

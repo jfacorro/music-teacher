@@ -4,6 +4,8 @@
     "up": "The {gScale} going up. Finger 4 plays the black key.",
     "down": "And going down.",
     "leftHand": "Now with the left hand, starting on the {g} below middle {c}, with the same fingering as the left-hand {cScale}.",
-    "inTime": "Right hand, up and down in time."
+    "inTime": "Right hand, up and down in time.",
+    "amazingGrace": "“Amazing Grace”, in {g} major. It starts on the last beat of the first bar, and some long notes are held across the bar line.",
+    "amazingGraceInTime": "Now in time with the metronome."
   }
 }

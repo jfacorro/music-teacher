@@ -1,0 +1,203 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "minor",
+      "textVars": {
+        "a": "A4",
+        "c": "C4"
+      },
+      "keys": [
+        {
+          "note": "A4"
+        },
+        {
+          "note": "B4"
+        },
+        {
+          "note": "C5"
+        },
+        {
+          "note": "D5"
+        },
+        {
+          "note": "E5"
+        }
+      ],
+      "range": ["G4", "G5"]
+    },
+    {
+      "type": "explain",
+      "text": "leadingNote",
+      "textVars": {
+        "a": "A4",
+        "g": "G4",
+        "gSharp": "G#4"
+      },
+      "keys": [
+        {
+          "note": "G#4"
+        },
+        {
+          "note": "A4"
+        }
+      ],
+      "range": ["G4", "G5"]
+    },
+    {
+      "type": "find",
+      "text": "findMinor",
+      "textVars": {
+        "gSharp": "G#4"
+      },
+      "notes": ["A4", "B4", "C5", "D5", "E5", "G#4"],
+      "range": ["G4", "G5"]
+    },
+    {
+      "type": "exercise",
+      "text": "minorTune",
+      "textVars": {
+        "a": "A4",
+        "gSharp": "G#4"
+      },
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "names",
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "A4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "B4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "C5",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "B4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "A4",
+            "start": 4,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "G#4",
+            "start": 5,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "A4",
+            "start": 6,
+            "duration": 2,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C5",
+            "start": 8,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "D5",
+            "start": 9,
+            "duration": 1,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "C5",
+            "start": 10,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "B4",
+            "start": 11,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "A4",
+            "start": 12,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "G#4",
+            "start": 13,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "A4",
+            "start": 14,
+            "duration": 2,
+            "hand": "R",
+            "finger": 2
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "greensleeves",
+      "textVars": {
+        "a": "A4",
+        "gSharp": "G#4",
+        "fSharp": "F#4"
+      },
+      "song": "greensleeves",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "greensleevesBoth",
+      "song": "greensleeves",
+      "mode": "wait",
+      "hands": "both",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

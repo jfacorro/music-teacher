@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "halfStep": "A half step (a semitone) is the smallest move on the piano: from one key to the very next, black or white. From {c} to {cSharp} is a half step, and so is {e} to {f}, with no black key between them.",
+    "twoNames": "A sharp (♯) raises a note by a half step; a flat (♭) lowers it. So each black key has two names: the one between {d} and {e} is both {dSharp} and {eFlat}.",
+    "findSharps": "Find the five sharps in this octave: {cSharp}, {dSharp}, {fSharp}, {gSharp} and {aSharp}.",
+    "findFlats": "The same keys by their flat names: {dFlat}, {eFlat}, {gFlat}, {aFlat} and {bFlat}.",
+    "chromatic": "Up by half steps from {c} to {g}: the thumb on the white keys, finger 3 on the black ones, and finger 2 on {f}."
+  }
+}

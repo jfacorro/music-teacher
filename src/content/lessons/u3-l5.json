@@ -80,6 +80,35 @@
       "pass": {
         "minStars": 1
       }
+    },
+    {
+      "type": "exercise",
+      "text": "twinkle",
+      "textVars": {
+        "a": "A4",
+        "g": "G4"
+      },
+      "song": "twinkle-twinkle",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "inTime",
+      "song": "twinkle-twinkle",
+      "mode": "tempo",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
     }
   ]
 }
