@@ -59,7 +59,7 @@ export interface MySongRow {
 
 /** The latest finished run of a song or lesson exercise, to listen to and compare. */
 export interface RecordingRow {
-  /** "song:<id>", "mySong:<id>" or "lesson:<id>:<step>". */
+  /** "song:<id>", "mySong:<id>", "lesson:<id>:<step>" or "drill:<level>:<seed>". */
   key: string;
   /** ms since epoch */
   recordedAt: number;

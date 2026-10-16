@@ -81,6 +81,11 @@ interface PracticeRunProps {
   onLoopChange?: (range: LoopRange | null) => void;
   /** Instruction shown next to the controls (defaults to a tip for the mode). */
   hint?: string;
+  /**
+   * Sight-reading: the keyboard doesn't light up the keys to play, and only its Cs are labeled,
+   * so the notes are read from the music.
+   */
+  sightReading?: boolean;
   /** Called once when the run ends, with its results and how long it took (ms). */
   onFinish?: (summary: Summary, durationMs: number) => void;
   /** Called each time through the repeated bars, with how many times so far. */
@@ -115,6 +120,7 @@ export function PracticeRun({
   resultsActions,
   recordingKey,
   onListeningChange,
+  sightReading = false,
 }: PracticeRunProps) {
   const { t, i18n } = useTranslation('screens');
   const names = useNoteNames();
@@ -599,9 +605,9 @@ export function PracticeRun({
           <PianoKeyboard
             layout={layout}
             pressed={pressed}
-            expected={expected}
+            expected={sightReading ? undefined : expected}
             marks={state.marks}
-            labels={KeyLabels.White}
+            labels={sightReading ? KeyLabels.C : KeyLabels.White}
             labelFor={keyLabel}
             onKeyDown={screenKeyDown}
             onKeyUp={screenKeyUp}

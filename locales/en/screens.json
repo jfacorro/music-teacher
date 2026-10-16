@@ -53,7 +53,8 @@
         "learning": "Learning",
         "good": "Good",
         "mastered": "Mastered"
-      }
+      },
+      "drills": "{count, plural, =0 {No drills yet} one {# drill} other {# drills}}"
     },
     "activity": {
       "heading": "Practice in the last year",
@@ -515,7 +516,8 @@
       "review": "Review",
       "weakSpot": "Weak spot",
       "song": "Song",
-      "skill": "Strengthen a skill"
+      "skill": "Strengthen a skill",
+      "drill": "Sight-reading"
     },
     "details": {
       "next": "Pick up where you left off.",
@@ -524,12 +526,35 @@
       "weakBars": "Bars {first}–{last} need some work: they repeat until you stop.",
       "newSong": "A song you haven’t played yet.",
       "song": "{days, plural, one {Not played since yesterday.} other {Not played for # days.}}",
-      "skill": "Your weakest skill so far: {skill}."
+      "skill": "Your weakest skill so far: {skill}.",
+      "newDrill": "Fresh music to read at sight.",
+      "drill": "{days, plural, one {Fresh music to read: your last drill was yesterday.} other {Fresh music to read: your last drill was # days ago.}}"
     },
     "done": "done",
     "allDone": "All done for today. Nice work!",
     "more": "Suggest more",
     "moreTip": "Add a few more things to practice today",
     "nothingMore": "Nothing more to suggest right now: come back tomorrow."
+  },
+  "sightReading": {
+    "title": "Sight-reading",
+    "intro": "Fresh music every time: read it and play it, without hearing it first.",
+    "level": "Level",
+    "levels": {
+      "treble": "Right hand: quarter and half notes",
+      "trebleRhythm": "Right hand: rests and eighth notes",
+      "bass": "Left hand: bass clef",
+      "handsTogether": "Both hands",
+      "keys": "{g} major and {f} major"
+    },
+    "lockedLevel": "{level} (after “{unit}”)",
+    "locked": "Sight-reading opens when you finish the unit “{unit}”.",
+    "toLessons": "Go to the lessons",
+    "newDrill": "New drill",
+    "newDrillTip": "Fresh music at this level",
+    "nextDrill": "Next drill",
+    "hintWait": "Read each note on the staff and play it: the music waits for you.",
+    "hintTempo": "Keep going in time and read ahead: the music doesn’t wait.",
+    "logTitle": "Sight-reading: {level}"
   }
 }

@@ -53,7 +53,8 @@
         "learning": "Aprendiendo",
         "good": "Bien",
         "mastered": "Dominada"
-      }
+      },
+      "drills": "{count, plural, =0 {Ningún ejercicio aún} one {# ejercicio} other {# ejercicios}}"
     },
     "activity": {
       "heading": "Práctica en el último año",
@@ -515,7 +516,8 @@
       "review": "Repaso",
       "weakSpot": "Punto débil",
       "song": "Canción",
-      "skill": "Reforzar una habilidad"
+      "skill": "Reforzar una habilidad",
+      "drill": "Lectura a primera vista"
     },
     "details": {
       "next": "Sigue donde lo dejaste.",
@@ -524,12 +526,35 @@
       "weakBars": "Los compases {first}–{last} necesitan trabajo: se repiten hasta que pares.",
       "newSong": "Una canción que todavía no tocaste.",
       "song": "{days, plural, one {No la tocas desde ayer.} other {No la tocas desde hace # días.}}",
-      "skill": "Tu habilidad más débil por ahora: {skill}."
+      "skill": "Tu habilidad más débil por ahora: {skill}.",
+      "newDrill": "Música nueva para leer a primera vista.",
+      "drill": "{days, plural, one {Música nueva para leer: tu último ejercicio fue ayer.} other {Música nueva para leer: tu último ejercicio fue hace # días.}}"
     },
     "done": "hecha",
     "allDone": "Todo listo por hoy. ¡Buen trabajo!",
     "more": "Sugerir más",
     "moreTip": "Añade algunas cosas más para practicar hoy",
     "nothingMore": "No hay nada más que sugerir por ahora: vuelve mañana."
+  },
+  "sightReading": {
+    "title": "Lectura a primera vista",
+    "intro": "Música nueva cada vez: léela y tócala sin haberla escuchado antes.",
+    "level": "Nivel",
+    "levels": {
+      "treble": "Mano derecha: negras y blancas",
+      "trebleRhythm": "Mano derecha: silencios y corcheas",
+      "bass": "Mano izquierda: clave de fa",
+      "handsTogether": "Ambas manos",
+      "keys": "{g} mayor y {f} mayor"
+    },
+    "lockedLevel": "{level} (después de «{unit}»)",
+    "locked": "La lectura a primera vista se abre cuando terminas la unidad «{unit}».",
+    "toLessons": "Ir a las lecciones",
+    "newDrill": "Nuevo ejercicio",
+    "newDrillTip": "Música nueva en este nivel",
+    "nextDrill": "Siguiente ejercicio",
+    "hintWait": "Lee cada nota en el pentagrama y tócala: la música te espera.",
+    "hintTempo": "Sigue a tempo y lee por delante: la música no espera.",
+    "logTitle": "Lectura a primera vista: {level}"
   }
 }

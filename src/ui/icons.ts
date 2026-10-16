@@ -22,4 +22,5 @@ export const ICONS = {
   listen: String.fromCodePoint(0x1f3a7), // 🎧 headphones
   stop: textStyle(0x23f9), // ⏹
   compare: String.fromCodePoint(0x1f50d), // 🔍 a closer look
+  newDrill: String.fromCodePoint(0x1f3b2), // 🎲 fresh music, by chance
 } as const;

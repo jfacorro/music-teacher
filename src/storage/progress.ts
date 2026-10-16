@@ -4,6 +4,7 @@
  * it survives browser restarts, and mirrored in a store for the UI.
  */
 import { create } from 'zustand';
+import type { Skill } from '../content/courses';
 import { nextReview, reviewOf } from '../content/review';
 import type { LoopRange } from '../engine/session';
 import { dayOf, db, type PracticeLogRow, type ResultRow } from './db';
@@ -15,6 +16,8 @@ export const ResultKind = {
   Song: 'song',
   /** An imported song ("My songs"). */
   MySong: 'mySong',
+  /** A sight-reading drill: saved by level (its id), each drill being new. */
+  Drill: 'drill',
 } as const;
 export type ResultKind = (typeof ResultKind)[keyof typeof ResultKind];
 
@@ -37,6 +40,25 @@ interface ProgressState {
 export const useProgress = create<ProgressState>(() => ({ results: {}, log: [], days: {} }));
 
 export const resultKey = (kind: ResultKind, id: string) => `${kind}:${id}`;
+
+/** Skills practiced by exercises of their own, and the results that count for them. */
+const EXERCISE_RESULTS: Partial<Readonly<Record<Skill, ResultKind>>> = {
+  'sight-reading': ResultKind.Drill,
+};
+/** How many of the latest exercises count for a skill's mastery. */
+export const EXERCISE_RUNS = 10;
+
+/** The accuracy of the latest exercises for each skill (none for skills taught by lessons). */
+export function exerciseAccuracies(log: readonly PracticeLogRow[]): (skill: Skill) => number[] {
+  return (skill) => {
+    const kind = EXERCISE_RESULTS[skill];
+    if (!kind) return [];
+    return log
+      .filter((entry) => entry.kind === kind)
+      .slice(-EXERCISE_RUNS)
+      .map((entry) => entry.accuracy);
+  };
+}
 
 /** A new attempt merged into the best result so far, with its next review. */
 export function mergeResult(

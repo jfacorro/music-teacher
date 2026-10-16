@@ -1,7 +1,7 @@
 /**
  * Today's practice (PLAN.md milestone 4.1): a short session picked from where the learner is —
  * the next lesson, a lesson due for review, a weak spot to loop, a song not played for a while,
- * and a lesson for the weakest skill.
+ * a sight-reading drill now and then (milestone 4.3), and a lesson for the weakest skill.
  *
  * Only what the learner has reached is suggested: never a locked lesson, a song above their
  * level, or a skill they haven't started; reviews and weak spots come from what they've played.
@@ -11,6 +11,7 @@ import type { ResultRow } from '../storage/db';
 import { resultKey, ResultKind } from '../storage/progress';
 import type { Skill, Unit } from './courses';
 import { DAY_MS, reviewOf } from './review';
+import type { DrillLevel } from './sightReading';
 import { type SkillProgress, SkillLevel } from './skills';
 import { STAR_THRESHOLDS } from '../engine/scoring';
 import { isUnitOpen, type LessonState, LessonStatus, nextLessonToPlay } from './unlock';
@@ -20,11 +21,12 @@ export const SuggestionKind = {
   Review: 'review',
   WeakSpot: 'weakSpot',
   Song: 'song',
+  Drill: 'drill',
   Skill: 'skill',
 } as const;
 export type SuggestionKind = (typeof SuggestionKind)[keyof typeof SuggestionKind];
 
-/** A lesson, a song or an imported song, as its results are saved. */
+/** A lesson, a song, an imported song or a drill level, as its results are saved. */
 export interface PracticeTarget {
   kind: ResultKind;
   id: string;
@@ -37,7 +39,7 @@ export interface Suggestion {
   bars?: LoopRange;
   /** Skill: the one to strengthen. */
   skill?: Skill;
-  /** Review, weak spot and song: when it was last played (ms), if ever. */
+  /** Review, weak spot, song and drill: when it was last played (ms), if ever. */
   lastPlayedAt?: number;
 }
 
@@ -53,6 +55,8 @@ export interface PracticeInput {
   results: Readonly<Record<string, ResultRow>>;
   songs: readonly SongChoice[];
   skills: readonly SkillProgress[];
+  /** Sight-reading levels open, easiest first. */
+  drillLevels: readonly DrillLevel[];
   now: number;
   /** Targets not to suggest again (by result key), e.g. already in today's plan. */
   exclude?: ReadonlySet<string>;
@@ -63,6 +67,8 @@ export const MAX_SUGGESTIONS = 5;
 export const WEAK_SPOT_DAYS = 14;
 /** A song played more recently than this isn't "not played for a while". */
 export const SONG_REST_DAYS = 3;
+/** A drill is suggested when none was played for this long. */
+export const DRILL_REST_DAYS = 2;
 const THREE_STARS = STAR_THRESHOLDS[2];
 
 export const targetKey = (target: PracticeTarget) => resultKey(target.kind, target.id);
@@ -131,6 +137,21 @@ export function suggestPractice(input: PracticeInput): Suggestion[] {
       ...(song.lastPlayedAt !== undefined && { lastPlayedAt: song.lastPlayedAt }),
     }),
   );
+
+  // A sight-reading drill now and then, at the highest level open.
+  const drillLevel = input.drillLevels.at(-1);
+  if (drillLevel) {
+    const lastDrill = input.drillLevels
+      .map((level) => resultOf({ kind: ResultKind.Drill, id: level })?.lastPlayedAt ?? 0)
+      .reduce((latest, at) => Math.max(latest, at), 0);
+    if (now - lastDrill >= DRILL_REST_DAYS * DAY_MS) {
+      add({
+        kind: SuggestionKind.Drill,
+        target: { kind: ResultKind.Drill, id: drillLevel },
+        ...(lastDrill > 0 && { lastPlayedAt: lastDrill }),
+      });
+    }
+  }
 
   // The weakest skill started: its lesson played least well (short of three stars), or else an
   // open one not played yet. Lessons already played at three-star accuracy aren't suggested.

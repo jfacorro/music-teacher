@@ -16,12 +16,19 @@ import {
   useTodayPlan,
 } from '../../storage/todayPlan';
 import { barsParam } from '../barSelection';
+import { isValueOf } from '../../lib/values';
+import { DrillLevel } from '../../content/sightReading';
+import { useDrillLevelName } from './sightReading/useDrillLevelName';
 
 const CHECK = '✓';
 
-/** Where a suggestion leads: its lesson or song, with the bars to repeat for a weak spot. */
+/**
+ * Where a suggestion leads: its lesson or song, with the bars to repeat for a weak spot, or a
+ * drill at its level.
+ */
 function hrefOf(item: PlanItem): string {
   const { kind, id } = item.target;
+  if (kind === ResultKind.Drill) return `/sight-reading?level=${id}`;
   const path =
     kind === ResultKind.Lesson
       ? `/lesson/${id}`
@@ -44,6 +51,7 @@ export function TodayCard() {
   const results = useProgress((s) => s.results);
   const mySongs = useMySongs((s) => s.songs);
   const [nothingMore, setNothingMore] = useState(false);
+  const levelName = useDrillLevelName();
 
   useEffect(() => ensureTodayPlan(), []);
 
@@ -51,6 +59,9 @@ export function TodayCard() {
 
   const titleOf = ({ kind, id }: PracticeTarget) => {
     if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
+    if (kind === ResultKind.Drill) {
+      return isValueOf(DrillLevel, id) ? levelName(id) : t('sightReading.title');
+    }
     if (kind === ResultKind.MySong) {
       return mySongs.find((song) => String(song.id) === id)?.title ?? t('progress.deletedSong');
     }
@@ -71,6 +82,10 @@ export function TodayCard() {
         return item.lastPlayedAt === undefined
           ? t('today.details.newSong')
           : t('today.details.song', { days: daysSince(item) });
+      case SuggestionKind.Drill:
+        return item.lastPlayedAt === undefined
+          ? t('today.details.newDrill')
+          : t('today.details.drill', { days: daysSince(item) });
       case SuggestionKind.Skill:
         return t('today.details.skill', { skill: courseText(`skills.${item.skill ?? ''}`) });
     }

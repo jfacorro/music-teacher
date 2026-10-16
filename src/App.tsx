@@ -10,6 +10,7 @@ import { MySongScreen } from './ui/screens/mySongs/MySongScreen';
 import { PracticeScreen } from './ui/screens/practice/PracticeScreen';
 import { ProgressScreen } from './ui/screens/ProgressScreen';
 import { SettingsScreen } from './ui/screens/settings/SettingsScreen';
+import { SightReadingScreen } from './ui/screens/sightReading/SightReadingScreen';
 import { SongsScreen } from './ui/screens/SongsScreen';
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { index: true, element: <ProgressScreen /> },
       { path: 'learn', element: <HomeScreen /> },
       { path: 'songs', element: <SongsScreen /> },
+      { path: 'sight-reading', element: <SightReadingScreen /> },
       { path: 'free-play', element: <FreePlayScreen /> },
       { path: 'practice/:songId', element: <PracticeScreen /> },
       { path: 'practice/my/:songId', element: <MySongPracticeScreen /> },

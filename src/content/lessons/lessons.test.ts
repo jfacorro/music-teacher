@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
-import { LESSON_ORDER, SKILLS, UNITS, findLesson, nextLessonId } from '../courses';
+import { EXERCISE_SKILLS, LESSON_ORDER, SKILLS, UNITS, findLesson, nextLessonId } from '../courses';
 import { lessonExists, loadLesson } from '.';
 import { LessonError, parseLesson, StepType } from './lesson';
 
@@ -39,7 +39,9 @@ describe('courses', () => {
     const lessons = UNITS.flatMap((unit) => unit.lessons);
     for (const lesson of lessons) expect(lesson.skills.length, lesson.id).toBeGreaterThan(0);
     const used = new Set(lessons.flatMap((lesson) => lesson.skills));
-    expect([...SKILLS].filter((skill) => !used.has(skill))).toEqual([]);
+    // Skills with exercises of their own aren't in lessons.
+    expect(SKILLS.filter((skill) => !used.has(skill))).toEqual(EXERCISE_SKILLS);
+    for (const skill of EXERCISE_SKILLS) expect(used.has(skill)).toBe(false);
   });
 
   describe.each(TRANSLATED_LANGUAGES)('%s', (language) => {
