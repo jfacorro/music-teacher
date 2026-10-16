@@ -71,8 +71,46 @@ export const QUESTIONS: Readonly<Record<EarLevel, number>> = {
   [EarLevel.Chords]: 10,
 };
 
-/** The right hand's first position, where notes, intervals and melodies are (Unit 1). */
-const C_POSITION = [60, 62, 64, 65, 67];
+/**
+ * The keys notes, intervals and melodies use, in the octave from middle C, growing with the
+ * course: the right hand's first position (Unit 1), up to the C above (Unit 3, reading the
+ * treble clef), E♭ (Unit 6, with C minor), F♯ and B♭ (Unit 7, with G and F major).
+ */
+const KEYS_FROM: readonly (readonly [string, readonly number[]])[] = [
+  ['u1', [60, 62, 64, 65, 67]],
+  ['u3', [69, 71, 72]],
+  ['u6', [63]],
+  ['u7', [66, 70]],
+];
+
+/** Scales melodies move in: C major, and G and F major once their scales are taught. */
+const SCALES_FROM: readonly (readonly [string, readonly number[]])[] = [
+  ['u1', [60, 62, 64, 65, 67, 69, 71, 72]],
+  ['u7', [60, 62, 64, 66, 67, 69, 71, 72]],
+  ['u7', [60, 62, 64, 65, 67, 69, 70, 72]],
+];
+
+/** What the questions can use, from the units finished. */
+export interface EarRange {
+  /** Lowest first. */
+  keys: readonly number[];
+  /** Scales for melodies, each within `keys`. */
+  scales: readonly (readonly number[])[];
+}
+
+export function earRange(finishedUnits: ReadonlySet<string>): EarRange {
+  const keys = KEYS_FROM.flatMap(([unit, added]) => (finishedUnits.has(unit) ? added : [])).sort(
+    (a, b) => a - b,
+  );
+  const scales = SCALES_FROM.filter(([unit]) => finishedUnits.has(unit)).map(([, scale]) =>
+    scale.filter((key) => keys.includes(key)),
+  );
+  return { keys, scales };
+}
+
+/** Intervals go up to a fifth, leaving out the tritone (hard to hear and to sing). */
+const LARGEST_INTERVAL = 7;
+const TRITONE = 6;
 
 /** Chords of Unit 6: the white-key major and minor chords from middle C up, and C minor. */
 const CHORDS: readonly (readonly [readonly number[], ChordKind])[] = [
@@ -101,17 +139,23 @@ const question = (
   ...extra,
 });
 
-/** A new exercise: the questions of a level. */
-export function earQuestions(level: EarLevel, random: Random = Math.random): EarQuestion[] {
+/** A new exercise: the questions of a level, using the keys `range` allows. */
+export function earQuestions(
+  level: EarLevel,
+  range: EarRange,
+  random: Random = Math.random,
+): EarQuestion[] {
   const count = QUESTIONS[level];
   switch (level) {
     case EarLevel.Notes:
-      return dealEvenly(random, C_POSITION, count).map((note) =>
+      return dealEvenly(random, range.keys, count).map((note) =>
         question(level, [note], { reference: MIDDLE_C, given: null }),
       );
     case EarLevel.Intervals: {
-      const pairs = C_POSITION.flatMap((low, i) =>
-        C_POSITION.slice(i + 1).map((high) => [low, high]),
+      const pairs = range.keys.flatMap((low) =>
+        range.keys
+          .filter((high) => high > low && high - low <= LARGEST_INTERVAL && high - low !== TRITONE)
+          .map((high) => [low, high]),
       );
       return dealEvenly(random, pairs, count, (a, b) => a[0] === b[0] && a[1] === b[1]).map(
         (pair) => question(level, pair),
@@ -119,7 +163,7 @@ export function earQuestions(level: EarLevel, random: Random = Math.random): Ear
     }
     case EarLevel.Melodies:
       return MELODY_LENGTHS.slice(0, count).map((length) =>
-        question(level, melody(random, length)),
+        question(level, melody(random, pick(random, range.scales), length)),
       );
     case EarLevel.Chords:
       return dealEvenly(random, CHORDS, count).map(([notes, quality]) =>
@@ -128,9 +172,9 @@ export function earQuestions(level: EarLevel, random: Random = Math.random): Ear
   }
 }
 
-/** Mostly steps, some thirds, no key twice in a row, within the position. */
-function melody(random: Random, length: number): number[] {
-  const indexes = [pick(random, [0, 1, 2, 3, 4])];
+/** Along a scale: mostly steps, some thirds, no key twice in a row. */
+function melody(random: Random, scale: readonly number[], length: number): number[] {
+  const indexes = [Math.floor(random() * scale.length)];
   while (indexes.length < length) {
     const last = indexes.at(-1)!;
     const moves = (
@@ -140,10 +184,10 @@ function melody(random: Random, length: number): number[] {
         [2, 3],
         [-2, 3],
       ] as const
-    ).filter(([move]) => last + move >= 0 && last + move < C_POSITION.length);
+    ).filter(([move]) => last + move >= 0 && last + move < scale.length);
     indexes.push(last + pickWeighted(random, moves));
   }
-  return indexes.map((index) => C_POSITION[index]!);
+  return indexes.map((index) => scale[index]!);
 }
 
 /** Lengths of a question's sounds, ms. */

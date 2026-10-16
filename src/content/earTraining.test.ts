@@ -13,6 +13,7 @@ import {
   EAR_UNITS,
   EarLevel,
   earQuestions,
+  earRange,
   openEarLevels,
   promptLength,
   promptNotes,
@@ -57,6 +58,14 @@ function keysTaughtUpTo(unitId: string): Set<number> {
   return keys;
 }
 
+/** Units up to (and including) this one. */
+const unitsUpTo = (unitId: string) =>
+  new Set(UNITS.slice(0, UNITS.findIndex((unit) => unit.id === unitId) + 1).map((u) => u.id));
+/** What the questions can use once the units up to this one are finished. */
+const rangeUpTo = (unitId: string) => earRange(unitsUpTo(unitId));
+const FIRST_POSITION = rangeUpTo('u1');
+const EVERYTHING = rangeUpTo('u7');
+
 describe('ear training levels', () => {
   it('open with the units that teach their keys', () => {
     const doneUpTo = (unitId: string | null) => {
@@ -77,44 +86,71 @@ describe('ear training levels', () => {
   });
 
   it.each(EAR_LEVELS)('only play keys the course has taught by then (%s)', (level) => {
-    const taught = keysTaughtUpTo(EAR_UNITS[level]);
-    for (let seed = 1; seed <= 50; seed++) {
-      for (const question of earQuestions(level, seededRandom(seed))) {
-        for (const midi of question.notes) {
-          expect(taught, pitchFromMidi(midi).step + midi).toContain(midi);
+    const from = UNITS.findIndex((unit) => unit.id === EAR_UNITS[level]);
+    for (const unit of UNITS.slice(from)) {
+      const taught = keysTaughtUpTo(unit.id);
+      for (let seed = 1; seed <= 30; seed++) {
+        for (const question of earQuestions(level, rangeUpTo(unit.id), seededRandom(seed))) {
+          for (const midi of question.notes) {
+            expect(taught, `${unit.id}: ${pitchFromMidi(midi).step}${midi}`).toContain(midi);
+          }
         }
       }
     }
+  });
+
+  it('use more keys as the course goes on, black keys included', () => {
+    expect(rangeUpTo('u1').keys).toEqual([60, 62, 64, 65, 67]);
+    expect(rangeUpTo('u3').keys).toEqual([60, 62, 64, 65, 67, 69, 71, 72]);
+    expect(rangeUpTo('u6').keys).toEqual([60, 62, 63, 64, 65, 67, 69, 71, 72]);
+    expect(EVERYTHING.keys).toEqual([60, 62, 63, 64, 65, 66, 67, 69, 70, 71, 72]);
+    expect(rangeUpTo('u1').scales).toEqual([[60, 62, 64, 65, 67]]);
+    expect(EVERYTHING.scales).toHaveLength(3);
   });
 });
 
 describe('earQuestions', () => {
   it.each(EAR_LEVELS)('makes a full exercise (%s)', (level) => {
-    const questions = earQuestions(level, seededRandom(1));
+    const questions = earQuestions(level, EVERYTHING, seededRandom(1));
     expect(questions).toHaveLength(QUESTIONS[level]);
   });
 
   it('plays middle C before each single note, and shows nothing to start from', () => {
-    for (const question of earQuestions(EarLevel.Notes, seededRandom(2))) {
+    for (const question of earQuestions(EarLevel.Notes, FIRST_POSITION, seededRandom(2))) {
       expect(question.reference).toBe(60);
       expect(question.given).toBeNull();
       expect(question.notes).toHaveLength(1);
     }
   });
 
-  it('asks for intervals upward from the note shown, up to a fifth', () => {
-    for (const question of earQuestions(EarLevel.Intervals, seededRandom(3))) {
-      const [low, high] = question.notes as [number, number];
-      expect(question.given).toBe(low);
-      expect(high).toBeGreaterThan(low);
-      expect(high - low).toBeLessThanOrEqual(7);
+  it('asks for intervals upward from the note shown, up to a fifth, never a tritone', () => {
+    for (let seed = 1; seed <= 20; seed++) {
+      for (const question of earQuestions(EarLevel.Intervals, EVERYTHING, seededRandom(seed))) {
+        const [low, high] = question.notes as [number, number];
+        expect(question.given).toBe(low);
+        expect(high).toBeGreaterThan(low);
+        expect(high - low).toBeLessThanOrEqual(7);
+        expect(high - low).not.toBe(6);
+      }
     }
   });
 
-  it('grows melodies from three notes to five, moving by step or third', () => {
-    const questions = earQuestions(EarLevel.Melodies, seededRandom(4));
+  it('includes black keys once they are taught', () => {
+    const black = new Set([63, 66, 70]);
+    const heard = Array.from({ length: 20 }, (_, seed) =>
+      earQuestions(EarLevel.Notes, EVERYTHING, seededRandom(seed)),
+    ).flatMap((questions) => questions.flatMap((q) => q.notes));
+    expect(heard.some((midi) => black.has(midi))).toBe(true);
+  });
+
+  it('grows melodies from three notes to five, moving along a scale by step or third', () => {
+    const questions = earQuestions(EarLevel.Melodies, EVERYTHING, seededRandom(4));
     expect(questions.map((q) => q.notes.length)).toEqual([3, 3, 4, 4, 5, 5]);
     for (const question of questions) {
+      // All in one of the scales taught.
+      expect(
+        EVERYTHING.scales.some((scale) => question.notes.every((n) => scale.includes(n))),
+      ).toBe(true);
       question.notes.slice(1).forEach((midi, i) => {
         const step = Math.abs(midi - question.notes[i]!);
         expect(step).toBeGreaterThan(0);
@@ -124,7 +160,7 @@ describe('earQuestions', () => {
   });
 
   it('mixes major and minor chords, showing the root', () => {
-    const questions = earQuestions(EarLevel.Chords, seededRandom(5));
+    const questions = earQuestions(EarLevel.Chords, EVERYTHING, seededRandom(5));
     const qualities = new Set(questions.map((q) => q.quality));
     expect(qualities).toEqual(new Set([ChordQuality.Major, ChordQuality.Minor]));
     for (const question of questions) expect(question.given).toBe(question.notes[0]);
@@ -133,7 +169,7 @@ describe('earQuestions', () => {
 
 describe('prompts', () => {
   it('play the reference, then the notes one after another', () => {
-    const [question] = earQuestions(EarLevel.Notes, seededRandom(6));
+    const [question] = earQuestions(EarLevel.Notes, FIRST_POSITION, seededRandom(6));
     const notes = promptNotes(question!);
     expect(notes[0]).toMatchObject({ midi: 60, at: 0 });
     expect(notes[1]!.at).toBeGreaterThan(notes[0]!.length);
@@ -141,7 +177,7 @@ describe('prompts', () => {
   });
 
   it('play a chord’s keys together', () => {
-    const [question] = earQuestions(EarLevel.Chords, seededRandom(7));
+    const [question] = earQuestions(EarLevel.Chords, EVERYTHING, seededRandom(7));
     expect(new Set(promptNotes(question!).map((note) => note.at)).size).toBe(1);
   });
 });

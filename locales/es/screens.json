@@ -575,18 +575,20 @@
     "toLessons": "Ir a las lecciones",
     "begin": "Empezar a escuchar",
     "start": {
-      "notes": "Oirás el do central y luego otra nota: búscala en el teclado.",
+      "notes": "Oirás el {c} central y luego otra nota: búscala en el teclado.",
       "intervals": "Oirás dos notas, una tras otra: tócalas empezando por la tecla iluminada.",
       "melodies": "Oirás una melodía corta: tócala empezando por la tecla iluminada.",
-      "chords": "Oirás un acorde: tócalo sobre la fundamental iluminada, o elige mayor o menor."
+      "chords": "Oirás un acorde: tócalo sobre la fundamental iluminada, o elige mayor o menor.",
+      "notesAlone": "Oirás una nota: búscala en el teclado."
     },
     "listen": "Escucha…",
     "ask": {
-      "notes": "¿Qué nota era? (Primero sonó el do central.)",
+      "notes": "¿Qué nota era? (Primero sonó el {c} central.)",
       "intervals": "Toca las dos notas, empezando por la tecla iluminada.",
       "melodies": "Toca la melodía, empezando por la tecla iluminada.",
       "chords": "Toca el acorde sobre la fundamental iluminada, o elige mayor o menor.",
-      "chordsMic": "¿Mayor o menor? Elige uno."
+      "chordsMic": "¿Mayor o menor? Elige uno.",
+      "notesAlone": "¿Qué nota era?"
     },
     "wrong": "Esa no: tocaste {note}.",
     "wrongChord": "No exactamente.",
@@ -607,6 +609,7 @@
     "firstTry": "{count} de {total, plural, one {# pregunta} other {# preguntas}} bien a la primera.",
     "logTitle": "Oído musical: {level}",
     "progress": "Pregunta {current} de {total}",
-    "results": "Resultados"
+    "results": "Resultados",
+    "reference": "Tocar primero el {c} central"
   }
 }

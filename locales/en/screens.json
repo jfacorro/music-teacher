@@ -575,18 +575,20 @@
     "toLessons": "Go to the lessons",
     "begin": "Start listening",
     "start": {
-      "notes": "You’ll hear middle C, then another note: find it on the keyboard.",
+      "notes": "You’ll hear middle {c}, then another note: find it on the keyboard.",
       "intervals": "You’ll hear two notes, one after the other: play them back, starting on the lit key.",
       "melodies": "You’ll hear a short melody: play it back, starting on the lit key.",
-      "chords": "You’ll hear a chord: play it on the lit root, or choose major or minor."
+      "chords": "You’ll hear a chord: play it on the lit root, or choose major or minor.",
+      "notesAlone": "You’ll hear a note: find it on the keyboard."
     },
     "listen": "Listen…",
     "ask": {
-      "notes": "Which note was it? (Middle C came first.)",
+      "notes": "Which note was it? (Middle {c} came first.)",
       "intervals": "Play both notes, starting on the lit key.",
       "melodies": "Play the melody back, starting on the lit key.",
       "chords": "Play the chord on the lit root, or choose major or minor.",
-      "chordsMic": "Major or minor? Choose one."
+      "chordsMic": "Major or minor? Choose one.",
+      "notesAlone": "Which note was it?"
     },
     "wrong": "Not that one: you played {note}.",
     "wrongChord": "Not quite.",
@@ -607,6 +609,7 @@
     "firstTry": "{count} of {total, plural, one {# question} other {# questions}} right the first time.",
     "logTitle": "Ear training: {level}",
     "progress": "Question {current} of {total}",
-    "results": "Results"
+    "results": "Results",
+    "reference": "Play middle {c} first"
   }
 }

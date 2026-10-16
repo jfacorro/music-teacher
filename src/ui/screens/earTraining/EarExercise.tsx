@@ -14,6 +14,7 @@ import {
   type ChordKind,
   EarLevel,
   type EarQuestion,
+  type EarRange,
   earQuestions,
   hintKey,
   promptLength,
@@ -32,7 +33,7 @@ import { Instrument, useInstrument } from '../../../input/routing';
 import { NoteEventType } from '../../../input/types';
 import { activityTimer, recordPracticeTime } from '../../../storage/progress';
 import { ChordQuality, identifyInterval } from '../../../theory/chords';
-import { pitchClass, pitchFromMidi } from '../../../theory/pitch';
+import { MIDDLE_C, pitchClass, pitchFromMidi } from '../../../theory/pitch';
 import { Stars } from '../../components/Stars';
 import { usePressedKeys } from '../../hooks';
 import { ICONS } from '../../icons';
@@ -52,17 +53,21 @@ const CHORD_KINDS: readonly ChordKind[] = [ChordQuality.Major, ChordQuality.Mino
 
 interface EarExerciseProps {
   level: EarLevel;
+  /** The keys questions can use (from the units finished). */
+  range: EarRange;
+  /** Single notes: play middle C first, as a reference. */
+  reference: boolean;
   /** Called when the last question is answered, with how long it took (ms). */
   onFinish?: (result: QuizResult, durationMs: number) => void;
 }
 
-export function EarExercise({ level, onFinish }: EarExerciseProps) {
+export function EarExercise({ level, range, reference, onFinish }: EarExerciseProps) {
   const { t, i18n } = useTranslation('screens');
   const { t: tt } = useTranslation('theory');
   const names = useNoteNames();
   const usingMic = useInstrument((s) => s.instrument) === Instrument.Mic;
 
-  const [questions, setQuestions] = useState(() => earQuestions(level));
+  const [questions, setQuestions] = useState(() => earQuestions(level, range));
   const [started, setStarted] = useState(false);
   const [index, setIndex] = useState(0);
   /** Notes played back right so far. */
@@ -81,7 +86,13 @@ export function EarExercise({ level, onFinish }: EarExerciseProps) {
   const chordByKeys = question?.quality !== null && !usingMic;
 
   const soundTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const play = async (asked: EarQuestion) => {
+  // The reference can be turned off, even halfway through.
+  const withReference = useRef(reference);
+  useEffect(() => {
+    withReference.current = reference;
+  }, [reference]);
+  const play = async (next: EarQuestion) => {
+    const asked = withReference.current ? next : { ...next, reference: null };
     const engine = await startAudio().catch((error: unknown) => {
       console.warn('No audio', error);
       return null;
@@ -258,7 +269,7 @@ export function EarExercise({ level, onFinish }: EarExerciseProps) {
             type="button"
             className="button button--primary"
             title={t('earTraining.againTip')}
-            onClick={() => begin(earQuestions(level))}
+            onClick={() => begin(earQuestions(level, range))}
           >
             {t('practice.results.retry')}
           </button>
@@ -287,7 +298,9 @@ export function EarExercise({ level, onFinish }: EarExerciseProps) {
     return t('earTraining.right.melody');
   };
   const message = !started
-    ? t(`earTraining.start.${level}`)
+    ? level === EarLevel.Notes && !reference
+      ? t('earTraining.start.notesAlone')
+      : t(`earTraining.start.${level}`, { c: name(MIDDLE_C) })
     : sounding
       ? t('earTraining.listen')
       : answered
@@ -303,7 +316,9 @@ export function EarExercise({ level, onFinish }: EarExerciseProps) {
               .join(' ')
           : question.quality !== null && !chordByKeys
             ? t('earTraining.ask.chordsMic')
-            : t(`earTraining.ask.${level}`);
+            : level === EarLevel.Notes && !reference
+              ? t('earTraining.ask.notesAlone')
+              : t(`earTraining.ask.${level}`, { c: name(MIDDLE_C) });
 
   return (
     <div className="quiz ear">

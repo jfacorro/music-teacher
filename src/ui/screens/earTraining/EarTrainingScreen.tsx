@@ -3,11 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { preloadAudio } from '../../../audio/audio';
 import { UNITS } from '../../../content/courses';
-import { EAR_LEVELS, EAR_UNITS, EarLevel, openEarLevels } from '../../../content/earTraining';
-import { lessonStates } from '../../../content/unlock';
+import {
+  EAR_LEVELS,
+  EAR_UNITS,
+  EarLevel,
+  earRange,
+  type EarRange,
+  openEarLevels,
+} from '../../../content/earTraining';
+import { isUnitFinished, lessonStates } from '../../../content/unlock';
+import { useNoteNames } from '../../../i18n/useNoteNames';
+import { MIDDLE_C, pitchFromMidi } from '../../../theory/pitch';
 import { useContentText } from '../../../i18n/useContentText';
 import { isValueOf } from '../../../lib/values';
-import { chooseEarLevel, useEarTraining } from '../../../storage/earTraining';
+import { chooseEarLevel, setEarReference, useEarTraining } from '../../../storage/earTraining';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
 import { EarExercise } from './EarExercise';
 import { useEarLevelName } from './useEarLevelName';
@@ -18,15 +27,16 @@ import { useEarLevelName } from './useEarLevelName';
  */
 export function EarTrainingScreen() {
   const results = useProgress((s) => s.results);
-  const open = useMemo(
-    () =>
-      openEarLevels(
-        UNITS,
-        lessonStates(UNITS, (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0),
-      ),
+  const states = useMemo(
+    () => lessonStates(UNITS, (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0),
     [results],
   );
-  return open.length === 0 ? <Locked /> : <Exercises open={open} />;
+  const open = useMemo(() => openEarLevels(UNITS, states), [states]);
+  const finished = UNITS.filter((unit) => isUnitFinished(unit, states)).map((unit) => unit.id);
+  // Only a new list of units finished makes new questions.
+  const finishedKey = finished.join(' ');
+  const range = useMemo(() => earRange(new Set(finishedKey.split(' '))), [finishedKey]);
+  return open.length === 0 ? <Locked /> : <Exercises open={open} range={range} />;
 }
 
 function useUnitTitle() {
@@ -53,8 +63,10 @@ function Locked() {
   );
 }
 
-function Exercises({ open }: { open: readonly EarLevel[] }) {
+function Exercises({ open, range }: { open: readonly EarLevel[]; range: EarRange }) {
   const { t } = useTranslation('screens');
+  const names = useNoteNames();
+  const reference = useEarTraining((s) => s.reference);
   const levelName = useEarLevelName();
   const unitTitle = useUnitTitle();
   const levelId = useId();
@@ -99,10 +111,24 @@ function Exercises({ open }: { open: readonly EarLevel[] }) {
             ))}
           </select>
         </label>
+        {level === EarLevel.Notes && (
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={reference}
+              onChange={(e) => setEarReference(e.target.checked)}
+            />
+            {t('earTraining.reference', {
+              c: names.name(pitchFromMidi(MIDDLE_C), { octave: false }),
+            })}
+          </label>
+        )}
       </div>
       <EarExercise
-        key={level}
+        key={`${level} ${range.keys.join(' ')}`}
         level={level}
+        range={range}
+        reference={reference}
         onFinish={(result, durationMs) =>
           void recordResult(ResultKind.Ear, level, {
             stars: result.stars,
