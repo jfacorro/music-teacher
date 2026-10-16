@@ -372,7 +372,10 @@
       "summary": "{right} bien, {early} antes de tiempo, {late} tarde, {wrong, plural, one {# tecla equivocada} other {# teclas equivocadas}}, {missed} sin tocar.",
       "playing": "Escuchando tu última interpretación",
       "position": "Posición de la reproducción",
-      "time": "{elapsed} / {total}"
+      "time": "{elapsed} / {total}",
+      "pause": "Pausa",
+      "resume": "Continuar",
+      "paused": "Tu última interpretación, en pausa"
     }
   },
   "lesson": {

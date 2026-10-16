@@ -33,8 +33,12 @@ export interface RunRecording {
   /** The latest finished run (this time, or kept from before). */
   recording: Recording | null;
   listening: boolean;
+  /** Listening, held where it is. */
+  paused: boolean;
   /** Plays the recording back, in time with the music on screen. */
   listen: () => Promise<void>;
+  pause: () => void;
+  resume: () => void;
   stop: () => void;
   /** Keys sounding in the playback now. */
   playbackKeys: ReadonlySet<number>;
@@ -58,6 +62,7 @@ export function useRunRecording({
 }: RunRecordingOptions): RunRecording {
   const [recording, setRecording] = useState<Recording | null>(null);
   const [listening, setListening] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [playbackKeys, setPlaybackKeys] = useState<ReadonlySet<number>>(NONE);
   const recorder = useRef<Recorder | null>(null);
   const playing = useRef(false);
@@ -175,19 +180,30 @@ export function useRunRecording({
           PLAYBACK_MARGIN_BEATS,
       }
     : { from: 0, to: 0 };
+  const pause = () => {
+    transport.pause();
+    audioIfReady()?.stopAccompaniment();
+    setPaused(true);
+    setPlaybackKeys(NONE);
+  };
+  const resume = () => {
+    transport.play();
+    setPaused(false);
+  };
   const stop = () => {
     transport.pause();
     audioIfReady()?.stopAccompaniment();
     setListening(false);
+    setPaused(false);
     setPlaybackKeys(NONE);
     // A run not started yet starts from its lead-in again.
     if (session.getState().status === SessionStatus.Ready) session.restart();
   };
 
   useAnimationFrame(() => {
-    if (!listening || !recording) return;
+    if (!listening || paused || !recording) return;
     const beat = transport.position();
-    // The end, or the music stopped some other way (starting over, choosing bars).
+    // The end, or the music stopped some other way.
     if (beat >= span.to || !transport.playing) {
       stop();
       return;
@@ -214,5 +230,5 @@ export function useRunRecording({
     setListening(true);
   };
 
-  return { recording, listening, listen, stop, playbackKeys, span };
+  return { recording, listening, paused, listen, pause, resume, stop, playbackKeys, span };
 }

@@ -13,6 +13,9 @@ interface PlaybackBarProps {
   /** The stretch played back, beats. */
   from: number;
   to: number;
+  paused: boolean;
+  onPause: () => void;
+  onResume: () => void;
   onStop: () => void;
 }
 
@@ -24,9 +27,17 @@ function clock(ms: number): string {
 
 /**
  * Stands in for the practice controls while a run is played back (PLAN.md milestone 4.2): what
- * is going on, how far along it is, and the one way out.
+ * is going on, how far along it is, pausing, and the way out.
  */
-export function PlaybackBar({ transport, from, to, onStop }: PlaybackBarProps) {
+export function PlaybackBar({
+  transport,
+  from,
+  to,
+  paused,
+  onPause,
+  onResume,
+  onStop,
+}: PlaybackBarProps) {
   const { t } = useTranslation('screens');
   const [beat, setBeat] = useState(from);
   useAnimationFrame(() => {
@@ -40,7 +51,7 @@ export function PlaybackBar({ transport, from, to, onStop }: PlaybackBarProps) {
     <div className="playback">
       <span className="playback__label">
         <span aria-hidden="true">{ICONS.listen}</span>
-        {t('practice.recording.playing')}
+        {paused ? t('practice.recording.paused') : t('practice.recording.playing')}
       </span>
       <div
         className="playback__track"
@@ -61,11 +72,26 @@ export function PlaybackBar({ transport, from, to, onStop }: PlaybackBarProps) {
       <button
         type="button"
         className="button"
+        onClick={paused ? onResume : onPause}
+        aria-keyshortcuts="Space"
+        title={t('practice.tips.withKey', {
+          action: paused ? t('practice.recording.resume') : t('practice.recording.pause'),
+          key: t('practice.keys.space'),
+        })}
+      >
+        <span className="button__icon" aria-hidden="true">
+          {paused ? ICONS.play : ICONS.pause}
+        </span>
+        {paused ? t('practice.recording.resume') : t('practice.recording.pause')}
+      </button>
+      <button
+        type="button"
+        className="button"
         onClick={onStop}
-        aria-keyshortcuts="Space Escape"
+        aria-keyshortcuts="Escape"
         title={t('practice.tips.withKey', {
           action: t('practice.recording.stopTip'),
-          key: t('practice.keys.space'),
+          key: t('practice.keys.escape'),
         })}
       >
         <span className="button__icon" aria-hidden="true">

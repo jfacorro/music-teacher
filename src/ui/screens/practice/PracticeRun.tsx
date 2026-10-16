@@ -314,8 +314,10 @@ export function PracticeRun({
   };
 
   const togglePlay = async () => {
+    // While listening, Space pauses and resumes the playback.
     if (run.listening) {
-      run.stop();
+      if (run.paused) run.resume();
+      else run.pause();
       return;
     }
     if (running) {
@@ -329,10 +331,14 @@ export function PracticeRun({
     session.play();
   };
 
-  // Shortcuts: Space plays and pauses, Escape starts over.
+  // Shortcuts: Space plays and pauses, Escape starts over (or, listening, stops the playback).
   const latestTogglePlay = useRef(togglePlay);
+  // Escape starts over; while listening, it stops the playback.
+  const startOver = () => (run.listening ? run.stop() : session.restart());
+  const latestStartOver = useRef(startOver);
   useEffect(() => {
     latestTogglePlay.current = togglePlay;
+    latestStartOver.current = startOver;
   });
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -347,7 +353,7 @@ export function PracticeRun({
         event.target.blur();
       }
       if (event.code === 'Space') void latestTogglePlay.current();
-      else session.restart();
+      else latestStartOver.current();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -398,6 +404,9 @@ export function PracticeRun({
             transport={transport}
             from={run.span.from}
             to={run.span.to}
+            paused={run.paused}
+            onPause={run.pause}
+            onResume={run.resume}
             onStop={run.stop}
           />
         ) : (

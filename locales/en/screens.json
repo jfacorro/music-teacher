@@ -372,7 +372,10 @@
       "summary": "{right} right, {early} early, {late} late, {wrong, plural, one {# wrong key} other {# wrong keys}}, {missed} missed.",
       "playing": "Listening to your last run",
       "position": "Playback position",
-      "time": "{elapsed} / {total}"
+      "time": "{elapsed} / {total}",
+      "pause": "Pause",
+      "resume": "Resume",
+      "paused": "Your last run, paused"
     }
   },
   "lesson": {
