@@ -649,14 +649,61 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 ---
 
+### Phase 4 — Practicing well
+
+**Goal:** help decide what to practice each day, let the learner hear and see their own playing, and train reading and listening with endless fresh material.
+
+#### Scope
+
+**4.1 Practice suggestions**
+- A **Today** card on the home screen (Progress) with a short session of 3–5 suggestions, each one tap away:
+  - the next lesson on the learning path;
+  - a **review**: a finished lesson due again, spaced by how well it went (e.g. 1★ after 3 days, 2★ after 7, 3★ after 14; doubling after each good review);
+  - a **weak spot**: the bars to loop from a recent run that went badly, opening the song or lesson with those bars repeating;
+  - a **song** not played for a while, at the learner's level;
+  - the **skill** with the lowest mastery, through one of its lessons.
+- Only what the learner has reached is suggested: never a locked lesson, a song above their level (see 4.6), or a skill they haven't started; reviews and weak spots come only from lessons and songs already played.
+- The suggestions change as the learner plays; finished ones are ticked for the day.
+- Storage: each result keeps its review interval and the weak bars of its latest run (database version 5, kept in backups).
+
+**4.2 Record and play back**
+- Every practice run is recorded (the notes played: time, key, velocity, input).
+- After a run: **Listen** plays it back with the app's piano, in time with the falling notes or the sheet music cursor; **Compare** draws the played notes over the written ones, so rushing, dragging, wrong keys and (with MIDI) uneven dynamics show at a glance.
+- The latest recording of each lesson and song is kept (and exported with the backup); older ones are dropped.
+
+**4.3 Sight-reading drills**
+- A generator of short melodies (2–4 bars) using only what the learner has been taught: the notes and clefs of finished units, note values up to their level (quarters and halves first; then rests, eighths; then the left hand, both hands, key signatures).
+- Musical rules: mostly steps with a few small leaps, phrases that end on the key note, no unplayable stretches for the hand position; a seed per drill, so a drill can be replayed exactly.
+- A **Sight-reading** page: a new drill each time, shown in sheet music only, in wait or play-along mode; results feed a new "sight-reading" skill.
+
+**4.4 Ear training**
+- Exercises that play something and ask for it back on the keyboard: a single note (after hearing middle C as a reference), an interval above a given note, a short melody (3–5 notes), major or minor chord (answered by playing it or by choosing).
+- Levels follow the curriculum; the answer is checked like any played note, with MIDI or the microphone (the microphone stops listening while the app plays, so it doesn't hear itself).
+- Results feed a new "ear training" skill.
+
+**4.5 Appearance and comfort**
+- Theme: light, dark, or follow the system (now it always follows the system).
+- Keyboard size: taller or shorter keys, and how many keys around the music to show.
+- Both remembered, and applied in every view (including the desktop app).
+
+**4.6 Content: more songs**
+- Six or more public-domain songs spread over the levels, several for both hands (e.g. "Minuet in G", "Für Elise" opening, "Brahms' Lullaby", "Amazing Grace", "Greensleeves", "Twinkle, Twinkle"), each with fingering, markings and dynamics.
+- Song practice shows each song's level (the unit it fits after) and sorts by it.
+- All titles and texts translated; new terms in the glossary.
+
+#### Phase 4 done when
+- [ ] The home screen suggests a daily session that follows progress, including reviews of lessons due again and a weak spot to loop.
+- [ ] A run can be played back and compared with the written music, with MIDI and with the microphone.
+- [ ] Sight-reading drills only use what has been taught, and are never the same twice.
+- [ ] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
+- [ ] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
+- [ ] All new text is in English and Spanish.
+
+---
+
 ### Future ideas (unscheduled)
 
 - Backing tracks / accompaniment for songs.
-- Generated sight-reading exercises at the user's level.
-- Record & play back performances; compare with the reference.
-- Ear training (play back what you hear).
-- Spaced-repetition review of weak skills.
-- Theme/appearance options, keyboard size options.
 - More languages, including right-to-left ones; movable-do solfège option.
 
 ---
