@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { DataSettings } from './DataSettings';
 import { DevKeyboardSettings } from './DevKeyboardSettings';
 import { InputSettings } from './InputSettings';
 import { LanguageSettings } from './LanguageSettings';
@@ -22,6 +23,7 @@ export function SettingsScreen() {
         <SoundSettings />
         <DevKeyboardSettings />
         <LanguageSettings />
+        <DataSettings />
       </div>
     </section>
   );

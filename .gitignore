@@ -1,5 +1,7 @@
 node_modules
 dist
+# Desktop installers (npm run desktop:dist)
+release
 *.tsbuildinfo
 *.log
 .DS_Store

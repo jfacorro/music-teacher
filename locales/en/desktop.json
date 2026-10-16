@@ -1,0 +1,13 @@
+{
+  "menu": {
+    "app": "Piano Teacher",
+    "reload": "Reload",
+    "fullScreen": "Full screen",
+    "quit": "Quit",
+    "view": "View",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "actualSize": "Actual size",
+    "devTools": "Developer tools"
+  }
+}

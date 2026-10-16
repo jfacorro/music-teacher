@@ -30,7 +30,7 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 | Notation | Both: falling notes first, then sheet music with gradual transition |
 | Learner level | Piano beginner with some prior music experience |
 | Platform | Local web app on `localhost`, Chrome/Edge (Web MIDI support) |
-| Desktop packaging | Optional, later (Electron — same Chromium, near drop-in; Tauri as a lighter alternative) |
+| Desktop packaging | Electron (Phase 3): the same Chromium, so Web MIDI and the microphone work as in the browser; the web version stays as it is |
 | Localization | Built in from day one: every written string comes from translation files; English is the source language; additional languages TBD |
 
 ---
@@ -56,7 +56,7 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 | Localization | i18next + react-i18next with ICU message format (`i18next-icu`) for plurals/gender; `Intl.*` APIs for numbers, dates, durations, percentages |
 | i18n tooling | `eslint-plugin-i18next` (no hard-coded strings), key-parity check script, pseudo-locale for testing |
 | Tests | Vitest (unit; jsdom for the MusicXML parser tests), Playwright (smoke/E2E) |
-| Desktop wrapper (Phase 3, optional) | Electron |
+| Desktop wrapper (Phase 3, optional) | Electron + electron-builder (Windows installer) |
 
 ---
 
@@ -632,10 +632,12 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Engine: lesson text variables can name a chord (`{ "chord": "C4", "quality": "major" }`) or a scale (`{ "scale": "G4", "quality": "major" }`) in the user's naming system; explain-step keys can belong to either hand (`"hand": "L"`); inline scores take a key signature (`"keyFifths"`); results show each hand's accuracy when both are played (a wrong key counts against the hand playing the nearest note at that moment); the practice keyboard spans the hands being practiced.
 - All new text in English and Spanish; scale names in `theory.json` (`scales`), new skills (hands together, chords, accompaniment, scales, thumb under), glossary terms.
 
-**3.5 Desktop packaging (optional)**
-- Electron wrapper: load the built app, grant MIDI/mic permissions automatically, store data in the app profile.
-- Native menus, window title and installer text localized.
-- Windows installer via electron-builder.
+**3.5 Desktop packaging (optional)** — ✔ done
+- Electron wrapper (`electron/main.js`): loads the built app (`dist/`) from `app://piano-teacher/`, a secure origin served by the app itself (pages such as `/learn` get `index.html`), so it works offline without a server. MIDI and the microphone are allowed without asking, sound plays without a first click, links to other sites open in the browser, and a second launch focuses the open window. Data (IndexedDB) lives in the app's profile.
+- Native menu (Piano Teacher: reload, full screen, quit; View: zoom, developer tools), hidden until Alt is pressed, in the app's language (`locales/<lang>/desktop.json`; the page tells the menu when the language changes). The window title is the page's. The installer offers English and Spanish.
+- Windows installer via electron-builder (`npm run desktop:dist` → `release/Piano-Teacher-Setup-<version>.exe`, unsigned); `npm run desktop` opens the app from a fresh build. The web version is unchanged (`npm run dev`).
+- The browser and the app keep separate data: **Settings → Your data** exports everything (settings, results, practice history, imported songs) to a file and imports it back, replacing what's there (`storage/backup.ts`).
+- `PIANO_TEACHER_SMOKE=1 npx electron .` opens the app hidden and reports what works (secure page, MIDI inputs, microphone permission, storage), then quits.
 
 #### Phase 3 done when
 - [x] Two-handed lessons grade both hands independently. (verified 2026-10-16 on the Casio: each hand's score includes its own misses and wrong keys)
@@ -693,7 +695,9 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 ---
 
-## 14. How to run (once built)
+## 14. How to run
+
+In the browser:
 
 ```bash
 npm install
@@ -701,3 +705,5 @@ npm run dev
 ```
 
 Open the printed `localhost` URL in Chrome or Edge, connect the Casio via USB, and allow MIDI (and microphone, if used) when prompted.
+
+As a desktop app: `npm run desktop` opens it in its own window; `npm run desktop:dist` builds the Windows installer into `release/`. The app and the browser keep separate data; move it with Settings → Your data.

@@ -1,7 +1,8 @@
 # Piano Teacher
 
 A local piano-learning app: guided lessons that listen to what you play through MIDI or the
-microphone. Runs entirely in your browser on `localhost`, with no accounts and no cloud.
+microphone. Runs in your browser on `localhost`, or as a Windows desktop app, with no accounts
+and no cloud.
 
 See [PLAN.md](PLAN.md) for the full plan and phases.
 
@@ -25,6 +26,19 @@ Press keys on the piano: they appear under **Live test** with their names.
 If the keyboard isn't listed, check the USB cable and that the piano is on. On Windows,
 only one app can use a MIDI device at a time, so close any other music software.
 
+### As a desktop app
+
+```bash
+npm run desktop        # build and open it in a window
+npm run desktop:dist   # build the Windows installer: release/Piano-Teacher-Setup-<version>.exe
+```
+
+The desktop app is the same app in its own window: it works without a server or a browser,
+and uses MIDI and the microphone without asking. It keeps its data separately from the
+browser; to move your progress, settings and songs between them, use **Settings → Your
+data → Export to a file**, then **Import from a file** in the other one. The installer isn't
+signed, so Windows may warn about it the first time ("More info" → "Run anyway").
+
 If the metronome clicks sound late compared with the falling notes, use **Settings → Sound
 and timing → Measure timing** (tap a key on each click).
 
@@ -36,15 +50,17 @@ both on, and MIDI tells you how accurately the microphone hears each key. Saved 
 
 ## Scripts
 
-| Command              | What it does                                       |
-| -------------------- | -------------------------------------------------- |
-| `npm run dev`        | Dev server with hot reload                         |
-| `npm run build`      | Type-check and build to `dist/`                    |
-| `npm test`           | Run all unit tests                                 |
-| `npm run lint`       | ESLint, including the no-hard-coded-strings rule   |
-| `npm run i18n:check` | Translation checks: keys, ICU syntax, placeholders |
-| `npm run check`      | Type-check, lint and test (run before committing)  |
-| `npm run format`     | Format everything with Prettier                    |
+| Command                | What it does                                       |
+| ---------------------- | -------------------------------------------------- |
+| `npm run dev`          | Dev server with hot reload                         |
+| `npm run build`        | Type-check and build to `dist/`                    |
+| `npm test`             | Run all unit tests                                 |
+| `npm run lint`         | ESLint, including the no-hard-coded-strings rule   |
+| `npm run i18n:check`   | Translation checks: keys, ICU syntax, placeholders |
+| `npm run check`        | Type-check, lint and test (run before committing)  |
+| `npm run format`       | Format everything with Prettier                    |
+| `npm run desktop`      | Build and open the desktop app                     |
+| `npm run desktop:dist` | Build the Windows installer into `release/`        |
 
 ## Project structure
 
@@ -59,6 +75,7 @@ src/
   i18n/       i18next setup, note-naming systems, Intl formatting, pseudo-locale
   storage/    IndexedDB (Dexie) and settings
   ui/         Layout, components and screens
+electron/     The desktop app: a window around the built app, served from app://piano-teacher
 locales/      Translations, one folder per language
 ```
 

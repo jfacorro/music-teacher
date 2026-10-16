@@ -207,6 +207,22 @@
       "done": "Los clics suenan ahora {ms} ms antes ({taps} de {total} toques usados).",
       "failed": "No se oyeron suficientes toques. Vuelve a intentarlo tocando una tecla en cada clic.",
       "micFirst": "Hazlo antes de medir el retraso del micrófono."
+    },
+    "data": {
+      "heading": "Tus datos",
+      "intro": "Tu progreso, tus ajustes y tus canciones se guardan en esta computadora, por separado en cada navegador y en la aplicación de escritorio. Expórtalos a un archivo para guardar una copia o para pasarlos de uno a otro.",
+      "export": "Exportar a un archivo",
+      "exportTip": "Guarda tu progreso, tus ajustes y tus canciones en un archivo",
+      "import": "Importar de un archivo",
+      "importTip": "Reemplaza tu progreso, tus ajustes y tus canciones por los de un archivo guardado",
+      "confirmTitle": "¿Reemplazar tus datos?",
+      "confirmText": "Tu progreso, tus ajustes y tus canciones de aquí se reemplazan por los del archivo. Expórtalos antes si quieres conservarlos.",
+      "replace": "Reemplazar",
+      "cancel": "Cancelar",
+      "problems": {
+        "notBackup": "Este archivo no es una exportación de Piano Teacher.",
+        "failed": "No se pudo importar el archivo. No se cambió nada."
+      }
     }
   },
   "practice": {

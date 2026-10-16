@@ -207,6 +207,22 @@
       "done": "Clicks now play {ms} ms earlier ({taps} of {total} taps used).",
       "failed": "Not enough taps were heard. Try again, tapping a key on every click.",
       "micFirst": "Do this before measuring the microphone delay."
+    },
+    "data": {
+      "heading": "Your data",
+      "intro": "Your progress, settings and songs are kept on this computer, separately in each browser and in the desktop app. Export them to a file to keep a copy, or to move them from one to the other.",
+      "export": "Export to a file",
+      "exportTip": "Save your progress, settings and songs to a file",
+      "import": "Import from a file",
+      "importTip": "Replace your progress, settings and songs with a saved file",
+      "confirmTitle": "Replace your data?",
+      "confirmText": "Your progress, settings and songs here are replaced with the ones in the file. Export them first if you want to keep them.",
+      "replace": "Replace",
+      "cancel": "Cancel",
+      "problems": {
+        "notBackup": "This file isn’t a Piano Teacher export.",
+        "failed": "The file couldn’t be imported. Nothing was changed."
+      }
     }
   },
   "practice": {

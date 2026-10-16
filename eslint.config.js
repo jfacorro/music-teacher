@@ -6,7 +6,13 @@ import i18next from 'eslint-plugin-i18next';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules'] },
+  { ignores: ['dist', 'node_modules', 'release'] },
+  {
+    // The desktop app's main process and preload script run in Node.
+    files: ['electron/**/*.{js,cjs}'],
+    extends: [js.configs.recommended],
+    languageOptions: { ecmaVersion: 2022, globals: globals.node },
+  },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
