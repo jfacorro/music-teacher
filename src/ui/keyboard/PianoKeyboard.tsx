@@ -1,4 +1,6 @@
 import { useEffect, useRef, type PointerEvent } from 'react';
+import { useSettings } from '../../storage/settings';
+import { KEY_ASPECTS, KeyHeight } from '../appearance';
 import { useTranslation } from 'react-i18next';
 import { type Finger, Hand } from '../../engine/score';
 import { KeyMark } from '../../engine/session';
@@ -35,9 +37,10 @@ interface PianoKeyboardProps {
 }
 
 const COLORS = {
+  keybed: '--keybed',
   white: '--key-white',
+  edge: '--key-edge',
   black: '--key-black',
-  border: '--key-border',
   label: '--key-label',
   pressed: '--key-pressed',
   correct: '--key-correct',
@@ -50,7 +53,8 @@ type Colors = Record<keyof typeof COLORS, string>;
 
 const MIN_HEIGHT = 90;
 const MAX_HEIGHT = 190;
-const KEY_ASPECT = 5; // white key height / width
+/** The normal key height, to scale the limits for shorter and taller keys. */
+const NORMAL_ASPECT = KEY_ASPECTS[KeyHeight.Normal];
 
 /** Canvas piano keyboard: shows pressed and expected keys, plays notes on click/touch. */
 export function PianoKeyboard({
@@ -68,8 +72,13 @@ export function PianoKeyboard({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { width } = useElementSize(containerRef);
+  const aspect = KEY_ASPECTS[useSettings((s) => s.keyHeight)];
+  const scale = aspect / NORMAL_ASPECT;
   const height = Math.round(
-    Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, (width / layout.whiteCount) * KEY_ASPECT)),
+    Math.min(
+      MAX_HEIGHT * scale,
+      Math.max(MIN_HEIGHT * scale, (width / layout.whiteCount) * aspect),
+    ),
   );
   const scheme = useColorScheme();
 
@@ -163,7 +172,15 @@ function drawKeyboard(
   const unit = width / layout.whiteCount;
   const blackHeight = height * BLACK_KEY_HEIGHT;
   const fontSize = Math.max(8, Math.min(14, unit * 0.4));
+  // White keys stand apart on a dark keybed, as on a piano, whatever the page's colors.
+  const gap = Math.max(1.5, Math.min(3, unit * 0.08));
+  const lip = Math.max(3, height * 0.04);
+  /** The case's edge above the keys. */
+  const top = Math.max(3, height * 0.03);
   ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = colors.keybed;
+  roundedRect(ctx, 0, 0, width, height, Math.min(6, unit * 0.15));
+  ctx.fill();
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
 
@@ -184,7 +201,21 @@ function drawKeyboard(
     const isPressed = pressed.has(key.midi);
     const want = expected?.get(key.midi);
 
-    roundedRect(ctx, x + 0.5, 0, unit - 1, height - 0.5, Math.min(6, unit * 0.15));
+    const radius = Math.min(5, unit * 0.15);
+    // The key's front edge, darker, below its top.
+    if (!isPressed) {
+      roundedRect(ctx, x + gap / 2, top, unit - gap, height - top - gap / 2, radius);
+      ctx.fillStyle = colors.edge;
+      ctx.fill();
+    }
+    roundedRect(
+      ctx,
+      x + gap / 2,
+      top,
+      unit - gap,
+      height - top - gap / 2 - (isPressed ? 0 : lip),
+      radius,
+    );
     ctx.fillStyle = colors.white;
     ctx.fill();
     if (want || completed?.has(key.midi)) {
@@ -197,15 +228,17 @@ function drawKeyboard(
       ctx.fillStyle = pressedColor(key);
       ctx.fill();
     }
-    ctx.lineWidth = want && isPressed ? 3 : 1;
-    ctx.strokeStyle = want && isPressed ? handColor(key) : colors.border;
-    ctx.stroke();
+    if (want && isPressed) {
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = handColor(key);
+      ctx.stroke();
+    }
 
     const showLabel =
       labels === KeyLabels.White
         ? unit >= 14
         : labels === KeyLabels.C && pitchClass(key.midi) === 0;
-    let bottom = height - fontSize * 0.6;
+    let bottom = height - lip - fontSize * 0.5;
     if (showLabel) {
       ctx.font = `600 ${fontSize}px system-ui, sans-serif`;
       ctx.fillStyle = isPressed ? colors.badgeText : colors.label;
@@ -223,7 +256,7 @@ function drawKeyboard(
     const isPressed = pressed.has(key.midi);
     const want = expected?.get(key.midi);
 
-    roundedRect(ctx, x, 0, w, blackHeight, Math.min(4, w * 0.15));
+    roundedRect(ctx, x, top, w, blackHeight - top, Math.min(4, w * 0.15));
     ctx.fillStyle = isPressed
       ? pressedColor(key)
       : want

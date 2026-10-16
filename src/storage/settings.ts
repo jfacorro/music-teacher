@@ -3,6 +3,7 @@ import { SheetNotation } from '../content/lessons';
 import type { NamingSystem } from '../i18n/naming';
 import { DEFAULT_VOLUMES } from '../audio/volume';
 import { InputMode } from '../input/types';
+import { KeyHeight, KeysShown, Theme } from '../ui/appearance';
 import { db } from './db';
 
 export interface Settings {
@@ -36,6 +37,12 @@ export interface Settings {
   micSensitivityDb: number;
   /** Extra delay to subtract from microphone notes, from calibration, ms. */
   micLatencyMs: number;
+  /** Light, dark, or the computer's setting. */
+  theme: Theme;
+  /** How tall the on-screen keyboard's keys are. */
+  keyHeight: KeyHeight;
+  /** How many keys the on-screen keyboard shows around the music. */
+  keysShown: KeysShown;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -57,6 +64,9 @@ export const DEFAULT_SETTINGS: Settings = {
   micNoiseFloorDb: -65,
   micSensitivityDb: 12,
   micLatencyMs: 0,
+  theme: Theme.System,
+  keyHeight: KeyHeight.Normal,
+  keysShown: KeysShown.Fit,
 };
 
 const SETTINGS_KEY = 'app';

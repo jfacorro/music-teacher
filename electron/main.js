@@ -8,7 +8,17 @@
  * PIANO_TEACHER_URL loads another address instead (e.g. the dev server, http://localhost:5173);
  * PIANO_TEACHER_SMOKE=1 opens the app, prints what it found and quits (a quick check).
  */
-import { app, BrowserWindow, ipcMain, Menu, net, protocol, session, shell } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  nativeTheme,
+  net,
+  protocol,
+  session,
+  shell,
+} from 'electron';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -85,7 +95,8 @@ function createWindow() {
     minWidth: 720,
     minHeight: 560,
     title: 'Piano Teacher',
-    backgroundColor: '#161614',
+    // The page's background while it loads (styles.css › --bg).
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#161614' : '#f6f5f2',
     icon: path.join(ROOT, 'build', 'icon.png'),
     autoHideMenuBar: true, // Alt shows it
     show: !SMOKE,
@@ -156,6 +167,12 @@ if (!app.requestSingleInstanceLock()) {
     // The menu follows the language chosen in the app.
     ipcMain.on('desktop:language', (_event, language) => {
       if (typeof language === 'string') setMenu(language);
+    });
+    // The window's frame and title bar follow the theme chosen in the app.
+    ipcMain.on('desktop:theme', (_event, theme) => {
+      if (theme === 'system' || theme === 'light' || theme === 'dark') {
+        nativeTheme.themeSource = theme;
+      }
     });
 
     const window = createWindow();

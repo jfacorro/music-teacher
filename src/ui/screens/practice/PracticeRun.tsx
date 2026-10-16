@@ -38,7 +38,8 @@ import { ICONS } from '../../icons';
 import { useActiveNotes, useAnimationFrame } from '../../hooks';
 import { FallingNotes } from '../../keyboard/FallingNotes';
 import { KeyLabels, NoteStyle } from '../../keyboard/styles';
-import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
+import { keyboardLayout, keyboardRange } from '../../keyboard/layout';
+import { useSettings } from '../../../storage/settings';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
 import { TapPad } from '../../keyboard/TapPad';
 import { ScoreView, type SheetNotation } from '../../../content/lessons';
@@ -260,12 +261,18 @@ export function PracticeRun({
   const rhythmKey = score.notes[0]?.pitch.midi ?? 64;
   // The keys of the hands being practiced, and of the other hand when it's played along.
   const shown = otherHand ? score.notes : session.hands;
+  const keysShown = useSettings((s) => s.keysShown);
   const layout = useMemo(
     () =>
       rhythm
         ? keyboardLayout(rhythmKey, rhythmKey)
-        : keyboardLayout(...rangeForNotes(shown.map((note) => note.pitch.midi))),
-    [shown, rhythm, rhythmKey],
+        : keyboardLayout(
+            ...keyboardRange(
+              shown.map((note) => note.pitch.midi),
+              keysShown,
+            ),
+          ),
+    [shown, rhythm, rhythmKey, keysShown],
   );
   // Light up the keys to play now: sounding notes that haven't been played yet. Outcomes
   // change with the session state, so recompute on both.

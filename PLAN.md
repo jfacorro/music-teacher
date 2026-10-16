@@ -700,10 +700,14 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - To fit the new item on one line, Settings became a gear at the end of the top bar.
 - Built as: `content/earTraining.ts` (levels, questions, answers; pure, tested), `storage/earTraining.ts`, `ui/screens/earTraining/`.
 
-**4.5 Appearance and comfort**
+**4.5 Appearance and comfort** — ✔ done (verified 2026-10-17 in the browser and the desktop app)
 - Theme: light, dark, or follow the system (now it always follows the system).
 - Keyboard size: taller or shorter keys, and how many keys around the music to show.
 - Both remembered, and applied in every view (including the desktop app).
+- Built as an **Appearance** card in Settings (between Sound and Language): Theme (System, Light, Dark), Key height (Short, Normal, Tall: keys 4, 5 or 6.5 times as tall as wide) and Keys shown (Fit the music: whole octaves around the notes, at least two; Wider: at least four; Whole piano: all 88), with a keyboard showing the result. No new controls elsewhere: every on-screen keyboard follows (song practice, lessons, sight-reading, ear training, the note quiz; free play already shows the whole piano), and falling-note lanes with it.
+- The theme is set on the page (`data-theme`), dark colors keyed to it in `styles.css`; canvases redraw from `useColorScheme`. A copy in the browser's storage lets `index.html` set it before the app loads, so the page never flashes the wrong colors. The desktop app's window frame follows through `window.desktop.setTheme` (Electron `nativeTheme.themeSource`).
+- The on-screen keyboard sits on a dark keybed, as a piano's keys do (a dark edge on top, dark gaps between white keys, a darker lip at their front), so the keys stand out in the light theme too.
+- Stored with the other settings (`theme`, `keyHeight`, `keysShown`), so backups include them. Built as `ui/appearance.ts`, `ui/keyboard/layout.ts › keyboardRange`, `ui/screens/settings/AppearanceSettings.tsx`.
 
 **4.6 Content: more songs**
 - Six or more public-domain songs spread over the levels, several for both hands (e.g. "Minuet in G", "Für Elise" opening, "Brahms' Lullaby", "Amazing Grace", "Greensleeves", "Twinkle, Twinkle"), each with fingering, markings and dynamics.
@@ -716,7 +720,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - [ ] Sight-reading drills only use what has been taught, and are never the same twice.
   - [ ] TODO (user): once Unit 3 is finished, play a few drills on the Casio (MIDI): they should read well from the sheet, sound like little tunes and fit under the hand; try "New drill", "Try again" and each open level.
 - [x] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
-- [ ] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
+- [x] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
 - [ ] All new text is in English and Spanish.
 
 ---

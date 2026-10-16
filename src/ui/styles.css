@@ -14,7 +14,9 @@
   --radius: 10px;
 
   /* Keyboard and falling notes (read by the canvases) */
+  --keybed: #3a3733;
   --key-white: #ffffff;
+  --key-edge: #d6d2c9;
   --key-black: #1f1e1c;
   --key-border: #b9b5ad;
   --key-label: #6b6862;
@@ -32,7 +34,7 @@
   --note-played: #37b24d;
   --note-missed: #868e96;
 
-  color-scheme: light dark;
+  color-scheme: light;
   font-family:
     system-ui,
     -apple-system,
@@ -44,39 +46,42 @@
   background: var(--bg);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #161614;
-    --surface: #211f1d;
-    --text: #ece9e3;
-    --muted: #a19d95;
-    --border: #3a3733;
-    --accent: #748ffc;
-    --accent-text: #10121a;
-    --ok: #69db7c;
-    --ok-bg: #1d2b20;
-    --problem: #ff8787;
-    --problem-bg: #2e1d1d;
-    --pending: #ffa94d;
+/* Dark colors: the theme chosen in Settings, or the system's (see ui/appearance.ts). */
+:root[data-theme='dark'] {
+  color-scheme: dark;
 
-    --key-white: #e6e3dc;
-    --key-black: #0f0f0e;
-    --key-border: #57534d;
-    --key-label: #57534d;
-    --key-pressed: #9775fa;
-    --hand-right: #5c7cfa;
-    --hand-left: #ff922b;
-    --badge-text: #ffffff;
-    --lane-bg: #1b1a18;
-    --lane-octave: #2c2a27;
-    --grid-beat: #262422;
-    --grid-measure: #3d3a36;
-    --hit-line: #9775fa;
-    --key-correct: #40c057;
-    --key-wrong: #fa5252;
-    --note-played: #51cf66;
-    --note-missed: #5c5f66;
-  }
+  --bg: #161614;
+  --surface: #211f1d;
+  --text: #ece9e3;
+  --muted: #a19d95;
+  --border: #3a3733;
+  --accent: #748ffc;
+  --accent-text: #10121a;
+  --ok: #69db7c;
+  --ok-bg: #1d2b20;
+  --problem: #ff8787;
+  --problem-bg: #2e1d1d;
+  --pending: #ffa94d;
+
+  --keybed: #0b0b0a;
+  --key-white: #e6e3dc;
+  --key-edge: #b9b5ad;
+  --key-black: #0f0f0e;
+  --key-border: #57534d;
+  --key-label: #57534d;
+  --key-pressed: #9775fa;
+  --hand-right: #5c7cfa;
+  --hand-left: #ff922b;
+  --badge-text: #ffffff;
+  --lane-bg: #1b1a18;
+  --lane-octave: #2c2a27;
+  --grid-beat: #262422;
+  --grid-measure: #3d3a36;
+  --hit-line: #9775fa;
+  --key-correct: #40c057;
+  --key-wrong: #fa5252;
+  --note-played: #51cf66;
+  --note-missed: #5c5f66;
 }
 
 * {
@@ -2030,4 +2035,28 @@ button.bars__bar:focus-visible {
   justify-content: center;
   gap: 0.75rem;
   margin-block: 0.5rem 0.75rem;
+}
+
+/* Settings › Appearance: a label beside each choice, then a keyboard to see the result. */
+.appearance__row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+  gap: 0.5rem 1rem;
+  align-items: start;
+  margin-block-end: 1rem;
+}
+
+.appearance__label {
+  padding-block-start: 0.45rem;
+}
+
+.appearance__hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 560px) {
+  .appearance__row {
+    grid-template-columns: 1fr;
+  }
 }

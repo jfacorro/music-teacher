@@ -224,6 +224,43 @@
         "notBackup": "Este archivo no es una exportación de Piano Teacher.",
         "failed": "No se pudo importar el archivo. No se cambió nada."
       }
+    },
+    "appearance": {
+      "heading": "Apariencia",
+      "theme": "Tema",
+      "themes": {
+        "system": "Sistema",
+        "light": "Claro",
+        "dark": "Oscuro"
+      },
+      "themeHints": {
+        "system": "Sigue la configuración de tu computadora.",
+        "light": "Claro, sea cual sea la configuración de tu computadora.",
+        "dark": "Oscuro, sea cual sea la configuración de tu computadora."
+      },
+      "keyHeight": "Altura de las teclas",
+      "keyHeights": {
+        "short": "Bajas",
+        "normal": "Normales",
+        "tall": "Altas"
+      },
+      "keyHeightHints": {
+        "short": "La música y el teclado caben en la pantalla de una computadora portátil.",
+        "normal": "Teclas unas cinco veces más altas que anchas.",
+        "tall": "Más fáciles de ver de un vistazo, en una pantalla grande."
+      },
+      "keysShown": "Teclas a la vista",
+      "keysShownOptions": {
+        "fit": "Las de la música",
+        "wider": "Más amplio",
+        "piano": "Piano completo"
+      },
+      "keysShownHints": {
+        "fit": "Octavas completas alrededor de las notas, al menos dos.",
+        "wider": "Al menos cuatro octavas, más cerca de donde están tus manos.",
+        "piano": "Las 88 teclas, como tu piano, más estrechas."
+      },
+      "preview": "Así se ve el teclado con las notas de do a sol iluminadas, como en una lección:"
     }
   },
   "practice": {

@@ -1,4 +1,5 @@
 import { useEffect, useState, type RefObject } from 'react';
+import { create } from 'zustand';
 
 export const ColorScheme = {
   Light: 'light',
@@ -45,17 +46,21 @@ export function prepareCanvas(
   return ctx;
 }
 
-/** Changes whenever the light/dark color scheme changes, to trigger a redraw. */
+const useScheme = create<{ scheme: ColorScheme }>(() => ({
+  scheme:
+    typeof document !== 'undefined' && document.documentElement.dataset.theme === ColorScheme.Dark
+      ? ColorScheme.Dark
+      : ColorScheme.Light,
+}));
+
+/** The colors now in use (see appearance.ts › applyTheme). */
+export function setColorScheme(scheme: ColorScheme): void {
+  useScheme.setState({ scheme });
+}
+
+/** Changes whenever the light/dark colors change, to trigger a redraw. */
 export function useColorScheme(): ColorScheme {
-  const query = '(prefers-color-scheme: dark)';
-  const [dark, setDark] = useState(() => window.matchMedia(query).matches);
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    const onChange = () => setDark(media.matches);
-    media.addEventListener('change', onChange);
-    return () => media.removeEventListener('change', onChange);
-  }, []);
-  return dark ? ColorScheme.Dark : ColorScheme.Light;
+  return useScheme((s) => s.scheme);
 }
 
 /** Reads CSS custom properties (e.g. `--key-white`) so canvases follow the theme. */

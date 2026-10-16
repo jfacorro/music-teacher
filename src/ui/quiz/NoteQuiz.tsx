@@ -18,7 +18,8 @@ import { activityTimer, recordPracticeTime } from '../../storage/progress';
 import { MIDDLE_C, pitchFromMidi, type Pitch } from '../../theory/pitch';
 import { Stars } from '../components/Stars';
 import { usePressedKeys } from '../hooks';
-import { keyboardLayout, rangeForNotes } from '../keyboard/layout';
+import { keyboardLayout, keyboardRange } from '../keyboard/layout';
+import { useSettings } from '../../storage/settings';
 import { PianoKeyboard, type ExpectedKey } from '../keyboard/PianoKeyboard';
 import { KeyLabels } from '../keyboard/styles';
 import { NoteCard } from '../sheet/NoteCard';
@@ -119,9 +120,16 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
     setFirstTry(0);
   };
 
+  const keysShown = useSettings((s) => s.keysShown);
   const layout = useMemo(
-    () => keyboardLayout(...rangeForNotes(notes.map((note) => note.midi))),
-    [notes],
+    () =>
+      keyboardLayout(
+        ...keyboardRange(
+          notes.map((note) => note.midi),
+          keysShown,
+        ),
+      ),
+    [notes, keysShown],
   );
   const pressed = usePressedKeys();
   const held = useLiveInput((s) => s.held);
