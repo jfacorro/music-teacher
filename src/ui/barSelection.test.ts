@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toggleBars } from './barSelection';
+import { barsParam, parseBars, toggleBars } from './barSelection';
 
 describe('toggleBars', () => {
   it('repeats the chosen bars', () => {
@@ -22,5 +22,22 @@ describe('toggleBars', () => {
 
   it('moves or widens the loop when going outside it', () => {
     expect(toggleBars({ first: 2, last: 3 }, { first: 3, last: 5 })).toEqual({ first: 3, last: 5 });
+  });
+});
+
+describe('bars in an address', () => {
+  it('writes and reads them counted from 1', () => {
+    expect(barsParam({ first: 4, last: 5 })).toBe('5-6');
+    expect(barsParam({ first: 2, last: 2 })).toBe('3');
+    expect(parseBars('5-6', 8)).toEqual({ first: 4, last: 5 });
+    expect(parseBars('3', 8)).toEqual({ first: 2, last: 2 });
+  });
+
+  it('ignores bars the music doesn’t have, and anything else', () => {
+    expect(parseBars('7-9', 8)).toBeNull();
+    expect(parseBars('0', 8)).toBeNull();
+    expect(parseBars('6-5', 8)).toBeNull();
+    expect(parseBars('a', 8)).toBeNull();
+    expect(parseBars(null, 8)).toBeNull();
   });
 });

@@ -478,5 +478,31 @@
     "mySongsIntro": "Songs you imported. They’re kept in this browser, on this computer.",
     "mySongsEmpty": "Import a MIDI or MusicXML file to practice your own music.",
     "importSong": "Import a song"
+  },
+  "today": {
+    "title": "Today",
+    "intro": "A short practice session, picked from where you are.",
+    "progress": "{done} of {total} done",
+    "kinds": {
+      "next": "Next lesson",
+      "review": "Review",
+      "weakSpot": "Weak spot",
+      "song": "Song",
+      "skill": "Strengthen a skill"
+    },
+    "details": {
+      "next": "Pick up where you left off.",
+      "review": "{days, plural, one {Last played yesterday: a quick review keeps it fresh.} other {Last played # days ago: a quick review keeps it fresh.}}",
+      "weakBar": "Bar {bar} needs some work: it repeats until you stop.",
+      "weakBars": "Bars {first}–{last} need some work: they repeat until you stop.",
+      "newSong": "A song you haven’t played yet.",
+      "song": "{days, plural, one {Not played since yesterday.} other {Not played for # days.}}",
+      "skill": "Your weakest skill so far: {skill}."
+    },
+    "done": "done",
+    "allDone": "All done for today. Nice work!",
+    "more": "Suggest more",
+    "moreTip": "Add a few more things to practice today",
+    "nothingMore": "Nothing more to suggest right now: come back tomorrow."
   }
 }

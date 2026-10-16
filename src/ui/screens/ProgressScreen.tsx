@@ -19,6 +19,7 @@ import {
 import { Stars } from '../components/Stars';
 import { StarsSize } from '../components/starsSize';
 import { ActivityCalendar } from './ActivityCalendar';
+import { TodayCard } from './TodayCard';
 
 const RECENT_LIMIT = 10;
 const DATE_AND_TIME: Intl.DateTimeFormatOptions = { dateStyle: 'medium', timeStyle: 'short' };
@@ -72,6 +73,7 @@ export function ProgressScreen() {
           {t('progress.letsGo')}
         </Link>
       </div>
+      <TodayCard />
       {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
 
       <div className="stat-grid">

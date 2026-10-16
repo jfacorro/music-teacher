@@ -24,6 +24,20 @@ export function toggleBars(current: LoopRange | null, chosen: LoopRange): LoopRa
   return inside && (chosen.first === chosen.last || same) ? null : chosen;
 }
 
+/** Bars for an address, counted from 1: "5-6", or "5" for one bar. */
+export function barsParam({ first, last }: LoopRange): string {
+  return first === last ? String(first + 1) : `${first + 1}-${last + 1}`;
+}
+
+/** The bars in an address ("5-6" or "5", from 1), within the music's `count` bars; null if none. */
+export function parseBars(text: string | null, count: number): LoopRange | null {
+  const match = text ? /^(\d+)(?:-(\d+))?$/.exec(text) : null;
+  if (!match) return null;
+  const first = Number(match[1]) - 1;
+  const last = Number(match[2] ?? match[1]) - 1;
+  return first >= 0 && first <= last && last < count ? { first, last } : null;
+}
+
 const between = (a: number, b: number): LoopRange => ({
   first: Math.min(a, b),
   last: Math.max(a, b),

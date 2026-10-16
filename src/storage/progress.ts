@@ -4,6 +4,8 @@
  * it survives browser restarts, and mirrored in a store for the UI.
  */
 import { create } from 'zustand';
+import { nextReview, reviewOf } from '../content/review';
+import type { LoopRange } from '../engine/session';
 import { dayOf, db, type PracticeLogRow, type ResultRow } from './db';
 
 export { dayOf };
@@ -20,6 +22,8 @@ export interface Attempt {
   stars: number;
   accuracy: number;
   durationMs: number;
+  /** Songs: the bars of this run that need work (null: none); lessons leave it out. */
+  weakBars?: LoopRange | null;
 }
 
 interface ProgressState {
@@ -34,13 +38,15 @@ export const useProgress = create<ProgressState>(() => ({ results: {}, log: [], 
 
 export const resultKey = (kind: ResultKind, id: string) => `${kind}:${id}`;
 
-/** A new attempt merged into the best result so far. */
+/** A new attempt merged into the best result so far, with its next review. */
 export function mergeResult(
   key: string,
   previous: ResultRow | undefined,
   attempt: Attempt,
   now: number,
 ): ResultRow {
+  const review = nextReview(previous ? reviewOf(previous) : null, attempt.stars, now);
+  const weakBars = attempt.weakBars !== undefined ? attempt.weakBars : previous?.weakBars;
   return {
     key,
     bestStars: Math.max(previous?.bestStars ?? 0, attempt.stars),
@@ -48,6 +54,8 @@ export function mergeResult(
     attempts: (previous?.attempts ?? 0) + 1,
     completedAt: previous?.completedAt ?? (attempt.stars >= 1 ? now : null),
     lastPlayedAt: now,
+    ...(review && review),
+    ...(weakBars !== undefined && { weakBars }),
   };
 }
 
@@ -77,7 +85,8 @@ export async function recordResult(
 ): Promise<ResultRow> {
   const key = resultKey(kind, id);
   const row = mergeResult(key, useProgress.getState().results[key], attempt, now);
-  const entry: PracticeLogRow = { at: now, kind, refId: id, ...attempt };
+  const { stars, accuracy, durationMs } = attempt;
+  const entry: PracticeLogRow = { at: now, kind, refId: id, stars, accuracy, durationMs };
   useProgress.setState((state) => ({
     results: { ...state.results, [key]: row },
     log: [...state.log, entry],

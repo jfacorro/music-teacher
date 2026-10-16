@@ -19,6 +19,20 @@ export type SongId = keyof typeof loaders;
 
 export const SONG_IDS = Object.keys(loaders) as SongId[];
 
+/**
+ * Each song's level: the unit whose lessons first use it. A song is suggested once its unit is
+ * open (content/suggestions.ts); a test keeps this in step with the lessons.
+ */
+export const SONG_UNITS: Readonly<Record<SongId, string>> = {
+  'ode-to-joy': 'u1',
+  'when-the-saints': 'u2',
+  'lightly-row': 'u3',
+  'au-clair-de-la-lune': 'u3',
+  'hot-cross-buns': 'u4',
+  'mary-had-a-little-lamb': 'u4',
+  'jingle-bells': 'u6',
+};
+
 export function isSongId(id: string | undefined): id is SongId {
   return id !== undefined && Object.hasOwn(loaders, id);
 }
