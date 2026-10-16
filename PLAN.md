@@ -632,7 +632,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Engine: lesson text variables can name a chord (`{ "chord": "C4", "quality": "major" }`) or a scale (`{ "scale": "G4", "quality": "major" }`) in the user's naming system; explain-step keys can belong to either hand (`"hand": "L"`); inline scores take a key signature (`"keyFifths"`); results show each hand's accuracy when both are played (a wrong key counts against the hand playing the nearest note at that moment); the practice keyboard spans the hands being practiced.
 - All new text in English and Spanish; scale names in `theory.json` (`scales`), new skills (hands together, chords, accompaniment, scales, thumb under), glossary terms.
 
-**3.5 Desktop packaging (optional)** — ✔ done
+**3.5 Desktop packaging (optional)** — ✔ done (verified 2026-10-16: installed with the installer, practiced with the Casio, and progress moved over from the browser)
 - Electron wrapper (`electron/main.js`): loads the built app (`dist/`) from `app://piano-teacher/`, a secure origin served by the app itself (pages such as `/learn` get `index.html`), so it works offline without a server. MIDI and the microphone are allowed without asking, sound plays without a first click, links to other sites open in the browser, and a second launch focuses the open window. Data (IndexedDB) lives in the app's profile.
 - Native menu (Piano Teacher: reload, full screen, quit; View: zoom, developer tools), hidden until Alt is pressed, in the app's language (`locales/<lang>/desktop.json`; the page tells the menu when the language changes). The window title is the page's. The installer offers English and Spanish.
 - Windows installer via electron-builder (`npm run desktop:dist` → `release/Piano-Teacher-Setup-<version>.exe`, unsigned); `npm run desktop` opens the app from a fresh build. The web version is unchanged (`npm run dev`).
@@ -644,7 +644,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - [x] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note. (verified 2026-10-16 with the microphone, lesson u6-l1)
 - [x] A user-provided MIDI/MusicXML file can be imported and practiced. (verified 2026-10-15 on the Casio)
 - [x] Chord names (e.g. C major / Do mayor / C-Dur) display correctly in every language and naming system. (`i18n/chordNames.test.ts`, and lesson texts checked in English and Spanish)
-- [ ] (Optional) App runs as a standalone Windows desktop app.
+- [x] (Optional) App runs as a standalone Windows desktop app. (verified 2026-10-16 on the Casio; the web version still runs on localhost)
 
 ---
 
