@@ -34,6 +34,7 @@ const backend: BackendModule = {
 export async function initI18n(language: string): Promise<void> {
   i18n.on('languageChanged', (lng) => {
     document.documentElement.lang = lng;
+    window.desktop?.setLanguage(lng); // the desktop app's menu follows
   });
 
   await i18n
