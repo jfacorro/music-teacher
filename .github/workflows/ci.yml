@@ -6,8 +6,7 @@ name: CI
 on:
   pull_request:
   push:
-    # TEMPORARY: milestone-3.5-desktop tries the Windows build before merging (no publishing).
-    branches: [main, milestone-3.5-desktop]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
