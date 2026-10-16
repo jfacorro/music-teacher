@@ -224,6 +224,43 @@
         "notBackup": "This file isn’t a Piano Teacher export.",
         "failed": "The file couldn’t be imported. Nothing was changed."
       }
+    },
+    "appearance": {
+      "heading": "Appearance",
+      "theme": "Theme",
+      "themes": {
+        "system": "System",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "themeHints": {
+        "system": "Follows your computer’s setting.",
+        "light": "Light, whatever your computer’s setting.",
+        "dark": "Dark, whatever your computer’s setting."
+      },
+      "keyHeight": "Key height",
+      "keyHeights": {
+        "short": "Short",
+        "normal": "Normal",
+        "tall": "Tall"
+      },
+      "keyHeightHints": {
+        "short": "Keeps the music and the keyboard on a laptop screen.",
+        "normal": "Keys about five times as tall as they are wide.",
+        "tall": "Easier to see at a glance, on a big screen."
+      },
+      "keysShown": "Keys shown",
+      "keysShownOptions": {
+        "fit": "Fit the music",
+        "wider": "Wider",
+        "piano": "Whole piano"
+      },
+      "keysShownHints": {
+        "fit": "Whole octaves around the notes, at least two.",
+        "wider": "At least four octaves, closer to where your hands are.",
+        "piano": "All 88 keys, like your piano, with narrower keys."
+      },
+      "preview": "How the keyboard looks with the notes C to G lit, as in a lesson:"
     }
   },
   "practice": {

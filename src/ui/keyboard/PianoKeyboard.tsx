@@ -1,4 +1,6 @@
 import { useEffect, useRef, type PointerEvent } from 'react';
+import { useSettings } from '../../storage/settings';
+import { KEY_ASPECTS, KeyHeight } from '../appearance';
 import { useTranslation } from 'react-i18next';
 import { type Finger, Hand } from '../../engine/score';
 import { KeyMark } from '../../engine/session';
@@ -50,7 +52,8 @@ type Colors = Record<keyof typeof COLORS, string>;
 
 const MIN_HEIGHT = 90;
 const MAX_HEIGHT = 190;
-const KEY_ASPECT = 5; // white key height / width
+/** The normal key height, to scale the limits for shorter and taller keys. */
+const NORMAL_ASPECT = KEY_ASPECTS[KeyHeight.Normal];
 
 /** Canvas piano keyboard: shows pressed and expected keys, plays notes on click/touch. */
 export function PianoKeyboard({
@@ -68,8 +71,13 @@ export function PianoKeyboard({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { width } = useElementSize(containerRef);
+  const aspect = KEY_ASPECTS[useSettings((s) => s.keyHeight)];
+  const scale = aspect / NORMAL_ASPECT;
   const height = Math.round(
-    Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, (width / layout.whiteCount) * KEY_ASPECT)),
+    Math.min(
+      MAX_HEIGHT * scale,
+      Math.max(MIN_HEIGHT * scale, (width / layout.whiteCount) * aspect),
+    ),
   );
   const scheme = useColorScheme();
 

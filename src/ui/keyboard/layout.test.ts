@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { BLACK_KEY_WIDTH, FULL_PIANO, keyAt, keyboardLayout, rangeForNotes } from './layout';
+import { KeysShown } from '../appearance';
+import {
+  BLACK_KEY_WIDTH,
+  FULL_PIANO,
+  keyAt,
+  keyboardLayout,
+  keyboardRange,
+  rangeForNotes,
+} from './layout';
 
 describe('keyboardLayout', () => {
   it('lays out the full piano: 88 keys, 52 white', () => {
@@ -64,5 +72,18 @@ describe('rangeForNotes', () => {
 
   it('has a default for no notes', () => {
     expect(rangeForNotes([])).toEqual([48, 72]);
+  });
+});
+
+describe('keyboardRange', () => {
+  const firstPosition = [60, 62, 64, 65, 67];
+
+  it('fits the music, widens to four octaves, or shows the whole piano', () => {
+    expect(keyboardRange(firstPosition, KeysShown.Fit)).toEqual([48, 72]);
+    const [low, high] = keyboardRange(firstPosition, KeysShown.Wider);
+    expect(high - low).toBe(48);
+    expect(low).toBeLessThanOrEqual(60);
+    expect(high).toBeGreaterThanOrEqual(67);
+    expect(keyboardRange(firstPosition, KeysShown.Piano)).toEqual([...FULL_PIANO]);
   });
 });

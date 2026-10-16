@@ -13,6 +13,7 @@ import { loadSettings, updateSettings } from './storage/settings';
 import { loadEarTraining } from './storage/earTraining';
 import { loadSightReading } from './storage/sightReading';
 import { loadTodayPlan } from './storage/todayPlan';
+import { applyTheme } from './ui/appearance';
 
 /** Everything that must be ready before the first render. */
 export async function bootstrap(): Promise<void> {
@@ -24,6 +25,7 @@ export async function bootstrap(): Promise<void> {
     loadSightReading(),
     loadEarTraining(),
   ]);
+  applyTheme(settings.theme);
   await initI18n(settings.language ?? detectLanguage(navigator.languages));
 
   startLiveTracking();

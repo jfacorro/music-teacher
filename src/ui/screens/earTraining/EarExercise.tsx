@@ -37,7 +37,8 @@ import { MIDDLE_C, pitchClass, pitchFromMidi } from '../../../theory/pitch';
 import { Stars } from '../../components/Stars';
 import { usePressedKeys } from '../../hooks';
 import { ICONS } from '../../icons';
-import { keyboardLayout, rangeForNotes } from '../../keyboard/layout';
+import { keyboardLayout, keyboardRange } from '../../keyboard/layout';
+import { useSettings } from '../../../storage/settings';
 import { type ExpectedKey, PianoKeyboard } from '../../keyboard/PianoKeyboard';
 import { KeyLabels } from '../../keyboard/styles';
 
@@ -219,14 +220,16 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
     if (fresh[0]) void play(fresh[0]);
   };
 
+  const keysShown = useSettings((s) => s.keysShown);
   const layout = useMemo(
     () =>
       keyboardLayout(
-        ...rangeForNotes(
+        ...keyboardRange(
           questions.flatMap((q) => [...q.notes, ...(q.reference ? [q.reference] : [])]),
+          keysShown,
         ),
       ),
-    [questions],
+    [questions, keysShown],
   );
   const pressed = usePressedKeys();
   const held = useLiveInput((s) => s.held);

@@ -704,6 +704,9 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Theme: light, dark, or follow the system (now it always follows the system).
 - Keyboard size: taller or shorter keys, and how many keys around the music to show.
 - Both remembered, and applied in every view (including the desktop app).
+- Built as an **Appearance** card in Settings (between Sound and Language): Theme (System, Light, Dark), Key height (Short, Normal, Tall: keys 4, 5 or 6.5 times as tall as wide) and Keys shown (Fit the music: whole octaves around the notes, at least two; Wider: at least four; Whole piano: all 88), with a keyboard showing the result. No new controls elsewhere: every on-screen keyboard follows (song practice, lessons, sight-reading, ear training, the note quiz; free play already shows the whole piano), and falling-note lanes with it.
+- The theme is set on the page (`data-theme`), dark colors keyed to it in `styles.css`; canvases redraw from `useColorScheme`. A copy in the browser's storage lets `index.html` set it before the app loads, so the page never flashes the wrong colors. The desktop app's window frame follows through `window.desktop.setTheme` (Electron `nativeTheme.themeSource`).
+- Stored with the other settings (`theme`, `keyHeight`, `keysShown`), so backups include them. Built as `ui/appearance.ts`, `ui/keyboard/layout.ts › keyboardRange`, `ui/screens/settings/AppearanceSettings.tsx`.
 
 **4.6 Content: more songs**
 - Six or more public-domain songs spread over the levels, several for both hands (e.g. "Minuet in G", "Für Elise" opening, "Brahms' Lullaby", "Amazing Grace", "Greensleeves", "Twinkle, Twinkle"), each with fingering, markings and dynamics.

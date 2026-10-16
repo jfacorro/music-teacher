@@ -6,11 +6,17 @@ import { setDevInputEnabled } from './input/dev/devInput';
 import { setMicDelay, setMicGate, startMic, stopMic } from './input/mic/micInput';
 import type { InputMode } from './input/routing';
 import { type Settings, updateSettings, useSettings } from './storage/settings';
+import { applyTheme, type Theme } from './ui/appearance';
 
 /** `null` follows the browser's language. */
 export function setLanguagePreference(language: string | null): void {
   updateSettings({ language });
   void changeLanguage(language ?? detectLanguage(navigator.languages));
+}
+
+export function setThemePreference(theme: Theme): void {
+  updateSettings({ theme });
+  applyTheme(theme);
 }
 
 export function setDevKeyboardPreference(enabled: boolean): void {

@@ -3,6 +3,7 @@
  * line up exactly with the keys. Units: one white key = 1 wide; heights are 0–1 ratios.
  */
 import { PIANO_HIGHEST, PIANO_LOWEST, isBlackKey, pitchClass } from '../../theory/pitch';
+import { KeysShown } from '../appearance';
 
 export const BLACK_KEY_WIDTH = 0.6;
 export const BLACK_KEY_HEIGHT = 0.62;
@@ -61,6 +62,17 @@ export function keyAt(layout: KeyboardLayout, x: number, y: number): KeyGeometry
  * A comfortable range for the given notes: from the C at or below the lowest to the C above
  * the highest, widened octave by octave (below first) to at least `minOctaves`.
  */
+/**
+ * The keys an on-screen keyboard shows for these notes, as chosen in Settings: whole octaves
+ * around them (at least two, or four for "wider"), or the whole piano.
+ */
+export function keyboardRange(midis: readonly number[], shown: KeysShown): [number, number] {
+  if (shown === KeysShown.Piano) return [...FULL_PIANO];
+  return rangeForNotes(midis, shown === KeysShown.Wider ? WIDER_OCTAVES : 2);
+}
+
+const WIDER_OCTAVES = 4;
+
 export function rangeForNotes(midis: readonly number[], minOctaves = 2): [number, number] {
   if (midis.length === 0) return [48, 72]; // C3–C5
   const lowest = Math.min(...midis);
