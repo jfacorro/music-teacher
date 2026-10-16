@@ -14,7 +14,9 @@
   --radius: 10px;
 
   /* Keyboard and falling notes (read by the canvases) */
+  --keybed: #3a3733;
   --key-white: #ffffff;
+  --key-edge: #d6d2c9;
   --key-black: #1f1e1c;
   --key-border: #b9b5ad;
   --key-label: #6b6862;
@@ -61,7 +63,9 @@
   --problem-bg: #2e1d1d;
   --pending: #ffa94d;
 
+  --keybed: #0b0b0a;
   --key-white: #e6e3dc;
+  --key-edge: #b9b5ad;
   --key-black: #0f0f0e;
   --key-border: #57534d;
   --key-label: #57534d;
