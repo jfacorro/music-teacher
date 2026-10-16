@@ -19,4 +19,7 @@ export const ICONS = {
   R: String.fromCodePoint(0x1faf1), // 🫱 rightwards hand
   settings: String.fromCodePoint(0x2699, 0xfe0f), // ⚙️ gear
   volume: String.fromCodePoint(0x1f50a), // 🔊 speaker
+  listen: String.fromCodePoint(0x1f3a7), // 🎧 headphones
+  stop: textStyle(0x23f9), // ⏹
+  compare: String.fromCodePoint(0x1f50d), // 🔍 a closer look
 } as const;

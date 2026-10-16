@@ -349,6 +349,33 @@
       "notSofter": "No bajó de volumen",
       "midiOnly": "Las partes fuertes y suaves se comprueban con un teclado MIDI: el micrófono no sabe con qué fuerza se tocó una tecla.",
       "nowTip": "Qué tan fuerte tocar ahora, y con qué fuerza tocaste la última nota"
+    },
+    "recording": {
+      "listen": "Escuchar",
+      "listenTip": "Escucha tu última interpretación, con la música avanzando a la par",
+      "stop": "Detener",
+      "stopTip": "Deja de escuchar",
+      "compare": "Comparar",
+      "compareTip": "Mira lo que tocaste sobre las notas escritas",
+      "heading": "Tu interpretación y la partitura",
+      "intro": "Las barras grises son las notas escritas; las de color, lo que tocaste y cuándo lo tocaste.",
+      "legend": {
+        "written": "Escrita",
+        "right": "Bien",
+        "early": "Antes de tiempo",
+        "late": "Tarde",
+        "wrong": "Tecla equivocada",
+        "missed": "Sin tocar",
+        "ungraded": "Sin calificar (otra mano o entrada)"
+      },
+      "loudness": "Abajo: con qué fuerza pulsaste cada tecla.",
+      "summary": "{right} bien, {early} antes de tiempo, {late} tarde, {wrong, plural, one {# tecla equivocada} other {# teclas equivocadas}}, {missed} sin tocar.",
+      "playing": "Escuchando tu última interpretación",
+      "position": "Posición de la reproducción",
+      "time": "{elapsed} / {total}",
+      "pause": "Pausa",
+      "resume": "Continuar",
+      "paused": "Tu última interpretación, en pausa"
     }
   },
   "lesson": {

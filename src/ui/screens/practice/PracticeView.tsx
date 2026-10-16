@@ -57,6 +57,8 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
   );
   const [looping, setLooping] = useState(asked !== null);
   const [otherHand, setOtherHand] = useState(false);
+  /** Playing the last run back: the practice settings wait. */
+  const [listening, setListening] = useState(false);
 
   /** null: stop repeating (keeping the bars for next time). */
   const chooseLoop = (range: LoopRange | null, on = true) => {
@@ -89,7 +91,12 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
       <div className="practice__options">
         <ViewToggle view={view} onChange={setView} />
         {view === ScoreView.Sheet && <NotationSelect notation={notation} onChange={setNotation} />}
-        <div className="segmented" role="radiogroup" aria-label={t('practice.mode.label')}>
+        <div
+          className={listening ? 'segmented is-set-aside' : 'segmented'}
+          role="radiogroup"
+          aria-label={t('practice.mode.label')}
+          inert={listening}
+        >
           {MODES.map((value) => (
             <button
               key={value}
@@ -109,7 +116,12 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
             </button>
           ))}
         </div>
-        <div className="segmented" role="radiogroup" aria-label={t('practice.hands.label')}>
+        <div
+          className={listening ? 'segmented is-set-aside' : 'segmented'}
+          role="radiogroup"
+          aria-label={t('practice.hands.label')}
+          inert={listening}
+        >
           {HANDS.map((value) => (
             <button
               key={value}
@@ -130,7 +142,7 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
           ))}
         </div>
         <div className="practice__sound">
-          <label className="checkbox">
+          <label className={listening ? 'checkbox is-set-aside' : 'checkbox'} inert={listening}>
             <input
               type="checkbox"
               checked={metronome}
@@ -152,6 +164,7 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
         hands={hands}
         otherHand={otherHand}
         onOtherHandChange={setOtherHand}
+        setAside={listening}
       />
 
       <PracticeRun
@@ -174,6 +187,8 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
             weakBars: weakSpot(summary.measures),
           })
         }
+        recordingKey={resultKey(result.kind, result.id)}
+        onListeningChange={setListening}
         onLoopPass={(count) => {
           if (count >= LOOP_PASSES_PRACTICED) markPracticed(resultKey(result.kind, result.id));
         }}

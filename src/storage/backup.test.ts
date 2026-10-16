@@ -48,6 +48,16 @@ describe('backups', () => {
     );
   });
 
+  it('reads backups made before recordings were kept', () => {
+    const old = {
+      format: 'piano-teacher-backup',
+      version: 1,
+      exportedAt: '2026-10-15T10:00:00.000Z',
+      tables: { settings: [], results: [], practiceLog: [], practiceDays: [], mySongs: [] },
+    };
+    expect(parseBackup(old).tables.recordings).toEqual([]);
+  });
+
   it('names the file after the day', () => {
     expect(backupFileName(new Date(2026, 9, 16))).toBe('piano-teacher-2026-10-16.json');
   });

@@ -349,6 +349,33 @@
       "notSofter": "Didn’t get softer",
       "midiOnly": "Loud and soft parts are checked on a MIDI keyboard: the microphone can’t tell how hard a key was pressed.",
       "nowTip": "How loud to play now, and how hard you played the last note"
+    },
+    "recording": {
+      "listen": "Listen",
+      "listenTip": "Hear your last run, with the music moving along",
+      "stop": "Stop",
+      "stopTip": "Stop listening",
+      "compare": "Compare",
+      "compareTip": "See what you played over the written notes",
+      "heading": "Your run and the music",
+      "intro": "Gray bars are the written notes; colored bars are what you played, where you played it.",
+      "legend": {
+        "written": "Written",
+        "right": "Right",
+        "early": "Early",
+        "late": "Late",
+        "wrong": "Wrong key",
+        "missed": "Missed",
+        "ungraded": "Not graded (other hand or count-in)"
+      },
+      "loudness": "Below: how hard you pressed each key.",
+      "summary": "{right} right, {early} early, {late} late, {wrong, plural, one {# wrong key} other {# wrong keys}}, {missed} missed.",
+      "playing": "Listening to your last run",
+      "position": "Playback position",
+      "time": "{elapsed} / {total}",
+      "pause": "Pause",
+      "resume": "Resume",
+      "paused": "Your last run, paused"
     }
   },
   "lesson": {
