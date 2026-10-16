@@ -144,3 +144,13 @@ describe('dynamics', () => {
     ).toThrow('song › hairpins: hairpins must not overlap');
   });
 });
+
+describe('key signature', () => {
+  it('reads it in fifths, and rejects what isn’t one', () => {
+    expect(parseInlineScore({ ...valid, keyFifths: -1 }, 'test').keyFifths).toBe(-1);
+    expect(parseInlineScore(valid, 'test')).not.toHaveProperty('keyFifths');
+    expect(() => parseInlineScore({ ...valid, keyFifths: 8 }, 'song')).toThrow(
+      'song › keyFifths: expected a whole number from -7 to 7',
+    );
+  });
+});

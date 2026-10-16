@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "triad": "Un acorde son varias notas tocadas juntas. El más común es la tríada: tres notas, saltando una tecla blanca entre cada una. {c}, {e} y {g} forman {cMajor}. Mano derecha: pulgar, dedo medio y meñique (1, 3 y 5).",
+    "cChord": "Toca {cMajor} cuatro veces. Pulsa las tres teclas juntas y levántalas juntas.",
+    "fAndG": "Desplaza la misma forma de la mano y obtienes otros acordes mayores: {fMajor} empieza en {f} y {gMajor} en {g}.",
+    "cfg": "Mueve la forma del acorde: {cMajor}, {fMajor}, {gMajor} y de vuelta a {cMajor}. Mantén la mano con la misma forma mientras se mueve.",
+    "cfgInTime": "Ahora a tiempo con el metrónomo, dos tiempos por acorde."
+  }
+}

@@ -257,7 +257,8 @@
         "hint": "Haz clic en un compás para repetirlo."
       },
       "extra": "Toques de más",
-      "show": "Resultados"
+      "show": "Resultados",
+      "hand": "{hand}: {accuracy}"
     },
     "songInfo": "{composer} · {bpm} BPM",
     "view": {

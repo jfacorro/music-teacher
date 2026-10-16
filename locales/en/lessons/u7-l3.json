@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "gScale": "The {gScale} starts on {g} and uses the same fingering as the {cScale}, with one change: {fSharp}, a black key, instead of {f}. The sharp at the start of the staff, the key signature, says so for the whole piece.",
+    "up": "The {gScale} going up. Finger 4 plays the black key.",
+    "down": "And going down.",
+    "leftHand": "Now with the left hand, starting on the {g} below middle {c}, with the same fingering as the left-hand {cScale}.",
+    "inTime": "Right hand, up and down in time."
+  }
+}

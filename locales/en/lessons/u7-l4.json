@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "fScale": "The {fScale} has one flat, {bFlat}, instead of {b}. Its right-hand fingering is different: 1 2 3 4 from {f} to {bFlat}, then the thumb passes under to {c} and 1 2 3 4 to the top.",
+    "up": "The {fScale} going up: finger 4 on the black key, then the thumb under.",
+    "down": "And going down: 4 3 2 1, then 4 crosses over the thumb to {bFlat}.",
+    "leftHand": "The left hand keeps its usual fingering: 5 4 3 2 1, 3 crosses over, 2 1.",
+    "inTime": "Right hand, up and down in time."
+  }
+}

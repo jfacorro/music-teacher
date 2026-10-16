@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "mirror": "En el movimiento contrario las manos van en direcciones opuestas, como en un espejo. Empiezan los dos pulgares: el derecho en el {c} central y el izquierdo en el {c} una octava más abajo. La mano derecha sube mientras la izquierda baja, con los mismos números de dedo al mismo tiempo.",
+    "outward": "Hacia afuera: las dos manos tocan juntas los dedos 1, 2, 3, 4 y 5.",
+    "inward": "Y de vuelta hacia adentro, del 5 al 1, hasta que los pulgares vuelvan a sus teclas del principio.",
+    "inTime": "Hacia afuera y de vuelta, a tiempo con el metrónomo: el mismo dedo en las dos manos en cada clic."
+  }
+}

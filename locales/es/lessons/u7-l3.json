@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "gScale": "La {gScale} empieza en {g} y usa la misma digitación que la {cScale}, con un cambio: {fSharp}, una tecla negra, en lugar de {f}. El sostenido al principio del pentagrama, la armadura, lo indica para toda la pieza.",
+    "up": "La {gScale} hacia arriba. El dedo 4 toca la tecla negra.",
+    "down": "Y hacia abajo.",
+    "leftHand": "Ahora con la mano izquierda, empezando en el {g} debajo del {c} central, con la misma digitación que la {cScale} con la izquierda.",
+    "inTime": "Mano derecha, arriba y abajo a tiempo."
+  }
+}

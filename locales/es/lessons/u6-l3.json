@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "inversions": "Las notas de un acorde se pueden apilar en otro orden y sigue siendo el mismo acorde. Con {c} abajo ({c}, {e}, {g}), {cMajor} está en estado fundamental. Sube {c} arriba ({e}, {g}, {c}) para la primera inversión, y luego también {e} ({g}, {c}, {e}) para la segunda inversión.",
+    "climb": "Sube por las inversiones de {cMajor} y vuelve a bajar. Dedos: 1-3-5 en estado fundamental, 1-2-5 en la primera inversión y 1-3-5 en la segunda.",
+    "closeChords": "Las inversiones permiten cambiar de acorde con movimientos pequeños. Deja {cMajor} en estado fundamental, toca {fMajor} como {c}, {f}, {a} y {gMajor} como {b}, {d}, {g}: la mano apenas se mueve.",
+    "nearChords": "{cMajor}, {fMajor}, {gMajor} y {cMajor} con las formas cercanas. El pulgar se queda en {c}, salvo en {gMajor}, donde baja a {b}.",
+    "nearChordsInTime": "Ahora a tiempo, dos tiempos por acorde."
+  }
+}

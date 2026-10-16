@@ -300,6 +300,118 @@
       "start": 60,
       "duration": 4,
       "hand": "R"
+    },
+    {
+      "note": "C3",
+      "start": 0,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "G3",
+      "start": 4,
+      "duration": 4,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "C3",
+      "start": 8,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "C3",
+      "start": 12,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "C3",
+      "start": 16,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "G3",
+      "start": 20,
+      "duration": 4,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "C3",
+      "start": 24,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "C3",
+      "start": 28,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "G3",
+      "start": 32,
+      "duration": 4,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "G3",
+      "start": 36,
+      "duration": 4,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "C3",
+      "start": 40,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "C3",
+      "start": 44,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "C3",
+      "start": 48,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "G3",
+      "start": 52,
+      "duration": 4,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "C3",
+      "start": 56,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "C3",
+      "start": 60,
+      "duration": 4,
+      "hand": "L",
+      "finger": 5
     }
   ],
   "markings": ["moderato", "mf"]

@@ -8,7 +8,10 @@ export function ExplainStepView({ step, text }: { step: ExplainStep; text: strin
   const highlight = useMemo(
     () =>
       new Map<number, ExpectedKey>(
-        step.keys.map((key) => [key.pitch.midi, { hand: step.hand, finger: key.finger }]),
+        step.keys.map((key) => [
+          key.pitch.midi,
+          { hand: key.hand ?? step.hand, finger: key.finger },
+        ]),
       ),
     [step],
   );

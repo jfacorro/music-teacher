@@ -18,7 +18,7 @@
  */
 import { InputSource, type NoteEvent, NoteEventType } from '../input/types';
 import { summarizeDynamics } from './dynamics';
-import type { Pitch } from '../theory/pitch';
+import { MIDDLE_C, type Pitch } from '../theory/pitch';
 import { TempoMatcher, TempoResultKind } from './matching/tempoMatcher';
 import { resolvePlayed } from './micAliases';
 import { WaitMatcher, WaitResultKind } from './matching/waitMatcher';
@@ -154,6 +154,8 @@ export class PracticeSession {
   /** How hard each note was played, for notes played on a MIDI keyboard. */
   private velocities = new Map<ScoreNote, number>();
   private wrongBeats: number[] = [];
+  /** The hand each wrong key is put down to (see `handNear`). */
+  private wrongHands: Hand[] = [];
   private feedbackId = 0;
   /** Held microphone pitch → the expected pitch it was read as. */
   private readonly aliases = new Map<number, number>();
@@ -418,6 +420,7 @@ export class PracticeSession {
 
   private wrong(pitch: number, beat: number): void {
     this.wrongBeats.push(beat);
+    this.wrongHands.push(this.handNear(pitch, beat));
     this.mark(pitch, KeyMark.Wrong, {
       streak: 0,
       feedback: this.feedback(
@@ -426,6 +429,28 @@ export class PracticeSession {
           : { kind: FeedbackKind.Wrong, expected: this.expectedAt(beat) },
       ),
     });
+  }
+
+  /**
+   * The hand a wrong key most likely came from: the one playing the note closest to it among
+   * the notes around `beat` (the next ones in wait mode); split at middle C without notes.
+   */
+  private handNear(pitch: number, beat: number): Hand {
+    const around = this.practicedNotes.filter(
+      (note) => note.start <= beat + 1 && note.start + note.duration >= beat - 1,
+    );
+    const candidates = around.length > 0 ? around : this.practicedNotes;
+    let nearest: ScoreNote | undefined;
+    let distance = Infinity;
+    for (const note of candidates) {
+      // Pitch first; between equally close keys, the note nearer in time.
+      const d = Math.abs(note.pitch.midi - pitch) * 1000 + Math.abs(note.start - beat);
+      if (d < distance) {
+        nearest = note;
+        distance = d;
+      }
+    }
+    return nearest?.hand ?? (pitch >= MIDDLE_C ? Hand.Right : Hand.Left);
   }
 
   /** The notes the learner should be playing around `beat`. */
@@ -490,6 +515,7 @@ export class PracticeSession {
       this.wrongBeats,
       this.score.measures,
       this.mode === PracticeMode.Tempo ? this.windows() : undefined,
+      this.wrongHands,
     );
     summary.dynamics = summarizeDynamics(
       this.score.dynamics,
@@ -522,6 +548,7 @@ export class PracticeSession {
     this.outcomes = new Map();
     this.velocities = new Map();
     this.wrongBeats = [];
+    this.wrongHands = [];
   }
 
   private reset(): void {

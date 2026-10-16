@@ -53,5 +53,8 @@
   "hairpins": {
     "crescendo": "cada vez más fuerte",
     "diminuendo": "cada vez más suave"
+  },
+  "scales": {
+    "major": "escala de {root} mayor"
   }
 }

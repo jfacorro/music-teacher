@@ -121,6 +121,103 @@
           "skills": ["dynamics", "rh-position"]
         }
       ]
+    },
+    {
+      "id": "u5",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u5-l1",
+          "skills": ["hands-together"]
+        },
+        {
+          "id": "u5-l2",
+          "skills": ["hands-together"]
+        },
+        {
+          "id": "u5-l3",
+          "skills": ["hands-together"]
+        },
+        {
+          "id": "u5-l4",
+          "skills": ["hands-together", "steady-tempo"]
+        }
+      ]
+    },
+    {
+      "id": "u6",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u6-l1",
+          "skills": ["chords"]
+        },
+        {
+          "id": "u6-l2",
+          "skills": ["chords"]
+        },
+        {
+          "id": "u6-l3",
+          "skills": ["chords"]
+        },
+        {
+          "id": "u6-l4",
+          "skills": ["chords", "hands-together"]
+        },
+        {
+          "id": "u6-l5",
+          "skills": ["accompaniment", "lh-position"]
+        }
+      ]
+    },
+    {
+      "id": "u7",
+      "textVars": {
+        "c": "C4",
+        "g": "G4",
+        "f": "F4"
+      },
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u7-l1",
+          "titleVars": {
+            "c": "C4"
+          },
+          "skills": ["scales", "thumb-under"]
+        },
+        {
+          "id": "u7-l2",
+          "titleVars": {
+            "c": "C4"
+          },
+          "skills": ["scales", "thumb-under"]
+        },
+        {
+          "id": "u7-l3",
+          "titleVars": {
+            "g": "G4"
+          },
+          "skills": ["scales"]
+        },
+        {
+          "id": "u7-l4",
+          "titleVars": {
+            "f": "F4"
+          },
+          "skills": ["scales", "thumb-under"]
+        },
+        {
+          "id": "u7-l5",
+          "skills": ["scales", "hands-together"]
+        }
+      ]
     }
   ]
 }

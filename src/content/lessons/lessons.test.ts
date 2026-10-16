@@ -111,6 +111,37 @@ describe('parseLesson', () => {
     },
   };
 
+  it('names notes, chords and scales in the text, and keys of either hand', async () => {
+    const lesson = await parseLesson('x', {
+      steps: [
+        {
+          type: 'explain',
+          text: 'x',
+          textVars: {
+            c: 'C4',
+            cMajor: { chord: 'C4', quality: 'major' },
+            gScale: { scale: 'G4', quality: 'major' },
+          },
+          hand: 'R',
+          keys: [
+            { note: 'C3', finger: 5, hand: 'L' },
+            { note: 'C4', finger: 1 },
+          ],
+        },
+      ],
+    });
+    const step = lesson.steps[0]!;
+    expect(step.textVars).toMatchObject({
+      c: { midi: 60 },
+      cMajor: { chord: { midi: 60 }, quality: 'major' },
+      gScale: { scale: { midi: 67 }, quality: 'major' },
+    });
+    expect(step.type === StepType.Explain && step.keys.map((key) => key.hand)).toEqual([
+      'L',
+      undefined,
+    ]);
+  });
+
   it('parses every step type', async () => {
     const lesson = await parseLesson('x', {
       steps: [
@@ -213,6 +244,21 @@ describe('parseLesson', () => {
     ],
     ['a rhythm without a pattern', { type: 'rhythm', text: 'x', tempo: 60 }, 'pattern'],
     ['a backwards range', { type: 'find', text: 'x', notes: ['C4'], range: ['C5', 'C3'] }, 'range'],
+    [
+      'a chord of an unknown kind',
+      { type: 'explain', text: 'x', textVars: { x: { chord: 'C4', quality: 'happy' } } },
+      'textVars › x › quality',
+    ],
+    [
+      'a variable that is neither',
+      { type: 'explain', text: 'x', textVars: { x: { y: 1 } } },
+      'textVars › x',
+    ],
+    [
+      'a key for a third hand',
+      { type: 'explain', text: 'x', keys: [{ note: 'C4', hand: 'X' }] },
+      'keys › [0] › hand',
+    ],
   ])('rejects %s with its location', async (_, step, message) => {
     await expect(parseLesson('x', { steps: [step] })).rejects.toThrow(LessonError);
     await expect(parseLesson('x', { steps: [step] })).rejects.toThrow(message);

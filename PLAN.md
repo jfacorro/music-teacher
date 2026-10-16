@@ -624,12 +624,13 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Content: lesson u4-l6 "Loud and soft" (p then f, crescendo/diminuendo, Ode to Joy with mf, p, cresc. and f); new skill "dynamics"; Ode to Joy has dynamics.
 - Sustain pedal (CC64): a "Pedal" indicator on the practice screen and in free play, lit while the pedal is down (shown when a MIDI keyboard is connected).
 
-**3.4 Content: Units 5–7**
-- Hands together: parallel and contrary motion, melody + single bass notes, then melody + simple chords.
-- Chords: major/minor triads, inversions, I–IV–V–I, common accompaniment patterns (block, broken, Alberti).
-- Scales: C, G, F major with thumb-under fingering.
-- More songs combining both hands.
-- All new text translated; chord-quality and scale names added to `theory.json` and the glossary.
+**3.4 Content: Units 5–7** — ✔ done
+- Unit 5, hands together (4 lessons): same direction (parallel), mirror image (contrary motion), melody over bass notes, songs for both hands.
+- Unit 6, chords (5 lessons): major triads (C, F, G), minor triads (C minor, D/E/A minor), inversions and close chord shapes, I–IV–V–I in the left hand, accompaniment patterns (block, broken, Alberti bass, with a melody on top).
+- Unit 7, scales and fingering (5 lessons): C major right and left hand (thumb under / crossing over), G major (key signature, F♯), F major (B♭, its own right-hand fingering), C major with both hands; the opening of "Joy to the World" as a scale in a song.
+- Songs combining both hands: bass lines added to "Lightly Row", "Au clair de la lune" and "When the Saints" (lessons that play them with one hand are unchanged), and a new "Jingle Bells" with I, IV and V in the left hand.
+- Engine: lesson text variables can name a chord (`{ "chord": "C4", "quality": "major" }`) or a scale (`{ "scale": "G4", "quality": "major" }`) in the user's naming system; explain-step keys can belong to either hand (`"hand": "L"`); inline scores take a key signature (`"keyFifths"`); results show each hand's accuracy when both are played (a wrong key counts against the hand playing the nearest note at that moment); the practice keyboard spans the hands being practiced.
+- All new text in English and Spanish; scale names in `theory.json` (`scales`), new skills (hands together, chords, accompaniment, scales, thumb under), glossary terms.
 
 **3.5 Desktop packaging (optional)**
 - Electron wrapper: load the built app, grant MIDI/mic permissions automatically, store data in the app profile.
@@ -637,10 +638,10 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Windows installer via electron-builder.
 
 #### Phase 3 done when
-- [ ] Two-handed lessons grade both hands independently.
-- [ ] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note.
+- [x] Two-handed lessons grade both hands independently. (verified 2026-10-16 on the Casio: each hand's score includes its own misses and wrong keys)
+- [x] In mic mode, chord exercises can be played through (any note of a chord counts) and say that MIDI checks every note. (verified 2026-10-16 with the microphone, lesson u6-l1)
 - [x] A user-provided MIDI/MusicXML file can be imported and practiced. (verified 2026-10-15 on the Casio)
-- [ ] Chord names (e.g. C major / Do mayor / C-Dur) display correctly in every language and naming system.
+- [x] Chord names (e.g. C major / Do mayor / C-Dur) display correctly in every language and naming system. (`i18n/chordNames.test.ts`, and lesson texts checked in English and Spanish)
 - [ ] (Optional) App runs as a standalone Windows desktop app.
 
 ---

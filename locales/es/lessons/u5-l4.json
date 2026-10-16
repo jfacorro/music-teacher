@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "intro": "Dos canciones más con la melodía en la mano derecha y notas de bajo en la izquierda. Tócalas despacio primero: la música te espera.",
+    "lightlyRow": "«Hänschen klein»: la mano izquierda solo toca {c3} y {g3}, una por compás.",
+    "lightlyRowInTime": "Ahora a tiempo con el metrónomo.",
+    "saints": "«When the Saints Go Marching In»: la mano izquierda empieza sola en {c3} y pasa a {g3} solo en el último compás.",
+    "saintsInTime": "Ahora a tiempo con el metrónomo."
+  }
+}

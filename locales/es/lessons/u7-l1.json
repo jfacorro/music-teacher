@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "scale": "Una escala es una fila de notas que suben o bajan, una tecla tras otra. La {cScale} usa todas las teclas blancas de {c} al siguiente {c}: ocho notas para cinco dedos. El truco: después de {e}, el pulgar pasa por debajo de la mano para tocar {f}. Dedos 1 2 3, paso del pulgar, 1 2 3 4 5.",
+    "thumbUnder": "Primero la parte difícil: {c}, {d}, {e} y el pulgar por debajo hasta {f}. Al volver, el dedo medio cruza por encima del pulgar hasta {e}.",
+    "up": "La escala entera hacia arriba. Mantén la muñeca nivelada mientras pasa el pulgar.",
+    "down": "Y hacia abajo: 5 4 3 2 1, luego el 3 cruza por encima del pulgar, 2 1.",
+    "upDown": "Sube y baja a tiempo, una nota por clic.",
+    "joyToTheWorld": "Las escalas están en todas partes: el primer verso de «Al mundo paz» es la {cScale} bajando."
+  }
+}
