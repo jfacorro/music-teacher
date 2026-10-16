@@ -705,6 +705,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - [x] The home screen suggests a daily session that follows progress, including reviews of lessons due again and a weak spot to loop.
 - [x] A run can be played back and compared with the written music, with MIDI and with the microphone.
 - [ ] Sight-reading drills only use what has been taught, and are never the same twice.
+  - [ ] TODO (user): once Unit 3 is finished, play a few drills on the Casio (MIDI): they should read well from the sheet, sound like little tunes and fit under the hand; try "New drill", "Try again" and each open level.
 - [ ] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
 - [ ] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
 - [ ] All new text is in English and Spanish.
