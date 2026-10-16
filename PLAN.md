@@ -686,7 +686,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Storage: results by level (`drill:<level>`, with the practice log); the level chosen and the recent drills in the settings table (key `sightReading`). The database stays at version 5. The skill's mastery is the average accuracy of the last 10 drills. The Today card suggests a drill at the highest level open when none was played for 2 days.
 - Built as: `content/sightReading.ts` (levels and the generator; pure, tested), `lib/random.ts` (seeded random numbers), `storage/sightReading.ts`, `ui/screens/sightReading/`.
 
-**4.4 Ear training**
+**4.4 Ear training** — ✔ done (verified 2026-10-17 on the Casio, with MIDI and with the microphone)
 - Exercises that play something and ask for it back on the keyboard: a single note (after hearing middle C as a reference), an interval above a given note, a short melody (3–5 notes), major or minor chord (answered by playing it or by choosing).
 - Levels follow the curriculum; the answer is checked like any played note, with MIDI or the microphone (the microphone stops listening while the app plays, so it doesn't hear itself).
 - Results feed a new "ear training" skill.
@@ -714,7 +714,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - [x] A run can be played back and compared with the written music, with MIDI and with the microphone.
 - [ ] Sight-reading drills only use what has been taught, and are never the same twice.
   - [ ] TODO (user): once Unit 3 is finished, play a few drills on the Casio (MIDI): they should read well from the sheet, sound like little tunes and fit under the hand; try "New drill", "Try again" and each open level.
-- [ ] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
+- [x] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
 - [ ] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
 - [ ] All new text is in English and Spanish.
 
