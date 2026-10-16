@@ -27,6 +27,10 @@
     "u7": {
       "title": "Escalas y digitación",
       "description": "Las escalas de {c} mayor, {g} mayor y {f} mayor, con el paso del pulgar."
+    },
+    "u8": {
+      "title": "Sostenidos, bemoles y becuadros",
+      "description": "Los dos nombres de las teclas negras, las alteraciones en la partitura, el becuadro, {a} menor y las notas vecinas."
     }
   },
   "lessons": {
@@ -64,7 +68,12 @@
     "u7-l2": "La escala de {c} mayor, mano izquierda",
     "u7-l3": "La escala de {g} mayor",
     "u7-l4": "La escala de {f} mayor",
-    "u7-l5": "Escalas a dos manos"
+    "u7-l5": "Escalas a dos manos",
+    "u8-l1": "Sostenidos y bemoles",
+    "u8-l2": "Alteraciones en la partitura",
+    "u8-l3": "El becuadro",
+    "u8-l4": "{a} menor",
+    "u8-l5": "Notas vecinas"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -84,6 +93,8 @@
     "accompaniment": "Acompañamiento",
     "scales": "Escalas",
     "thumb-under": "Paso del pulgar",
+    "accidentals": "Alteraciones",
+    "minor-keys": "Tonalidades menores",
     "sight-reading": "Lectura a primera vista",
     "ear-training": "Oído musical"
   }

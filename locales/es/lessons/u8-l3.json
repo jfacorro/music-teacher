@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "natural": "Una alteración dura hasta el final del compás: cada {f} que sigue a {fSharp} en ese compás también es sostenido, sin otro signo. El becuadro (♮) la anula: vuelta a la tecla blanca, {f}.",
+    "naturalTune": "Léela en el pentagrama: primero {fSharp}, luego un becuadro devuelve {f} en el mismo compás.",
+    "naturalInTime": "Ahora a tempo con el metrónomo."
+  }
+}

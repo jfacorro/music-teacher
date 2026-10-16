@@ -1,0 +1,384 @@
+{
+  "tempo": 66,
+  "timeSignature": [3, 4],
+  "markings": ["andante", "pp"],
+  "notes": [
+    {
+      "note": "E5",
+      "start": 2,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 5
+    },
+    {
+      "note": "D#5",
+      "start": 2.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "E5",
+      "start": 3,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 5
+    },
+    {
+      "note": "D#5",
+      "start": 3.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "E5",
+      "start": 4,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 5
+    },
+    {
+      "note": "B4",
+      "start": 4.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 2
+    },
+    {
+      "note": "D5",
+      "start": 5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "C5",
+      "start": 5.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 3
+    },
+    {
+      "note": "A2",
+      "start": 6,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "A4",
+      "start": 6,
+      "duration": 1,
+      "hand": "R",
+      "finger": 1
+    },
+    {
+      "note": "E3",
+      "start": 6.5,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 2
+    },
+    {
+      "note": "A3",
+      "start": 7,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "C4",
+      "start": 7.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 1
+    },
+    {
+      "note": "E4",
+      "start": 8,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 2
+    },
+    {
+      "note": "A4",
+      "start": 8.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 3
+    },
+    {
+      "note": "E3",
+      "start": 9,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "B4",
+      "start": 9,
+      "duration": 1,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "G#3",
+      "start": 9.5,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 3
+    },
+    {
+      "note": "B3",
+      "start": 10,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "E4",
+      "start": 10.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 1
+    },
+    {
+      "note": "G#4",
+      "start": 11,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 3
+    },
+    {
+      "note": "B4",
+      "start": 11.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "A2",
+      "start": 12,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "C5",
+      "start": 12,
+      "duration": 1,
+      "hand": "R",
+      "finger": 5
+    },
+    {
+      "note": "E3",
+      "start": 12.5,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 2
+    },
+    {
+      "note": "A3",
+      "start": 13,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "E4",
+      "start": 13.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 1
+    },
+    {
+      "note": "E5",
+      "start": 14,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 5
+    },
+    {
+      "note": "D#5",
+      "start": 14.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "E5",
+      "start": 15,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 5
+    },
+    {
+      "note": "D#5",
+      "start": 15.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "E5",
+      "start": 16,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 5
+    },
+    {
+      "note": "B4",
+      "start": 16.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 2
+    },
+    {
+      "note": "D5",
+      "start": 17,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "C5",
+      "start": 17.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 3
+    },
+    {
+      "note": "A2",
+      "start": 18,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "A4",
+      "start": 18,
+      "duration": 1,
+      "hand": "R",
+      "finger": 1
+    },
+    {
+      "note": "E3",
+      "start": 18.5,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 2
+    },
+    {
+      "note": "A3",
+      "start": 19,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "C4",
+      "start": 19.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 1
+    },
+    {
+      "note": "E4",
+      "start": 20,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 2
+    },
+    {
+      "note": "A4",
+      "start": 20.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 3
+    },
+    {
+      "note": "E3",
+      "start": 21,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "B4",
+      "start": 21,
+      "duration": 1,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "G#3",
+      "start": 21.5,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 3
+    },
+    {
+      "note": "B3",
+      "start": 22,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 1
+    },
+    {
+      "note": "E4",
+      "start": 22.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 1
+    },
+    {
+      "note": "C5",
+      "start": 23,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 4
+    },
+    {
+      "note": "B4",
+      "start": 23.5,
+      "duration": 0.5,
+      "hand": "R",
+      "finger": 3
+    },
+    {
+      "note": "A2",
+      "start": 24,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 5
+    },
+    {
+      "note": "A4",
+      "start": 24,
+      "duration": 3,
+      "hand": "R",
+      "finger": 2
+    },
+    {
+      "note": "E3",
+      "start": 24.5,
+      "duration": 0.5,
+      "hand": "L",
+      "finger": 2
+    },
+    {
+      "note": "A3",
+      "start": 25,
+      "duration": 2,
+      "hand": "L",
+      "finger": 1
+    }
+  ],
+  "dynamics": [
+    {
+      "beat": 0,
+      "mark": "pp"
+    }
+  ]
+}

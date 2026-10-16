@@ -456,6 +456,30 @@
       "pass": {
         "minStars": 1
       }
+    },
+    {
+      "type": "exercise",
+      "text": "amazingGrace",
+      "textVars": {
+        "g": "G4"
+      },
+      "song": "amazing-grace",
+      "mode": "wait",
+      "hands": "both",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "amazingGraceInTime",
+      "song": "amazing-grace",
+      "mode": "tempo",
+      "hands": "both",
+      "metronome": true,
+      "pass": {
+        "minStars": 1
+      }
     }
   ]
 }

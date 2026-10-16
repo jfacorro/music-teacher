@@ -74,13 +74,15 @@ export const QUESTIONS: Readonly<Record<EarLevel, number>> = {
 /**
  * The keys notes, intervals and melodies use, in the octave from middle C, growing with the
  * course: the right hand's first position (Unit 1), up to the C above (Unit 3, reading the
- * treble clef), E♭ (Unit 6, with C minor), F♯ and B♭ (Unit 7, with G and F major).
+ * treble clef), E♭ (Unit 6, with C minor), F♯ and B♭ (Unit 7, with G and F major), and
+ * the rest of the black keys (Unit 8, sharps and flats).
  */
 const KEYS_FROM: readonly (readonly [string, readonly number[]])[] = [
   ['u1', [60, 62, 64, 65, 67]],
   ['u3', [69, 71, 72]],
   ['u6', [63]],
   ['u7', [66, 70]],
+  ['u8', [61, 68]],
 ];
 
 /** Scales melodies move in: C major, and G and F major once their scales are taught. */

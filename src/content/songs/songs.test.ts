@@ -46,3 +46,63 @@ describe('song levels', () => {
     }
   });
 });
+
+describe('songs use what their unit has taught', () => {
+  const lessonFiles = import.meta.glob<unknown>('../lessons/*.json', {
+    eager: true,
+    import: 'default',
+  });
+
+  /** Black keys (pitch classes), time signatures and key signatures, up to a unit. */
+  async function taughtUpTo(unitId: string) {
+    const { UNITS } = await import('../courses');
+    const { pitchClass, parseNote, isBlackKey } = await import('../../theory/pitch');
+    const last = UNITS.findIndex((unit) => unit.id === unitId);
+    const lessons = new Set(
+      UNITS.slice(0, last + 1).flatMap((unit) => unit.lessons.map((lesson) => lesson.id)),
+    );
+    const black = new Set<number>();
+    const times = new Set<string>(['4/4']);
+    const keys = new Set<number>([0]);
+    const addNote = (note: unknown) => {
+      if (typeof note !== 'string') return;
+      try {
+        const midi = parseNote(note).midi;
+        if (isBlackKey(midi)) black.add(pitchClass(midi));
+      } catch {
+        // Not a note (e.g. a translation key).
+      }
+    };
+    const walk = (value: unknown): void => {
+      if (Array.isArray(value)) {
+        value.forEach(walk);
+        return;
+      }
+      if (!value || typeof value !== 'object') return;
+      const data = value as Record<string, unknown>;
+      addNote(data.note);
+      if (Array.isArray(data.notes)) data.notes.forEach(addNote);
+      if (Array.isArray(data.timeSignature)) times.add(data.timeSignature.join('/'));
+      if (typeof data.keyFifths === 'number') keys.add(data.keyFifths);
+      Object.values(data).forEach(walk);
+    };
+    for (const [path, lesson] of Object.entries(lessonFiles)) {
+      if (lessons.has(path.slice('../lessons/'.length, -'.json'.length))) walk(lesson);
+    }
+    return { black, times, keys, pitchClass, isBlackKey };
+  }
+
+  it.each(SONG_IDS)('%s: black keys, time and key signature', async (id) => {
+    const score = await loadSong(id);
+    const { black, times, keys, pitchClass, isBlackKey } = await taughtUpTo(SONG_UNITS[id]);
+    for (const note of score.notes) {
+      if (isBlackKey(note.pitch.midi)) {
+        expect(black, `${note.pitch.step}${note.pitch.alter} at ${note.start}`).toContain(
+          pitchClass(note.pitch.midi),
+        );
+      }
+    }
+    expect(times).toContain(score.timeSignature.join('/'));
+    expect(keys).toContain(score.keyFifths ?? 0);
+  });
+});

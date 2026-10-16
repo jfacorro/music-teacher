@@ -3,6 +3,8 @@
     "together": "Last step: the {cScale} with both hands, an octave apart. The thumbs pass under at different moments in each hand, so go slowly and watch your fingers.",
     "up": "Both hands up together.",
     "down": "Both hands down together.",
-    "inTime": "Up and down in time, slowly."
+    "inTime": "Up and down in time, slowly.",
+    "minuet": "A real dance to end the unit: the “Minuet in {g}”, from the music book of Anna Magdalena Bach. Each {f} is {fSharp}, as the key signature says, and the thumbs pass under in both hands.",
+    "minuetInTime": "And in time: a minuet is a dance in 3/4, one step per beat."
   }
 }

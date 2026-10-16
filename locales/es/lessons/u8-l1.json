@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "halfStep": "Un semitono es el movimiento más pequeño en el piano: de una tecla a la siguiente, negra o blanca. De {c} a {cSharp} hay un semitono, y también de {e} a {f}, sin tecla negra entre ellas.",
+    "twoNames": "Un sostenido (♯) sube una nota un semitono; un bemol (♭) la baja. Por eso cada tecla negra tiene dos nombres: la que está entre {d} y {e} es {dSharp} y también {eFlat}.",
+    "findSharps": "Busca los cinco sostenidos de esta octava: {cSharp}, {dSharp}, {fSharp}, {gSharp} y {aSharp}.",
+    "findFlats": "Las mismas teclas con su nombre en bemol: {dFlat}, {eFlat}, {gFlat}, {aFlat} y {bFlat}.",
+    "chromatic": "Sube por semitonos de {c} a {g}: el pulgar en las teclas blancas, el dedo 3 en las negras y el dedo 2 en {f}."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "neighbors": "A neighbor note steps a half step away and straight back: {e}, {dSharp}, {e}. Played lightly, it makes a little shiver around the main note. Fingers 5 and 4 rock between the two keys.",
+    "slowly": "Slowly, one note per beat: the opening of “Für Elise”.",
+    "flowing": "Now flowing, two notes per beat, with the metronome.",
+    "furEliseRight": "“Für Elise” by Beethoven, the opening, with the right hand: the shiver, then notes climbing up from below.",
+    "furElise": "Both hands: the left hand plays its three notes while the right hand waits, then the right hand answers.",
+    "furEliseInTime": "And in time with the metronome. Keep it soft."
+  }
+}

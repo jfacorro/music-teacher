@@ -538,11 +538,12 @@
   "songPractice": {
     "title": "Song practice",
     "songs": "Songs",
-    "songsIntro": "Practice whole songs any time, in wait or play-along mode.",
+    "songsIntro": "Practice whole songs any time, in wait or play-along mode. Each one is listed with the unit that teaches what it needs.",
     "mySongs": "My songs",
     "mySongsIntro": "Songs you imported. They’re kept in this browser, on this computer.",
     "mySongsEmpty": "Import a MIDI or MusicXML file to practice your own music.",
-    "importSong": "Import a song"
+    "importSong": "Import a song",
+    "level": "Unit {number}: {unit}"
   },
   "today": {
     "title": "Today",

@@ -20,7 +20,12 @@ export function ExplainStepView({ step, text }: { step: ExplainStep; text: strin
     <div className="lesson__step">
       <p className="lesson__text">{text}</p>
       {step.staff && (
-        <StaffPicture clef={step.staff.clef} notes={step.staff.notes} names={step.staff.names} />
+        <StaffPicture
+          clef={step.staff.clef}
+          notes={step.staff.notes}
+          names={step.staff.names}
+          bar={step.staff.bar}
+        />
       )}
       <StepKeyboard range={step.range} highlight={highlight} />
     </div>

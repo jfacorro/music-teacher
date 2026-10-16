@@ -56,6 +56,11 @@ export interface StaffNotes {
   notes: Pitch[];
   /** Write each note's name under it. */
   names: boolean;
+  /**
+   * All the notes in one bar (as quarter notes), so an accidental carries on to the notes
+   * after it as in music; otherwise each note stands alone.
+   */
+  bar: boolean;
 }
 
 export interface ExplainStep extends StepBase {
@@ -368,6 +373,7 @@ function staffNotes(input: unknown, location: string): StaffNotes {
     clef: data.clef,
     notes: data.notes.map((note, i) => pitch(note, at(location, `notes[${i}]`))),
     names: data.names === true,
+    bar: data.bar === true,
   };
 }
 

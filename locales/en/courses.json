@@ -27,6 +27,10 @@
     "u7": {
       "title": "Scales and fingering",
       "description": "The {c} major, {g} major and {f} major scales, with the thumb passing under."
+    },
+    "u8": {
+      "title": "Sharps, flats and naturals",
+      "description": "The black keys’ two names, accidentals in the music, the natural sign, {a} minor and neighbor notes."
     }
   },
   "lessons": {
@@ -64,7 +68,12 @@
     "u7-l2": "The {c} major scale, left hand",
     "u7-l3": "The {g} major scale",
     "u7-l4": "The {f} major scale",
-    "u7-l5": "Scales with both hands"
+    "u7-l5": "Scales with both hands",
+    "u8-l1": "Sharps and flats",
+    "u8-l2": "Accidentals in the music",
+    "u8-l3": "The natural sign",
+    "u8-l4": "{a} minor",
+    "u8-l5": "Neighbor notes"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -84,6 +93,8 @@
     "accompaniment": "Accompaniment",
     "scales": "Scales",
     "thumb-under": "Thumb under",
+    "accidentals": "Accidentals",
+    "minor-keys": "Minor keys",
     "sight-reading": "Sight-reading",
     "ear-training": "Ear training"
   }

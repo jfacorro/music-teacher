@@ -119,6 +119,7 @@ describe('ear training levels', () => {
     expect(rangeUpTo('u3').keys).toEqual([60, 62, 64, 65, 67, 69, 71, 72]);
     expect(rangeUpTo('u6').keys).toEqual([60, 62, 63, 64, 65, 67, 69, 71, 72]);
     expect(EVERYTHING.keys).toEqual([60, 62, 63, 64, 65, 66, 67, 69, 70, 71, 72]);
+    expect(rangeUpTo('u8').keys).toHaveLength(13);
     expect(rangeUpTo('u1').scales).toEqual([[60, 62, 64, 65, 67]]);
     expect(EVERYTHING.scales).toHaveLength(3);
   });

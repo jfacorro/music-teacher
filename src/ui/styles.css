@@ -2060,3 +2060,10 @@ button.bars__bar:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* Song practice: the songs of each unit, under its name. */
+.songs__level h3 {
+  margin: 1rem 0 0.25rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}

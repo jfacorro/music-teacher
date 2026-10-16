@@ -192,7 +192,7 @@ describe('parseLesson', () => {
       keys: [{ pitch: { midi: 60 }, finger: 1 }],
       range: [48, 72],
       hand: 'R',
-      staff: { clef: 'treble', notes: [{ midi: 60 }, { midi: 67 }], names: true },
+      staff: { clef: 'treble', notes: [{ midi: 60 }, { midi: 67 }], names: true, bar: false },
     });
     expect(lesson.steps[1]).not.toHaveProperty('staff');
     expect(lesson.steps[2]).toMatchObject({

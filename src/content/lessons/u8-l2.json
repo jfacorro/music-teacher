@@ -1,0 +1,73 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "written",
+      "staff": {
+        "clef": "treble",
+        "notes": ["F#4", "C#5", "Bb4", "Eb5"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "F#4"
+        },
+        {
+          "note": "C#5"
+        },
+        {
+          "note": "Bb4"
+        },
+        {
+          "note": "Eb5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizTreble",
+      "notes": ["C#4", "D#4", "F#4", "G#4", "Bb4", "C#5", "Eb5", "F#5"],
+      "count": 10,
+      "clef": "treble",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "explain",
+      "text": "bass",
+      "staff": {
+        "clef": "bass",
+        "notes": ["F#3", "Bb3", "C#3", "Eb3"],
+        "names": true
+      },
+      "keys": [
+        {
+          "note": "C#3"
+        },
+        {
+          "note": "Eb3"
+        },
+        {
+          "note": "F#3"
+        },
+        {
+          "note": "Bb3"
+        }
+      ],
+      "hand": "L",
+      "range": ["C3", "C5"]
+    },
+    {
+      "type": "quiz",
+      "text": "quizBass",
+      "notes": ["C#3", "D#3", "F#3", "G#3", "Bb2", "Eb3", "Ab3", "Bb3"],
+      "count": 8,
+      "clef": "bass",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

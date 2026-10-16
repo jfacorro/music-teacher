@@ -13,6 +13,12 @@ const loaders = {
   'hot-cross-buns': () => import('./hot-cross-buns.json'),
   'mary-had-a-little-lamb': () => import('./mary-had-a-little-lamb.json'),
   'jingle-bells': () => import('./jingle-bells.json'),
+  'twinkle-twinkle': () => import('./twinkle-twinkle.json'),
+  'brahms-lullaby': () => import('./brahms-lullaby.json'),
+  'amazing-grace': () => import('./amazing-grace.json'),
+  'minuet-in-g': () => import('./minuet-in-g.json'),
+  greensleeves: () => import('./greensleeves.json'),
+  'fur-elise': () => import('./fur-elise.json'),
 } satisfies Record<string, () => Promise<{ default: unknown }>>;
 
 export type SongId = keyof typeof loaders;
@@ -31,6 +37,12 @@ export const SONG_UNITS: Readonly<Record<SongId, string>> = {
   'hot-cross-buns': 'u4',
   'mary-had-a-little-lamb': 'u4',
   'jingle-bells': 'u6',
+  'twinkle-twinkle': 'u3',
+  'brahms-lullaby': 'u5',
+  'amazing-grace': 'u7',
+  'minuet-in-g': 'u7',
+  greensleeves: 'u8',
+  'fur-elise': 'u8',
 };
 
 export function isSongId(id: string | undefined): id is SongId {

@@ -3,6 +3,8 @@
     "together": "Último paso: la {cScale} con las dos manos, a una octava. Los pulgares pasan por debajo en momentos distintos en cada mano, así que ve despacio y fíjate en los dedos.",
     "up": "Las dos manos hacia arriba juntas.",
     "down": "Las dos manos hacia abajo juntas.",
-    "inTime": "Arriba y abajo a tiempo, despacio."
+    "inTime": "Arriba y abajo a tiempo, despacio.",
+    "minuet": "Una danza de verdad para terminar la unidad: el «Minueto en {g}», del cuaderno de música de Anna Magdalena Bach. Cada {f} es {fSharp}, como dice la armadura, y los pulgares pasan por debajo en las dos manos.",
+    "minuetInTime": "Y a tempo: el minueto es una danza en 3/4, un paso por pulso."
   }
 }
