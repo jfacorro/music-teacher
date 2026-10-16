@@ -697,7 +697,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - All titles and texts translated; new terms in the glossary.
 
 #### Phase 4 done when
-- [ ] The home screen suggests a daily session that follows progress, including reviews of lessons due again and a weak spot to loop.
+- [x] The home screen suggests a daily session that follows progress, including reviews of lessons due again and a weak spot to loop.
 - [x] A run can be played back and compared with the written music, with MIDI and with the microphone.
 - [ ] Sight-reading drills only use what has been taught, and are never the same twice.
 - [ ] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
