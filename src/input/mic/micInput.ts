@@ -71,6 +71,8 @@ interface Capture {
 
 let capture: Capture | null = null;
 let calibratedDelayMs = 0;
+/** Notes starting before this (performance.now() ms) aren't passed on: the app was playing. */
+let ignoredUntil = 0;
 const held = new HeldNotes(InputSource.Mic);
 const levelListeners = new Set<(levelDb: number) => void>();
 type AudioListener = (samples: Float32Array, time: number, sampleRate: number) => void;
@@ -83,6 +85,15 @@ export function setMicGate(gateDb: number): void {
 
 export function setMicDelay(delayMs: number): void {
   calibratedDelayMs = delayMs;
+}
+
+/**
+ * Stops passing on notes that start before `time` (performance.now() ms): while the app plays
+ * something for the learner to hear (e.g. ear training), the microphone would take its sound
+ * for the learner's playing.
+ */
+export function ignoreMicUntil(time: number): void {
+  ignoredUntil = Math.max(ignoredUntil, time);
 }
 
 /**
@@ -219,8 +230,8 @@ function handleHop(current: Capture, samples: Float32Array, frame: number): void
 
   for (const event of detector.process(samples, time)) {
     const at = toEventTime(event.time);
-    if (event.type === NoteEventType.On) held.on(event.midi, event.velocity, at);
-    else held.off(event.midi, at);
+    if (event.type === NoteEventType.Off) held.off(event.midi, at);
+    else if (at >= ignoredUntil) held.on(event.midi, event.velocity, at);
   }
 
   for (const listener of levelListeners) listener(detector.levelDb);

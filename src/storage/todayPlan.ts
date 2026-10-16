@@ -8,6 +8,7 @@ import { SKILLS, UNITS } from '../content/courses';
 import { skillProgress } from '../content/skills';
 import { SONG_IDS, SONG_UNITS } from '../content/songs';
 import { type Suggestion, suggestPractice, targetKey } from '../content/suggestions';
+import { openEarLevels } from '../content/earTraining';
 import { openDrillLevels } from '../content/sightReading';
 import { lessonStates } from '../content/unlock';
 import { dayOf, db, type ResultRow } from './db';
@@ -74,6 +75,7 @@ function suggestNow(now: number, exclude?: ReadonlySet<string>): Suggestion[] {
       exerciseAccuracies(log),
     ),
     drillLevels: openDrillLevels(UNITS, states),
+    earLevels: openEarLevels(UNITS, states),
     now,
     exclude,
   });

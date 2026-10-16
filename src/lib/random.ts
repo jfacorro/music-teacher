@@ -45,3 +45,28 @@ export function shuffled<T>(random: Random, items: readonly T[]): T[] {
   }
   return result;
 }
+
+/**
+ * `count` items dealt from `items` like cards from a deck that's reshuffled when empty: each
+ * item as evenly as possible, never the same one twice in a row (when there's a choice).
+ */
+export function dealEvenly<T>(
+  random: Random,
+  items: readonly T[],
+  count: number,
+  same: (a: T, b: T) => boolean = Object.is,
+): T[] {
+  const dealt: T[] = [];
+  let deck: T[] = [];
+  while (dealt.length < count && items.length > 0) {
+    if (deck.length === 0) deck = [...items];
+    const previous = dealt.at(-1);
+    const choices = deck.filter(
+      (item) => deck.length === 1 || previous === undefined || !same(item, previous),
+    );
+    const item = pick(random, choices.length > 0 ? choices : deck);
+    deck.splice(deck.indexOf(item), 1);
+    dealt.push(item);
+  }
+  return dealt;
+}

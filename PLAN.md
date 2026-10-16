@@ -690,6 +690,12 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Exercises that play something and ask for it back on the keyboard: a single note (after hearing middle C as a reference), an interval above a given note, a short melody (3–5 notes), major or minor chord (answered by playing it or by choosing).
 - Levels follow the curriculum; the answer is checked like any played note, with MIDI or the microphone (the microphone stops listening while the app plays, so it doesn't hear itself).
 - Results feed a new "ear training" skill.
+- Levels, each opening when the unit that teaches its keys is finished: single notes after middle C, and two notes in a row from the lit one (Unit 1, in the right hand's first position); short melodies of 3 to 5 notes, growing over an exercise, from the lit first note (Unit 2); major or minor chords on a lit root, C to A plus C minor (Unit 6). A test checks every level against the keys the lessons up to its unit use.
+- An exercise is 10 questions (6 melodies), each played once by itself and again on "Hear it again"; keys wait while it plays. Wrong keys say which note they were; after two misses the answer lights up. A right answer names what was heard ("C up to E, a major third", "D minor") and the next question plays. Scored like the note quiz: questions right without a miss. Chords can be played (any voicing, once three notes are down) or chosen; with the microphone, which hears one note at a time, they're chosen.
+- The microphone drops notes that start while the app is playing a question, until its sound has died away (`ignoreMicUntil`).
+- Storage: results by level (`ear:<level>`, with the practice log); the level chosen last in the settings table (key `earTraining`). The skill's mastery is the average accuracy of the last 10 exercises. The Today card suggests ear training at the highest level open when none was done for 2 days.
+- To fit the new item on one line, Settings became a gear at the end of the top bar.
+- Built as: `content/earTraining.ts` (levels, questions, answers; pure, tested), `storage/earTraining.ts`, `ui/screens/earTraining/`.
 
 **4.5 Appearance and comfort**
 - Theme: light, dark, or follow the system (now it always follows the system).

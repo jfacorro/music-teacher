@@ -115,7 +115,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 1.5rem;
+  gap: 0.5rem 1rem;
   padding: 0.75rem 1.5rem;
   background: var(--surface);
   border-block-end: 1px solid var(--border);
@@ -154,6 +154,23 @@ h3 {
   color: var(--text);
   background: var(--bg);
   font-weight: 600;
+}
+
+.app-settings {
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 999px;
+  font-size: 1.15rem;
+  text-decoration: none;
+  opacity: 0.75;
+}
+
+.app-settings:hover,
+.app-settings.active {
+  opacity: 1;
+  background: var(--bg);
 }
 
 .app-main {
@@ -2003,4 +2020,14 @@ button.bars__bar:focus-visible {
 .playback__time {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+}
+
+/* Ear training: hear the question again, or choose major or minor. */
+.ear__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-block: 0.5rem 0.75rem;
 }

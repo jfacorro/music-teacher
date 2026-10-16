@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { newSeed, pick, pickWeighted, seededRandom, shuffled } from './random';
+import { dealEvenly, newSeed, pick, pickWeighted, seededRandom, shuffled } from './random';
 
 describe('seededRandom', () => {
   it('gives the same numbers for the same seed, in [0, 1)', () => {
@@ -36,5 +36,18 @@ describe('picking', () => {
   it('makes seeds that fit in 32 bits', () => {
     expect(newSeed(() => 0.999999999)).toBeLessThan(2 ** 32);
     expect(newSeed(() => 0)).toBe(0);
+  });
+});
+
+describe('dealEvenly', () => {
+  it('deals each item as evenly as possible, never the same twice in a row', () => {
+    const random = seededRandom(3);
+    const dealt = dealEvenly(random, ['a', 'b', 'c'], 10);
+    expect(dealt).toHaveLength(10);
+    for (const item of ['a', 'b', 'c']) {
+      const count = dealt.filter((d) => d === item).length;
+      expect(count === 3 || count === 4).toBe(true);
+    }
+    dealt.slice(1).forEach((item, i) => expect(item).not.toBe(dealt[i]));
   });
 });

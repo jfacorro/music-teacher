@@ -11,6 +11,7 @@ import { PracticeScreen } from './ui/screens/practice/PracticeScreen';
 import { ProgressScreen } from './ui/screens/ProgressScreen';
 import { SettingsScreen } from './ui/screens/settings/SettingsScreen';
 import { SightReadingScreen } from './ui/screens/sightReading/SightReadingScreen';
+import { EarTrainingScreen } from './ui/screens/earTraining/EarTrainingScreen';
 import { SongsScreen } from './ui/screens/SongsScreen';
 
 const router = createBrowserRouter([
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: 'learn', element: <HomeScreen /> },
       { path: 'songs', element: <SongsScreen /> },
       { path: 'sight-reading', element: <SightReadingScreen /> },
+      { path: 'ear-training', element: <EarTrainingScreen /> },
       { path: 'free-play', element: <FreePlayScreen /> },
       { path: 'practice/:songId', element: <PracticeScreen /> },
       { path: 'practice/my/:songId', element: <MySongPracticeScreen /> },

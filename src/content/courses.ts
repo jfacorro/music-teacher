@@ -30,12 +30,13 @@ export const SKILLS = [
   'scales',
   'thumb-under',
   'sight-reading',
+  'ear-training',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];
 
 /** Skills practiced by exercises of their own rather than lessons (e.g. sight-reading drills). */
-export const EXERCISE_SKILLS: readonly Skill[] = ['sight-reading'];
+export const EXERCISE_SKILLS: readonly Skill[] = ['sight-reading', 'ear-training'];
 
 export interface CourseLesson {
   id: string;

@@ -10,6 +10,8 @@ import { useContentText } from '../../i18n/useContentText';
 import { isValueOf } from '../../lib/values';
 import { DrillLevel } from '../../content/sightReading';
 import { useDrillLevelName } from './sightReading/useDrillLevelName';
+import { EarLevel } from '../../content/earTraining';
+import { useEarLevelName } from './earTraining/useEarLevelName';
 import {
   exerciseAccuracies,
   longestStreak,
@@ -50,6 +52,7 @@ export function ProgressScreen() {
     exerciseAccuracies(log),
   );
   const levelName = useDrillLevelName();
+  const earLevelName = useEarLevelName();
 
   const time = (ms: number) =>
     ms > 0 && ms < 60_000
@@ -64,6 +67,11 @@ export function ProgressScreen() {
       return isValueOf(DrillLevel, id)
         ? t('sightReading.logTitle', { level: levelName(id) })
         : t('sightReading.title');
+    }
+    if (kind === ResultKind.Ear) {
+      return isValueOf(EarLevel, id)
+        ? t('earTraining.logTitle', { level: earLevelName(id) })
+        : t('earTraining.title');
     }
     if (kind === ResultKind.MySong) {
       return mySongs.find((song) => String(song.id) === id)?.title ?? t('progress.deletedSong');
@@ -124,7 +132,7 @@ export function ProgressScreen() {
               <span className="muted skill__lessons">
                 {skill.lessons > 0
                   ? t('progress.skills.lessons', { played: skill.played, total: skill.lessons })
-                  : t('progress.skills.drills', { count: skill.played })}
+                  : t('progress.skills.exercises', { count: skill.played })}
               </span>
             </li>
           ))}
