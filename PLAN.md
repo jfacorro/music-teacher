@@ -667,7 +667,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - Storage: each result keeps its review schedule (`reviewDays`, `reviewDue`; results saved before get one from their best stars) and, for songs, the weak bars of its latest run; today's plan is saved in the settings table (key `today`). No new tables, so the database stays at version 4; all of it is in backups.
 - Built as: `content/review.ts` (the schedule), `content/suggestions.ts` (what to suggest; pure, tested), `storage/todayPlan.ts` (the day's plan; an item is done once played since it was suggested — a finished run, or three times through a weak spot's bars), `ui/screens/TodayCard.tsx`. Songs know their level (`SONG_UNITS`: the unit whose lessons first use them, kept in step by a test). A song opens with bars repeating from its address (`/practice/<song>?bars=5-6`).
 
-**4.2 Record and play back**
+**4.2 Record and play back** — ✔ done (verified 2026-10-16 on the Casio: Listen and Compare with MIDI and with the microphone)
 - Every practice run is recorded (the notes played: time, key, velocity, input).
 - After a run: **Listen** plays it back with the app's piano, in time with the falling notes or the sheet music cursor; **Compare** draws the played notes over the written ones, so rushing, dragging, wrong keys and (with MIDI) uneven dynamics show at a glance.
 - The latest recording of each lesson and song is kept (and exported with the backup); older ones are dropped.
@@ -698,7 +698,7 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 
 #### Phase 4 done when
 - [ ] The home screen suggests a daily session that follows progress, including reviews of lessons due again and a weak spot to loop.
-- [ ] A run can be played back and compared with the written music, with MIDI and with the microphone.
+- [x] A run can be played back and compared with the written music, with MIDI and with the microphone.
 - [ ] Sight-reading drills only use what has been taught, and are never the same twice.
 - [ ] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
 - [ ] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
