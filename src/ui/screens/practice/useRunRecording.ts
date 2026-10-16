@@ -38,6 +38,8 @@ export interface RunRecording {
   stop: () => void;
   /** Keys sounding in the playback now. */
   playbackKeys: ReadonlySet<number>;
+  /** The stretch played back (beats): from a little before the first key to after the last. */
+  span: { from: number; to: number };
 }
 
 const NONE: ReadonlySet<number> = new Set();
@@ -163,9 +165,16 @@ export function useRunRecording({
     );
   }, [listening, recording, transport]);
 
-  const end = recording
-    ? Math.max(recording.to, ...recording.notes.map((note) => note.end)) + PLAYBACK_MARGIN_BEATS
-    : 0;
+  const span = recording
+    ? {
+        from:
+          Math.min(recording.from, ...recording.notes.map((note) => note.start)) -
+          PLAYBACK_MARGIN_BEATS,
+        to:
+          Math.max(recording.to, ...recording.notes.map((note) => note.end)) +
+          PLAYBACK_MARGIN_BEATS,
+      }
+    : { from: 0, to: 0 };
   const stop = () => {
     transport.pause();
     audioIfReady()?.stopAccompaniment();
@@ -179,7 +188,7 @@ export function useRunRecording({
     if (!listening || !recording) return;
     const beat = transport.position();
     // The end, or the music stopped some other way (starting over, choosing bars).
-    if (beat >= end || !transport.playing) {
+    if (beat >= span.to || !transport.playing) {
       stop();
       return;
     }
@@ -199,12 +208,11 @@ export function useRunRecording({
   const listen = async () => {
     if (!recording) return;
     await startAudio().catch((error: unknown) => console.warn('No audio', error));
-    const first = Math.min(recording.from, ...recording.notes.map((note) => note.start));
     transport.pause();
-    transport.seek(first - PLAYBACK_MARGIN_BEATS);
+    transport.seek(span.from);
     transport.play();
     setListening(true);
   };
 
-  return { recording, listening, listen, stop, playbackKeys };
+  return { recording, listening, listen, stop, playbackKeys, span };
 }

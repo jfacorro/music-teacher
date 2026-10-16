@@ -369,7 +369,10 @@
         "ungraded": "Sin calificar (otra mano o entrada)"
       },
       "loudness": "Abajo: con qué fuerza pulsaste cada tecla.",
-      "summary": "{right} bien, {early} antes de tiempo, {late} tarde, {wrong, plural, one {# tecla equivocada} other {# teclas equivocadas}}, {missed} sin tocar."
+      "summary": "{right} bien, {early} antes de tiempo, {late} tarde, {wrong, plural, one {# tecla equivocada} other {# teclas equivocadas}}, {missed} sin tocar.",
+      "playing": "Escuchando tu última interpretación",
+      "position": "Posición de la reproducción",
+      "time": "{elapsed} / {total}"
     }
   },
   "lesson": {

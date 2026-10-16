@@ -369,7 +369,10 @@
         "ungraded": "Not graded (other hand or count-in)"
       },
       "loudness": "Below: how hard you pressed each key.",
-      "summary": "{right} right, {early} early, {late} late, {wrong, plural, one {# wrong key} other {# wrong keys}}, {missed} missed."
+      "summary": "{right} right, {early} early, {late} late, {wrong, plural, one {# wrong key} other {# wrong keys}}, {missed} missed.",
+      "playing": "Listening to your last run",
+      "position": "Playback position",
+      "time": "{elapsed} / {total}"
     }
   },
   "lesson": {

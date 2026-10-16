@@ -29,6 +29,8 @@ export function ExerciseStepView({
   const { t } = useTranslation('screens');
   const [metronome, setMetronome] = useState(step.metronome);
   const [view, setView] = useState(step.view);
+  /** Playing the last run back: the metronome setting waits. */
+  const [listening, setListening] = useState(false);
   const [notation, setNotation] = useState(
     () => step.notation ?? useSettings.getState().sheetNotation,
   );
@@ -44,7 +46,7 @@ export function ExerciseStepView({
         <Markings markings={step.score.markings ?? []} />
         <ViewToggle view={view} onChange={setView} />
         {view === ScoreView.Sheet && <NotationSelect notation={notation} onChange={setNotation} />}
-        <label className="checkbox">
+        <label className={listening ? 'checkbox is-set-aside' : 'checkbox'} inert={listening}>
           <input
             type="checkbox"
             checked={metronome}
@@ -65,6 +67,7 @@ export function ExerciseStepView({
         view={view}
         notation={notation}
         recordingKey={recordingKey}
+        onListeningChange={setListening}
         onFinish={(summary) =>
           onResult({ stars: summary.stars, accuracy: summary.accuracy }, passes(summary))
         }

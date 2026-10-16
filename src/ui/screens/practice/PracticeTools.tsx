@@ -20,6 +20,8 @@ interface PracticeToolsProps {
   hands: HandFilter;
   otherHand: boolean;
   onOtherHandChange: (on: boolean) => void;
+  /** Waiting (e.g. while a run plays back): shown dimmed, out of reach. */
+  setAside?: boolean;
 }
 
 /** Speed, loop and the other hand (PLAN.md §2.3). */
@@ -33,6 +35,7 @@ export function PracticeTools({
   hands,
   otherHand,
   onOtherHandChange,
+  setAside = false,
 }: PracticeToolsProps) {
   const { t, i18n } = useTranslation('screens');
   const speedId = useId();
@@ -44,7 +47,14 @@ export function PracticeTools({
   const setLast = (last: number) => onLoopChange({ first: Math.min(loop.first, last), last }, true);
 
   return (
-    <div className="practice__options practice__tools">
+    <div
+      className={
+        setAside
+          ? 'practice__options practice__tools is-set-aside'
+          : 'practice__options practice__tools'
+      }
+      inert={setAside}
+    >
       <label className="inline-field" htmlFor={speedId}>
         {t('practice.speed')}
         <input
