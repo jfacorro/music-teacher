@@ -68,7 +68,9 @@
     },
     "deletedSong": "Deleted song",
     "letsGo": "Let’s Go!",
-    "letsGoTip": "Go to your learning path"
+    "letsGoTip": "Go to your learning path",
+    "level": "Level",
+    "levelDetail": "Unit {number} of {total}"
   },
   "settings": {
     "title": "Settings",
@@ -651,5 +653,14 @@
     "reference": "Play middle {c} first",
     "allNotes": "All 12 notes",
     "allNotesTip": "Every key from middle C to the C above, black keys included, whatever the course has reached"
+  },
+  "course": {
+    "levels": {
+      "beginner": "Beginner",
+      "elementary": "Elementary",
+      "lateElementary": "Late elementary",
+      "earlyIntermediate": "Early intermediate"
+    },
+    "levelHeading": "{level} · Units {first}–{last}"
   }
 }

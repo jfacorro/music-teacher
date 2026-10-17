@@ -68,7 +68,9 @@
     },
     "deletedSong": "Canción eliminada",
     "letsGo": "¡Vamos!",
-    "letsGoTip": "Ir a tu camino de aprendizaje"
+    "letsGoTip": "Ir a tu camino de aprendizaje",
+    "level": "Nivel",
+    "levelDetail": "Unidad {number} de {total}"
   },
   "settings": {
     "title": "Configuración",
@@ -651,5 +653,14 @@
     "reference": "Tocar primero el {c} central",
     "allNotes": "Las 12 notas",
     "allNotesTip": "Todas las teclas del do central al do siguiente, negras incluidas, llegue donde llegue el curso"
+  },
+  "course": {
+    "levels": {
+      "beginner": "Principiante",
+      "elementary": "Elemental",
+      "lateElementary": "Elemental avanzado",
+      "earlyIntermediate": "Intermedio inicial"
+    },
+    "levelHeading": "{level} · Unidades {first}–{last}"
   }
 }

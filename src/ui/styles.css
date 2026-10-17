@@ -884,9 +884,22 @@ input[type='range'] {
   display: none;
 }
 
-.unit__summary h2 {
+.unit__summary .unit__title {
   flex: 1;
   margin: 0;
+}
+
+/* A unit's title, under its level's heading: as a card heading. */
+.unit__title {
+  margin-block: 0 0.75rem;
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+/* A level (Beginner, Elementary…) over its units. */
+.level__heading {
+  margin-block: 2rem 0.75rem;
+  font-size: 1.35rem;
 }
 
 .unit[open] > .unit__summary {
@@ -2062,7 +2075,13 @@ button.bars__bar:focus-visible {
 }
 
 /* Song practice: the songs of each unit, under its name. */
-.songs__level h3 {
+.songs__group > h3 {
+  margin: 1.5rem 0 0;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.songs__level h4 {
   margin: 1rem 0 0.25rem;
   font-size: 0.95rem;
   color: var(--muted);

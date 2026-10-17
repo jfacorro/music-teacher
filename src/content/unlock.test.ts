@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { Unit } from './courses';
+import { CourseLevel, type Unit } from './courses';
 import { isUnitFinished, isUnitOpen, lessonStates, nextLessonToPlay } from './unlock';
 
 const unit = (id: string, lessons: string[], minStars?: number): Unit => ({
   id,
+  level: CourseLevel.Beginner,
   textVars: {},
   unlock: minStars === undefined ? null : { previousUnitMinStars: minStars },
   lessons: lessons.map((lessonId) => ({ id: lessonId, titleVars: {}, skills: [] })),

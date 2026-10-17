@@ -459,6 +459,8 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 | 14 | **Two hands, two lines** — hand independence: a melody in each hand | 5 |
 | — | **Songs** — public-domain pieces interleaved at each level | all |
 
+Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5–8), **Late elementary** (9–11) and **Early intermediate** (12–14). Each unit names its level (`courses.json` › `level`); the Learn page and Song practice list units under their level, and Your progress shows the level of the unit being worked on ("Beginner, Unit 3 of 8"). A level shows once it has units.
+
 ---
 
 ## 11. Phases
