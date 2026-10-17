@@ -5,6 +5,8 @@ import { lessonNamespace, type Lesson } from '../../../content/lessons';
 import { lessonResult, type StepResult } from '../../../content/lessons/result';
 import { useContentText } from '../../../i18n/useContentText';
 import { recordResult, ResultKind } from '../../../storage/progress';
+import { loadStepRuns, recordStepRun, stepKey, useStepRuns } from '../../../storage/stepRuns';
+import { StepHistory } from './StepHistory';
 import { LessonComplete } from './LessonComplete';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
@@ -26,6 +28,12 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   /** Steps whose goal was reached (found all keys, passed the exercise). */
   const [done, setDone] = useState<ReadonlySet<number>>(new Set());
   const [startedAt, setStartedAt] = useState(() => performance.now());
+
+  // Every try of the graded steps, kept to show how each went before.
+  useEffect(() => {
+    void loadStepRuns(lesson.id);
+  }, [lesson.id]);
+  const history = useStepRuns((s) => s.byKey[stepKey(lesson.id, index)]);
 
   const finished = index >= lesson.steps.length;
   const step = lesson.steps[index];
@@ -49,6 +57,12 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
     setDone(new Set());
     setStartedAt(performance.now());
     setIndex(0);
+  };
+  /** A finished try of a graded step: kept in its history, and the best counts for the lesson. */
+  const tried = (stepIndex: number, stepResult: StepResult, passed: boolean) => {
+    void recordStepRun(stepKey(lesson.id, stepIndex), stepResult);
+    saveStep(stepIndex, stepResult);
+    if (passed) markDone(stepIndex);
   };
   const saveStep = (stepIndex: number, stepResult: StepResult) =>
     setResults((prev) => {
@@ -89,6 +103,9 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         <LessonComplete lessonId={lesson.id} stars={result.stars} onRestart={restart} />
       ) : (
         <>
+          {(step?.type === StepType.Exercise ||
+            step?.type === StepType.Quiz ||
+            step?.type === StepType.Rhythm) && <StepHistory runs={history} />}
           {step?.type === StepType.Explain && (
             <ExplainStepView key={index} step={step} text={text} />
           )}
@@ -108,10 +125,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               key={index}
               step={step}
               text={text}
-              onResult={(stepResult, passed) => {
-                saveStep(index, stepResult);
-                if (passed) markDone(index);
-              }}
+              onResult={(stepResult, passed) => tried(index, stepResult, passed)}
               onContinue={next}
             />
           )}
@@ -120,10 +134,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               key={index}
               step={step}
               text={text}
-              onResult={(stepResult, passed) => {
-                saveStep(index, stepResult);
-                if (passed) markDone(index);
-              }}
+              onResult={(stepResult, passed) => tried(index, stepResult, passed)}
               onContinue={next}
             />
           )}
@@ -132,10 +143,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               key={index}
               step={step}
               text={text}
-              onResult={(stepResult, passed) => {
-                saveStep(index, stepResult);
-                if (passed) markDone(index);
-              }}
+              onResult={(stepResult, passed) => tried(index, stepResult, passed)}
               onContinue={next}
               recordingKey={`lesson:${lesson.id}:${index}`}
             />

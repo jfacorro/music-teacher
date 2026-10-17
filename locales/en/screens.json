@@ -441,7 +441,15 @@
       "continue": "Go on to the next step",
       "skip": "Skip this step for now"
     },
-    "passDynamics": "Play the loud and soft parts as written (checked on a MIDI keyboard)."
+    "passDynamics": "Play the loud and soft parts as written (checked on a MIDI keyboard).",
+    "history": {
+      "label": "Your tries at this step",
+      "best": "Best",
+      "last": "Last",
+      "trend": "Your last {count} tries, oldest first: {scores}",
+      "tries": "{count, plural, one {# try} other {# tries}}",
+      "allTip": "Every try, with its date"
+    }
   },
   "welcome": {
     "title": "Welcome to Piano Teacher",

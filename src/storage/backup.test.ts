@@ -56,6 +56,7 @@ describe('backups', () => {
       tables: { settings: [], results: [], practiceLog: [], practiceDays: [], mySongs: [] },
     };
     expect(parseBackup(old).tables.recordings).toEqual([]);
+    expect(parseBackup(old).tables.stepRuns).toEqual([]);
   });
 
   it('names the file after the day', () => {
