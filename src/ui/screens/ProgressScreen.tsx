@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { MAX_STARS } from '../../engine/scoring';
 import { Link } from 'react-router';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
+import { lessonStates, nextLessonToPlay } from '../../content/unlock';
 import { skillProgress, SkillLevel } from '../../content/skills';
 import { isSongId } from '../../content/songs';
 import { useMySongs } from '../../storage/mySongs';
@@ -45,6 +46,17 @@ export function ProgressScreen() {
   const streak = streakDays(practiced);
   const best = longestStreak(practiced);
   const minutes = totalPracticeMinutes(days);
+  // The level of the unit being worked on: the next lesson's (the last unit's once all is done).
+  const states = lessonStates(
+    UNITS,
+    (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0,
+  );
+  const next = nextLessonToPlay(UNITS, states);
+  const unitIndex = Math.max(
+    0,
+    next ? UNITS.findIndex((unit) => unit.lessons.some((l) => l.id === next)) : UNITS.length - 1,
+  );
+  const currentUnit = UNITS[unitIndex]!;
   const skills = skillProgress(
     SKILLS,
     UNITS,
@@ -96,6 +108,11 @@ export function ProgressScreen() {
       {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
 
       <div className="stat-grid">
+        <Stat
+          label={t('progress.level')}
+          value={t(`course.levels.${currentUnit.level}`)}
+          detail={t('progress.levelDetail', { number: unitIndex + 1, total: UNITS.length })}
+        />
         <Stat
           label={t('progress.lessons')}
           value={t('progress.outOf', { value: completed, total: LESSON_ORDER.length })}

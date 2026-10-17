@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { UNITS } from '../../content/courses';
+import { UNITS, unitsByLevel } from '../../content/courses';
 import {
   isUnitFinished,
   isUnitOpen,
@@ -18,7 +18,12 @@ const CHECK = '✓';
 const STAR = '★';
 const CHEVRON = '▸';
 
-/** The learning path: what to do next, and every unit's lessons with stars and locks. */
+const LEVELS = unitsByLevel();
+
+/**
+ * The learning path: what to do next, and every unit's lessons with stars and locks, under
+ * their levels (Beginner, Elementary…).
+ */
 export function HomeScreen() {
   const { t } = useTranslation('screens');
   const courseText = useContentText('courses');
@@ -55,78 +60,89 @@ export function HomeScreen() {
         )}
       </section>
 
-      {UNITS.map((unit, index) => {
-        const open = isUnitOpen(unit, states);
-        const finished = isUnitFinished(unit, states);
-        const done = unit.lessons.filter(
-          (l) => states.get(l.id)?.status === LessonStatus.Completed,
-        ).length;
-        const title = t('home.unit', {
-          number: index + 1,
-          title: courseText(`units.${unit.id}.title`, unit.textVars),
-        });
-        const progress = t('home.unitProgress', { done, total: unit.lessons.length });
-        const contents = (
-          <>
-            <p className="muted">{courseText(`units.${unit.id}.description`, unit.textVars)}</p>
-            <ol className="path">
-              {unit.lessons.map((lesson) => (
-                <PathItem
-                  key={lesson.id}
-                  title={courseText(`lessons.${lesson.id}`, lesson.titleVars)}
-                  href={`/lesson/${lesson.id}`}
-                  state={states.get(lesson.id)!}
-                  current={lesson.id === nextId}
-                />
-              ))}
-            </ol>
-          </>
-        );
+      {LEVELS.map(({ level, units }) => (
+        <section key={level} className="level" aria-labelledby={`level-${level}`}>
+          <h2 id={`level-${level}`} className="level__heading">
+            {t('course.levelHeading', {
+              level: t(`course.levels.${level}`),
+              first: units[0]!.number,
+              last: units.at(-1)!.number,
+            })}
+          </h2>
+          {units.map(({ unit, number }) => {
+            const open = isUnitOpen(unit, states);
+            const finished = isUnitFinished(unit, states);
+            const done = unit.lessons.filter(
+              (l) => states.get(l.id)?.status === LessonStatus.Completed,
+            ).length;
+            const title = t('home.unit', {
+              number,
+              title: courseText(`units.${unit.id}.title`, unit.textVars),
+            });
+            const progress = t('home.unitProgress', { done, total: unit.lessons.length });
+            const contents = (
+              <>
+                <p className="muted">{courseText(`units.${unit.id}.description`, unit.textVars)}</p>
+                <ol className="path">
+                  {unit.lessons.map((lesson) => (
+                    <PathItem
+                      key={lesson.id}
+                      title={courseText(`lessons.${lesson.id}`, lesson.titleVars)}
+                      href={`/lesson/${lesson.id}`}
+                      state={states.get(lesson.id)!}
+                      current={lesson.id === nextId}
+                    />
+                  ))}
+                </ol>
+              </>
+            );
 
-        // Units in progress stay open; finished and locked ones fold to one line, which opens
-        // them (e.g. to replay a lesson for more stars).
-        if (open && !finished) {
-          return (
-            <section key={unit.id} className="card unit">
-              <header className="unit__header">
-                <h2>{title}</h2>
-                <span className="muted">{progress}</span>
-              </header>
-              {contents}
-            </section>
-          );
-        }
-        const stars = unit.lessons.reduce(
-          (sum, lesson) => sum + (states.get(lesson.id)?.stars ?? 0),
-          0,
-        );
-        return (
-          <details key={unit.id} className={open ? 'card unit' : 'card unit is-locked'}>
-            <summary className="unit__header unit__summary" title={t('home.unitToggle')}>
-              <span className="unit__chevron" aria-hidden="true">
-                {CHEVRON}
-              </span>
-              <h2>{title}</h2>
-              <span className="unit__status muted">
-                {finished && <span aria-hidden="true">{CHECK}</span>}
-                <span>{progress}</span>
-                {finished && (
-                  <span>
-                    <span aria-hidden="true">{STAR}</span>{' '}
-                    {t('home.unitStars', { stars, total: unit.lessons.length * MAX_STARS })}
+            // Units in progress stay open; finished and locked ones fold to one line, which opens
+            // them (e.g. to replay a lesson for more stars).
+            if (open && !finished) {
+              return (
+                <section key={unit.id} className="card unit">
+                  <header className="unit__header">
+                    <h3 className="unit__title">{title}</h3>
+                    <span className="muted">{progress}</span>
+                  </header>
+                  {contents}
+                </section>
+              );
+            }
+            const stars = unit.lessons.reduce(
+              (sum, lesson) => sum + (states.get(lesson.id)?.stars ?? 0),
+              0,
+            );
+            return (
+              <details key={unit.id} className={open ? 'card unit' : 'card unit is-locked'}>
+                <summary className="unit__header unit__summary" title={t('home.unitToggle')}>
+                  <span className="unit__chevron" aria-hidden="true">
+                    {CHEVRON}
                   </span>
-                )}
-              </span>
-              {!open && unit.unlock && (
-                <span className="notice unit__lock">
-                  {t('home.unitLocked', { stars: unit.unlock.previousUnitMinStars })}
-                </span>
-              )}
-            </summary>
-            {contents}
-          </details>
-        );
-      })}
+                  <h3 className="unit__title">{title}</h3>
+                  <span className="unit__status muted">
+                    {finished && <span aria-hidden="true">{CHECK}</span>}
+                    <span>{progress}</span>
+                    {finished && (
+                      <span>
+                        <span aria-hidden="true">{STAR}</span>{' '}
+                        {t('home.unitStars', { stars, total: unit.lessons.length * MAX_STARS })}
+                      </span>
+                    )}
+                  </span>
+                  {!open && unit.unlock && (
+                    <span className="notice unit__lock">
+                      {t('home.unitLocked', { stars: unit.unlock.previousUnitMinStars })}
+                    </span>
+                  )}
+                </summary>
+                {contents}
+              </details>
+            );
+          })}
+        </section>
+      ))}
     </section>
   );
 }

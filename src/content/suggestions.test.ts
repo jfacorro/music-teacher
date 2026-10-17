@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ResultRow } from '../storage/db';
 import { ResultKind } from '../storage/progress';
-import type { Skill, Unit } from './courses';
+import { CourseLevel, type Skill, type Unit } from './courses';
 import { DAY_MS } from './review';
 import { skillProgress } from './skills';
 import { EarLevel } from './earTraining';
@@ -11,6 +11,7 @@ import { lessonStates } from './unlock';
 
 const unit = (id: string, lessons: [string, Skill][], minStars?: number): Unit => ({
   id,
+  level: CourseLevel.Beginner,
   textVars: {},
   unlock: minStars === undefined ? null : { previousUnitMinStars: minStars },
   lessons: lessons.map(([lessonId, skill]) => ({ id: lessonId, titleVars: {}, skills: [skill] })),

@@ -1,6 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
-import { EXERCISE_SKILLS, LESSON_ORDER, SKILLS, UNITS, findLesson, nextLessonId } from '../courses';
+import {
+  COURSE_LEVELS,
+  CourseLevel,
+  EXERCISE_SKILLS,
+  LESSON_ORDER,
+  SKILLS,
+  UNITS,
+  findLesson,
+  nextLessonId,
+  unitsByLevel,
+} from '../courses';
 import { lessonExists, loadLesson } from '.';
 import { LessonError, parseLesson, StepType } from './lesson';
 
@@ -33,6 +43,16 @@ describe('courses', () => {
     expect(nextLessonId('u1-l6')).toBe('u2-l1');
     expect(nextLessonId(LESSON_ORDER.at(-1)!)).toBeNull();
     expect(findLesson('nope')).toBeNull();
+  });
+
+  it('groups the units in levels, in course order', () => {
+    const order = UNITS.map((unit) => COURSE_LEVELS.indexOf(unit.level));
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+    const groups = unitsByLevel();
+    expect(groups.map(({ level, units }) => [level, units.map(({ number }) => number)])).toEqual([
+      [CourseLevel.Beginner, [1, 2, 3, 4]],
+      [CourseLevel.Elementary, [5, 6, 7, 8]],
+    ]);
   });
 
   it('tags every lesson with what it practices, and every skill is practiced', () => {

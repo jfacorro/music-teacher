@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { UNITS } from '../../content/courses';
+import { unitsByLevel } from '../../content/courses';
 import { SONG_IDS, SONG_UNITS } from '../../content/songs';
 import { useContentText } from '../../i18n/useContentText';
 import { LessonStatus } from '../../content/unlock';
@@ -8,12 +8,21 @@ import { useMySongs } from '../../storage/mySongs';
 import { resultKey, ResultKind, useProgress } from '../../storage/progress';
 import { PathItem } from '../components/PathItem';
 
-/** The built-in songs by level: the units that teach them, in course order. */
-const SONGS_BY_UNIT = UNITS.map((unit, index) => ({
-  unit,
-  number: index + 1,
-  songs: SONG_IDS.filter((id) => SONG_UNITS[id] === unit.id),
-})).filter(({ songs }) => songs.length > 0);
+/** The built-in songs by level, then by the unit that teaches them, in course order. */
+const SONGS_BY_LEVEL = unitsByLevel()
+  .map(({ level, units }) => ({
+    level,
+    first: units[0]!.number,
+    last: units.at(-1)!.number,
+    units: units
+      .map(({ unit, number }) => ({
+        unit,
+        number,
+        songs: SONG_IDS.filter((id) => SONG_UNITS[id] === unit.id),
+      }))
+      .filter(({ songs }) => songs.length > 0),
+  }))
+  .filter(({ units }) => units.length > 0);
 
 /**
  * Song practice: the built-in songs, by the unit they belong to, and the learner's own
@@ -38,24 +47,29 @@ export function SongsScreen() {
       <section className="card unit">
         <h2>{t('songPractice.songs')}</h2>
         <p className="muted">{t('songPractice.songsIntro')}</p>
-        {SONGS_BY_UNIT.map(({ unit, number, songs }) => (
-          <section key={unit.id} className="songs__level">
-            <h3>
-              {t('songPractice.level', {
-                number,
-                unit: courseText(`units.${unit.id}.title`, unit.textVars),
-              })}
-            </h3>
-            <ol className="path">
-              {songs.map((id) => (
-                <PathItem
-                  key={id}
-                  title={ts(`${id}.title`)}
-                  href={`/practice/${id}`}
-                  state={stateOf(starsOf(ResultKind.Song, id))}
-                />
-              ))}
-            </ol>
+        {SONGS_BY_LEVEL.map(({ level, first, last, units }) => (
+          <section key={level} className="songs__group">
+            <h3>{t('course.levelHeading', { level: t(`course.levels.${level}`), first, last })}</h3>
+            {units.map(({ unit, number, songs }) => (
+              <section key={unit.id} className="songs__level">
+                <h4>
+                  {t('songPractice.level', {
+                    number,
+                    unit: courseText(`units.${unit.id}.title`, unit.textVars),
+                  })}
+                </h4>
+                <ol className="path">
+                  {songs.map((id) => (
+                    <PathItem
+                      key={id}
+                      title={ts(`${id}.title`)}
+                      href={`/practice/${id}`}
+                      state={stateOf(starsOf(ResultKind.Song, id))}
+                    />
+                  ))}
+                </ol>
+              </section>
+            ))}
           </section>
         ))}
       </section>

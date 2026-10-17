@@ -119,6 +119,9 @@ system setting (`src/i18n/naming.ts`).
 | Dotted half / dotted quarter note             | dotted half note / dotted quarter note               | blanca con puntillo / negra con puntillo           |
 | Minuet                                        | minuet                                               | minueto                                            |
 | Lullaby                                       | lullaby                                              | canción de cuna                                    |
+| Course level (group of units)                 | level                                                | nivel                                              |
+| Beginner / Elementary                         | Beginner / Elementary                                | Principiante / Elemental                           |
+| Late elementary / Early intermediate          | Late elementary / Early intermediate                 | Elemental avanzado / Intermedio inicial            |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
 their explanations are translated (`theory.json` › `markings`).

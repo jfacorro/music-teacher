@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { Unit } from './courses';
+import { CourseLevel, type Unit } from './courses';
 import { skillProgress } from './skills';
 
 const unit: Unit = {
   id: 'u',
+  level: CourseLevel.Beginner,
   textVars: {},
   unlock: null,
   lessons: [
