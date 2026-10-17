@@ -66,6 +66,17 @@ export interface RecordingRow {
   recording: Recording;
 }
 
+/** One finished try of a lesson's graded step (exercise, note quiz, rhythm). */
+export interface StepRunRow {
+  id?: number;
+  /** "lesson:<id>:<step index>". */
+  key: string;
+  /** ms since epoch */
+  at: number;
+  stars: number;
+  accuracy: number;
+}
+
 export const db = new Dexie('piano-teacher') as Dexie & {
   settings: EntityTable<KeyValueRow, 'key'>;
   results: EntityTable<ResultRow, 'key'>;
@@ -73,6 +84,7 @@ export const db = new Dexie('piano-teacher') as Dexie & {
   practiceDays: EntityTable<PracticeDayRow, 'day'>;
   mySongs: EntityTable<MySongRow, 'id'>;
   recordings: EntityTable<RecordingRow, 'key'>;
+  stepRuns: EntityTable<StepRunRow, 'id'>;
 };
 
 db.version(1).stores({
@@ -105,6 +117,10 @@ db.version(4).stores({
 
 db.version(5).stores({
   recordings: 'key',
+});
+
+db.version(6).stores({
+  stepRuns: '++id, key',
 });
 
 /** Local calendar day, e.g. "2026-10-13". */

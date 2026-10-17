@@ -804,6 +804,12 @@ Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5�
 
 ---
 
+### Between phases
+
+**Lesson step history** — ✔ done
+- Every finished try of a lesson's exercises, note quizzes and rhythm steps is kept (`stepRuns` table, database version 6, in backups; keyed `lesson:<id>:<step>`, so new steps are appended to lessons, never inserted, to keep each step's history). Until then only a lesson's overall best was saved, so histories start from this change.
+- Each graded step shows a line under the step dots: the best try and the last (with its date when it wasn't today), the last five as small bars (height = accuracy, color = stars, oldest first), and "N tries", which opens every try with its date, newest first.
+
 ### Future ideas (unscheduled)
 
 - Backing tracks / accompaniment for songs.

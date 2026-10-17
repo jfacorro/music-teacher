@@ -441,7 +441,15 @@
       "continue": "Pasar al siguiente paso",
       "skip": "Saltar este paso por ahora"
     },
-    "passDynamics": "Toca las partes fuertes y suaves como están escritas (se comprueba con un teclado MIDI)."
+    "passDynamics": "Toca las partes fuertes y suaves como están escritas (se comprueba con un teclado MIDI).",
+    "history": {
+      "label": "Tus intentos en este paso",
+      "best": "Mejor",
+      "last": "Último",
+      "trend": "Tus últimos {count} intentos, del más antiguo al más reciente: {scores}",
+      "tries": "{count, plural, one {# intento} other {# intentos}}",
+      "allTip": "Todos los intentos, con su fecha"
+    }
   },
   "welcome": {
     "title": "Bienvenido a Profesor de piano",

@@ -15,9 +15,10 @@ const TABLES = [
   'practiceDays',
   'mySongs',
   'recordings',
+  'stepRuns',
 ] as const;
 /** Tables added after the first backups: a file without them still imports (as empty). */
-const LATER_TABLES: readonly TableName[] = ['recordings'];
+const LATER_TABLES: readonly TableName[] = ['recordings', 'stepRuns'];
 type TableName = (typeof TABLES)[number];
 
 export interface Backup {
