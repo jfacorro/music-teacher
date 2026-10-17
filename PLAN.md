@@ -450,6 +450,13 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 | 5 | **Hands together** — parallel/contrary motion, melody over single bass notes | 3 |
 | 6 | **Chords** — triads, inversions, I–IV–V–I, accompaniment patterns | 3 |
 | 7 | **Scales & fingering** — C, G, F major; thumb-under technique | 3 |
+| 8 | **Sharps, flats & naturals** — black keys' two names, accidentals, the natural sign, A minor, neighbor notes | 4 |
+| 9 | **Touch** — legato and slurs, staccato, ties, accents | 5 |
+| 10 | **The sustain pedal** — when to press and lift, pedal marks, connecting chords | 5 |
+| 11 | **Around the keyboard** — position shifts, octave jumps, arpeggios, crossing over | 5 |
+| 12 | **More keys** — D and B♭ major, minor scales (A, E, D), key signatures up to two sharps or flats | 5 |
+| 13 | **Rhythm & form** — sixteenth notes, 6/8, syncopation, repeats and endings, ritardando and fermata | 5 |
+| 14 | **Two hands, two lines** — hand independence: a melody in each hand | 5 |
 | — | **Songs** — public-domain pieces interleaved at each level | all |
 
 ---
@@ -726,6 +733,72 @@ Pace assumes some prior music knowledge — theory basics go quickly; the focus 
 - [x] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
 - [x] All new text is in English and Spanish.
   - [ ] TODO (user): once Unit 7 is finished, go through Unit 8's lessons on the Casio (the black keys' names, accidental quizzes, the natural sign, A minor with "Greensleeves", neighbor notes with "Für Elise").
+
+---
+
+### Phase 5 — Playing musically (draft)
+
+**Goal:** go past the first method book: shape the sound (touch, pedal), move freely around the keyboard, read more keys and rhythms, and let each hand play its own line. Each unit ends in songs that need what it teaches, as in Units 1–8.
+
+#### Scope
+
+**5.1 Score and engine: touch, pedal and form**
+- Score format: articulation per note (`staccato`, `accent`, `tenuto`), slurs (`"slurs": [{ "from": 0, "to": 4, "hand": "R" }]`), pedal marks (`"pedal": [{ "down": 0, "up": 4 }]`), repeats with first and second endings, fermatas, and `rit.` / `a tempo` (a tempo change the transport follows).
+- Sheet music draws them (MusicXML `<articulations>`, `<slur>`, `<pedal>`, `<repeat>`, `<ending>`, `<fermata>`); MusicXML import keeps them. Ties are already drawn; lessons now explain them.
+- Repeats are unrolled for playing, Listen and Compare (the second time through follows the second ending); the sheet shows them once, with the cursor jumping back.
+- Grading, MIDI only (note releases and the pedal, CC64, are exact there; the microphone can't tell when a key is let go): staccato notes released before half their length, legato notes held until the next one starts (a small overlap allowed), accents louder than the notes around them, the pedal down and lifted within a window of each mark. Results show it like dynamics (a verdict per passage); stars stay about the notes, and a lesson exercise can require it (`"pass": { "touch": true }` / `{ "pedal": true }`). With the microphone, lessons explain it but don't grade it.
+- Compare (milestone 4.2) shows how long each key was held against the written length, so legato and staccato show at a glance; with MIDI, a pedal strip under the chart.
+
+**5.2 Unit 9: Touch** (5 lessons)
+- Legato and slurs: connecting notes, the finger lifting as the next one goes down.
+- Staccato: short, bouncing notes; staccato and legato in the same piece.
+- Ties: two notes joined into one, across a beat and across the bar line.
+- Accents and tenuto: leaning on a note.
+- Songs: "Can-Can" (Offenbach, staccato) and "Ode to Joy" with slurs and ties.
+
+**5.3 Unit 10: The sustain pedal** (4 lessons)
+- What the pedal does, foot on the heel; pedal down and up with the marks.
+- "Legato pedaling": change the pedal just after a new chord, not with it, so the chords connect without blurring.
+- Pedal with broken chords, and when not to pedal (moving melodies, staccato).
+- Song: "Gymnopédie No. 1" (Satie, the opening).
+
+**5.4 Unit 11: Around the keyboard** (5 lessons)
+- Position shifts mid-phrase: moving the hand during a rest or a long note.
+- Octave jumps: looking ahead, landing on the right key without looking down.
+- Arpeggios: C, G and F major, hands separately, the thumb passing under across octaves.
+- Crossing over: the left hand crossing over the right for a high note.
+- Song: "Prelude in C" (Bach, BWV 846, the opening, as broken chords), with the pedal from Unit 10.
+
+**5.5 Unit 12: More keys** (5 lessons)
+- D major (two sharps) and B♭ major (two flats): key signatures with two sharps or flats, their scales and fingerings.
+- Relative minors, and minor scales: A, E and D minor, natural and harmonic.
+- Reading in these keys: quizzes with key signatures.
+- Songs: "Musette in D" (from the Notebook for Anna Magdalena Bach), "Scarborough Fair" (D minor).
+
+**5.6 Unit 13: Rhythm and form** (5 lessons)
+- Sixteenth notes, and dotted eighth plus sixteenth.
+- 6/8 time: two beats of three eighths.
+- Syncopation: notes on the off-beat, tied across the beat.
+- Repeats and endings; ritardando and the fermata (the music waits, then goes on).
+- Songs: "Morning Mood" (Grieg, 6/8, the opening), "The Entertainer" (Joplin, a simplified opening, syncopation).
+
+**5.7 Unit 14: Two hands, two lines** (4 lessons)
+- The melody in the left hand, chords in the right.
+- Two melodies at once: each hand with its own rhythm (first in contrary motion, then independent).
+- Songs: "Minuet in G" with Petzold's own left hand (replacing the simplified one as a second version), "Minuet in G minor" (Petzold).
+
+**5.8 Practice grows with the course**
+- Sight-reading: levels for Unit 8 (accidentals), Unit 9 (staccato and slurs to play as written), Unit 12 (D and B♭ major, minor keys) and Unit 13 (6/8, sixteenths).
+- Ear training: a rhythm level (hear a rhythm, tap it back), and major or minor *scales* by ear.
+- Every new song passes the "only what's taught" test, extended to articulation, pedal marks and repeats.
+
+#### Phase 5 done when
+- [ ] Units 9–14 are playable in English and Spanish, each ending in songs that need what it teaches.
+- [ ] With a MIDI keyboard, touch (staccato, legato, accents) and the pedal are checked and reported; with the microphone, lessons explain them without grading them.
+- [ ] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
+- [ ] Repeats play back as written, in practice, Listen and Compare.
+- [ ] Sight-reading and ear training gain levels for the new units.
+- [ ] Verified on the Casio, with MIDI and (where it applies) the microphone.
 
 ---
 
