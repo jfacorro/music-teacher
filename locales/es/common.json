@@ -2,6 +2,8 @@
   "appTitle": "Profesor de piano",
   "nav": {
     "label": "Principal",
+    "menu": "Menú",
+    "home": "Inicio",
     "learn": "Aprender",
     "songs": "Práctica de canciones",
     "sightReading": "Lectura a primera vista",

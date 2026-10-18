@@ -114,22 +114,48 @@ h3 {
   margin-block-start: 1.25rem;
 }
 
-/* Layout */
+/* Layout: the top bar, the sidebar with the sections, and the page. */
+
+.app {
+  --header-height: 3.5rem;
+}
 
 .app-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 20;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 1rem;
-  padding: 0.75rem 1.5rem;
+  gap: 0.75rem;
+  block-size: var(--header-height);
+  padding-inline: 0.75rem 1.25rem;
   background: var(--surface);
   border-block-end: 1px solid var(--border);
+}
+
+.app-menu-button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.app-menu-button:hover {
+  background: var(--bg);
 }
 
 .app-title {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  flex: none;
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--text);
@@ -145,48 +171,123 @@ h3 {
   block-size: 1.75rem;
 }
 
-.app-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
+/* Where you are: "Piano Teacher / Song practice". */
+.app-section {
+  min-inline-size: 0;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-section::before {
+  content: '/';
+  margin-inline-end: 0.75rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.app-header__spacer {
   flex: 1;
 }
 
-.app-nav a {
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
+.app-body {
+  display: flex;
+  align-items: flex-start;
+}
+
+.app-sidebar {
+  position: sticky;
+  inset-block-start: var(--header-height);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: none;
+  block-size: calc(100dvh - var(--header-height));
+  padding: 0.75rem 0.5rem;
+  overflow-y: auto;
+  background: var(--surface);
+  border-inline-end: 1px solid var(--border);
+}
+
+.app-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.9rem 0.5rem 0.6rem;
+  border-radius: 8px;
   color: var(--muted);
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.app-nav a:hover {
-  color: var(--text);
-}
-
-.app-nav a.active {
+.app-sidebar__link:hover {
   color: var(--text);
   background: var(--bg);
+}
+
+.app-sidebar__link[aria-current='page'] {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   font-weight: 600;
 }
 
-.app-settings {
-  display: grid;
-  place-items: center;
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
-  border-radius: 999px;
-  font-size: 1.15rem;
-  text-decoration: none;
-  opacity: 0.75;
+.app-sidebar__link--settings {
+  margin-block-start: auto;
 }
 
-.app-settings:hover,
-.app-settings.active {
-  opacity: 1;
-  background: var(--bg);
+.app-sidebar__icon {
+  flex: none;
+}
+
+/* Icons only: the names stay for screen readers and show on hover. */
+.app[data-sidebar='icons'] .app-sidebar__link {
+  justify-content: center;
+  padding-inline: 0.4rem;
+}
+
+.app[data-sidebar='icons'] .app-sidebar__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.app[data-sidebar='hidden'] .app-sidebar {
+  display: none;
+}
+
+/* A narrow window: the sidebar slides over the page. */
+.app[data-sidebar='over'] .app-sidebar {
+  position: fixed;
+  inset-block: var(--header-height) 0;
+  inset-inline-start: 0;
+  z-index: 15;
+  block-size: auto;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 25%);
+}
+
+.app-backdrop {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  z-index: 14;
+  background: rgb(0 0 0 / 35%);
+}
+
+/* A narrow window's top bar: the section rather than the app's name, a shorter input picker. */
+.app[data-narrow] .app-title__name,
+.app[data-narrow] .app-section::before {
+  display: none;
+}
+
+.app[data-narrow] .input-picker select {
+  max-inline-size: 7rem;
 }
 
 .app-main {
+  flex: 1;
+  min-inline-size: 0;
   max-width: 1100px;
   margin-inline: auto;
   padding: 1.5rem;

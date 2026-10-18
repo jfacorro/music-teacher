@@ -2,6 +2,8 @@
   "appTitle": "Piano Teacher",
   "nav": {
     "label": "Main",
+    "menu": "Menu",
+    "home": "Home",
     "learn": "Learn",
     "songs": "Song practice",
     "sightReading": "Sight-reading",

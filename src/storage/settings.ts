@@ -43,6 +43,8 @@ export interface Settings {
   keyHeight: KeyHeight;
   /** How many keys the on-screen keyboard shows around the music. */
   keysShown: KeysShown;
+  /** The sidebar shows only its icons (on a wide window; a narrow one hides it anyway). */
+  sidebarCollapsed: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -67,6 +69,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: Theme.System,
   keyHeight: KeyHeight.Normal,
   keysShown: KeysShown.Fit,
+  sidebarCollapsed: false,
 };
 
 const SETTINGS_KEY = 'app';
