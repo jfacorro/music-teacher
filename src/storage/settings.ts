@@ -21,6 +21,8 @@ export interface Settings {
   keySound: boolean;
   /** Clicks are played this much earlier to make up for output delay the browser misses, ms. */
   soundTimingMs: number;
+  /** The timing measured for each sound output, by its name; followed as outputs change. */
+  soundTimings: Record<string, number>;
   /** Metronome clicks, 0–100 %. */
   metronomeVolume: number;
   /** The app's piano (autoplay, the other hand, computer and on-screen keys), 0–100 %. */
@@ -56,6 +58,7 @@ export const DEFAULT_SETTINGS: Settings = {
   devKeyboard: true,
   keySound: true,
   soundTimingMs: 0,
+  soundTimings: {},
   metronomeVolume: DEFAULT_VOLUMES.metronome,
   pianoVolume: DEFAULT_VOLUMES.piano,
   midiInputId: null,

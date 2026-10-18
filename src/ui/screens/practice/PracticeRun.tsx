@@ -51,6 +51,7 @@ import { useRunRecording } from './useRunRecording';
 import { DynamicsNow } from './DynamicsNow';
 import { PedalIndicator } from '../../components/PedalIndicator';
 import { ResultsCard } from './ResultsCard';
+import { SoundOutputNotice } from '../../components/SoundOutputNotice';
 import { InputSource } from '../../../input/types';
 
 const SECONDS_VISIBLE = 3;
@@ -502,6 +503,7 @@ export function PracticeRun({
       </div>
 
       {micChords && <p className="notice practice__notice">{t('practice.micChords')}</p>}
+      {metronome && <SoundOutputNotice />}
 
       {/* Results float over the page; closed, the music stays with its colored notes. */}
       {state.summary && resultsOpen && (
@@ -517,6 +519,7 @@ export function PracticeRun({
             onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
             hasDynamics={score.dynamics !== undefined}
             hasTouch={hasTouchMarks(score, session.hands)}
+            clicks={metronome}
           >
             {weak || extraActions || run.recording ? (
               <>

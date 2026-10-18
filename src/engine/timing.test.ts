@@ -4,6 +4,7 @@ import {
   MIDI_WINDOWS,
   chordToleranceFor,
   gradeFor,
+  steadyLatenessMs,
   timingOf,
   windowsFor,
 } from './timing';
@@ -47,5 +48,17 @@ describe('per-source settings', () => {
     expect(windowsFor(InputSource.Mic)).toBe(MIC_WINDOWS);
     expect(chordToleranceFor(InputSource.Midi)).toBe(150);
     expect(chordToleranceFor(InputSource.Mic)).toBe(250);
+  });
+});
+
+describe('steadyLatenessMs', () => {
+  it('finds notes that are late by about the same amount', () => {
+    expect(steadyLatenessMs([100, 76, 57, 76, 95, 76, 0, 20])).toBe(76);
+  });
+
+  it('leaves out scattered timing, small delays and too few notes', () => {
+    expect(steadyLatenessMs([120, -110, 90, -80, 100, -60])).toBeNull();
+    expect(steadyLatenessMs([30, 40, 35, 45, 25])).toBeNull();
+    expect(steadyLatenessMs([100, 90, 110])).toBeNull();
   });
 });

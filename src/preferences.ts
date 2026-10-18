@@ -1,5 +1,6 @@
 /** User preference changes that touch more than the stored settings. */
 import { setSoundTimingCorrection, setVolumes } from './audio/audio';
+import { timingForOutput, useSoundOutput } from './audio/output';
 import { changeLanguage } from './i18n';
 import { detectLanguage } from './i18n/languages';
 import { setDevInputEnabled } from './input/dev/devInput';
@@ -24,8 +25,23 @@ export function setDevKeyboardPreference(enabled: boolean): void {
   setDevInputEnabled(enabled);
 }
 
+/** The click timing, measured (or reset) for the output sound goes to now. */
 export function setSoundTiming(ms: number): void {
   const soundTimingMs = Math.round(ms);
+  const output = useSoundOutput.getState().name;
+  updateSettings({
+    soundTimingMs,
+    ...(output !== null && {
+      soundTimings: { ...useSettings.getState().soundTimings, [output]: soundTimingMs },
+    }),
+  });
+  setSoundTimingCorrection(soundTimingMs);
+}
+
+/** Sound moved to another output: use the timing measured for it (none if it never was). */
+export function followSoundOutput(output: string | null): void {
+  const soundTimingMs = timingForOutput(useSettings.getState().soundTimings, output);
+  if (soundTimingMs === null || soundTimingMs === useSettings.getState().soundTimingMs) return;
   updateSettings({ soundTimingMs });
   setSoundTimingCorrection(soundTimingMs);
 }
