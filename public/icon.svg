@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- The app's icon: the same drawing as build/icon.png, the desktop app's icon. -->
+  <rect x="8" y="8" width="240" height="240" rx="48" fill="#3b5bdb" />
+  <g fill="#f6f5f2">
+    <rect x="43" y="64" width="33" height="145" />
+    <rect x="79" y="64" width="32" height="145" />
+    <rect x="114" y="64" width="32" height="145" />
+    <rect x="149" y="64" width="32" height="145" />
+    <rect x="184" y="64" width="32" height="145" />
+  </g>
+  <g fill="#1c1b19">
+    <rect x="65" y="64" width="22" height="89" />
+    <rect x="100" y="64" width="22" height="89" />
+    <rect x="170" y="64" width="22" height="89" />
+  </g>
+</svg>

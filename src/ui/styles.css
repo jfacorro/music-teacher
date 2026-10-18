@@ -127,6 +127,9 @@ h3 {
 }
 
 .app-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--text);
@@ -135,6 +138,11 @@ h3 {
 
 .app-title:hover {
   color: var(--accent);
+}
+
+.app-title__icon {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
 }
 
 .app-nav {

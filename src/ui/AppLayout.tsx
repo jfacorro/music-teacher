@@ -17,8 +17,9 @@ export function AppLayout() {
   return (
     <div className="app">
       <header className="app-header">
-        {/* The app's name leads home: the progress screen. */}
+        {/* The app's icon and name lead home: the progress screen. */}
         <Link className="app-title" to="/" title={t('nav.homeTip')}>
+          <img className="app-title__icon" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" />
           {t('appTitle')}
         </Link>
         <nav className="app-nav" aria-label={t('nav.label')}>
