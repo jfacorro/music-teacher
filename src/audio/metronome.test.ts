@@ -53,6 +53,31 @@ describe('startMetronome', () => {
     expect(queued).toEqual([500]);
   });
 
+  it('clicks up to where the music waits, and not that beat again when it goes on', () => {
+    const transport = new Transport(60, () => now);
+    const clicks: number[] = [];
+    let holdBeat = 2;
+    const stop = startMetronome(
+      transport,
+      () => ({ metronome: true, countInFrom: null, beatsPerMeasure: 4, holdBeat }),
+      (time) => clicks.push(Math.round(time) + 0),
+      () => 600, // a large sound-delay correction: the look-ahead reaches far
+    );
+    transport.seek(0.5);
+    transport.play();
+    run(1500); // beat 2: the music waits here
+    transport.pause();
+    transport.seek(2);
+    run(2000); // waiting: no clicks
+    holdBeat = 4;
+    transport.play(); // the note was played
+    run(1500);
+    stop();
+    // Beats 1 and 2 (the music waits there), then after the 2 s wait beat 3 and the next
+    // note's beat 4: never 2 twice.
+    expect(clicks).toEqual([500, 1500, 4500, 5500]);
+  });
+
   it('stays quiet while paused and resyncs after a seek', () => {
     const transport = new Transport(60, () => now);
     const clicks: number[] = [];

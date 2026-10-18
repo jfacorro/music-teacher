@@ -140,8 +140,10 @@ async function createEngine(): Promise<AudioEngine> {
     click(time, accent) {
       const target = audioTimeFor(context, time - timingCorrectionMs);
       // A click that's already noticeably late (e.g. timers throttled in a background tab)
-      // would only confuse; skip it rather than play it off the beat.
-      if (target < context.currentTime - MAX_LATE_S) return;
+      // would only confuse; skip it rather than play it off the beat. Its time is on the
+      // speakers' timeline, which runs behind by the output delay: that much late still plays.
+      const outputDelay = context.baseLatency + (context.outputLatency || 0);
+      if (target < context.currentTime - outputDelay - MAX_LATE_S) return;
       // Tone requires strictly increasing start times for the same synth.
       const when = Math.max(target, context.currentTime, lastClick + 0.001);
       lastClick = when;
