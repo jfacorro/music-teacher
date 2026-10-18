@@ -134,6 +134,8 @@ export function PracticeRun({
         hands,
         leadInSeconds: LEAD_IN_SCREENS * SECONDS_VISIBLE,
         loop,
+        // Waiting for each note, the metronome counts in too.
+        countIn: metronome,
         anyKey: rhythm,
         // Timing windows before the first note arrives: wider for the microphone.
         defaultSource:
@@ -212,6 +214,8 @@ export function PracticeRun({
     if (state.summary) finished.current?.(state.summary, performance.now() - startedAt.current);
   }, [state.summary]);
 
+  // Waiting for each note, the metronome counts in too (before starting, the run moves back).
+  useEffect(() => session.setCountIn(metronome), [session, metronome]);
   // The metronome and the other hand read the latest choices without restarting. Playing a
   // recording back has no metronome.
   const metronomeOn = useRef(metronome);
@@ -230,6 +234,7 @@ export function PracticeRun({
           musicStart: session.musicStart,
           loopEnd: session.looping ? session.musicEnd : null,
           beatsPerMeasure: beatsPerMeasure(score.timeSignature),
+          holdBeat: session.holdBeat,
         }),
         (time, accent) => audioIfReady()?.click(time, accent),
         soundLeadMs,

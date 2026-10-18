@@ -15,6 +15,11 @@ export interface ClickOptions {
   musicStart?: number;
   /** When looping, playback jumps back here to the loop's start: no clicks from here on. */
   loopEnd?: number | null;
+  /**
+   * Wait mode: the music stops at this beat until its notes are played. Its click marks when
+   * they're due; none comes after it until the music moves on.
+   */
+  holdBeat?: number;
   beatsPerMeasure: number;
 }
 

@@ -119,7 +119,15 @@ export interface SessionOptions {
   defaultSource?: InputSource;
   /** Rhythm exercises: any key counts as the next note; only timing matters. */
   anyKey?: boolean;
+  /** Wait mode: count in a measure first, as when playing along (with the metronome on). */
+  countIn?: boolean;
 }
+
+/**
+ * A count-in starts this much before its first click, so that click can be scheduled ahead of
+ * time like the others (a click due the instant playback starts would come too late to sound).
+ */
+const PRE_ROLL_SECONDS = 0.25;
 
 const INITIAL_STATE: SessionState = {
   status: SessionStatus.Ready,
@@ -142,6 +150,8 @@ export class PracticeSession {
 
   private readonly leadInSeconds: number;
   private readonly anyKey: boolean;
+  /** Wait mode counts in (see `setCountIn`). */
+  private countInWaiting: boolean;
   /** The loop in beats, or null to play the whole score. */
   private loop: { start: number; end: number } | null = null;
   /** The notes being graded: the selected hands, within the loop. */
@@ -169,6 +179,7 @@ export class PracticeSession {
     this.source = options.defaultSource ?? InputSource.Midi;
     this.leadInSeconds = options.leadInSeconds;
     this.anyKey = options.anyKey ?? false;
+    this.countInWaiting = options.countIn ?? false;
     this.hands = score.notes.filter(
       (n) => options.hands === HandFilter.Both || n.hand === options.hands,
     );
@@ -197,16 +208,28 @@ export class PracticeSession {
 
   /** First count-in beat (tempo mode: one measure before the music), or null. */
   get countInFrom(): number | null {
-    return this.mode === PracticeMode.Tempo
-      ? this.musicStart - beatsPerMeasure(this.score.timeSignature)
-      : null;
+    const counts =
+      this.mode === PracticeMode.Tempo || (this.mode === PracticeMode.Wait && this.countInWaiting);
+    return counts ? this.musicStart - beatsPerMeasure(this.score.timeSignature) : null;
   }
 
-  /** Where playback starts and restarts: the lead-in or the count-in, whichever is longer. */
+  /**
+   * Where playback starts and restarts: the lead-in, or the count-in (a moment before its
+   * first click), whichever is longer.
+   */
   get startBeat(): number {
-    const leadIn = (this.leadInSeconds * this.transport.tempo) / 60;
-    const countIn = this.musicStart - (this.countInFrom ?? this.musicStart);
+    const beats = (seconds: number) => (seconds * this.transport.tempo) / 60;
+    const leadIn = beats(this.leadInSeconds);
+    const from = this.countInFrom;
+    const countIn = from === null ? 0 : this.musicStart - from + beats(PRE_ROLL_SECONDS);
     return this.musicStart - Math.max(leadIn, countIn);
+  }
+
+  /** Wait mode: count in a measure first (when the metronome is on). Moves to the new start. */
+  setCountIn(on: boolean): void {
+    if (this.countInWaiting === on) return;
+    this.countInWaiting = on;
+    if (this.state.status === SessionStatus.Ready) this.transport.seek(this.startBeat);
   }
 
   /**
@@ -300,13 +323,6 @@ export class PracticeSession {
       for (const note of missed) this.outcomes.set(note, { kind: OutcomeKind.Missed });
       if (missed.length > 0)
         this.setState({ streak: 0, feedback: this.feedback({ kind: FeedbackKind.Missed }) });
-
-      const from = this.countInFrom;
-      const countIn =
-        from !== null && position >= from && position < this.musicStart
-          ? Math.floor(position - from) + 1
-          : null;
-      if (countIn !== this.state.countIn) this.setState({ countIn });
     } else if (this.mode === PracticeMode.Wait) {
       const group = this.waitMatcher.current;
       if (group && status === SessionStatus.Playing && position >= group.start) {
@@ -315,6 +331,14 @@ export class PracticeSession {
         this.setState({ status: SessionStatus.Waiting });
       }
     }
+
+    // The count-in, shown 1, 2, 3, 4.
+    const from = this.countInFrom;
+    const countIn =
+      from !== null && position >= from && position < this.musicStart
+        ? Math.floor(position - from) + 1
+        : null;
+    if (countIn !== this.state.countIn) this.setState({ countIn });
 
     if (position < this.musicEnd) return;
     if (this.mode === PracticeMode.Autoplay) {

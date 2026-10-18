@@ -13,13 +13,26 @@ export function startMetronome(
   click: (time: number, accent: boolean) => void,
   leadMs: () => number = () => 0,
 ): () => void {
+  /** The last beat clicked, so a beat isn't clicked twice. */
+  let lastBeat = -Infinity;
   return scheduleAhead(
     transport,
     (from, to) => {
+      // Moving back (starting over, a loop) clicks the beats again; going on from where the
+      // music waited doesn't click that beat a second time.
+      if (from < lastBeat - REPEAT_MARGIN_BEATS) lastBeat = -Infinity;
       for (const { beat, accent } of clicksBetween(from, to, options())) {
+        if (beat <= lastBeat) continue;
         click(transport.timeAt(beat), accent);
+        lastBeat = beat;
       }
     },
-    { leadMs },
+    // Up to and including the beat where the music will wait (wait mode).
+    { leadMs, until: () => (options().holdBeat ?? Infinity) + HOLD_MARGIN_BEATS },
   );
 }
+
+/** Further back than this is a jump back, not going on after a wait. */
+const REPEAT_MARGIN_BEATS = 0.5;
+/** Just past the waiting beat, so its own click is included. */
+const HOLD_MARGIN_BEATS = 1e-4;

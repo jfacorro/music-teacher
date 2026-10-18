@@ -5,6 +5,7 @@ import {
   PracticeMode,
   HandFilter,
   FeedbackKind,
+  SessionStatus,
 } from './session';
 import { noteOff, noteOn, scoreOf, type NoteSpec } from './testUtils';
 import { Transport } from './transport';
@@ -61,7 +62,8 @@ const melody: NoteSpec[] = [
 
 describe('PracticeSession: tempo mode', () => {
   it('starts after a one-measure count-in (or the lead-in, if longer)', () => {
-    expect(setup(melody, { leadInSeconds: 2 }).transport.position()).toBe(-4);
+    // A quarter of a second before the first click, so it can be scheduled in time.
+    expect(setup(melody, { leadInSeconds: 2 }).transport.position()).toBe(-4.25);
     expect(setup(melody, { leadInSeconds: 6 }).transport.position()).toBe(-6);
   });
 
@@ -182,7 +184,7 @@ describe('PracticeSession: tempo mode', () => {
     t.at(1);
     t.session.restart();
     expect(t.session.getState()).toMatchObject({ status: 'ready', streak: 0, feedback: null });
-    expect(t.transport.position()).toBe(-4);
+    expect(t.transport.position()).toBe(-4.25);
   });
 
   it('grades only the selected hand and ignores the other hand’s keys', () => {
@@ -255,6 +257,20 @@ describe('PracticeSession: wait mode', () => {
     const t = setup(melody, { mode: PracticeMode.Wait, leadInSeconds: 2 });
     expect(t.session.countInFrom).toBeNull();
     expect(t.transport.position()).toBe(-2);
+  });
+
+  it('counts in a measure when asked (with the metronome on)', () => {
+    const t = setup(melody, { mode: PracticeMode.Wait, leadInSeconds: 2 });
+    t.session.setCountIn(true);
+    expect(t.session.countInFrom).toBe(-4);
+    expect(t.transport.position()).toBe(-4.25);
+    t.session.play();
+    t.at(-2.5);
+    expect(t.session.getState().countIn).toBe(2);
+    t.at(0);
+    expect(t.session.getState()).toMatchObject({ status: SessionStatus.Waiting, countIn: null });
+    t.session.setCountIn(false); // only before starting does it move
+    expect(t.transport.position()).toBe(0);
   });
 
   it('stops at each note until it is played', () => {
@@ -434,7 +450,7 @@ describe('PracticeSession: loop and tempo', () => {
     expect(t.session.practiced.map((n) => n.pitch.midi)).toEqual([D4]);
     expect(t.session.isGraded(t.score.notes[0]!)).toBe(false);
     expect(t.session.countInFrom).toBe(0);
-    expect(t.transport.position()).toBe(0);
+    expect(t.transport.position()).toBe(-0.25);
     t.session.play();
     t.at(1);
     expect(t.session.getState().countIn).toBe(2);
@@ -501,7 +517,7 @@ describe('PracticeSession: loop and tempo', () => {
     t.session.setLoop(null);
     expect(t.session.practiced).toHaveLength(3);
     expect(t.session.getState().status).toBe('ready');
-    expect(t.transport.position()).toBe(-4);
+    expect(t.transport.position()).toBe(-4.25);
   });
 
   it('changes tempo without jumping, and moves to the new lead-in before starting', () => {
