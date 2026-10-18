@@ -6,7 +6,7 @@
 import { create } from 'zustand';
 import { db, type StepRunRow } from './db';
 
-export type StepRun = Pick<StepRunRow, 'at' | 'stars' | 'accuracy'>;
+export type StepRun = Pick<StepRunRow, 'at' | 'stars' | 'accuracy' | 'passed'>;
 
 /** A lesson step's key: "lesson:<id>:<step index>" (as for recordings). */
 export const stepKey = (lessonId: string, index: number) => `lesson:${lessonId}:${index}`;
@@ -20,8 +20,8 @@ export async function loadStepRuns(lessonId: string): Promise<void> {
   try {
     const rows = await db.stepRuns.where('key').startsWith(`lesson:${lessonId}:`).toArray();
     const byKey: Record<string, StepRun[]> = {};
-    for (const { key, at, stars, accuracy } of rows.sort((a, b) => a.at - b.at)) {
-      (byKey[key] ??= []).push({ at, stars, accuracy });
+    for (const { key, at, stars, accuracy, passed } of rows.sort((a, b) => a.at - b.at)) {
+      (byKey[key] ??= []).push({ at, stars, accuracy, ...(passed !== undefined && { passed }) });
     }
     useStepRuns.setState((state) => ({ byKey: { ...state.byKey, ...byKey } }));
   } catch (error) {
@@ -31,10 +31,10 @@ export async function loadStepRuns(lessonId: string): Promise<void> {
 
 export async function recordStepRun(
   key: string,
-  { stars, accuracy }: Pick<StepRun, 'stars' | 'accuracy'>,
+  { stars, accuracy, passed }: Pick<StepRun, 'stars' | 'accuracy' | 'passed'>,
   now = Date.now(),
 ): Promise<void> {
-  const run: StepRun = { at: now, stars, accuracy };
+  const run: StepRun = { at: now, stars, accuracy, ...(passed !== undefined && { passed }) };
   useStepRuns.setState((state) => ({
     byKey: { ...state.byKey, [key]: [...(state.byKey[key] ?? []), run] },
   }));

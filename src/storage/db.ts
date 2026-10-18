@@ -66,7 +66,7 @@ export interface RecordingRow {
   recording: Recording;
 }
 
-/** One finished try of a lesson's graded step (exercise, note quiz, rhythm). */
+/** One finished try of a lesson's graded step (exercise, note quiz, rhythm, finding keys). */
 export interface StepRunRow {
   id?: number;
   /** "lesson:<id>:<step index>". */
@@ -75,6 +75,8 @@ export interface StepRunRow {
   at: number;
   stars: number;
   accuracy: number;
+  /** It passed the step (missing on tries kept before this was saved). */
+  passed?: boolean;
 }
 
 export const db = new Dexie('piano-teacher') as Dexie & {

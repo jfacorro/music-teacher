@@ -810,6 +810,9 @@ Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5�
 - Every finished try of a lesson's exercises, note quizzes and rhythm steps is kept (`stepRuns` table, database version 6, in backups; keyed `lesson:<id>:<step>`, so new steps are appended to lessons, never inserted, to keep each step's history). Until then only a lesson's overall best was saved, so histories start from this change.
 - Each graded step shows a line under the step dots: the best try and the last (with its date when it wasn't today), the last five as small bars (height = accuracy, color = stars, oldest first), and "N tries", which opens every try with its date, newest first.
 
+**Skipping a step done before** — ✔ done
+- A lesson step passed on an earlier visit counts when skipped: its dot shows as done, it offers Continue rather than Skip, and its best try counts in the lesson's stars (before, a skipped step scored zero, so replaying a lesson and skipping one step ended with no stars and set its review sooner). Tries keep whether they passed the step, and finding the keys counts as a try too. For a lesson finished before tries were kept, its own best stands in for the steps not tried since (steps added to it later count as done as well).
+
 **Metronome fixes** — ✔ done
 - The first click of a count-in sounds: a run now starts a quarter of a second before it, so it's scheduled ahead like the others (before, it was due the instant playback started, already late for the speakers, and skipped). Clicks only as late as the output delay still play; only truly late ones (a throttled background tab) are dropped.
 - "Wait for me" with the metronome on counts in a measure first, as when playing along, and clicks up to where the music waits: the click on the waiting note's beat says when it's due. Nothing clicks during the wait, and that beat isn't clicked again when the music goes on.
