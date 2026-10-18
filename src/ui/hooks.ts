@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { notesAt, type ScoreNote } from '../engine/score';
 import type { Transport, TransportState } from '../engine/transport';
 import { useLiveInput } from '../input/liveStore';
@@ -7,6 +7,19 @@ import { useLiveInput } from '../input/liveStore';
 export function usePressedKeys(): ReadonlySet<number> {
   const held = useLiveInput((s) => s.held);
   return useMemo(() => new Set(held.map((note) => note.pitch)), [held]);
+}
+
+/** Whether a CSS media query matches, kept up to date. */
+export function useMediaQuery(query: string): boolean {
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const media = window.matchMedia(query);
+      media.addEventListener('change', onChange);
+      return () => media.removeEventListener('change', onChange);
+    },
+    [query],
+  );
+  return useSyncExternalStore(subscribe, () => window.matchMedia(query).matches);
 }
 
 export function useTransportState(transport: Transport): TransportState {

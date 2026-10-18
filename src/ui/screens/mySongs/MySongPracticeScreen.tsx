@@ -6,6 +6,7 @@ import type { MySongRow } from '../../../storage/db';
 import { ResultKind } from '../../../storage/progress';
 import { ICONS } from '../../icons';
 import { LoadStatus } from '../../loadStatus';
+import { useTopBarDetail } from '../../topBar';
 import { PracticeView } from '../practice/PracticeView';
 import { useMySong } from './useMySong';
 
@@ -32,6 +33,7 @@ export function MySongPracticeScreen() {
 function MySongPractice({ song, id }: { song: MySongRow; id: number }) {
   const { t } = useTranslation('screens');
   const { score } = useMemo(() => importedScore(song.music, song.options), [song]);
+  useTopBarDetail(song.title);
   const settings = (
     <Link className="button" to={`/my-songs/${id}`} title={t('practice.songSettingsTip')}>
       <span className="button__icon" aria-hidden="true">

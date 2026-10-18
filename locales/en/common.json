@@ -2,13 +2,16 @@
   "appTitle": "Piano Teacher",
   "nav": {
     "label": "Main",
+    "menu": "Menu",
+    "home": "Home",
     "learn": "Learn",
     "songs": "Song practice",
     "sightReading": "Sight-reading",
     "earTraining": "Ear training",
     "freePlay": "Free play",
     "settings": "Settings",
-    "homeTip": "Your progress"
+    "homeTip": "Your progress",
+    "pageTitle": "{where} · Piano Teacher"
   },
   "midiBadge": {
     "connecting": "Connecting…",

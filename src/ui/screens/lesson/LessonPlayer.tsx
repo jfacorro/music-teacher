@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { findLesson } from '../../../content/courses';
+import { findLesson, UNITS } from '../../../content/courses';
 import { lessonNamespace, type Lesson } from '../../../content/lessons';
 import {
   bestResults,
@@ -11,6 +11,7 @@ import {
 import { useContentText } from '../../../i18n/useContentText';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
 import { loadStepRuns, recordStepRun, stepKey, useStepRuns } from '../../../storage/stepRuns';
+import { useTopBarDetail } from '../../topBar';
 import { StepHistory } from './StepHistory';
 import { LessonComplete } from './LessonComplete';
 import { ExerciseStepView } from './steps/ExerciseStepView';
@@ -106,12 +107,14 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const markDone = (stepIndex: number) => setDone((prev) => new Set(prev).add(stepIndex));
   const next = () => setIndex((i) => i + 1);
   const canContinue = step?.type === StepType.Explain || passed.has(index);
+  const title = courseText(`lessons.${lesson.id}`, courseLesson.titleVars);
+  useTopBarDetail(t('lesson.topBar', { number: UNITS.indexOf(unit) + 1, lesson: title }));
 
   return (
     <section className="screen lesson">
       <header className="lesson__header">
         <p className="muted">{courseText(`units.${unit.id}.title`, unit.textVars)}</p>
-        <h1>{courseText(`lessons.${lesson.id}`, courseLesson.titleVars)}</h1>
+        <h1>{title}</h1>
         <ol className="lesson__progress" aria-label={t('lesson.progress')}>
           {lesson.steps.map((_, i) => (
             <li

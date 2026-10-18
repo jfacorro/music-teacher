@@ -21,6 +21,7 @@ import { dropRecordings } from '../../../storage/recordings';
 import { rememberDrill, useSightReading } from '../../../storage/sightReading';
 import { VolumeButton } from '../../components/VolumeControls';
 import { ICONS } from '../../icons';
+import { useTopBarDetail } from '../../topBar';
 import { PracticeRun } from '../practice/PracticeRun';
 import { useDrillLevelName } from './useDrillLevelName';
 
@@ -92,6 +93,7 @@ function Drills({ open }: { open: readonly DrillLevel[] }) {
       : remembered && open.includes(remembered)
         ? remembered
         : open.at(-1)!;
+  useTopBarDetail(levelName(level));
   const seed = parseSeed(params.get('seed'));
   const inAddress = seed !== null && asked === level;
 

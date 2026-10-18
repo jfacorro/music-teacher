@@ -9,6 +9,7 @@ import {
 import { defaultImportOptions } from '../../../content/loaders/importedScore';
 import { IMPORT_FILE_TYPES, readMusicFile } from '../../../content/loaders/importFile';
 import { addMySong } from '../../../storage/mySongs';
+import { useTopBarDetail } from '../../topBar';
 import { SongSetup } from './SongSetup';
 
 interface ReadFile {
@@ -25,6 +26,7 @@ export function ImportSongScreen() {
   const [error, setError] = useState<ImportErrorCode | null>(null);
   const [reading, setReading] = useState(false);
   const [dragging, setDragging] = useState(false);
+  useTopBarDetail(t('mySongs.import.title'));
 
   const read = async (chosen: File) => {
     setReading(true);

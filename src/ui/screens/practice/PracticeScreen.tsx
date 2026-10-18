@@ -6,6 +6,7 @@ import type { Score } from '../../../engine/score';
 import { ResultKind } from '../../../storage/progress';
 import { PracticeView } from './PracticeView';
 import { LoadStatus } from '../../loadStatus';
+import { useTopBarDetail } from '../../topBar';
 
 type LoadState =
   | { status: typeof LoadStatus.Loading }
@@ -31,6 +32,7 @@ function SongLoader({ songId }: { songId: SongId }) {
   const { t } = useTranslation('screens');
   const { t: ts } = useTranslation('songs');
   const [state, setState] = useState<LoadState>({ status: LoadStatus.Loading });
+  useTopBarDetail(ts(`${songId}.title`));
 
   useEffect(() => {
     let cancelled = false;

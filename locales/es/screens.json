@@ -436,6 +436,7 @@
     }
   },
   "lesson": {
+    "topBar": "Unidad {number} · {lesson}",
     "notFound": "Esta lección no existe.",
     "loadError": "No se pudo cargar esta lección.",
     "backHome": "Volver a las lecciones",

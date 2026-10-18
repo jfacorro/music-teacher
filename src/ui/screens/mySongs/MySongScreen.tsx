@@ -5,6 +5,7 @@ import type { MySongRow } from '../../../storage/db';
 import { deleteMySong, updateMySong } from '../../../storage/mySongs';
 import { Modal } from '../../components/Modal';
 import { LoadStatus } from '../../loadStatus';
+import { useTopBarDetail } from '../../topBar';
 import { SongSetup } from './SongSetup';
 import { useMySong } from './useMySong';
 
@@ -34,6 +35,7 @@ function SongSettings({ song, id }: { song: MySongRow; id: number }) {
   const headingId = useId();
   const [confirming, setConfirming] = useState(false);
   const practice = `/practice/my/${id}`;
+  useTopBarDetail(song.title);
 
   return (
     <section className="screen">

@@ -25,6 +25,8 @@ system setting (`src/i18n/naming.ts`).
 | MIDI keyboard                                 | MIDI keyboard                                        | teclado MIDI                                       |
 | Computer keyboard                             | computer keyboard                                    | teclado de la computadora                          |
 | Free play                                     | free play                                            | práctica libre                                     |
+| Home (the progress page)                      | Home                                                 | Inicio                                             |
+| Menu (the ☰ button)                          | menu                                                 | menú                                               |
 | Learning path                                 | learning path                                        | camino de aprendizaje                              |
 | Lesson                                        | lesson                                               | lección                                            |
 | Progress                                      | progress                                             | progreso                                           |

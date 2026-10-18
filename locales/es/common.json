@@ -2,13 +2,16 @@
   "appTitle": "Profesor de piano",
   "nav": {
     "label": "Principal",
+    "menu": "Menú",
+    "home": "Inicio",
     "learn": "Aprender",
     "songs": "Práctica de canciones",
     "sightReading": "Lectura a primera vista",
     "earTraining": "Oído musical",
     "freePlay": "Práctica libre",
     "settings": "Configuración",
-    "homeTip": "Tu progreso"
+    "homeTip": "Tu progreso",
+    "pageTitle": "{where} · Profesor de piano"
   },
   "midiBadge": {
     "connecting": "Conectando…",

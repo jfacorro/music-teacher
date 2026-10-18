@@ -1,3 +1,4 @@
+import { IconChevronDown } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useMic, MicStatus } from '../../input/mic/micInput';
 import { enableMidi, useMidi, MidiAccessState, MidiConnection } from '../../input/midi/midiInput';
@@ -111,6 +112,8 @@ export function InputPicker() {
           </option>
         ))}
       </select>
+      {/* Shown instead of the select's own arrow when only the dot shows (a narrow window). */}
+      <IconChevronDown className="input-picker__chevron" size={14} aria-hidden="true" />
     </label>
   );
 }
