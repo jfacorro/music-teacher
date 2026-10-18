@@ -2160,3 +2160,30 @@ button.bars__bar:focus-visible {
   gap: 0.75rem;
   padding-block: 0.15rem;
 }
+
+/* Results: touch (staccato, legato, accents, tenuto), kind by kind. */
+.touch-results__list {
+  margin: 0 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.touch-results__item {
+  display: grid;
+  grid-template-columns: 6rem 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding-block: 0.2rem;
+}
+
+.touch-results__kind {
+  font-weight: 600;
+}
+
+.touch-results__verdict {
+  color: var(--problem);
+}
+
+.touch-results__verdict.is-ok {
+  color: var(--ok);
+}

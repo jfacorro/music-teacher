@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { startAccompaniment } from '../../../audio/accompaniment';
 import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
-import { beatsPerMeasure, type Score, type ScoreNote } from '../../../engine/score';
+import { beatsPerMeasure, hasTouchMarks, type Score, type ScoreNote } from '../../../engine/score';
 import { type Summary, OutcomeKind } from '../../../engine/scoring';
 import {
   PracticeSession,
@@ -516,6 +516,7 @@ export function PracticeRun({
             }}
             onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
             hasDynamics={score.dynamics !== undefined}
+            hasTouch={hasTouchMarks(score, session.hands)}
           >
             {weak || extraActions || run.recording ? (
               <>

@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "legato": "Legato means smooth and connected: keep each key down until the next one goes down, so there’s no silence between the notes. A curved line over the notes, a slur, asks for it. With a MIDI keyboard, the app checks it.",
+    "legatoUpDown": "Up and down under one slur: lift each finger just as the next one plays.",
+    "legatoInTime": "Now in time, still connected.",
+    "phrases": "Slurs also shape the music into phrases, like sentences. At the end of a slur, lift the hand a little before the next one starts: a small breath.",
+    "auraLee": "“Aura Lee”, an American song from 1861, in {g} major: four smooth phrases, each under its slur. Remember {fSharp}.",
+    "auraLeeInTime": "Now in time, singing each phrase."
+  }
+}

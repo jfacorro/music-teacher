@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "accents": "An accent (>) asks you to play a note louder than the ones around it: a little more weight on that key. Here the first note of each bar has one.",
+    "accented": "Lean on the accented notes, and keep the others even.",
+    "tenuto": "A short line over or under a note, tenuto, asks you to hold it its whole length and lean on it a little. Next to staccato notes the difference is easy to hear.",
+    "tenutoAndStaccato": "Held, short, held, short: watch the lines and the dots.",
+    "tenutoInTime": "Now in time."
+  }
+}

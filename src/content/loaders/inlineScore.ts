@@ -5,12 +5,22 @@
  *     "notes": [{ "note": "E4", "start": 0, "duration": 1, "hand": "R", "finger": 3 }, …],
  *     "dynamics": [{ "beat": 0, "mark": "p" }, { "beat": 8, "mark": "f" }],
  *     "hairpins": [{ "from": 4, "to": 8, "kind": "crescendo" }],
- *     "keyFifths": 1 }   (key signature: sharps positive, flats negative)
+ *     "keyFifths": 1,    (key signature: sharps positive, flats negative)
+ *     "slurs": [{ "from": 0, "to": 4, "hand": "R" }] }   (legato: that hand's notes from-to)
+ *   A note can have "articulations": ["staccato" | "accent" | "tenuto"].
  *
  * Validates everything once at load time and reports problems with their location, e.g.
  * `song "ode-to-joy" › notes[3] › note: Invalid note "H4": …`.
  */
-import { type Finger, Hand, type Score, type ScoreNote, wholeMeasures } from '../../engine/score';
+import {
+  Articulation,
+  type Finger,
+  Hand,
+  type Score,
+  type ScoreNote,
+  type Slur,
+  wholeMeasures,
+} from '../../engine/score';
 import { isMarking, isDynamic, type Marking } from '../../engine/markings';
 import { type Hairpin, HairpinKind, type ScoreDynamics } from '../../engine/dynamics';
 import { describeValues, isValueOf } from '../../lib/values';
@@ -41,6 +51,7 @@ export function parseInlineScore(input: unknown, location: string): Score {
     .sort((a, b) => a.start - b.start || a.pitch.midi - b.pitch.midi);
 
   const markings = parseMarkings(data.markings, at(location, 'markings'));
+  const slurs = parseSlurs(data.slurs, at(location, 'slurs'));
   const dynamics = parseDynamics(data, location);
   if (
     data.keyFifths !== undefined &&
@@ -56,7 +67,21 @@ export function parseInlineScore(input: unknown, location: string): Score {
     ...(markings.length > 0 && { markings }),
     ...(dynamics && { dynamics }),
     ...(data.keyFifths !== undefined && { keyFifths: data.keyFifths as number }),
+    ...(slurs.length > 0 && { slurs }),
   };
+}
+
+function parseSlurs(input: unknown, location: string): Slur[] {
+  return list(input, location).map((item, index) => {
+    const where = at(location, `[${index}]`);
+    const slur = expectObject(item, where);
+    const start = expectNumber(slur.from, at(where, 'from'), { min: 0 });
+    const end = expectNumber(slur.to, at(where, 'to'), { min: start, exclusive: true });
+    if (!isValueOf(Hand, slur.hand)) {
+      throw new ScoreError(at(where, 'hand'), `expected ${describeValues(Hand)}`);
+    }
+    return { start, end, hand: slur.hand };
+  });
 }
 
 function parseDynamics(data: Record<string, unknown>, location: string): ScoreDynamics | null {
@@ -139,6 +164,18 @@ function parseScoreNote(input: unknown, location: string): ScoreNote {
       throw new ScoreError(at(location, 'finger'), 'expected 1–5');
     }
     note.finger = data.finger as Finger;
+  }
+  if (data.articulations !== undefined) {
+    const articulations = list(data.articulations, at(location, 'articulations'));
+    articulations.forEach((item, index) => {
+      if (!isValueOf(Articulation, item)) {
+        throw new ScoreError(
+          at(location, `articulations[${index}]`),
+          `expected ${describeValues(Articulation)}`,
+        );
+      }
+    });
+    if (articulations.length > 0) note.articulations = articulations as Articulation[];
   }
   return note;
 }

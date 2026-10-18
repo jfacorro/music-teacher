@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { ExplainStep } from '../../../../content/lessons';
 import type { ExpectedKey } from '../../../keyboard/PianoKeyboard';
-import { StaffPicture } from '../../../sheet/StaffPicture';
+import { MusicPicture, StaffPicture } from '../../../sheet/StaffPicture';
 import { StepKeyboard } from './StepKeyboard';
 
 export function ExplainStepView({ step, text }: { step: ExplainStep; text: string }) {
@@ -27,6 +27,7 @@ export function ExplainStepView({ step, text }: { step: ExplainStep; text: strin
           bar={step.staff.bar}
         />
       )}
+      {step.music && <MusicPicture score={step.music} />}
       <StepKeyboard range={step.range} highlight={highlight} />
     </div>
   );

@@ -50,5 +50,13 @@
   "fur-elise": {
     "title": "Para Elisa (comienzo)",
     "composer": "Ludwig van Beethoven"
+  },
+  "can-can": {
+    "title": "Cancán",
+    "composer": "Jacques Offenbach"
+  },
+  "aura-lee": {
+    "title": "Aura Lee",
+    "composer": "George R. Poulton"
   }
 }

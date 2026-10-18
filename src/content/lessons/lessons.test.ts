@@ -52,6 +52,7 @@ describe('courses', () => {
     expect(groups.map(({ level, units }) => [level, units.map(({ number }) => number)])).toEqual([
       [CourseLevel.Beginner, [1, 2, 3, 4]],
       [CourseLevel.Elementary, [5, 6, 7, 8]],
+      [CourseLevel.LateElementary, [9]],
     ]);
   });
 
@@ -174,6 +175,11 @@ describe('parseLesson', () => {
           keys: [{ note: 'C4', finger: 1 }],
           range: ['C3', 'C5'],
           staff: { clef: 'treble', notes: ['C4', 'G4'], names: true },
+          music: {
+            tempo: 60,
+            timeSignature: [4, 4],
+            notes: [{ note: 'C4', start: 0, duration: 1, hand: 'R', articulations: ['staccato'] }],
+          },
         },
         { type: 'find', text: 'b', notes: ['C4', 'E4'] },
         {
@@ -213,6 +219,7 @@ describe('parseLesson', () => {
       range: [48, 72],
       hand: 'R',
       staff: { clef: 'treble', notes: [{ midi: 60 }, { midi: 67 }], names: true, bar: false },
+      music: { notes: [{ pitch: { midi: 60 }, articulations: ['staccato'] }] },
     });
     expect(lesson.steps[1]).not.toHaveProperty('staff');
     expect(lesson.steps[2]).toMatchObject({
@@ -256,6 +263,11 @@ describe('parseLesson', () => {
       'a staff picture with a bad clef',
       { type: 'explain', text: 'x', staff: { clef: 'alto', notes: ['C4'] } },
       'staff › clef',
+    ],
+    [
+      'music with a bad note',
+      { type: 'explain', text: 'x', music: { tempo: 60, timeSignature: [4, 4], notes: [{}] } },
+      'music › notes[0]',
     ],
     ['too many quiz cards', { type: 'quiz', text: 'x', notes: ['C4'], count: 100 }, 'count'],
     ['a bad clef', { type: 'quiz', text: 'x', notes: ['C4'], clef: 'alto' }, 'clef'],

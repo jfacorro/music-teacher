@@ -738,61 +738,45 @@ Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5�
 
 ---
 
-### Phase 5 — Playing musically (draft)
+### Phase 5 — Playing musically
 
 **Goal:** go past the first method book: shape the sound (touch, pedal), move freely around the keyboard, read more keys and rhythms, and let each hand play its own line. Each unit ends in songs that need what it teaches, as in Units 1–8.
 
 #### Scope
 
-**5.1 Score and engine: touch, pedal and form**
-- Score format: articulation per note (`staccato`, `accent`, `tenuto`), slurs (`"slurs": [{ "from": 0, "to": 4, "hand": "R" }]`), pedal marks (`"pedal": [{ "down": 0, "up": 4 }]`), repeats with first and second endings, fermatas, and `rit.` / `a tempo` (a tempo change the transport follows).
-- Sheet music draws them (MusicXML `<articulations>`, `<slur>`, `<pedal>`, `<repeat>`, `<ending>`, `<fermata>`); MusicXML import keeps them. Ties are already drawn; lessons now explain them.
-- Repeats are unrolled for playing, Listen and Compare (the second time through follows the second ending); the sheet shows them once, with the cursor jumping back.
-- Grading, MIDI only (note releases and the pedal, CC64, are exact there; the microphone can't tell when a key is let go): staccato notes released before half their length, legato notes held until the next one starts (a small overlap allowed), accents louder than the notes around them, the pedal down and lifted within a window of each mark. Results show it like dynamics (a verdict per passage); stars stay about the notes, and a lesson exercise can require it (`"pass": { "touch": true }` / `{ "pedal": true }`). With the microphone, lessons explain it but don't grade it.
-- Compare (milestone 4.2) shows how long each key was held against the written length, so legato and staccato show at a glance; with MIDI, a pedal strip under the chart.
+Built one area at a time, each with the engine work it needs and the unit that uses it, so every step can be played and checked on the piano. Units 9–14 stay locked until Unit 8 is finished: their songs, always open in Song practice, are how each area is checked early.
 
-**5.2 Unit 9: Touch** (5 lessons)
-- Legato and slurs: connecting notes, the finger lifting as the next one goes down.
-- Staccato: short, bouncing notes; staccato and legato in the same piece.
-- Ties: two notes joined into one, across a beat and across the bar line.
-- Accents and tenuto: leaning on a note.
-- Songs: "Can-Can" (Offenbach, staccato) and "Ode to Joy" with slurs and ties.
+**5.1 Touch: Unit 9**
+- Score format: articulation per note (`"articulations": ["staccato"]`: staccato, accent, tenuto) and slurs (`"slurs": [{ "from": 0, "to": 4, "hand": "R" }]`: the notes of that hand starting from `from` to `to`). Sheet music draws them (MusicXML `<articulations>`, `<slur>`), and MusicXML import keeps them. Ties are already drawn; the unit explains them.
+- Grading, MIDI only (the microphone can't tell when a key is let go), on the real time each key is held, so it works waiting or playing along: staccato notes let go before half their length, slurred notes held until the next one goes down (no gap), accents louder than the notes around them, tenuto notes held their full length. Results show each kind ("7 of 8 short") and the bars to work on; stars stay about the notes, and a lesson exercise can require it (`"pass": { "touch": true }`). With the microphone, results say touch needs a MIDI keyboard.
+- Unit 9, touch (5 lessons): legato and slurs; staccato; staccato and legato together; accents and tenuto; ties. Songs: "Can-Can" (Offenbach, staccato) and "Aura Lee" (legato). New skill: touch.
+- Built as: the thresholds are staccato let go within half the note's written length; slurred notes connected when a key comes up no more than 40 ms before the next goes down (a key played again isn't checked: it has to come up first); accents at least 10 (MIDI velocity) harder than the unaccented notes either side; tenuto held at least 85% of its length. A kind passes when three in four of its notes are right. Results get a **Touch** section under the stars: each kind ("7 of 8 short") and the bars to work on.
+- Explanations can show a few bars of music (`"music"`, an inline score) above the keyboard, so each mark is pictured where it's explained.
+- Unit 9 (late elementary): legato and slurs (a scale under one slur, then phrases, then "Aura Lee"); staccato; both together (then "Can-Can"); accents and tenuto; ties (three held over bar lines, with tenuto lines as reminders). The lessons' own exercises require the touch (`"touch": true`); the songs don't.
+- "Aura Lee" (George R. Poulton, 1861) in G major, four phrases each under a slur. "Can-Can" (the chorus of Offenbach's galop) in C: staccato quarter notes, slurred runs of eighth notes, accented long notes; the octave leap in its fourth bar is simplified to one quarter note. The song test now also checks that every articulation and slur a song uses has been taught.
+- Built as `engine/touch.ts` (checks and summary; pure, tested), `engine/score.ts` (`Articulation`, `Slur`), the session keeping each key's down, up and velocity (MIDI only), `content/musicxml.ts` and `loaders/musicXmlFile.ts` (out and in), `ui/screens/practice/TouchBreakdown.tsx`, `ui/sheet/StaffPicture.tsx › MusicPicture`.
 
-**5.3 Unit 10: The sustain pedal** (4 lessons)
-- What the pedal does, foot on the heel; pedal down and up with the marks.
-- "Legato pedaling": change the pedal just after a new chord, not with it, so the chords connect without blurring.
-- Pedal with broken chords, and when not to pedal (moving melodies, staccato).
-- Song: "Gymnopédie No. 1" (Satie, the opening).
+**5.2 The pedal: Unit 10**
+- Pedal marks in the score (`"pedal": [{ "down": 0, "up": 4 }]`), drawn and imported (MusicXML `<pedal>`); graded with MIDI (CC64): down and up within a window of each mark. Compare gets a pedal strip.
+- Unit 10, the sustain pedal (4 lessons): what it does and the marks; changing it just after a new chord ("legato pedaling"); with broken chords; when not to pedal. Song: "Gymnopédie No. 1" (Satie, the opening).
 
-**5.4 Unit 11: Around the keyboard** (5 lessons)
-- Position shifts mid-phrase: moving the hand during a rest or a long note.
-- Octave jumps: looking ahead, landing on the right key without looking down.
-- Arpeggios: C, G and F major, hands separately, the thumb passing under across octaves.
-- Crossing over: the left hand crossing over the right for a high note.
-- Song: "Prelude in C" (Bach, BWV 846, the opening, as broken chords), with the pedal from Unit 10.
+**5.3 Around the keyboard: Unit 11**
+- Unit 11 (5 lessons): position shifts mid-phrase; octave jumps; arpeggios (C, G and F major, hands separately, the thumb passing under across octaves); crossing over. Song: "Prelude in C" (Bach, BWV 846, the opening), with the pedal.
 
-**5.5 Unit 12: More keys** (5 lessons)
-- D major (two sharps) and B♭ major (two flats): key signatures with two sharps or flats, their scales and fingerings.
-- Relative minors, and minor scales: A, E and D minor, natural and harmonic.
-- Reading in these keys: quizzes with key signatures.
-- Songs: "Musette in D" (from the Notebook for Anna Magdalena Bach), "Scarborough Fair" (D minor).
+**5.4 More keys: Unit 12**
+- Unit 12 (5 lessons): D major (two sharps) and B♭ major (two flats), their scales and fingerings; relative minors and minor scales (A, E and D minor, natural and harmonic); reading with these key signatures. Songs: "Musette in D" (Notebook for Anna Magdalena Bach), "Scarborough Fair" (D minor).
+- Sight-reading: a level in D and B♭ major and minor keys; one with accidentals (Unit 8).
 
-**5.6 Unit 13: Rhythm and form** (5 lessons)
-- Sixteenth notes, and dotted eighth plus sixteenth.
-- 6/8 time: two beats of three eighths.
-- Syncopation: notes on the off-beat, tied across the beat.
-- Repeats and endings; ritardando and the fermata (the music waits, then goes on).
-- Songs: "Morning Mood" (Grieg, 6/8, the opening), "The Entertainer" (Joplin, a simplified opening, syncopation).
+**5.5 Rhythm and form: Unit 13**
+- Score format and playback: repeats with first and second endings (unrolled for playing, Listen and Compare; the sheet shows them once, the cursor jumping back), fermatas (the music holds), and `rit.` / `a tempo` (a tempo change the transport follows); drawn and imported (MusicXML `<repeat>`, `<ending>`, `<fermata>`, `<sound tempo>`).
+- Unit 13 (5 lessons): sixteenth notes, and a dotted eighth with a sixteenth; 6/8 time; syncopation; repeats and endings; ritardando and the fermata. Songs: "Morning Mood" (Grieg, 6/8, the opening), "The Entertainer" (Joplin, a simplified opening).
+- Sight-reading: a level in 6/8 with sixteenths. Ear training: a rhythm level (hear a rhythm, tap it back).
 
-**5.7 Unit 14: Two hands, two lines** (4 lessons)
-- The melody in the left hand, chords in the right.
-- Two melodies at once: each hand with its own rhythm (first in contrary motion, then independent).
-- Songs: "Minuet in G" with Petzold's own left hand (replacing the simplified one as a second version), "Minuet in G minor" (Petzold).
+**5.6 Two lines: Unit 14**
+- Unit 14 (4 lessons): the melody in the left hand, chords in the right; two melodies at once, first in contrary motion, then independent. Songs: "Minuet in G" with Petzold's own left hand (a second version), "Minuet in G minor" (Petzold).
+- Ear training: major or minor scales by ear.
 
-**5.8 Practice grows with the course**
-- Sight-reading: levels for Unit 8 (accidentals), Unit 9 (staccato and slurs to play as written), Unit 12 (D and B♭ major, minor keys) and Unit 13 (6/8, sixteenths).
-- Ear training: a rhythm level (hear a rhythm, tap it back), and major or minor *scales* by ear.
-- Every new song passes the "only what's taught" test, extended to articulation, pedal marks and repeats.
+Every new song passes the "only what's taught" test, extended to articulation, slurs, pedal marks and repeats.
 
 #### Phase 5 done when
 - [ ] Units 9–14 are playable in English and Spanish, each ending in songs that need what it teaches.

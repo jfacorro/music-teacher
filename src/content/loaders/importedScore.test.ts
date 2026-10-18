@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Hand } from '../../engine/score';
+import { Articulation, Hand } from '../../engine/score';
 import { formatNote, type NoteString, pitchOf } from '../../theory/pitch';
 import {
   type ImportedMusic,
@@ -85,6 +85,24 @@ describe('importedScore', () => {
       ['B3', 0, 1, Hand.Left],
       ['C4', 1, 1, Hand.Right],
     ]);
+  });
+
+  it('turns slur starts and stops into slurs for the track’s hand, keeping articulations', () => {
+    const marked: ImportedTrack = {
+      ...melody,
+      notes: melody.notes.map((note, i) => ({
+        ...note,
+        ...(i === 0 && { slurs: ['start' as const] }),
+        ...(i === 2 && { slurs: ['stop' as const], articulations: [Articulation.Accent] }),
+      })),
+    };
+    const result = importedScore(music([marked]), {
+      hands: [TrackHand.Right],
+      transpose: 0,
+      tempo: 72,
+    });
+    expect(result.score?.slurs).toEqual([{ start: 0, end: 2, hand: Hand.Right }]);
+    expect(result.score?.notes.at(-1)?.articulations).toEqual([Articulation.Accent]);
   });
 
   it('has no score when no track is played', () => {

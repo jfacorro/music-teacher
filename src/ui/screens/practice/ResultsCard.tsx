@@ -7,6 +7,7 @@ import { Stars } from '../../components/Stars';
 import { ICONS } from '../../icons';
 import { BarHeatmap } from './BarHeatmap';
 import { DynamicsBreakdown } from './DynamicsBreakdown';
+import { TouchBreakdown } from './TouchBreakdown';
 import { TimingBreakdown } from './TimingBreakdown';
 
 interface ResultsCardProps {
@@ -19,6 +20,8 @@ interface ResultsCardProps {
   onSelectBar?: (bar: number) => void;
   /** The music has loud and soft parts (graded only on a MIDI keyboard). */
   hasDynamics?: boolean;
+  /** The music has staccato, slurs, accents or tenuto (graded only on a MIDI keyboard). */
+  hasTouch?: boolean;
   /** Extra actions next to Try again. */
   children?: ReactNode;
 }
@@ -30,6 +33,7 @@ export function ResultsCard({
   onRetry,
   onSelectBar,
   hasDynamics = false,
+  hasTouch = false,
   children,
 }: ResultsCardProps) {
   const { t, i18n } = useTranslation('screens');
@@ -75,6 +79,11 @@ export function ResultsCard({
         <DynamicsBreakdown dynamics={summary.dynamics} />
       ) : (
         hasDynamics && <p className="muted">{t('practice.dynamics.midiOnly')}</p>
+      )}
+      {summary.touch ? (
+        <TouchBreakdown touch={summary.touch} />
+      ) : (
+        hasTouch && <p className="muted">{t('practice.touch.midiOnly')}</p>
       )}
       {summary.measures.length > 1 && (
         <BarHeatmap measures={summary.measures} onSelect={onSelectBar} />

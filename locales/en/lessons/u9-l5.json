@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "ties": "A tie is a curved line joining two notes on the same key: play the first and keep holding through the second, without playing it again. It lets a note last across a bar line: the {f} here lasts two beats, one in each bar.",
+    "tied": "Three ties: hold each tied note through the bar line. The tenuto line on them is a reminder to hold.",
+    "tiedInTime": "Now in time: count through the tied notes."
+  }
+}

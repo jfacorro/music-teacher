@@ -112,6 +112,28 @@ describe('parseMusicXml', () => {
     expect(music.tracks[0]!.staff).toBeNull();
   });
 
+  it('reads articulations and where slurs start and stop', () => {
+    const notations = (inner: string) => `<notations>${inner}</notations>`;
+    const music = parseMusicXml(
+      piece(
+        measure(
+          attributes('<divisions>1</divisions>'),
+          n('C4', 1, notations('<slur type="start" number="1"/>')),
+          n('D4', 1, notations('<articulations><staccatissimo/><strong-accent/></articulations>')),
+          n(
+            'E4',
+            2,
+            notations('<slur type="stop" number="1"/><articulations><tenuto/></articulations>'),
+          ),
+        ),
+      ),
+    );
+    const [c, d, e] = music.tracks[0]!.notes;
+    expect(c?.slurs).toEqual(['start']);
+    expect(d?.articulations).toEqual(['staccato', 'accent']);
+    expect(e).toMatchObject({ slurs: ['stop'], articulations: ['tenuto'] });
+  });
+
   it('joins tied notes, also across bar lines', () => {
     const music = parseMusicXml(
       piece(

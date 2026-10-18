@@ -2,7 +2,7 @@
  * An imported song's practice score: the learner's choices (which hand plays each track,
  * transposition, tempo) applied to the music read from the file.
  */
-import { Hand, type Score, type ScoreNote, wholeMeasures } from '../../engine/score';
+import { Hand, type Score, type ScoreNote, wholeMeasures, type Slur } from '../../engine/score';
 import { MIDDLE_C, PIANO_HIGHEST, PIANO_LOWEST, pitchFromMidi } from '../../theory/pitch';
 import { type ImportedMusic, suggestHands, TrackHand } from './importedMusic';
 
@@ -34,23 +34,35 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
   const keyFifths = transposeKey(music.keyFifths, options.transpose);
   let outOfRange = 0;
   const notes: ScoreNote[] = [];
+  const slurs: Slur[] = [];
 
   music.tracks.forEach((track, index) => {
     const role = options.hands[index] ?? TrackHand.None;
     if (role === TrackHand.None) return;
-    for (const { pitch, start, duration, finger } of track.notes) {
+    /** A slur open on this track: where it started, and in which hand. */
+    let slur: { start: number; hand: Hand } | null = null;
+    for (const { pitch, start, duration, finger, articulations, slurs: marks } of track.notes) {
       const midi = pitch.midi + options.transpose;
       if (midi < PIANO_LOWEST || midi > PIANO_HIGHEST) {
         outOfRange++;
         continue;
       }
       const hand = role === TrackHand.Split ? (midi >= MIDDLE_C ? Hand.Right : Hand.Left) : role;
+      for (const mark of marks ?? []) {
+        if (mark === 'stop' && slur && start > slur.start) {
+          slurs.push({ start: slur.start, end: start, hand: slur.hand });
+          slur = null;
+        } else if (mark === 'start') {
+          slur = { start, hand };
+        }
+      }
       notes.push({
         pitch: options.transpose === 0 ? pitch : pitchFromMidi(midi, { keyFifths }),
         start,
         duration,
         hand,
         ...(finger && options.transpose === 0 && { finger }),
+        ...(articulations && { articulations }),
       });
     }
   });
@@ -65,6 +77,7 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
       notes: playable,
       measures: wholeMeasures(playable, music.timeSignature),
       ...(music.dynamics && { dynamics: music.dynamics }),
+      ...(slurs.length > 0 && { slurs }),
     },
     outOfRange,
   };

@@ -19,6 +19,8 @@ const loaders = {
   'minuet-in-g': () => import('./minuet-in-g.json'),
   greensleeves: () => import('./greensleeves.json'),
   'fur-elise': () => import('./fur-elise.json'),
+  'aura-lee': () => import('./aura-lee.json'),
+  'can-can': () => import('./can-can.json'),
 } satisfies Record<string, () => Promise<{ default: unknown }>>;
 
 export type SongId = keyof typeof loaders;
@@ -43,6 +45,8 @@ export const SONG_UNITS: Readonly<Record<SongId, string>> = {
   'minuet-in-g': 'u7',
   greensleeves: 'u8',
   'fur-elise': 'u8',
+  'aura-lee': 'u9',
+  'can-can': 'u9',
 };
 
 export function isSongId(id: string | undefined): id is SongId {

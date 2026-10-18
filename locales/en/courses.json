@@ -31,6 +31,10 @@
     "u8": {
       "title": "Sharps, flats and naturals",
       "description": "The black keys’ two names, accidentals in the music, the natural sign, {a} minor and neighbor notes."
+    },
+    "u9": {
+      "title": "Touch",
+      "description": "How each key is played: legato and slurs, staccato, accents, tenuto and ties."
     }
   },
   "lessons": {
@@ -73,7 +77,12 @@
     "u8-l2": "Accidentals in the music",
     "u8-l3": "The natural sign",
     "u8-l4": "{a} minor",
-    "u8-l5": "Neighbor notes"
+    "u8-l5": "Neighbor notes",
+    "u9-l1": "Legato and slurs",
+    "u9-l2": "Staccato",
+    "u9-l3": "Staccato and legato",
+    "u9-l4": "Accents and tenuto",
+    "u9-l5": "Ties"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -95,6 +104,7 @@
     "thumb-under": "Thumb under",
     "accidentals": "Accidentals",
     "minor-keys": "Minor keys",
+    "touch": "Touch",
     "sight-reading": "Sight-reading",
     "ear-training": "Ear training"
   }

@@ -7,7 +7,7 @@
  * that start together form a chord); durations are multiples of a sixteenth note.
  */
 import { HairpinKind } from '../engine/dynamics';
-import { beatsPerMeasure, Hand, type Score, type ScoreNote } from '../engine/score';
+import { beatsPerMeasure, Hand, type Score, type ScoreNote, slurNotes } from '../engine/score';
 import type { Pitch } from '../theory/pitch';
 
 /** Divisions per quarter note: sixteenths (3) and eighth-note triplets (4) are whole numbers. */
@@ -91,6 +91,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
   }));
 
   const directions = options.illustration ? [] : directionsFor(score, staves[0]);
+  const slurs = slurMarks(score);
 
   const measures: string[] = [];
   for (let m = 0; m < measureCount; m++) {
@@ -113,6 +114,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
           options.noteLabel,
           options.rhythm ?? false,
           inBar,
+          slurs,
         ),
       );
     });
@@ -134,6 +136,28 @@ const NO_BAR_LINE = '<barline location="right"><bar-style>none</bar-style></barl
 
 /** Rests take their space but aren't drawn. */
 const hideRests = (xml: string) => xml.replaceAll('<note><rest', '<note print-object="no"><rest');
+
+/** Where a slur starts or stops: on which note, and its number (so two can overlap). */
+interface SlurMark {
+  type: 'start' | 'stop';
+  number: number;
+}
+
+/** Each slur's first and last notes, numbered by hand (1–2 right, 3–4 left, alternating). */
+function slurMarks(score: Score): Map<ScoreNote, SlurMark[]> {
+  const marks = new Map<ScoreNote, SlurMark[]>();
+  const counts = { [Hand.Right]: 0, [Hand.Left]: 0 };
+  for (const slur of score.slurs ?? []) {
+    const notes = slurNotes(score.notes, slur);
+    const first = notes[0];
+    const last = notes.at(-1);
+    if (!first || !last || first === last) continue;
+    const number = (counts[slur.hand]++ % 2) + (slur.hand === Hand.Right ? 1 : 3);
+    marks.set(first, [...(marks.get(first) ?? []), { type: 'start', number }]);
+    marks.set(last, [...(marks.get(last) ?? []), { type: 'stop', number }]);
+  }
+  return marks;
+}
 
 /** One hand's notes as a single line of events (chords grouped, overlaps cut). */
 function eventsFor(notes: readonly ScoreNote[]): Event[] {
@@ -161,6 +185,7 @@ function measureNotes(
   noteLabel: MusicXmlOptions['noteLabel'],
   rhythm: boolean,
   directions: readonly Direction[],
+  slurs: ReadonlyMap<ScoreNote, readonly SlurMark[]> = new Map(),
 ): string[] {
   const out: string[] = [];
   let pending = 0;
@@ -212,6 +237,10 @@ function measureNotes(
             tieStart,
             tieStop,
             fingering: !tieStop,
+            // A tied note's slur starts on its first part and stops on its last.
+            slurs: (slurs.get(note) ?? []).filter((mark) =>
+              mark.type === 'start' ? !tieStop : !tieStart,
+            ),
             rhythm,
             // Chord notes stack their labels on separate lines.
             label: !tieStop && noteLabel ? { text: noteLabel(note), line: n + 1 } : null,
@@ -296,6 +325,7 @@ function noteXml(
     tieStart,
     tieStop,
     fingering,
+    slurs = [],
     rhythm,
     label,
   }: {
@@ -303,14 +333,21 @@ function noteXml(
     tieStart: boolean;
     tieStop: boolean;
     fingering: boolean;
+    slurs?: readonly SlurMark[];
     rhythm: boolean;
     label: { text: string; line: number } | null;
   },
 ): string {
   const { step, alter, octave } = note.pitch;
+  // Articulations go with the note's first written part, like its fingering.
+  const articulations = fingering ? (note.articulations ?? []) : [];
   const notations = [
     tieStop ? '<tied type="stop"/>' : '',
     tieStart ? '<tied type="start"/>' : '',
+    ...slurs.map((mark) => `<slur type="${mark.type}" number="${mark.number}"/>`),
+    articulations.length > 0
+      ? `<articulations>${articulations.map((name) => `<${name}/>`).join('')}</articulations>`
+      : '',
     fingering && note.finger ? `<technical><fingering>${note.finger}</fingering></technical>` : '',
   ].join('');
   return (
