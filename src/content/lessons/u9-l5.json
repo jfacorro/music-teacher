@@ -1,0 +1,256 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "ties",
+      "textVars": {
+        "f": "F4"
+      },
+      "music": {
+        "tempo": 60,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "F4",
+            "start": 3,
+            "duration": 2,
+            "hand": "R"
+          },
+          {
+            "note": "E4",
+            "start": 5,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "D4",
+            "start": 6,
+            "duration": 1,
+            "hand": "R"
+          },
+          {
+            "note": "C4",
+            "start": 7,
+            "duration": 1,
+            "hand": "R"
+          }
+        ]
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "tied",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "score": {
+        "tempo": 72,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "F4",
+            "start": 3,
+            "duration": 2,
+            "hand": "R",
+            "finger": 4,
+            "articulations": ["tenuto"]
+          },
+          {
+            "note": "E4",
+            "start": 5,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 6,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "G4",
+            "start": 7,
+            "duration": 3,
+            "hand": "R",
+            "finger": 5,
+            "articulations": ["tenuto"]
+          },
+          {
+            "note": "F4",
+            "start": 10,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 11,
+            "duration": 2,
+            "hand": "R",
+            "finger": 3,
+            "articulations": ["tenuto"]
+          },
+          {
+            "note": "D4",
+            "start": 13,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 14,
+            "duration": 2,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1,
+        "touch": true
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "tiedInTime",
+      "mode": "tempo",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "score": {
+        "tempo": 72,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "F4",
+            "start": 3,
+            "duration": 2,
+            "hand": "R",
+            "finger": 4,
+            "articulations": ["tenuto"]
+          },
+          {
+            "note": "E4",
+            "start": 5,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 6,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "G4",
+            "start": 7,
+            "duration": 3,
+            "hand": "R",
+            "finger": 5,
+            "articulations": ["tenuto"]
+          },
+          {
+            "note": "F4",
+            "start": 10,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 11,
+            "duration": 2,
+            "hand": "R",
+            "finger": 3,
+            "articulations": ["tenuto"]
+          },
+          {
+            "note": "D4",
+            "start": 13,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 14,
+            "duration": 2,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1,
+        "touch": true
+      }
+    }
+  ]
+}

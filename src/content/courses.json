@@ -260,6 +260,35 @@
           "skills": ["accidentals", "minor-keys"]
         }
       ]
+    },
+    {
+      "id": "u9",
+      "level": "lateElementary",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u9-l1",
+          "skills": ["touch"]
+        },
+        {
+          "id": "u9-l2",
+          "skills": ["touch"]
+        },
+        {
+          "id": "u9-l3",
+          "skills": ["touch"]
+        },
+        {
+          "id": "u9-l4",
+          "skills": ["touch", "dynamics"]
+        },
+        {
+          "id": "u9-l5",
+          "skills": ["touch", "note-values"]
+        }
+      ]
     }
   ]
 }

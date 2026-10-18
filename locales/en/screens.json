@@ -416,6 +416,23 @@
       "pause": "Pause",
       "resume": "Resume",
       "paused": "Your last run, paused"
+    },
+    "touch": {
+      "heading": "Touch",
+      "kinds": {
+        "staccato": "Staccato",
+        "legato": "Legato",
+        "accent": "Accents",
+        "tenuto": "Tenuto"
+      },
+      "counts": {
+        "staccato": "{right} of {total} short",
+        "legato": "{right} of {total} connected",
+        "accent": "{right} of {total} louder",
+        "tenuto": "{right} of {total} held"
+      },
+      "bars": "{count, plural, one {Bar to work on: {bars}} other {Bars to work on: {bars}}}",
+      "midiOnly": "Touch (staccato, slurs, accents) is checked with a MIDI keyboard."
     }
   },
   "lesson": {
@@ -449,7 +466,8 @@
       "trend": "Your last {count} tries, oldest first: {scores}",
       "tries": "{count, plural, one {# try} other {# tries}}",
       "allTip": "Every try, with its date"
-    }
+    },
+    "passTouch": "Play the staccato and slurred notes as written too (with a MIDI keyboard)."
   },
   "welcome": {
     "title": "Welcome to Piano Teacher",

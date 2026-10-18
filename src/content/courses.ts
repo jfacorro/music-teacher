@@ -35,6 +35,7 @@ export const SKILLS = [
   'thumb-under',
   'accidentals',
   'minor-keys',
+  'touch',
   'sight-reading',
   'ear-training',
 ] as const;

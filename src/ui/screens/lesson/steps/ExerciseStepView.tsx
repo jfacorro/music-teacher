@@ -37,7 +37,8 @@ export function ExerciseStepView({
   // Without a MIDI keyboard there are no dynamics to check: the notes decide.
   const passes = (summary: Summary) =>
     summary.stars >= step.pass.minStars &&
-    (!step.pass.dynamics || summary.dynamics === null || summary.dynamics.ok);
+    (!step.pass.dynamics || summary.dynamics === null || summary.dynamics.ok) &&
+    (!step.pass.touch || summary.touch === null || summary.touch.ok);
 
   return (
     <div className="lesson__step">
@@ -58,6 +59,7 @@ export function ExerciseStepView({
           <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
         )}
         {step.pass.dynamics && <span className="muted">{t('lesson.passDynamics')}</span>}
+        {step.pass.touch && <span className="muted">{t('lesson.passTouch')}</span>}
       </div>
       <PracticeRun
         score={step.score}

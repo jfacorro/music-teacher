@@ -53,7 +53,7 @@ describe('songs use what their unit has taught', () => {
     import: 'default',
   });
 
-  /** Black keys (pitch classes), time signatures and key signatures, up to a unit. */
+  /** Black keys (pitch classes), time and key signatures, articulations and slurs, up to a unit. */
   async function taughtUpTo(unitId: string) {
     const { UNITS } = await import('../courses');
     const { pitchClass, parseNote, isBlackKey } = await import('../../theory/pitch');
@@ -64,6 +64,8 @@ describe('songs use what their unit has taught', () => {
     const black = new Set<number>();
     const times = new Set<string>(['4/4']);
     const keys = new Set<number>([0]);
+    const articulations = new Set<string>();
+    let slurs = false;
     const addNote = (note: unknown) => {
       if (typeof note !== 'string') return;
       try {
@@ -84,12 +86,16 @@ describe('songs use what their unit has taught', () => {
       if (Array.isArray(data.notes)) data.notes.forEach(addNote);
       if (Array.isArray(data.timeSignature)) times.add(data.timeSignature.join('/'));
       if (typeof data.keyFifths === 'number') keys.add(data.keyFifths);
+      if (Array.isArray(data.articulations)) {
+        for (const mark of data.articulations) articulations.add(String(mark));
+      }
+      if (Array.isArray(data.slurs) && data.slurs.length > 0) slurs = true;
       Object.values(data).forEach(walk);
     };
     for (const [path, lesson] of Object.entries(lessonFiles)) {
       if (lessons.has(path.slice('../lessons/'.length, -'.json'.length))) walk(lesson);
     }
-    return { black, times, keys, pitchClass, isBlackKey };
+    return { black, times, keys, articulations, slurs, pitchClass, isBlackKey };
   }
 
   it.each(SONG_IDS)('%s: black keys, time and key signature', async (id) => {
@@ -104,5 +110,16 @@ describe('songs use what their unit has taught', () => {
     }
     expect(times).toContain(score.timeSignature.join('/'));
     expect(keys).toContain(score.keyFifths ?? 0);
+  });
+
+  it.each(SONG_IDS)('%s: articulations and slurs', async (id) => {
+    const score = await loadSong(id);
+    const taught = await taughtUpTo(SONG_UNITS[id]);
+    for (const note of score.notes) {
+      for (const mark of note.articulations ?? []) {
+        expect(taught.articulations, `${mark} at ${note.start}`).toContain(mark);
+      }
+    }
+    if ((score.slurs ?? []).length > 0) expect(taught.slurs, 'slurs').toBe(true);
   });
 });

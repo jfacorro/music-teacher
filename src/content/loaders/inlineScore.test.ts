@@ -18,6 +18,25 @@ const withNote = (patch: Record<string, unknown>) => ({
 });
 
 describe('parseInlineScore', () => {
+  it('reads articulations and slurs', () => {
+    const score = parseInlineScore(
+      {
+        ...withNote({ articulations: ['staccato', 'accent'] }),
+        slurs: [{ from: 0, to: 1, hand: 'R' }],
+      },
+      'test',
+    );
+    expect(score.notes[0]?.articulations).toEqual(['staccato', 'accent']);
+    expect(score.notes[1]).not.toHaveProperty('articulations');
+    expect(score.slurs).toEqual([{ start: 0, end: 1, hand: 'R' }]);
+    expect(() => parseInlineScore(withNote({ articulations: ['marcato'] }), 'song')).toThrow(
+      /articulations\[0\]/,
+    );
+    expect(() =>
+      parseInlineScore({ ...valid, slurs: [{ from: 2, to: 1, hand: 'R' }] }, 'song'),
+    ).toThrow(/slurs › \[0\] › to/);
+  });
+
   it('parses notes into pitches, keeping spelling and fingering', () => {
     const score = parseInlineScore(valid, 'test');
     expect(score.tempo).toBe(100);

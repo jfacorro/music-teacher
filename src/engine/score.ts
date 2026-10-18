@@ -15,12 +15,45 @@ export type Hand = (typeof Hand)[keyof typeof Hand];
 
 export type Finger = 1 | 2 | 3 | 4 | 5;
 
+/** How a note is played (MusicXML `<articulations>`). */
+export const Articulation = {
+  /** Short: let go before half its length. */
+  Staccato: 'staccato',
+  /** Louder than the notes around it. */
+  Accent: 'accent',
+  /** Held its whole length. */
+  Tenuto: 'tenuto',
+} as const;
+export type Articulation = (typeof Articulation)[keyof typeof Articulation];
+
 export interface ScoreNote {
   pitch: Pitch;
   start: number;
   duration: number;
   hand: Hand;
   finger?: Finger;
+  articulations?: Articulation[];
+}
+
+/** Notes played smoothly connected (legato): one hand's notes from `start` to `end` (beats). */
+export interface Slur {
+  start: number;
+  end: number;
+  hand: Hand;
+}
+
+const SAME_BEAT = 1e-6;
+
+/** The notes a slur joins, in order. */
+export function slurNotes(notes: readonly ScoreNote[], slur: Slur): ScoreNote[] {
+  return notes
+    .filter(
+      (note) =>
+        note.hand === slur.hand &&
+        note.start >= slur.start - SAME_BEAT &&
+        note.start <= slur.end + SAME_BEAT,
+    )
+    .sort((a, b) => a.start - b.start || a.pitch.midi - b.pitch.midi);
 }
 
 export interface Measure {
@@ -40,6 +73,16 @@ export interface Score {
   keyFifths?: number;
   /** Loud and soft: levels from a beat on, and crescendos and diminuendos. */
   dynamics?: ScoreDynamics;
+  /** Phrases played legato. */
+  slurs?: Slur[];
+}
+
+/** The score asks for a touch: staccato, accents, tenuto or slurs, among these notes. */
+export function hasTouchMarks(score: Score, notes: readonly ScoreNote[] = score.notes): boolean {
+  return (
+    notes.some((note) => (note.articulations?.length ?? 0) > 0) ||
+    (score.slurs ?? []).some((slur) => notes.some((note) => slurNotes([note], slur).length > 0))
+  );
 }
 
 export function beatsPerMeasure([numerator, denominator]: [number, number]): number {

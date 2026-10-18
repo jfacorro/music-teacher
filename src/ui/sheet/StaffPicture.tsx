@@ -1,4 +1,7 @@
-/** Notes on a staff, side by side, for lesson explanations (e.g. the landmark notes). */
+/**
+ * Notes on a staff, side by side, for lesson explanations (e.g. the landmark notes); or a few
+ * bars of music, to show a mark.
+ */
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StaffClef } from '../../content/lessons';
@@ -69,6 +72,43 @@ export function StaffPicture({ clef, notes, names, bar = false }: StaffPicturePr
         label={t('lesson.staffPicture')}
         // As wide per note either way.
         barWidth={bar ? NOTE_WIDTH * Math.min(notes.length, BAR_BEATS) : NOTE_WIDTH}
+        spacePx={12}
+      />
+    </div>
+  );
+}
+
+/** A few bars of music as written, with their marks; as wide per note as a staff picture. */
+export function MusicPicture({ score }: { score: Score }) {
+  const { t } = useTranslation('screens');
+  const xml = useMemo(
+    () =>
+      scoreToMusicXml(score, {
+        hands: STAVES[StaffClef.Grand].filter((hand) =>
+          score.notes.some((note) => note.hand === hand),
+        ),
+      }).xml,
+    [score],
+  );
+  const mostInABar = Math.max(
+    BAR_BEATS,
+    ...score.measures.map(
+      (measure) =>
+        new Set(
+          score.notes
+            .filter(
+              (note) => note.start >= measure.start && note.start < measure.start + measure.length,
+            )
+            .map((note) => note.start),
+        ).size,
+    ),
+  );
+  return (
+    <div className="staff-picture">
+      <StaticStaff
+        xml={xml}
+        label={t('lesson.staffPicture')}
+        barWidth={NOTE_WIDTH * mostInABar}
         spacePx={12}
       />
     </div>

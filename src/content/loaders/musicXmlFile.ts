@@ -14,7 +14,7 @@ import {
   type ScoreDynamics,
 } from '../../engine/dynamics';
 import { isDynamic, isMarking } from '../../engine/markings';
-import { beatsPerMeasure, type Finger } from '../../engine/score';
+import { beatsPerMeasure, type Finger, Articulation } from '../../engine/score';
 import { type Alter, makePitch, type Pitch, type Step, STEPS } from '../../theory/pitch';
 import {
   type ImportedMusic,
@@ -221,10 +221,16 @@ function addNote(
   );
   const key = `${staff}|${pitch.midi}`;
 
-  // The continuation of a tied note only makes it longer.
+  const slurs = childrenOf(childOf(item, 'notations'), 'slur')
+    .map((slur) => slur.getAttribute('type'))
+    .filter((type): type is 'start' | 'stop' => type === 'start' || type === 'stop')
+    .sort((a, b) => (a === b ? 0 : a === 'stop' ? -1 : 1));
+
+  // The continuation of a tied note only makes it longer (and may end a slur).
   const open = tied.get(key);
   if (ties.includes('stop') && open && Math.abs(open.start + open.duration - start) < EPSILON) {
     open.duration += duration;
+    if (slurs.includes('stop')) open.slurs = [...(open.slurs ?? []), 'stop'];
     if (!ties.includes('start')) tied.delete(key);
     return;
   }
@@ -232,10 +238,30 @@ function addNote(
   const note: ImportedNote = { pitch, start, duration };
   const finger = fingerOf(item);
   if (finger) note.finger = finger;
+  const articulations = articulationsOf(item);
+  if (articulations.length > 0) note.articulations = articulations;
+  if (slurs.length > 0) note.slurs = slurs;
   const notes = part.staves.get(staff) ?? [];
   notes.push(note);
   part.staves.set(staff, notes);
   if (ties.includes('start')) tied.set(key, note);
+}
+
+/** MusicXML articulations as ours (staccatissimo is staccato; a strong accent, an accent). */
+const ARTICULATIONS: Readonly<Record<string, readonly Articulation[]>> = {
+  staccato: [Articulation.Staccato],
+  staccatissimo: [Articulation.Staccato],
+  spiccato: [Articulation.Staccato],
+  accent: [Articulation.Accent],
+  'strong-accent': [Articulation.Accent],
+  tenuto: [Articulation.Tenuto],
+  'detached-legato': [Articulation.Tenuto, Articulation.Staccato],
+};
+
+function articulationsOf(item: Element): Articulation[] {
+  const marks = childOf(childOf(item, 'notations'), 'articulations');
+  const found = [...(marks?.children ?? [])].flatMap((mark) => ARTICULATIONS[mark.tagName] ?? []);
+  return [...new Set(found)];
 }
 
 /** Reads time and key signatures and the staff count; returns the divisions, if given. */

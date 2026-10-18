@@ -6,7 +6,7 @@
  * value the sheet music writes (`musicxml.ts`).
  */
 import type { ScoreDynamics } from '../../engine/dynamics';
-import { type Finger, Hand } from '../../engine/score';
+import { type Finger, Hand, type Articulation } from '../../engine/score';
 import { MIDDLE_C, type Pitch } from '../../theory/pitch';
 
 export interface ImportedNote {
@@ -14,6 +14,9 @@ export interface ImportedNote {
   start: number;
   duration: number;
   finger?: Finger;
+  articulations?: Articulation[];
+  /** Slurs starting or stopping on it (MusicXML), in order: stops first. */
+  slurs?: ('start' | 'stop')[];
 }
 
 export interface ImportedTrack {

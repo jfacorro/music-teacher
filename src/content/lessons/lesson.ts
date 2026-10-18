@@ -4,14 +4,15 @@
  * variables (`textVars`) filled in with the user's naming system.
  *
  * Step types:
- * - explain:  text, optionally with highlighted keys (and finger numbers)
+ * - explain:  text, optionally with highlighted keys (and finger numbers), notes on a staff, or
+ *             a little music showing a mark
  * - find:     press each of the given keys once, in any order
  * - exercise: a graded practice run (wait or tempo mode) of an inline score or a song
  * - quiz:     note-naming flash cards: a note on the staff, play its key
  * - rhythm:   tap any key along with a rhythm pattern (see engine/rhythm.ts)
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
-import { type Finger, Hand, type Score } from '../../engine/score';
+import { type Finger, Hand, hasTouchMarks, type Score } from '../../engine/score';
 import { GradedMode, HandFilter } from '../../engine/session';
 import { describeValues, isValueOf } from '../../lib/values';
 import { ChordQuality } from '../../theory/chords';
@@ -70,6 +71,8 @@ export interface ExplainStep extends StepBase {
   range: [number, number] | null;
   /** Notes shown on a staff above the keyboard. */
   staff: StaffNotes | null;
+  /** A few bars of music shown above the keyboard, e.g. to show a mark (an inline score). */
+  music: Score | null;
 }
 
 export interface FindStep extends StepBase {
@@ -116,7 +119,11 @@ export interface ExerciseStep extends StepBase {
   song: SongId | null;
   metronome: boolean;
   /** `dynamics`: the loud and soft parts must be played as written too (on a MIDI keyboard). */
-  pass: { minStars: number; dynamics: boolean };
+  /**
+   * `dynamics` / `touch`: the loud and soft parts / the staccato, slurs, accents and tenuto
+   * must be played as written too (on a MIDI keyboard).
+   */
+  pass: { minStars: number; dynamics: boolean; touch: boolean };
 }
 
 /** The staff a quiz card is shown on; "auto": treble from middle C up, bass below. */
@@ -197,6 +204,7 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
         hand: data.hand === Hand.Left ? Hand.Left : Hand.Right,
         range: range(data.range, at(location, 'range')),
         staff: data.staff === undefined ? null : staffNotes(data.staff, at(location, 'staff')),
+        music: data.music === undefined ? null : inlineScore(data.music, at(location, 'music')),
       };
     case StepType.Find: {
       if (!Array.isArray(data.notes) || data.notes.length === 0) {
@@ -304,12 +312,7 @@ async function exercise(
     song = data.song;
     score = await loadSong(song);
   } else {
-    try {
-      score = parseInlineScore(data.score, at(location, 'score'));
-    } catch (error) {
-      if (error instanceof ScoreError) throw new LessonError(error.location, error.message);
-      throw error;
-    }
+    score = inlineScore(data.score, at(location, 'score'));
   }
   if (data.tempo !== undefined) {
     if (typeof data.tempo !== 'number' || data.tempo <= 0) {
@@ -336,8 +339,27 @@ async function exercise(
     score,
     song,
     metronome: data.metronome === true,
-    pass: { ...passRule(data, location), dynamics: passDynamics(data, score, location) },
+    pass: {
+      ...passRule(data, location),
+      dynamics: passDynamics(data, score, location),
+      touch: passTouch(data, score, location),
+    },
   };
+}
+
+function passTouch(data: Record<string, unknown>, score: Score, location: string): boolean {
+  const pass = (data.pass ?? {}) as Record<string, unknown>;
+  if (pass.touch === undefined) return false;
+  if (typeof pass.touch !== 'boolean') {
+    throw new LessonError(at(location, 'pass.touch'), 'expected true or false');
+  }
+  if (pass.touch && !hasTouchMarks(score)) {
+    throw new LessonError(
+      at(location, 'pass.touch'),
+      'the score has no staccato, accents, tenuto or slurs',
+    );
+  }
+  return pass.touch;
 }
 
 function passDynamics(data: Record<string, unknown>, score: Score, location: string): boolean {
@@ -359,6 +381,15 @@ function passRule(data: Record<string, unknown>, location: string): { minStars: 
     throw new LessonError(at(location, 'pass › minStars'), 'expected 0–3');
   }
   return { minStars: minStars as number };
+}
+
+function inlineScore(input: unknown, location: string): Score {
+  try {
+    return parseInlineScore(input, location);
+  } catch (error) {
+    if (error instanceof ScoreError) throw new LessonError(error.location, error.message);
+    throw error;
+  }
 }
 
 function staffNotes(input: unknown, location: string): StaffNotes {

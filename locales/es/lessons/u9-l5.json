@@ -1,0 +1,7 @@
+{
+  "steps": {
+    "ties": "Una ligadura de prolongación es una línea curva que une dos notas en la misma tecla: toca la primera y sigue sosteniéndola durante la segunda, sin volver a tocarla. Así una nota dura más allá de la barra de compás: el {f} de aquí dura dos pulsos, uno en cada compás.",
+    "tied": "Tres ligaduras: sostén cada nota ligada más allá de la barra. La rayita de tenuto sobre ellas te recuerda sostenerla.",
+    "tiedInTime": "Ahora a tempo: cuenta durante las notas ligadas."
+  }
+}

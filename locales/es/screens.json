@@ -416,6 +416,23 @@
       "pause": "Pausa",
       "resume": "Continuar",
       "paused": "Tu última interpretación, en pausa"
+    },
+    "touch": {
+      "heading": "Toque",
+      "kinds": {
+        "staccato": "Staccato",
+        "legato": "Legato",
+        "accent": "Acentos",
+        "tenuto": "Tenuto"
+      },
+      "counts": {
+        "staccato": "{right} de {total} cortas",
+        "legato": "{right} de {total} unidas",
+        "accent": "{right} de {total} más fuertes",
+        "tenuto": "{right} de {total} sostenidas"
+      },
+      "bars": "{count, plural, one {Compás para trabajar: {bars}} other {Compases para trabajar: {bars}}}",
+      "midiOnly": "El toque (staccato, ligaduras, acentos) se comprueba con un teclado MIDI."
     }
   },
   "lesson": {
@@ -449,7 +466,8 @@
       "trend": "Tus últimos {count} intentos, del más antiguo al más reciente: {scores}",
       "tries": "{count, plural, one {# intento} other {# intentos}}",
       "allTip": "Todos los intentos, con su fecha"
-    }
+    },
+    "passTouch": "Toca también las notas staccato y ligadas como están escritas (con un teclado MIDI)."
   },
   "welcome": {
     "title": "Bienvenido a Profesor de piano",

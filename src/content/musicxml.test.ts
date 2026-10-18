@@ -3,7 +3,7 @@ import { scoreOf } from '../engine/testUtils';
 import { loadSong, SONG_IDS } from './songs';
 import { DIVISIONS, noteCardXml, noteKey, scoreToMusicXml, Clef } from './musicxml';
 import { pitchOf } from '../theory/pitch';
-import { beatsPerMeasure, Hand } from '../engine/score';
+import { Articulation, beatsPerMeasure, Hand } from '../engine/score';
 
 /** The <note> elements of a staff, as short strings: "C4:quarter", "rest:half", "D4:eighth.". */
 function written(xml: string, staff: number): string[] {
@@ -26,6 +26,27 @@ function written(xml: string, staff: number): string[] {
 const measures = (xml: string) => (xml.match(/<measure /g) ?? []).length;
 
 describe('scoreToMusicXml', () => {
+  it('writes staccato dots, accents and slurs from the first note to the last', () => {
+    const base = scoreOf([
+      ['C4', 0],
+      ['D4', 1],
+      ['E4', 2],
+      ['F4', 3],
+    ]);
+    const { xml } = scoreToMusicXml({
+      ...base,
+      notes: base.notes.map((note, i) =>
+        i === 3 ? { ...note, articulations: [Articulation.Staccato, Articulation.Accent] } : note,
+      ),
+      slurs: [{ start: 0, end: 2, hand: Hand.Right }],
+    });
+    const notes = [...xml.matchAll(/<note>(.*?)<\/note>/g)].map((match) => match[1]!);
+    expect(notes[0]).toContain('<slur type="start" number="1"/>');
+    expect(notes[1]).not.toContain('<slur');
+    expect(notes[2]).toContain('<slur type="stop" number="1"/>');
+    expect(notes[3]).toContain('<articulations><staccato/><accent/></articulations>');
+  });
+
   it('writes a one-hand melody on a treble staff', () => {
     const { xml, staves } = scoreToMusicXml(
       scoreOf([

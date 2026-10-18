@@ -122,6 +122,14 @@ system setting (`src/i18n/naming.ts`).
 | Course level (group of units)                 | level                                                | nivel                                              |
 | Beginner / Elementary                         | Beginner / Elementary                                | Principiante / Elemental                           |
 | Late elementary / Early intermediate          | Late elementary / Early intermediate                 | Elemental avanzado / Intermedio inicial            |
+| Touch (how a key is played)                   | touch                                                | toque                                              |
+| Legato (smooth, connected)                    | legato                                               | legato                                             |
+| Slur (curved line: play legato)               | slur                                                 | ligadura de expresión                              |
+| Tie (curved line: hold through)               | tie                                                  | ligadura de prolongación                           |
+| Staccato (short, detached)                    | staccato                                             | staccato                                           |
+| Accent (>)                                    | accent                                               | acento                                             |
+| Tenuto (held line)                            | tenuto                                               | tenuto                                             |
+| Phrase                                        | phrase                                               | frase                                              |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
 their explanations are translated (`theory.json` › `markings`).

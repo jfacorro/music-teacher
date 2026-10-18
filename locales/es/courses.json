@@ -31,6 +31,10 @@
     "u8": {
       "title": "Sostenidos, bemoles y becuadros",
       "description": "Los dos nombres de las teclas negras, las alteraciones en la partitura, el becuadro, {a} menor y las notas vecinas."
+    },
+    "u9": {
+      "title": "El toque",
+      "description": "Cómo se toca cada tecla: legato y ligaduras de expresión, staccato, acentos, tenuto y ligaduras de prolongación."
     }
   },
   "lessons": {
@@ -73,7 +77,12 @@
     "u8-l2": "Alteraciones en la partitura",
     "u8-l3": "El becuadro",
     "u8-l4": "{a} menor",
-    "u8-l5": "Notas vecinas"
+    "u8-l5": "Notas vecinas",
+    "u9-l1": "Legato y ligaduras",
+    "u9-l2": "Staccato",
+    "u9-l3": "Staccato y legato",
+    "u9-l4": "Acentos y tenuto",
+    "u9-l5": "Ligaduras de prolongación"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -95,6 +104,7 @@
     "thumb-under": "Paso del pulgar",
     "accidentals": "Alteraciones",
     "minor-keys": "Tonalidades menores",
+    "touch": "El toque",
     "sight-reading": "Lectura a primera vista",
     "ear-training": "Oído musical"
   }

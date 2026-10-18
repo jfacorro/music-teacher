@@ -10,7 +10,7 @@ import {
 import { noteOff, noteOn, scoreOf, type NoteSpec } from './testUtils';
 import { Transport } from './transport';
 import { InputSource } from '../input/types';
-import { Hand } from './score';
+import { Articulation, Hand } from './score';
 
 const C3 = 48;
 const C4 = 60;
@@ -602,6 +602,49 @@ describe('PracticeSession: dynamics', () => {
     }
     t.at(2.01);
     expect(t.session.getState().summary?.dynamics).toBeNull();
+  });
+});
+
+describe('PracticeSession: touch', () => {
+  const tune: NoteSpec[] = [
+    ['C4', 0],
+    ['D4', 1],
+  ];
+  /** C staccato, D slurred to nothing (so only C is checked); 60 BPM: a beat is a second. */
+  const staccato = (options: Partial<SessionOptions> = {}) => {
+    const t = setup(tune, { mode: PracticeMode.Wait, ...options });
+    t.score.notes[0]!.articulations = [Articulation.Staccato];
+    return t;
+  };
+
+  it('grades how long each key was held, on a MIDI keyboard', () => {
+    const t = staccato();
+    t.session.play();
+    t.at(0);
+    t.press(C4);
+    t.wait(800); // held most of the beat: not staccato
+    t.release(C4);
+    t.at(1);
+    t.press(D4);
+    t.release(D4);
+    t.at(2.01);
+    expect(t.session.getState().summary?.touch).toEqual({
+      kinds: [{ kind: 'staccato', right: 0, total: 1 }],
+      bars: [0],
+      ok: false,
+    });
+  });
+
+  it('has no touch to report through the microphone', () => {
+    const t = staccato();
+    t.session.play();
+    for (const pitch of [C4, D4]) {
+      t.at(t.score.notes.find((n) => n.pitch.midi === pitch)!.start);
+      t.session.handleNote(noteOn(pitch, t.now, InputSource.Mic));
+      t.session.handleNote(noteOff(pitch, t.now + 100, InputSource.Mic));
+    }
+    t.at(2.01);
+    expect(t.session.getState().summary?.touch).toBeNull();
   });
 });
 

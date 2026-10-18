@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "accents": "Un acento (>) pide tocar una nota más fuerte que las de alrededor: un poco más de peso en esa tecla. Aquí lo lleva la primera nota de cada compás.",
+    "accented": "Apóyate en las notas con acento y mantén las demás iguales.",
+    "tenuto": "Una rayita sobre o bajo una nota, tenuto, pide sostenerla todo su valor y apoyarse un poco en ella. Junto a notas staccato, la diferencia se oye enseguida.",
+    "tenutoAndStaccato": "Sostenida, corta, sostenida, corta: mira las rayitas y los puntos.",
+    "tenutoInTime": "Ahora a tempo."
+  }
+}

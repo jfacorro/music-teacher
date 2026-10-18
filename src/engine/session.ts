@@ -18,6 +18,7 @@
  */
 import { InputSource, type NoteEvent, NoteEventType } from '../input/types';
 import { summarizeDynamics } from './dynamics';
+import { type KeyTouch, summarizeTouch } from './touch';
 import { MIDDLE_C, type Pitch } from '../theory/pitch';
 import { TempoMatcher, TempoResultKind } from './matching/tempoMatcher';
 import { resolvePlayed } from './micAliases';
@@ -163,6 +164,10 @@ export class PracticeSession {
   private outcomes = new Map<ScoreNote, NoteOutcome>();
   /** How hard each note was played, for notes played on a MIDI keyboard. */
   private velocities = new Map<ScoreNote, number>();
+  /** When each note's key went down and up, and how hard (MIDI keyboard): its touch. */
+  private touches = new Map<ScoreNote, KeyTouch>();
+  /** Keys down now, by pitch, and the note each is playing. */
+  private keysDown = new Map<number, ScoreNote>();
   private wrongBeats: number[] = [];
   /** The hand each wrong key is put down to (see `handNear`). */
   private wrongHands: Hand[] = [];
@@ -291,6 +296,10 @@ export class PracticeSession {
     if (event.type === NoteEventType.Off) {
       const pitch = this.aliases.get(event.pitch) ?? event.pitch;
       this.aliases.delete(event.pitch);
+      const playing = this.keysDown.get(pitch);
+      const touch = playing && this.touches.get(playing);
+      if (touch && touch.up === null) touch.up = event.time;
+      this.keysDown.delete(pitch);
       this.waitMatcher.release(pitch);
       if (this.state.marks.has(pitch)) {
         const marks = new Map(this.state.marks);
@@ -439,7 +448,10 @@ export class PracticeSession {
 
   /** Only a MIDI keyboard reports how hard a key was hit. */
   private keepVelocity(note: ScoreNote, event: NoteEvent): void {
-    if (event.source === InputSource.Midi) this.velocities.set(note, event.velocity);
+    if (event.source !== InputSource.Midi) return;
+    this.velocities.set(note, event.velocity);
+    this.touches.set(note, { down: event.time, up: null, velocity: event.velocity });
+    this.keysDown.set(event.pitch, note);
   }
 
   private wrong(pitch: number, beat: number): void {
@@ -547,6 +559,12 @@ export class PracticeSession {
       this.velocities,
       this.score.measures,
     );
+    // Keys still down now are let go now.
+    const now = this.transport.timeAt(this.transport.position());
+    const touches = new Map(
+      [...this.touches].map(([note, touch]) => [note, { ...touch, up: touch.up ?? now }]),
+    );
+    summary.touch = summarizeTouch(this.score, this.hands, touches, this.transport.tempo);
     this.setState({ status: SessionStatus.Finished, countIn: null, summary });
   }
 
@@ -571,6 +589,8 @@ export class PracticeSession {
     this.waitMatcher = new WaitMatcher(this.practicedNotes);
     this.outcomes = new Map();
     this.velocities = new Map();
+    this.touches = new Map();
+    this.keysDown = new Map();
     this.wrongBeats = [];
     this.wrongHands = [];
   }
