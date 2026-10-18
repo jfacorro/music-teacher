@@ -21,3 +21,58 @@ export function lessonResult(
     accuracy: outcomes.reduce((sum, result) => sum + result.accuracy, 0) / outcomes.length,
   };
 }
+
+/** A try at a graded step from an earlier visit. */
+export interface EarlierTry extends StepResult {
+  /** It passed the step (unknown for tries kept before this was saved). */
+  passed?: boolean;
+}
+
+/** What earlier visits achieved on a graded step: its best result, and whether it was passed. */
+export interface EarlierStep {
+  result: StepResult;
+  passed: boolean;
+}
+
+const better = (a: StepResult, b: StepResult): StepResult =>
+  b.stars > a.stars || (b.stars === a.stars && b.accuracy > a.accuracy) ? b : a;
+
+/** The better of two results for each step. */
+export function bestResults(
+  a: ReadonlyMap<number, StepResult>,
+  b: ReadonlyMap<number, StepResult>,
+): Map<number, StepResult> {
+  const merged = new Map(a);
+  for (const [index, result] of b) {
+    const other = merged.get(index);
+    merged.set(index, other ? better(other, result) : result);
+  }
+  return merged;
+}
+
+/**
+ * Earlier visits' results for a lesson's graded steps, so a step done before can be skipped:
+ * each step's best try, passed if any try passed it. A lesson finished before tries were kept
+ * has only its own best: it stands in for the steps without any try.
+ */
+export function earlierSteps(
+  steps: readonly LessonStep[],
+  triesOf: (index: number) => readonly EarlierTry[],
+  lessonBest: StepResult | null,
+): Map<number, EarlierStep> {
+  const earlier = new Map<number, EarlierStep>();
+  steps.forEach((step, index) => {
+    if (step.type === StepType.Explain) return;
+    const tries = triesOf(index);
+    if (tries.length === 0) {
+      if (lessonBest) earlier.set(index, { result: lessonBest, passed: true });
+      return;
+    }
+    const minStars = step.type === StepType.Find ? 0 : step.pass.minStars;
+    earlier.set(index, {
+      result: tries.reduce<StepResult>(better, tries[0]!),
+      passed: tries.some((done) => done.passed ?? done.stars >= minStars),
+    });
+  });
+  return earlier;
+}

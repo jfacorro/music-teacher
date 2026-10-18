@@ -1,10 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { findLesson } from '../../../content/courses';
 import { lessonNamespace, type Lesson } from '../../../content/lessons';
-import { lessonResult, type StepResult } from '../../../content/lessons/result';
+import {
+  bestResults,
+  earlierSteps,
+  lessonResult,
+  type StepResult,
+} from '../../../content/lessons/result';
 import { useContentText } from '../../../i18n/useContentText';
-import { recordResult, ResultKind } from '../../../storage/progress';
+import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
 import { loadStepRuns, recordStepRun, stepKey, useStepRuns } from '../../../storage/stepRuns';
 import { StepHistory } from './StepHistory';
 import { LessonComplete } from './LessonComplete';
@@ -35,10 +40,33 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   }, [lesson.id]);
   const history = useStepRuns((s) => s.byKey[stepKey(lesson.id, index)]);
 
+  // Steps done on earlier visits count too, so one can be skipped without losing its stars.
+  const tries = useStepRuns((s) => s.byKey);
+  const saved = useProgress((s) => s.results[resultKey(ResultKind.Lesson, lesson.id)]);
+  const earlier = useMemo(
+    () =>
+      earlierSteps(
+        lesson.steps,
+        (i) => tries[stepKey(lesson.id, i)] ?? [],
+        saved && saved.bestStars >= 1
+          ? { stars: saved.bestStars, accuracy: saved.bestAccuracy }
+          : null,
+      ),
+    [lesson, tries, saved],
+  );
+
   const finished = index >= lesson.steps.length;
   const step = lesson.steps[index];
   const text = step ? stepText(`steps.${step.text}`, step.textVars) : '';
-  const result = lessonResult(lesson.steps, results);
+  const allResults = useMemo(
+    () => bestResults(results, new Map([...earlier].map(([i, step]) => [i, step.result]))),
+    [results, earlier],
+  );
+  const passed = useMemo(
+    () => new Set([...done, ...[...earlier].filter(([, step]) => step.passed).map(([i]) => i)]),
+    [done, earlier],
+  );
+  const result = lessonResult(lesson.steps, allResults);
 
   // Save the lesson once each time it's completed.
   const recorded = useRef(false);
@@ -60,7 +88,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   };
   /** A finished try of a graded step: kept in its history, and the best counts for the lesson. */
   const tried = (stepIndex: number, stepResult: StepResult, passed: boolean) => {
-    void recordStepRun(stepKey(lesson.id, stepIndex), stepResult);
+    void recordStepRun(stepKey(lesson.id, stepIndex), { ...stepResult, passed });
     saveStep(stepIndex, stepResult);
     if (passed) markDone(stepIndex);
   };
@@ -77,7 +105,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
     });
   const markDone = (stepIndex: number) => setDone((prev) => new Set(prev).add(stepIndex));
   const next = () => setIndex((i) => i + 1);
-  const canContinue = step?.type === StepType.Explain || done.has(index);
+  const canContinue = step?.type === StepType.Explain || passed.has(index);
 
   return (
     <section className="screen lesson">
@@ -88,7 +116,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           {lesson.steps.map((_, i) => (
             <li
               key={i}
-              className={i === index ? 'is-current' : i < index || done.has(i) ? 'is-done' : ''}
+              className={i === index ? 'is-current' : i < index || passed.has(i) ? 'is-done' : ''}
               aria-current={i === index ? 'step' : undefined}
             >
               <span className="visually-hidden">
@@ -114,10 +142,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               key={index}
               step={step}
               text={text}
-              onDone={() => {
-                saveStep(index, { stars: 3, accuracy: 1 });
-                markDone(index);
-              }}
+              onDone={() => tried(index, { stars: 3, accuracy: 1 }, true)}
             />
           )}
           {step?.type === StepType.Quiz && (
