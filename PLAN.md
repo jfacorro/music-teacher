@@ -746,7 +746,7 @@ Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5�
 
 Built one area at a time, each with the engine work it needs and the unit that uses it, so every step can be played and checked on the piano. Units 9–14 stay locked until Unit 8 is finished: their songs, always open in Song practice, are how each area is checked early.
 
-**5.1 Touch: Unit 9**
+**5.1 Touch: Unit 9** — ✔ done (verified 2026-10-18 on the Casio: touch graded with MIDI in "Can-Can" and "Aura Lee", the microphone says it needs MIDI)
 - Score format: articulation per note (`"articulations": ["staccato"]`: staccato, accent, tenuto) and slurs (`"slurs": [{ "from": 0, "to": 4, "hand": "R" }]`: the notes of that hand starting from `from` to `to`). Sheet music draws them (MusicXML `<articulations>`, `<slur>`), and MusicXML import keeps them. Ties are already drawn; the unit explains them.
 - Grading, MIDI only (the microphone can't tell when a key is let go), on the real time each key is held, so it works waiting or playing along: staccato notes let go before half their length, slurred notes held until the next one goes down (no gap), accents louder than the notes around them, tenuto notes held their full length. Results show each kind ("7 of 8 short") and the bars to work on; stars stay about the notes, and a lesson exercise can require it (`"pass": { "touch": true }`). With the microphone, results say touch needs a MIDI keyboard.
 - Unit 9, touch (5 lessons): legato and slurs; staccato; staccato and legato together; accents and tenuto; ties. Songs: "Can-Can" (Offenbach, staccato) and "Aura Lee" (legato). New skill: touch.
@@ -781,6 +781,8 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 #### Phase 5 done when
 - [ ] Units 9–14 are playable in English and Spanish, each ending in songs that need what it teaches.
 - [ ] With a MIDI keyboard, touch (staccato, legato, accents) and the pedal are checked and reported; with the microphone, lessons explain them without grading them.
+  - [x] Touch (5.1).
+  - [ ] TODO (user): once Unit 8 is finished, go through Unit 9’s lessons on the Casio (legato and slurs with "Aura Lee", staccato, both together with "Can-Can", accents and tenuto, ties).
 - [ ] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
 - [ ] Repeats play back as written, in practice, Listen and Compare.
 - [ ] Sight-reading and ear training gain levels for the new units.
