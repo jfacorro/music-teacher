@@ -803,7 +803,7 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - The first click of a count-in sounds: a run now starts a quarter of a second before it, so it's scheduled ahead like the others (before, it was due the instant playback started, already late for the speakers, and skipped). Clicks only as late as the output delay still play; only truly late ones (a throttled background tab) are dropped.
 - "Wait for me" with the metronome on counts in a measure first, as when playing along, and clicks up to where the music waits: the click on the waiting note's beat says when it's due. Nothing clicks during the wait, and that beat isn't clicked again when the music goes on.
 
-**Top bar and sidebar** — built
+**Top bar and sidebar** — ✔ done (verified 2026-10-18 in the browser)
 - The app’s icon sits before its name in the top bar and in the browser tab: the desktop app’s icon redrawn as an SVG (`public/icon.svg`).
 - The sections moved from the top bar to a sidebar on the left: Home, Learn, Song practice, Sight-reading, Ear training and Free play, with Settings at the bottom, each with a line icon (Tabler Icons, `@tabler/icons-react`, MIT). The top bar keeps ☰, the icon and name, where you are ("Piano Teacher / Song practice": a lesson is part of Learn, a song’s practice and imported songs part of Song practice; `ui/sections.ts`), and the input picker. It stays at the top while the page scrolls.
 - ☰ shrinks the sidebar to its icons (names on hover) and back, remembered (`sidebarCollapsed` setting). Below 760 px wide there’s no sidebar: ☰ slides it over the page, and choosing a section, Esc or a click outside closes it; the top bar shows just where you are, and the input picker only its dot (the same choices open from it).
