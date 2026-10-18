@@ -436,6 +436,7 @@
     }
   },
   "lesson": {
+    "topBar": "Unit {number} · {lesson}",
     "notFound": "This lesson doesn’t exist.",
     "loadError": "Couldn’t load this lesson.",
     "backHome": "Back to lessons",

@@ -10,7 +10,8 @@
     "earTraining": "Ear training",
     "freePlay": "Free play",
     "settings": "Settings",
-    "homeTip": "Your progress"
+    "homeTip": "Your progress",
+    "pageTitle": "{where} · Piano Teacher"
   },
   "midiBadge": {
     "connecting": "Connecting…",

@@ -10,7 +10,8 @@
     "earTraining": "Oído musical",
     "freePlay": "Práctica libre",
     "settings": "Configuración",
-    "homeTip": "Tu progreso"
+    "homeTip": "Tu progreso",
+    "pageTitle": "{where} · Profesor de piano"
   },
   "midiBadge": {
     "connecting": "Conectando…",

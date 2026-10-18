@@ -16,6 +16,7 @@ import { Link, Outlet, useLocation } from 'react-router';
 import { updateSettings, useSettings } from '../storage/settings';
 import { InputPicker } from './components/InputPicker';
 import { useMediaQuery } from './hooks';
+import { useTopBar } from './topBar';
 import { Section, SECTION_PATHS, SECTIONS, sectionOf } from './sections';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
@@ -50,11 +51,16 @@ export function AppLayout() {
   const collapsed = useSettings((s) => s.sidebarCollapsed);
   const narrow = useMediaQuery(NARROW);
   const [overOpen, setOverOpen] = useState(false);
-  const section = sectionOf(useLocation().pathname);
+  const { pathname } = useLocation();
+  const section = sectionOf(pathname);
+  const sectionName = t(`nav.${section}`);
+  const detail = useTopBar((s) => s.detail);
 
+  // The browser tab says where you are too: "Staccato · Piano Teacher".
   useEffect(() => {
-    document.title = t('appTitle');
-  }, [t]);
+    const where = detail ?? (section === Section.Home ? null : sectionName);
+    document.title = where ? t('nav.pageTitle', { where }) : t('appTitle');
+  }, [t, detail, section, sectionName]);
 
   // Esc closes the sidebar slid over the page.
   useEffect(() => {
@@ -108,7 +114,17 @@ export function AppLayout() {
           <img className="app-title__icon" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" />
           <span className="app-title__name">{t('appTitle')}</span>
         </Link>
-        <span className="app-section">{t(`nav.${section}`)}</span>
+        {/* Where you are: "Learn / Unit 9 · Staccato", the section leading back to its page. */}
+        <span className={detail ? 'app-where app-where--detail' : 'app-where'}>
+          {pathname === SECTION_PATHS[section] ? (
+            <span className="app-where__section">{sectionName}</span>
+          ) : (
+            <Link className="app-where__section" to={SECTION_PATHS[section]} onClick={close}>
+              {sectionName}
+            </Link>
+          )}
+          {detail && <span className="app-where__detail">{detail}</span>}
+        </span>
         <span className="app-header__spacer" />
         <InputPicker />
       </header>

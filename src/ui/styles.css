@@ -171,20 +171,43 @@ h3 {
   block-size: 1.75rem;
 }
 
-/* Where you are: "Piano Teacher / Song practice". */
-.app-section {
+/* Where you are: "Piano Teacher / Learn / Unit 9 · Staccato". */
+.app-where {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
   min-inline-size: 0;
-  overflow: hidden;
-  font-weight: 600;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.app-section::before {
+.app-where > *::before {
   content: '/';
   margin-inline-end: 0.75rem;
   color: var(--muted);
   font-weight: 400;
+}
+
+.app-where__section {
+  flex: none;
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.app-where--detail .app-where__section {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+a.app-where__section:hover {
+  color: var(--accent);
+}
+
+.app-where__detail {
+  min-inline-size: 0;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
 }
 
 .app-header__spacer {
@@ -275,14 +298,39 @@ h3 {
   background: rgb(0 0 0 / 35%);
 }
 
-/* A narrow window's top bar: the section rather than the app's name, a shorter input picker. */
+/*
+ * A narrow window's top bar: where you are rather than the app's name (the page's detail, or
+ * else its section), and a shorter input picker.
+ */
 .app[data-narrow] .app-title__name,
-.app[data-narrow] .app-section::before {
+.app[data-narrow] .app-where > *::before,
+.app[data-narrow] .app-where--detail .app-where__section {
   display: none;
 }
 
+.app[data-narrow] .app-where__section {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Just the input picker's dot: the select, invisible, still covers it and opens the choices. */
+.app[data-narrow] .input-picker {
+  position: relative;
+  gap: 0.3rem;
+  padding: 0.45rem 0.6rem;
+}
+
 .app[data-narrow] .input-picker select {
-  max-inline-size: 7rem;
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  opacity: 0;
+}
+
+.app[data-narrow] .input-picker__chevron {
+  display: block;
 }
 
 .app-main {
@@ -467,6 +515,12 @@ input[aria-invalid='true'] {
 .input-picker option {
   background: var(--surface);
   color: var(--text);
+}
+
+.input-picker__chevron {
+  display: none;
+  flex: none;
+  color: var(--muted);
 }
 
 .input-picker__dot {

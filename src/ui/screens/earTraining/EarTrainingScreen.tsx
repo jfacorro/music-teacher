@@ -23,6 +23,7 @@ import {
   useEarTraining,
 } from '../../../storage/earTraining';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
+import { useTopBarDetail } from '../../topBar';
 import { EarExercise } from './EarExercise';
 import { useEarLevelName } from './useEarLevelName';
 
@@ -89,6 +90,8 @@ function Exercises({ open, range }: { open: readonly EarLevel[]; range: EarRange
       : remembered && open.includes(remembered)
         ? remembered
         : open.at(-1)!;
+
+  useTopBarDetail(levelName(level));
 
   useEffect(preloadAudio, []);
   useEffect(() => chooseEarLevel(level), [level]);
