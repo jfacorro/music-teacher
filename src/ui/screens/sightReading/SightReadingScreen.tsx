@@ -1,5 +1,7 @@
 import { useEffect, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSettings } from '../../../storage/settings';
+import { metronomeAtStart } from '../../metronomeChoice';
 import { Link, useSearchParams } from 'react-router';
 import { preloadAudio } from '../../../audio/audio';
 import { UNITS } from '../../../content/courses';
@@ -98,7 +100,10 @@ function Drills({ open }: { open: readonly DrillLevel[] }) {
   const inAddress = seed !== null && asked === level;
 
   const [mode, setMode] = useState<PracticeMode>(PracticeMode.Wait);
-  const [metronome, setMetronome] = useState(false);
+  // Waiting for each note at first: the metronome only if the setting asks for it.
+  const [metronome, setMetronome] = useState(() =>
+    metronomeAtStart(useSettings.getState().exerciseMetronome, false),
+  );
   /** Playing the last run back: the drill settings wait. */
   const [listening, setListening] = useState(false);
 
@@ -128,7 +133,10 @@ function Drills({ open }: { open: readonly DrillLevel[] }) {
     setParams({ level: next, seed: String(freshSeed(next)) });
   const chooseMode = (next: PracticeMode) => {
     setMode(next);
-    setMetronome(next === PracticeMode.Tempo); // a steady click only makes sense when playing along
+    // Usually a steady click only makes sense when playing along.
+    setMetronome(
+      metronomeAtStart(useSettings.getState().exerciseMetronome, next === PracticeMode.Tempo),
+    );
   };
   const setAside = (className: string) => (listening ? `${className} is-set-aside` : className);
 

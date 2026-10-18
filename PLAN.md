@@ -814,6 +814,9 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - The timing correction is kept for each sound output, by its name (`soundTimings` setting), and followed when sound moves to another, so switching between headphones and speakers needs no new measurement. While the metronome is on, sound going to an output not measured yet (when another was) gets a notice. Browsers name the outputs once the microphone has been allowed; the desktop app always does (`audio/output.ts`).
 - Settings → Sound and timing names Bluetooth, and shows where sound goes and whether it was measured for it; the notices link straight to it (`/settings#sound`).
 
+**Metronome in exercises** — built
+- Settings → Sound and timing → **Metronome in exercises**: Automatic (as before: on when playing along, and when a lesson asks for it), Always on, or Always off. It sets how every exercise starts (lesson exercises and rhythm steps, song practice, sight-reading drills, and switching modes there); the checkbox on each still switches it for the moment. Stored as `exerciseMetronome` (`ui/metronomeChoice.ts`).
+
 ### Future ideas (unscheduled)
 
 - Backing tracks / accompaniment for songs.

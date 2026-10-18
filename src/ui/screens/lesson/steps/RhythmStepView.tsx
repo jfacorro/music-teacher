@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RhythmStep } from '../../../../content/lessons';
 import type { StepResult } from '../../../../content/lessons/result';
+import { useSettings } from '../../../../storage/settings';
+import { metronomeAtStart } from '../../../metronomeChoice';
 import { PracticeRun } from '../../practice/PracticeRun';
 import { ViewToggle } from '../../practice/ViewToggle';
 import { SheetNotation } from '../../../../content/lessons/lesson';
@@ -17,7 +19,9 @@ interface RhythmStepViewProps {
 /** Tap along with a rhythm: any key counts, only the timing is graded. */
 export function RhythmStepView({ step, text, onResult, onContinue }: RhythmStepViewProps) {
   const { t } = useTranslation('screens');
-  const [metronome, setMetronome] = useState(step.metronome);
+  const [metronome, setMetronome] = useState(() =>
+    metronomeAtStart(useSettings.getState().exerciseMetronome, step.metronome),
+  );
   const [view, setView] = useState(step.view);
   const passes = (stars: number) => stars >= step.pass.minStars;
 

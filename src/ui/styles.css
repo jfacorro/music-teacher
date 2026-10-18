@@ -378,7 +378,8 @@ a.app-where__section:hover {
   margin-block-end: 1rem;
 }
 
-.field label {
+.field label,
+.field__label {
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -714,6 +715,11 @@ input[aria-invalid='true'] {
   border: 1px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
+}
+
+/* In a field, as wide as its options. */
+.field > .segmented {
+  align-self: flex-start;
 }
 
 .segmented__option {

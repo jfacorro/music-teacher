@@ -6,6 +6,7 @@ import { setThemePreference } from '../../../preferences';
 import { updateSettings, useSettings } from '../../../storage/settings';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { KeyHeight, KeysShown, Theme } from '../../appearance';
+import { Choice } from '../../components/Choice';
 import { usePressedKeys } from '../../hooks';
 import { keyboardLayout, keyboardRange } from '../../keyboard/layout';
 import { type ExpectedKey, PianoKeyboard } from '../../keyboard/PianoKeyboard';
@@ -17,33 +18,6 @@ const KEY_HEIGHTS: readonly KeyHeight[] = [KeyHeight.Short, KeyHeight.Normal, Ke
 const KEYS_SHOWN: readonly KeysShown[] = [KeysShown.Fit, KeysShown.Wider, KeysShown.Piano];
 /** The preview's music: the right hand's first position. */
 const PREVIEW_KEYS = [60, 62, 64, 65, 67];
-
-interface ChoiceProps<T extends string> {
-  label: string;
-  options: readonly T[];
-  value: T;
-  nameOf: (option: T) => string;
-  onChange: (option: T) => void;
-}
-
-function Choice<T extends string>({ label, options, value, nameOf, onChange }: ChoiceProps<T>) {
-  return (
-    <div className="segmented" role="radiogroup" aria-label={label}>
-      {options.map((option) => (
-        <button
-          key={option}
-          type="button"
-          role="radio"
-          aria-checked={value === option}
-          className={value === option ? 'segmented__option is-selected' : 'segmented__option'}
-          onClick={() => onChange(option)}
-        >
-          {nameOf(option)}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 /** Theme and keyboard size (PLAN.md milestone 4.5), with a keyboard to see the result. */
 export function AppearanceSettings() {

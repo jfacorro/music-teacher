@@ -5,6 +5,7 @@ import type { StepResult } from '../../../../content/lessons/result';
 import { PracticeRun } from '../../practice/PracticeRun';
 import { NotationSelect, ViewToggle } from '../../practice/ViewToggle';
 import { useSettings } from '../../../../storage/settings';
+import { metronomeAtStart } from '../../../metronomeChoice';
 import { Markings } from '../../../components/Markings';
 import { ScoreView } from '../../../../content/lessons/lesson';
 import type { Summary } from '../../../../engine/scoring';
@@ -27,7 +28,9 @@ export function ExerciseStepView({
   recordingKey,
 }: ExerciseStepViewProps) {
   const { t } = useTranslation('screens');
-  const [metronome, setMetronome] = useState(step.metronome);
+  const [metronome, setMetronome] = useState(() =>
+    metronomeAtStart(useSettings.getState().exerciseMetronome, step.metronome),
+  );
   const [view, setView] = useState(step.view);
   /** Playing the last run back: the metronome setting waits. */
   const [listening, setListening] = useState(false);

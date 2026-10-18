@@ -4,6 +4,7 @@ import type { NamingSystem } from '../i18n/naming';
 import { DEFAULT_VOLUMES } from '../audio/volume';
 import { InputMode } from '../input/types';
 import { KeyHeight, KeysShown, Theme } from '../ui/appearance';
+import { MetronomeChoice } from '../ui/metronomeChoice';
 import { db } from './db';
 
 export interface Settings {
@@ -25,6 +26,8 @@ export interface Settings {
   soundTimings: Record<string, number>;
   /** Metronome clicks, 0–100 %. */
   metronomeVolume: number;
+  /** Whether exercises start with the metronome on: as each one usually does, always or never. */
+  exerciseMetronome: MetronomeChoice;
   /** The app's piano (autoplay, the other hand, computer and on-screen keys), 0–100 %. */
   pianoVolume: number;
   midiInputId: string | null;
@@ -60,6 +63,7 @@ export const DEFAULT_SETTINGS: Settings = {
   soundTimingMs: 0,
   soundTimings: {},
   metronomeVolume: DEFAULT_VOLUMES.metronome,
+  exerciseMetronome: MetronomeChoice.Auto,
   pianoVolume: DEFAULT_VOLUMES.piano,
   midiInputId: null,
   midiInputName: null,

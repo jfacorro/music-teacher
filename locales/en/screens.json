@@ -201,6 +201,17 @@
     },
     "sound": {
       "heading": "Sound and timing",
+      "metronome": "Metronome in exercises",
+      "metronomeChoices": {
+        "auto": "Automatic",
+        "on": "Always on",
+        "off": "Always off"
+      },
+      "metronomeHints": {
+        "auto": "On when playing along, and when a lesson asks for it.",
+        "on": "Every exercise starts with the metronome on, waiting for each note too.",
+        "off": "Every exercise starts with the metronome off."
+      },
       "intro": "Bluetooth headphones and speakers play sound late (often 150–250 ms), and the browser can’t tell: the clicks come after the beat, and notes played with them look late. Measure the timing to make up for it: tap any key on your piano exactly with each click. It’s kept for each sound output, and followed when you switch.",
       "output": "Sound goes to: {output}",
       "notMeasured": "Not measured for this output yet.",

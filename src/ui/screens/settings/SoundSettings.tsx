@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { measureClickTiming } from '../../../audio/calibrateTiming';
 import { isUnmeasuredOutput, useSoundOutput } from '../../../audio/output';
 import { setSoundTiming } from '../../../preferences';
-import { useSettings } from '../../../storage/settings';
+import { updateSettings, useSettings } from '../../../storage/settings';
+import { Choice } from '../../components/Choice';
+import { METRONOME_CHOICES } from '../../metronomeChoice';
 import { SoundDelay } from '../../components/SoundDelay';
 import { VolumeControls } from '../../components/VolumeControls';
 
@@ -29,6 +31,7 @@ export function SoundSettings() {
   const correction = useSettings((s) => s.soundTimingMs);
   const timings = useSettings((s) => s.soundTimings);
   const output = useSoundOutput((s) => s.name);
+  const metronome = useSettings((s) => s.exerciseMetronome);
   const [task, setTask] = useState<Task>({ kind: TapTask.Idle });
   const running = task.kind === TapTask.Running;
 
@@ -53,6 +56,17 @@ export function SoundSettings() {
     <section className="card" id="sound">
       <h2>{t('settings.sound.heading')}</h2>
       <VolumeControls />
+      <div className="field">
+        <span className="field__label">{t('settings.sound.metronome')}</span>
+        <Choice
+          label={t('settings.sound.metronome')}
+          options={METRONOME_CHOICES}
+          value={metronome}
+          nameOf={(option) => t(`settings.sound.metronomeChoices.${option}`)}
+          onChange={(exerciseMetronome) => updateSettings({ exerciseMetronome })}
+        />
+        <p className="muted">{t(`settings.sound.metronomeHints.${metronome}`)}</p>
+      </div>
       <SoundDelay />
       <p className="muted">{t('settings.sound.intro')}</p>
       {output && <p>{t('settings.sound.output', { output })}</p>}

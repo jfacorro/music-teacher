@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { metronomeAtStart } from '../../metronomeChoice';
 import { preloadAudio } from '../../../audio/audio';
 import type { Score } from '../../../engine/score';
 import { HandFilter, type LoopRange, PracticeMode } from '../../../engine/session';
@@ -46,7 +47,10 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
   const { t } = useTranslation('screens');
   const [mode, setMode] = useState<PracticeMode>(PracticeMode.Wait);
   const [hands, setHands] = useState<HandFilter>(HandFilter.Both);
-  const [metronome, setMetronome] = useState(false);
+  // Waiting for each note at first: the metronome only if the setting asks for it.
+  const [metronome, setMetronome] = useState(() =>
+    metronomeAtStart(useSettings.getState().exerciseMetronome, false),
+  );
   const [view, setView] = useState<ScoreView>(ScoreView.Falling);
   const [notation, setNotation] = useState(() => useSettings.getState().sheetNotation);
   const [speed, setSpeed] = useState(SPEED_MAX);
@@ -70,7 +74,10 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
 
   const chooseMode = (next: PracticeMode) => {
     setMode(next);
-    setMetronome(next === PracticeMode.Tempo); // a steady click only makes sense when playing along
+    // Usually a steady click only makes sense when playing along.
+    setMetronome(
+      metronomeAtStart(useSettings.getState().exerciseMetronome, next === PracticeMode.Tempo),
+    );
   };
 
   return (
