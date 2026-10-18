@@ -348,6 +348,8 @@ a.app-where__section:hover {
 /* Components */
 
 .card {
+  /* Clear of the top bar when a link scrolls to it. */
+  scroll-margin-block-start: calc(var(--header-height) + 1rem);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);

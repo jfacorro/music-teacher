@@ -1,4 +1,5 @@
 import { preloadAudio, setSoundTimingCorrection, setVolumes } from './audio/audio';
+import { useSoundOutput, watchSoundOutput } from './audio/output';
 import { startKeySound } from './audio/keySound';
 import { initI18n } from './i18n';
 import { detectLanguage } from './i18n/languages';
@@ -7,6 +8,7 @@ import { startLiveTracking } from './input/liveStore';
 import { micPermission, setMicDelay, setMicGate, startMic } from './input/mic/micInput';
 import { configureMidi, enableMidi, midiPermission } from './input/midi/midiInput';
 import { startRouting } from './input/routing';
+import { followSoundOutput } from './preferences';
 import { loadMySongs } from './storage/mySongs';
 import { loadProgress } from './storage/progress';
 import { loadSettings, updateSettings } from './storage/settings';
@@ -33,6 +35,9 @@ export async function bootstrap(): Promise<void> {
   setDevInputEnabled(settings.devKeyboard);
   startKeySound();
   setSoundTimingCorrection(settings.soundTimingMs);
+  // The click timing follows the sound output (Bluetooth headphones need much more).
+  useSoundOutput.subscribe(({ name }) => followSoundOutput(name));
+  watchSoundOutput();
   setVolumes({ metronome: settings.metronomeVolume, piano: settings.pianoVolume });
   preloadAudio(); // so the first key press isn't delayed by loading the audio library
 

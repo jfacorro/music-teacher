@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { measureClickTiming } from '../../../audio/calibrateTiming';
+import { isUnmeasuredOutput, useSoundOutput } from '../../../audio/output';
 import { setSoundTiming } from '../../../preferences';
 import { useSettings } from '../../../storage/settings';
 import { SoundDelay } from '../../components/SoundDelay';
@@ -26,6 +27,8 @@ type Task =
 export function SoundSettings() {
   const { t } = useTranslation('screens');
   const correction = useSettings((s) => s.soundTimingMs);
+  const timings = useSettings((s) => s.soundTimings);
+  const output = useSoundOutput((s) => s.name);
   const [task, setTask] = useState<Task>({ kind: TapTask.Idle });
   const running = task.kind === TapTask.Running;
 
@@ -47,12 +50,17 @@ export function SoundSettings() {
   };
 
   return (
-    <section className="card">
+    <section className="card" id="sound">
       <h2>{t('settings.sound.heading')}</h2>
       <VolumeControls />
       <SoundDelay />
       <p className="muted">{t('settings.sound.intro')}</p>
-      <p>{t('settings.sound.correction', { ms: correction })}</p>
+      {output && <p>{t('settings.sound.output', { output })}</p>}
+      <p>
+        {isUnmeasuredOutput(timings, output)
+          ? t('settings.sound.notMeasured')
+          : t('settings.sound.correction', { ms: correction })}
+      </p>
       <div className="button-row">
         <button
           type="button"

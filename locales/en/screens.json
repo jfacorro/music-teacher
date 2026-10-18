@@ -201,7 +201,9 @@
     },
     "sound": {
       "heading": "Sound and timing",
-      "intro": "If the metronome clicks sound late (or early) compared with the falling notes, measure the timing: tap any key on your piano exactly with each click.",
+      "intro": "Bluetooth headphones and speakers play sound late (often 150–250 ms), and the browser can’t tell: the clicks come after the beat, and notes played with them look late. Measure the timing to make up for it: tap any key on your piano exactly with each click. It’s kept for each sound output, and followed when you switch.",
+      "output": "Sound goes to: {output}",
+      "notMeasured": "Not measured for this output yet.",
       "correction": "Timing correction: {ms} ms",
       "measure": "Measure timing",
       "reset": "Reset",
@@ -433,7 +435,10 @@
       },
       "bars": "{count, plural, one {Bar to work on: {bars}} other {Bars to work on: {bars}}}",
       "midiOnly": "Touch (staccato, slurs, accents) is checked with a MIDI keyboard."
-    }
+    },
+    "lateSound": "Most notes came in late, by about {ms} ms. If you were playing with the clicks, they may be reaching you late: Bluetooth headphones and speakers delay sound, and the browser can’t tell.",
+    "unmeasuredOutput": "Sound goes to {output}, and the clicks’ timing hasn’t been measured for it. If it’s Bluetooth, the clicks will come late, and so will notes played with them.",
+    "measureTiming": "Measure the timing"
   },
   "lesson": {
     "topBar": "Unit {number} · {lesson}",

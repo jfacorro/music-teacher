@@ -809,6 +809,11 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - ☰ shrinks the sidebar to its icons (names on hover) and back, remembered (`sidebarCollapsed` setting). Below 760 px wide there’s no sidebar: ☰ slides it over the page, and choosing a section, Esc or a click outside closes it; the top bar shows just where you are, and the input picker only its dot (the same choices open from it).
 - After the section, the page adds what’s on it: the lesson ("Learn / Unit 9 · Staccato"), the song or imported song ("Song practice / Can-Can"), "Import a song", the sight-reading or ear-training level. The section then leads back to its page. Pages set it with `useTopBarDetail` (`ui/topBar.ts`), and the browser tab’s title follows ("Staccato · Piano Teacher"); a narrow window shows only the detail.
 
+**Late clicks with Bluetooth** — built
+- Bluetooth headphones and speakers play sound 150–250 ms late, and browsers can’t tell, so the clicks come after the beat and notes played with them look late (or, past the window, wrong). After a run with the metronome on, when most notes came in late by a similar amount (the middle one at least 60 ms late, two in three at least 30 ms; `engine/timing.ts › steadyLatenessMs`), the results say so, with a link to measure the timing.
+- The timing correction is kept for each sound output, by its name (`soundTimings` setting), and followed when sound moves to another, so switching between headphones and speakers needs no new measurement. While the metronome is on, sound going to an output not measured yet (when another was) gets a notice. Browsers name the outputs once the microphone has been allowed; the desktop app always does (`audio/output.ts`).
+- Settings → Sound and timing names Bluetooth, and shows where sound goes and whether it was measured for it; the notices link straight to it (`/settings#sound`).
+
 ### Future ideas (unscheduled)
 
 - Backing tracks / accompaniment for songs.

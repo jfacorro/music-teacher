@@ -201,7 +201,9 @@
     },
     "sound": {
       "heading": "Sonido y sincronización",
-      "intro": "Si los clics del metrónomo suenan tarde (o pronto) respecto a las notas que caen, mide la sincronización: toca cualquier tecla del piano justo con cada clic.",
+      "intro": "Los auriculares y altavoces Bluetooth reproducen el sonido tarde (a menudo 150–250 ms), y el navegador no lo sabe: los clics suenan después del pulso, y las notas que tocas con ellos parecen tarde. Mide la sincronización para compensarlo: toca cualquier tecla del piano justo con cada clic. Se guarda para cada salida de sonido y se aplica al cambiar de una a otra.",
+      "output": "El sonido sale por: {output}",
+      "notMeasured": "Todavía sin medir para esta salida.",
       "correction": "Corrección de sincronización: {ms} ms",
       "measure": "Medir la sincronización",
       "reset": "Restablecer",
@@ -433,7 +435,10 @@
       },
       "bars": "{count, plural, one {Compás para trabajar: {bars}} other {Compases para trabajar: {bars}}}",
       "midiOnly": "El toque (staccato, ligaduras, acentos) se comprueba con un teclado MIDI."
-    }
+    },
+    "lateSound": "La mayoría de las notas llegaron tarde, unos {ms} ms. Si tocabas con los clics, puede que te lleguen tarde: los auriculares y altavoces Bluetooth retrasan el sonido, y el navegador no lo sabe.",
+    "unmeasuredOutput": "El sonido sale por {output}, y la sincronización de los clics no se midió para esa salida. Si es Bluetooth, los clics sonarán tarde, y también las notas que toques con ellos.",
+    "measureTiming": "Medir la sincronización"
   },
   "lesson": {
     "topBar": "Unidad {number} · {lesson}",

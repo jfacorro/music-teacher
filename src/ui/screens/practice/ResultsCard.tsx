@@ -1,8 +1,11 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import type { Summary } from '../../../engine/scoring';
 import { PracticeMode } from '../../../engine/session';
+import { steadyLatenessMs } from '../../../engine/timing';
 import { formatPercent } from '../../../i18n/format';
+import { MEASURE_TIMING_PATH } from '../../components/SoundOutputNotice';
 import { Stars } from '../../components/Stars';
 import { ICONS } from '../../icons';
 import { BarHeatmap } from './BarHeatmap';
@@ -22,6 +25,8 @@ interface ResultsCardProps {
   hasDynamics?: boolean;
   /** The music has staccato, slurs, accents or tenuto (graded only on a MIDI keyboard). */
   hasTouch?: boolean;
+  /** The metronome clicked along: steadily late notes may mean the clicks came late. */
+  clicks?: boolean;
   /** Extra actions next to Try again. */
   children?: ReactNode;
 }
@@ -34,9 +39,11 @@ export function ResultsCard({
   onSelectBar,
   hasDynamics = false,
   hasTouch = false,
+  clicks = false,
   children,
 }: ResultsCardProps) {
   const { t, i18n } = useTranslation('screens');
+  const lateMs = clicks && summary.timing ? steadyLatenessMs(summary.timing.errorsMs) : null;
 
   const counts =
     mode === PracticeMode.Tempo
@@ -74,6 +81,12 @@ export function ResultsCard({
       </dl>
       {summary.timing && summary.timing.errorsMs.length > 0 && (
         <TimingBreakdown timing={summary.timing} />
+      )}
+      {lateMs !== null && (
+        <p className="notice">
+          {t('practice.lateSound', { ms: lateMs })}{' '}
+          <Link to={MEASURE_TIMING_PATH}>{t('practice.measureTiming')}</Link>
+        </p>
       )}
       {summary.dynamics ? (
         <DynamicsBreakdown dynamics={summary.dynamics} />

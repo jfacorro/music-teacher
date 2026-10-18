@@ -48,3 +48,25 @@ export function timingOf(errorMs: number, windows: TimingWindows): Timing {
   if (Math.abs(errorMs) <= windows.perfect) return Timing.OnTime;
   return errorMs < 0 ? Timing.Early : Timing.Late;
 }
+
+/** Notes late by this much (ms, the middle one), most of them, are steadily late. */
+const STEADY_LATE_MS = 60;
+/** Each of "most" notes late by at least half that. */
+const STEADY_LATE_SHARE = 2 / 3;
+/** Fewer notes say too little. */
+const STEADY_LATE_MIN_NOTES = 4;
+
+/**
+ * How late the notes came in (ms, the middle one) when most were late by a similar amount;
+ * null otherwise. Played along with the metronome, that points at the clicks reaching the player
+ * late (Bluetooth headphones), not at the playing: see the timing correction in audio.ts.
+ */
+export function steadyLatenessMs(errorsMs: readonly number[]): number | null {
+  if (errorsMs.length < STEADY_LATE_MIN_NOTES) return null;
+  const sorted = [...errorsMs].sort((a, b) => a - b);
+  const middle = sorted[Math.floor(sorted.length / 2)]!;
+  const late = errorsMs.filter((ms) => ms >= STEADY_LATE_MS / 2).length;
+  return middle >= STEADY_LATE_MS && late >= errorsMs.length * STEADY_LATE_SHARE
+    ? Math.round(middle)
+    : null;
+}
