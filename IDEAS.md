@@ -94,3 +94,86 @@ Larger ideas, worked out enough to plan from later. None is scheduled: an idea b
 - [ ] Songs show and keep their lyrics, in English and Spanish.
 - [ ] A singing course from one note to songs, in English and Spanish.
 - [ ] Verified with your voice and microphone.
+
+---
+
+## Releasing
+
+**Goal:** find out, cheaply, whether other people want the app, without taking time from learning with it. The app is built for its author first; releasing it is a test, not a business plan.
+
+### The market
+
+- People do pay for piano apps. Simply Piano, Flowkey, Skoove, Playground Sessions, Piano Marvel and Yousician charge roughly $10–20 a month or $100–150 a year; Synthesia sells a one-time license for about $40. These prices are approximate and from memory; check them before deciding anything.
+- Few users actually pay: free-to-paid conversion is typically a few percent, and most beginners stop within weeks. Retention, not features, decides whether these apps make money.
+
+### What sets it apart
+
+- It runs fully offline: no account, no cloud, no analytics.
+- It reads real sheet music early, with sight-reading and ear training.
+- It grades in depth: timing, dynamics, touch, and each hand separately.
+- It works with any MIDI keyboard, or the microphone, in English and Spanish.
+
+### What paid apps have that it doesn't
+
+- **Mobile and tablet.** Most learners put a phone or iPad on the music stand.
+- **Popular, licensed songs.** This app has public-domain melodies only.
+- **Depth.** Paid apps have years of content and video lessons; this one has nine units.
+- **Testing beyond one piano.** Microphone detection is tuned on the author's Casio.
+
+### Steps
+
+**R.1 Try it without installing**
+
+- Host the web version on a free static host (GitHub Pages, Netlify or Cloudflare Pages). That gives a link that works in Chrome and Edge, with MIDI and the microphone. Data stays in each visitor's browser, so there's no server to run and nothing to maintain.
+- The Windows installer already builds on every merge, but the repository is private, so its "Latest build" release isn't public. To share it, make the repository public or publish releases elsewhere.
+
+**R.2 Before sharing**
+
+- **A license:** decide whether it's open source. Without a license, all rights are reserved.
+- **Credits:**
+  - the songs are public domain, with our own arrangements;
+  - the piano and the clicks are synthesized, so there are no sample licenses;
+  - the libraries use permissive licenses (OpenSheetMusicDisplay, Tone.js, pitchy, Tabler Icons) and get a credits page.
+- **A distinctive name,** checked for conflicts. Singing › Open questions has candidates.
+- **Another piano:** at least one other piano and microphone tried.
+- **A short README:** what the app is, screenshots or a short video, and "everything stays on your computer".
+- **Feedback:** one way to send it, through GitHub issues or an email address.
+
+**R.3 Share and listen**
+
+- Post once where adult learners gather: r/piano, r/learnpiano, digital-piano forums.
+- The app has no analytics by design, so the signals come from people:
+  - messages, feature requests and bug reports;
+  - people saying they came back to it;
+  - stars, if the code is public.
+- An optional "support" link (Ko-fi or GitHub Sponsors) tests whether anyone would pay, with no commitment on either side.
+
+**R.4 If the response is good**
+
+- Invest in this order:
+  1. testing on more pianos and microphones;
+  2. a macOS build;
+  3. a tablet-friendly layout;
+  4. more units.
+- Costs to expect:
+  - a Windows code-signing certificate (about $100–400 a year), so SmartScreen doesn't warn people away from the installer;
+  - Apple's developer membership ($99 a year) for a macOS build;
+  - support, and a website.
+
+### Pricing options
+
+- **A subscription** against Simply Piano: unlikely to work without large investment in mobile, content and marketing.
+- **A one-time purchase for a niche** (adults with a digital piano who want offline learning and real sheet music, without a subscription): plausible at about $20–40, the way Synthesia sells. Expect modest income, not a business.
+- **Free and open source, with donations:** the easiest start, and in keeping with a local, private app.
+
+### When
+
+After working through more of the course, say Units 6–9. Then the early units have been tested by a real learner, and a first impression is worth protecting.
+
+### Done when
+
+- [ ] The web version is online and works in Chrome and Edge, with MIDI and the microphone.
+- [ ] A license, credits, the name and a README are in place.
+- [ ] Tried on at least one other piano and microphone.
+- [ ] Shared once, with a way to send feedback.
+- [ ] A decision on what's next, based on the response.
