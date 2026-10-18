@@ -201,6 +201,17 @@
     },
     "sound": {
       "heading": "Sonido y sincronización",
+      "metronome": "Metrónomo en los ejercicios",
+      "metronomeChoices": {
+        "auto": "Automático",
+        "on": "Siempre encendido",
+        "off": "Siempre apagado"
+      },
+      "metronomeHints": {
+        "auto": "Encendido al tocar a tempo, y cuando una lección lo pide.",
+        "on": "Todos los ejercicios empiezan con el metrónomo encendido, también al esperar cada nota.",
+        "off": "Todos los ejercicios empiezan con el metrónomo apagado."
+      },
       "intro": "Los auriculares y altavoces Bluetooth reproducen el sonido tarde (a menudo 150–250 ms), y el navegador no lo sabe: los clics suenan después del pulso, y las notas que tocas con ellos parecen tarde. Mide la sincronización para compensarlo: toca cualquier tecla del piano justo con cada clic. Se guarda para cada salida de sonido y se aplica al cambiar de una a otra.",
       "output": "El sonido sale por: {output}",
       "notMeasured": "Todavía sin medir para esta salida.",
