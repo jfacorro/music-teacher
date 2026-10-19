@@ -1,6 +1,9 @@
 /** Text for searching: lower case and without accents ("Cancán" → "cancan"). */
 const searchable = (text: string) =>
-  text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+  text
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase();
 
 /** Whether any of `texts` contains `query`, ignoring case and accents; an empty query matches. */
 export function matchesQuery(query: string, ...texts: (string | null)[]): boolean {
