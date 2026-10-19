@@ -70,7 +70,14 @@ export function SongsScreen() {
               {mySongs.map((song) => (
                 <PathItem
                   key={song.id}
-                  title={song.title}
+                  title={
+                    song.composer
+                      ? t('songPractice.mySongTitle', {
+                          title: song.title,
+                          composer: song.composer,
+                        })
+                      : song.title
+                  }
                   href={`/practice/my/${song.id}`}
                   state={stateOf(starsOf(ResultKind.MySong, String(song.id)))}
                 />
