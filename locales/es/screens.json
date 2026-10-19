@@ -74,8 +74,6 @@
   },
   "settings": {
     "title": "Configuración",
-    "jumpTo": "Ir a",
-    "index": "Secciones de la configuración",
     "groups": {
       "keyboard": "Teclado y micrófono",
       "sound": "Sonido y voz",
@@ -752,6 +750,7 @@
       "lateElementary": "Elemental avanzado",
       "earlyIntermediate": "Intermedio inicial"
     },
-    "levelHeading": "{level} · Unidades {first}–{last}"
+    "levelHeading": "{level} · Unidades {first}–{last}",
+    "unitShort": "{number} · {title}"
   }
 }

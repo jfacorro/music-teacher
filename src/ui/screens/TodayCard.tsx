@@ -106,7 +106,7 @@ export function TodayCard() {
   const allDone = done === plan.items.length;
 
   return (
-    <section className="card today" aria-labelledby="today-heading">
+    <section className="card today" id="today" aria-labelledby="today-heading">
       <div className="today__header">
         <h2 id="today-heading">{t('today.title')}</h2>
         <span className="muted">{t('today.progress', { done, total: plan.items.length })}</span>

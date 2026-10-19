@@ -68,5 +68,9 @@
     "label": "Pedal",
     "down": "Pedal de resonancia pisado",
     "up": "Pedal de resonancia suelto"
+  },
+  "pageIndex": {
+    "label": "En esta página",
+    "jumpTo": "Ir a"
   }
 }

@@ -74,8 +74,6 @@
   },
   "settings": {
     "title": "Settings",
-    "jumpTo": "Jump to",
-    "index": "Settings sections",
     "groups": {
       "keyboard": "Keyboard and microphone",
       "sound": "Sound and voice",
@@ -752,6 +750,7 @@
       "lateElementary": "Late elementary",
       "earlyIntermediate": "Early intermediate"
     },
-    "levelHeading": "{level} · Units {first}–{last}"
+    "levelHeading": "{level} · Units {first}–{last}",
+    "unitShort": "{number} · {title}"
   }
 }

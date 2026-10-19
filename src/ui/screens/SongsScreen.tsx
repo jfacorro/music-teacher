@@ -6,6 +6,7 @@ import { useContentText } from '../../i18n/useContentText';
 import { LessonStatus } from '../../content/unlock';
 import { useMySongs } from '../../storage/mySongs';
 import { resultKey, ResultKind, useProgress } from '../../storage/progress';
+import { IndexedPage, type IndexGroup } from '../components/IndexedPage';
 import { PathItem } from '../components/PathItem';
 
 /** The built-in songs by level, then by the unit that teaches them, in course order. */
@@ -40,63 +41,80 @@ export function SongsScreen() {
     stars,
   });
 
+  const groups: IndexGroup[] = [
+    ...SONGS_BY_LEVEL.map(({ level, units }) => ({
+      heading: t(`course.levels.${level}`),
+      items: units.map(({ unit, number }) => ({
+        id: `songs-${unit.id}`,
+        label: t('course.unitShort', {
+          number,
+          title: courseText(`units.${unit.id}.title`, unit.textVars),
+        }),
+      })),
+    })),
+    { items: [{ id: 'my-songs', label: t('songPractice.mySongs') }] },
+  ];
+
   return (
     <section className="screen">
       <h1>{t('songPractice.title')}</h1>
+      <IndexedPage groups={groups}>
+        <section className="card unit">
+          <h2>{t('songPractice.songs')}</h2>
+          <p className="muted">{t('songPractice.songsIntro')}</p>
+          {SONGS_BY_LEVEL.map(({ level, first, last, units }) => (
+            <section key={level} className="songs__group">
+              <h3>
+                {t('course.levelHeading', { level: t(`course.levels.${level}`), first, last })}
+              </h3>
+              {units.map(({ unit, number, songs }) => (
+                <section key={unit.id} id={`songs-${unit.id}`} className="songs__level">
+                  <h4>
+                    {t('songPractice.level', {
+                      number,
+                      unit: courseText(`units.${unit.id}.title`, unit.textVars),
+                    })}
+                  </h4>
+                  <ol className="path">
+                    {songs.map((id) => (
+                      <PathItem
+                        key={id}
+                        title={ts(`${id}.title`)}
+                        href={`/practice/${id}`}
+                        state={stateOf(starsOf(ResultKind.Song, id))}
+                      />
+                    ))}
+                  </ol>
+                </section>
+              ))}
+            </section>
+          ))}
+        </section>
 
-      <section className="card unit">
-        <h2>{t('songPractice.songs')}</h2>
-        <p className="muted">{t('songPractice.songsIntro')}</p>
-        {SONGS_BY_LEVEL.map(({ level, first, last, units }) => (
-          <section key={level} className="songs__group">
-            <h3>{t('course.levelHeading', { level: t(`course.levels.${level}`), first, last })}</h3>
-            {units.map(({ unit, number, songs }) => (
-              <section key={unit.id} className="songs__level">
-                <h4>
-                  {t('songPractice.level', {
-                    number,
-                    unit: courseText(`units.${unit.id}.title`, unit.textVars),
-                  })}
-                </h4>
-                <ol className="path">
-                  {songs.map((id) => (
-                    <PathItem
-                      key={id}
-                      title={ts(`${id}.title`)}
-                      href={`/practice/${id}`}
-                      state={stateOf(starsOf(ResultKind.Song, id))}
-                    />
-                  ))}
-                </ol>
-              </section>
-            ))}
-          </section>
-        ))}
-      </section>
-
-      <section className="card unit">
-        <h2>{t('songPractice.mySongs')}</h2>
-        <p className="muted">
-          {mySongs.length > 0 ? t('songPractice.mySongsIntro') : t('songPractice.mySongsEmpty')}
-        </p>
-        {mySongs.length > 0 && (
-          <ol className="path">
-            {mySongs.map((song) => (
-              <PathItem
-                key={song.id}
-                title={song.title}
-                href={`/practice/my/${song.id}`}
-                state={stateOf(starsOf(ResultKind.MySong, String(song.id)))}
-              />
-            ))}
-          </ol>
-        )}
-        <div className="button-row unit__actions">
-          <Link className="button" to="/my-songs/import">
-            {t('songPractice.importSong')}
-          </Link>
-        </div>
-      </section>
+        <section className="card unit" id="my-songs">
+          <h2>{t('songPractice.mySongs')}</h2>
+          <p className="muted">
+            {mySongs.length > 0 ? t('songPractice.mySongsIntro') : t('songPractice.mySongsEmpty')}
+          </p>
+          {mySongs.length > 0 && (
+            <ol className="path">
+              {mySongs.map((song) => (
+                <PathItem
+                  key={song.id}
+                  title={song.title}
+                  href={`/practice/my/${song.id}`}
+                  state={stateOf(starsOf(ResultKind.MySong, String(song.id)))}
+                />
+              ))}
+            </ol>
+          )}
+          <div className="button-row unit__actions">
+            <Link className="button" to="/my-songs/import">
+              {t('songPractice.importSong')}
+            </Link>
+          </div>
+        </section>
+      </IndexedPage>
     </section>
   );
 }
