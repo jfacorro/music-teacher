@@ -39,6 +39,8 @@ One switch decides what you're practicing, piano or voice, and every section fol
 
 **Getting started:** the welcome screen asks "Piano, Voice or Both". Adding the other one later is a click on the switch, and starts with the range test.
 
+![Mockups: the switch open with Piano chosen; Voice chosen, with Sight-singing and Tuner in the sidebar and the singing path; the welcome screen's choice of Piano, Voice or Both](docs/ideas/singing-switch.png)
+
 **The screens:**
 
 - **A singing exercise:**
@@ -48,6 +50,8 @@ One switch decides what you're practicing, piano or voice, and every section fol
   - modes: Wait for me, Sing along, Listen first; switches for the guide melody and the metronome.
 - **The results:** in tune, on time and steady, as percentages; the notes to work on (which ones, flat or sharp, by how much); Listen and Compare as for the piano.
 - **The Tuner page:** the note in large type with its cents, the last few seconds as a line, and the range found so far.
+
+![Mockups: a singing exercise with the pitch lane, the voice line and the tuner; its results; the Tuner page](docs/ideas/singing-exercise.png)
 
 **Underneath:** an `instrument` setting; a second course file for the voice; results, skills and the Today plan tagged with their instrument. The existing piano screens barely change.
 
