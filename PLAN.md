@@ -817,7 +817,7 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 **Metronome in exercises** — ✔ done (verified 2026-10-18 in the browser)
 - Settings → Sound and timing → **Metronome in exercises**: Automatic (as before: on when playing along, and when a lesson asks for it), Always on, or Always off. It sets how every exercise starts (lesson exercises and rhythm steps, song practice, sight-reading drills, and switching modes there); the checkbox on each still switches it for the moment. Stored as `exerciseMetronome` (`ui/metronomeChoice.ts`).
 
-**Vocal range** — built
+**Vocal range** — ✔ done (verified 2026-10-19 with your voice and microphone)
 - The first piece of singing (IDEAS.md › Singing), on its own: Settings → **Your vocal range**. Three steps with the microphone: a comfortable note (moves on by itself once held), then sliding down and up, each ended with a button (“That’s my lowest”, “That’s my highest”). A note counts when it’s held for half a second (gaps up to 150 ms allowed), from the microphone’s existing pitch readings; no new voice detection yet.
 - The result: the lowest and highest notes, the span, a keyboard (E2–C6) with the range and the comfortable note, and the closest voice type, as a guide. Only the latest is kept, with its date (`vocalRange` setting). The test turns the microphone on for itself, without changing the input setting, and off again if it was off.
 - Built as `engine/vocalRange.ts` (the held note and voice types; pure, tested) and `ui/screens/settings/VoiceSettings.tsx`.
