@@ -52,13 +52,12 @@ const GROUPS = [
       { id: 'language', heading: 'settings.language.heading', Card: LanguageSettings },
     ],
   },
-  // A group of one card needs no heading of its own.
   {
-    heading: null,
+    heading: 'settings.groups.data',
     sections: [{ id: 'data', heading: 'settings.data.heading', Card: DataSettings }],
   },
 ] as const satisfies readonly {
-  heading: string | null;
+  heading: string;
   sections: readonly { id: string; heading: string; Card: ComponentType }[];
 }[];
 
@@ -139,12 +138,10 @@ export function SettingsScreen() {
                   {t(section.heading)}
                 </option>
               ));
-            return group.heading ? (
+            return (
               <optgroup key={group.heading} label={t(group.heading)}>
                 {options}
               </optgroup>
-            ) : (
-              <Fragment key={group.sections[0].id}>{options}</Fragment>
             );
           })}
         </select>
@@ -157,27 +154,23 @@ export function SettingsScreen() {
                 <Card />
               </div>
             ));
-            return group.heading ? (
+            return (
               <section key={group.heading} className="settings-group">
                 <h2 className="settings-group__heading">{t(group.heading)}</h2>
                 {cards}
               </section>
-            ) : (
-              <Fragment key={group.sections[0].id}>{cards}</Fragment>
             );
           })}
         </div>
         <nav className="settings-index" aria-label={t('settings.index')}>
           {GROUPS.map((group) => (
-            <Fragment key={group.sections[0].id}>
-              {group.heading && <p className="settings-index__group">{t(group.heading)}</p>}
+            <Fragment key={group.heading}>
+              <p className="settings-index__group">{t(group.heading)}</p>
               {group.sections
                 .filter((section) => shown.includes(section.id))
                 .map((section) => (
                   <a
                     key={section.id}
-                    // A group of one card: spaced like a group, without the heading.
-                    className={group.heading ? undefined : 'settings-index__alone'}
                     href={`#${section.id}`}
                     aria-current={section.id === current ? 'true' : undefined}
                     onClick={(event) => {

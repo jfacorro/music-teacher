@@ -395,7 +395,7 @@ a.app-where__section:hover {
 }
 
 /* Room after the last card, so it too can scroll up to the top bar. */
-.settings-list > .settings-section:last-child {
+.settings-group:last-child > .settings-section:last-child {
   min-block-size: calc(100dvh - var(--header-height) - 2.5rem);
 }
 
@@ -424,10 +424,6 @@ a.app-where__section:hover {
   border-inline-start: 2px solid var(--border);
   color: var(--muted);
   text-decoration: none;
-}
-
-.settings-index .settings-index__alone {
-  margin-block-start: 0.75rem;
 }
 
 .settings-index a:hover {

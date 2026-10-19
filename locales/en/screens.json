@@ -79,7 +79,8 @@
     "groups": {
       "keyboard": "Keyboard and microphone",
       "sound": "Sound and voice",
-      "look": "Look and language"
+      "look": "Look and language",
+      "data": "Your data"
     },
     "language": {
       "heading": "Language and notation",
@@ -272,7 +273,7 @@
       "micUnavailable": "The range test needs a microphone, and none could be started."
     },
     "data": {
-      "heading": "Your data",
+      "heading": "Import and export app data",
       "intro": "Your progress, settings and songs are kept on this computer, separately in each browser and in the desktop app. Export them to a file to keep a copy, or to move them from one to the other.",
       "export": "Export to a file",
       "exportTip": "Save your progress, settings and songs to a file",

@@ -823,7 +823,7 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - Built as `engine/vocalRange.ts` (the held note and voice types; pure, tested) and `ui/screens/settings/VoiceSettings.tsx`.
 
 **Settings index** — built
-- Settings’ eleven cards are grouped (Keyboard and microphone; Sound and voice; Look and language; and Your data on its own), with an index beside them: it follows the scroll, highlighting the card under the top bar, and a click jumps to a card. Below 1000 px wide it becomes a “Jump to” menu that stays at the top. Cards showing nothing (the microphone check without a microphone and MIDI) are left out of both. Computer keyboard moved up into the first group.
+- Settings’ eleven cards are grouped (Keyboard and microphone; Sound and voice; Look and language; Your data, whose card is now named “Import and export app data”), with an index beside them: it follows the scroll, highlighting the card under the top bar, and a click jumps to a card. Below 1000 px wide it becomes a “Jump to” menu that stays at the top. Cards showing nothing (the microphone check without a microphone and MIDI) are left out of both. Computer keyboard moved up into the first group.
 - Each card keeps its place at an address (`/settings#sound`, `#voice`, …). There’s room after the last card, so every card can scroll up to the top bar.
 
 ### Future ideas (unscheduled)
