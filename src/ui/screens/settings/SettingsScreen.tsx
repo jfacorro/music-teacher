@@ -11,6 +11,7 @@ import { MicCheck } from './MicCheck';
 import { MicSettings } from './MicSettings';
 import { MidiSettings } from './MidiSettings';
 import { SoundSettings } from './SoundSettings';
+import { VoiceSettings } from './VoiceSettings';
 
 export function SettingsScreen() {
   const { t } = useTranslation('screens');
@@ -29,6 +30,7 @@ export function SettingsScreen() {
         <MicSettings />
         <MicCheck />
         <SoundSettings />
+        <VoiceSettings />
         <AppearanceSettings />
         <DevKeyboardSettings />
         <LanguageSettings />

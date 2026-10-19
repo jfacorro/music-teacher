@@ -3,6 +3,7 @@ import { SheetNotation } from '../content/lessons';
 import type { NamingSystem } from '../i18n/naming';
 import { DEFAULT_VOLUMES } from '../audio/volume';
 import { InputMode } from '../input/types';
+import type { VocalRange } from '../engine/vocalRange';
 import { KeyHeight, KeysShown, Theme } from '../ui/appearance';
 import { MetronomeChoice } from '../ui/metronomeChoice';
 import { db } from './db';
@@ -48,6 +49,8 @@ export interface Settings {
   keyHeight: KeyHeight;
   /** How many keys the on-screen keyboard shows around the music. */
   keysShown: KeysShown;
+  /** The latest vocal range test (Settings → Voice); null until one is done. */
+  vocalRange: VocalRange | null;
   /** The sidebar shows only its icons (on a wide window; a narrow one hides it anyway). */
   sidebarCollapsed: boolean;
 }
@@ -76,6 +79,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: Theme.System,
   keyHeight: KeyHeight.Normal,
   keysShown: KeysShown.Fit,
+  vocalRange: null,
   sidebarCollapsed: false,
 };
 
