@@ -348,8 +348,6 @@ a.app-where__section:hover {
 /* Components */
 
 .card {
-  /* Clear of the top bar when a link scrolls to it. */
-  scroll-margin-block-start: calc(var(--header-height) + 1rem);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -365,10 +363,118 @@ a.app-where__section:hover {
 }
 
 /* Settings: one section after the other. */
+/* Settings: the cards in groups, with an index beside them that follows the scroll. */
+.settings-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 13rem;
+  gap: 1.5rem;
+  align-items: start;
+}
+
 .settings-list {
   display: flex;
   flex-direction: column;
+  gap: 1.75rem;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+}
+
+.settings-group__heading {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Clear of the top bar when a link or the index scrolls to it. */
+.settings-section {
+  scroll-margin-block-start: calc(var(--header-height) + 1rem);
+}
+
+/* Room after the last card, so it too can scroll up to the top bar. */
+.settings-group:last-child > .settings-section:last-child {
+  min-block-size: calc(100dvh - var(--header-height) - 2.5rem);
+}
+
+.settings-index {
+  position: sticky;
+  inset-block-start: calc(var(--header-height) + 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.settings-index__group {
+  margin: 0.75rem 0 0.25rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.settings-index__group:first-child {
+  margin-block-start: 0;
+}
+
+.settings-index a {
+  padding: 0.25rem 0.6rem;
+  border-inline-start: 2px solid var(--border);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.settings-index a:hover {
+  color: var(--text);
+}
+
+.settings-index a[aria-current='true'] {
+  border-inline-start-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Only when there's no room for the index beside the cards. */
+.settings-jump {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .settings-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .settings-index {
+    display: none;
+  }
+
+  /* Clear of the top bar and the Jump to menu under it. */
+  .settings-section {
+    scroll-margin-block-start: calc(var(--header-height) + 5rem);
+  }
+
+  .settings-jump {
+    position: sticky;
+    inset-block-start: calc(var(--header-height) + 0.5rem);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-end: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .settings-jump select {
+    flex: 1;
+    min-inline-size: 0;
+    font: inherit;
+  }
 }
 
 .field {

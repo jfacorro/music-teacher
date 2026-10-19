@@ -74,6 +74,14 @@
   },
   "settings": {
     "title": "Configuración",
+    "jumpTo": "Ir a",
+    "index": "Secciones de la configuración",
+    "groups": {
+      "keyboard": "Teclado y micrófono",
+      "sound": "Sonido y voz",
+      "look": "Apariencia e idioma",
+      "data": "Tus datos"
+    },
     "language": {
       "heading": "Idioma y notación",
       "language": "Idioma",
@@ -265,7 +273,7 @@
       "micUnavailable": "La prueba de extensión necesita un micrófono, y no se pudo iniciar ninguno."
     },
     "data": {
-      "heading": "Tus datos",
+      "heading": "Importar / Exportar",
       "intro": "Tu progreso, tus ajustes y tus canciones se guardan en esta computadora, por separado en cada navegador y en la aplicación de escritorio. Expórtalos a un archivo para guardar una copia o para pasarlos de uno a otro.",
       "export": "Exportar a un archivo",
       "exportTip": "Guarda tu progreso, tus ajustes y tus canciones en un archivo",
