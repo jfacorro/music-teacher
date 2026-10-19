@@ -224,6 +224,46 @@
       "failed": "Not enough taps were heard. Try again, tapping a key on every click.",
       "micFirst": "Do this before measuring the microphone delay."
     },
+    "voice": {
+      "heading": "Your vocal range",
+      "intro": "Sing from your lowest comfortable note to your highest. It takes about a minute, with the microphone; the app stays quiet, so no headphones are needed.",
+      "find": "Find my range",
+      "steps": {
+        "comfortable": "1 · A comfortable note",
+        "comfortableFound": "1 · A comfortable note: {note}",
+        "lowest": "2 · Your lowest",
+        "highest": "3 · Your highest"
+      },
+      "help": {
+        "comfortable": "Sing an easy “ah”, at a pitch you could hold all day, and keep it for a moment.",
+        "lowest": "Slide down slowly, as low as feels easy, then hold the lowest note for a moment.",
+        "highest": "Now slide up slowly, as high as feels easy, and hold the highest note for a moment."
+      },
+      "dontPush": "Don’t push: a note counts once it’s steady for about half a second.",
+      "listening": "Listening…",
+      "singing": "You’re singing",
+      "thatsLowest": "That’s my lowest",
+      "thatsHighest": "That’s my highest",
+      "startOver": "Start over",
+      "cancel": "Cancel",
+      "result": "{low} – {high}",
+      "span": "{semitones, plural, one {# semitone} other {# semitones}}, about {octaves} octaves",
+      "comfortable": "Comfortable note: {note}",
+      "voiceType": "Closest voice type: {type}",
+      "voiceTypeNote": "(only a guide: voice types are about more than range)",
+      "types": {
+        "bass": "bass",
+        "baritone": "baritone",
+        "tenor": "tenor",
+        "alto": "alto",
+        "mezzoSoprano": "mezzo-soprano",
+        "soprano": "soprano"
+      },
+      "tested": "Tested on {date}",
+      "testAgain": "Test again",
+      "micDenied": "The microphone isn’t allowed. Allow it in the browser, then try again.",
+      "micUnavailable": "The range test needs a microphone, and none could be started."
+    },
     "data": {
       "heading": "Your data",
       "intro": "Your progress, settings and songs are kept on this computer, separately in each browser and in the desktop app. Export them to a file to keep a copy, or to move them from one to the other.",

@@ -224,6 +224,46 @@
       "failed": "No se oyeron suficientes toques. Vuelve a intentarlo tocando una tecla en cada clic.",
       "micFirst": "Hazlo antes de medir el retraso del micrófono."
     },
+    "voice": {
+      "heading": "Tu extensión vocal",
+      "intro": "Canta desde tu nota más grave cómoda hasta la más aguda. Lleva un minuto, con el micrófono; la aplicación no suena, así que no hacen falta auriculares.",
+      "find": "Encontrar mi extensión",
+      "steps": {
+        "comfortable": "1 · Una nota cómoda",
+        "comfortableFound": "1 · Una nota cómoda: {note}",
+        "lowest": "2 · Tu nota más grave",
+        "highest": "3 · Tu nota más aguda"
+      },
+      "help": {
+        "comfortable": "Canta una «a» fácil, a una altura que podrías sostener todo el día, y mantenla un momento.",
+        "lowest": "Baja despacio, tan grave como te resulte cómodo, y sostén la nota más grave un momento.",
+        "highest": "Ahora sube despacio, tan agudo como te resulte cómodo, y sostén la nota más aguda un momento."
+      },
+      "dontPush": "Sin forzar: una nota cuenta cuando se mantiene estable medio segundo.",
+      "listening": "Escuchando…",
+      "singing": "Estás cantando",
+      "thatsLowest": "Esa es mi nota más grave",
+      "thatsHighest": "Esa es mi nota más aguda",
+      "startOver": "Volver a empezar",
+      "cancel": "Cancelar",
+      "result": "{low} – {high}",
+      "span": "{semitones, plural, one {# semitono} other {# semitonos}}, unas {octaves} octavas",
+      "comfortable": "Nota cómoda: {note}",
+      "voiceType": "Tipo de voz más cercano: {type}",
+      "voiceTypeNote": "(solo como guía: el tipo de voz depende de más cosas que la extensión)",
+      "types": {
+        "bass": "bajo",
+        "baritone": "barítono",
+        "tenor": "tenor",
+        "alto": "contralto",
+        "mezzoSoprano": "mezzosoprano",
+        "soprano": "soprano"
+      },
+      "tested": "Medida el {date}",
+      "testAgain": "Medir de nuevo",
+      "micDenied": "El micrófono no está permitido. Permítelo en el navegador y vuelve a intentarlo.",
+      "micUnavailable": "La prueba de extensión necesita un micrófono, y no se pudo iniciar ninguno."
+    },
     "data": {
       "heading": "Tus datos",
       "intro": "Tu progreso, tus ajustes y tus canciones se guardan en esta computadora, por separado en cada navegador y en la aplicación de escritorio. Expórtalos a un archivo para guardar una copia o para pasarlos de uno a otro.",
