@@ -15,6 +15,42 @@ Larger ideas, worked out enough to plan from later. None is scheduled: an idea b
 - **Practice:** wait, play-along and autoplay modes, the metronome, and the app playing the melody or an accompaniment.
 - **The rest:** ear training, the sight-reading generator, recordings with Listen and Compare, and lessons with units, stars, skills and daily suggestions.
 
+### How it fits in the app
+
+One switch decides what you're practicing, piano or voice, and every section follows it, so the app keeps the same shape for both.
+
+**The switch** sits in the top bar, as the first part of the path: "Piano Teacher / Voice / Learn / Unit 1 · Matching one note". It opens a short list, Piano and Voice, each saying where you are ("Unit 9 of 14", "Not started · find your range first"). It stays visible on every page, even with the sidebar collapsed or on a phone. The alternative, a toggle at the top of the sidebar, would be hidden whenever the sidebar is.
+
+**The sections:**
+
+| Section                       | Piano                  | Voice                                                          |
+| ----------------------------- | ---------------------- | -------------------------------------------------------------- |
+| Home                          | Today's piano practice | Today's singing practice, starting with a warm-up              |
+| Learn                         | The piano course       | A singing course with its own units, progress and stars        |
+| Song practice                 | Play the songs         | Sing the same songs, with lyrics, moved into your range        |
+| Sight-reading → Sight-singing | Play at sight          | Sing at sight: the same generator, in your range, with solfège |
+| Ear training                  | Answer on the keyboard | Answer by singing, or still on the keyboard                    |
+| Free play → Tuner             | Play freely            | Sing anything and see the note and how far off it is           |
+| Settings                      | Shared                 | Shared, plus a Voice card: your range and a headphones check   |
+
+**Separate per instrument:** the course, progress, stars, skills and reviews. **Shared:** the practice calendar and streak, settings, the song library and the note names.
+
+**The input follows the instrument:** MIDI (or the microphone) for the piano; the microphone for the voice, with a reminder to use headphones. The top bar's picker shows which one is listening.
+
+**Getting started:** the welcome screen asks "Piano, Voice or Both". Adding the other one later is a click on the switch, and starts with the range test.
+
+**The screens:**
+
+- **A singing exercise:**
+  - a horizontal lane: note bars on rows named with the note names (solfège if chosen), and the lyrics under them;
+  - your voice drawn as a line through them, green when in tune and amber when off, up to a playhead;
+  - a tuner beside it: the note, how many cents flat or sharp, and a needle with a green zone (±25 cents);
+  - modes: Wait for me, Sing along, Listen first; switches for the guide melody and the metronome.
+- **The results:** in tune, on time and steady, as percentages; the notes to work on (which ones, flat or sharp, by how much); Listen and Compare as for the piano.
+- **The Tuner page:** the note in large type with its cents, the last few seconds as a line, and the range found so far.
+
+**Underneath:** an `instrument` setting; a second course file for the voice; results, skills and the Today plan tagged with their instrument. The existing piano screens barely change.
+
 ### Scope
 
 **S.1 Voice tuner**
@@ -71,7 +107,7 @@ Larger ideas, worked out enough to plan from later. None is scheduled: an idea b
 
   Each lesson starts with a warm-up.
 
-- Choosing what to learn: piano, voice, or both, each with its own learning path. The sidebar and the Today card follow the choice.
+- Choosing what to learn: piano, voice, or both, each with its own learning path (see How it fits in the app).
 
 ### Limits
 
@@ -81,8 +117,8 @@ Larger ideas, worked out enough to plan from later. None is scheduled: an idea b
 
 ### Open questions
 
-- One app with a choice of piano or voice, or two separate apps? The suggestion is one app.
-- The name: _Cantabile_ ("in a singing style") fits piano and voice; _Crescendo_ and _Da Capo_ are neutral; _Tecla_, _Pianova_ and _Ivories_ tie it to the piano.
+- One app with a switch between piano and voice, as in How it fits in the app, or two separate apps? The suggestion is one app.
+- The name: "Piano Teacher" no longer fits once the app teaches singing. _Cantabile_ ("in a singing style") fits piano and voice; _Crescendo_ and _Da Capo_ are neutral; _Tecla_, _Pianova_ and _Ivories_ tie it to the piano.
 - Does the browser's echo cancellation let you sing along through speakers, or does it distort the pitch? Try it in S.1.
 
 ### Done when
