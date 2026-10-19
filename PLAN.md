@@ -827,8 +827,8 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - Each card keeps its place at an address (`/settings#sound`, `#voice`, …). There’s room after the last card, so every card can scroll up to the top bar.
 
 **Page indexes** — built
-- The Settings index became a shared `IndexedPage` (`ui/components/IndexedPage.tsx`), used by every page with several sections: Settings; Home (Today, Practice in the last year, Skills, Recent practice); Learn (Up next, then each level’s units); Song practice (each unit with songs, by level, then My songs). Pages with one focus (sight-reading, ear training, free play, a lesson, a song) have none.
-- The same behavior everywhere: the highlight follows the scroll, a click jumps (a folded unit on Learn opens), long names show whole on hover, sections showing nothing are left out, and a link to a section (`#id`) shows it. Below 1000 px wide, a “Jump to” menu. The room after the content is measured, so the last section too can scroll up to the top bar.
+- The Settings index became a shared `IndexedPage` (`ui/components/IndexedPage.tsx`), used by every page with several sections: Settings; Home (Today, Practice in the last year, Skills, Recent practice); Learn (Up next, then each level’s units); Song practice (My songs first, as it grows with every import, then each unit with songs, by level). Pages with one focus (sight-reading, ear training, free play, a lesson, a song) have none.
+- The same behavior everywhere: the highlight follows the scroll, a click jumps (a folded unit on Learn opens, and any other opened one folds back, so at most one is open), long names show whole on hover, sections showing nothing are left out, and a link to a section (`#id`) shows it. Below 1000 px wide, a “Jump to” menu. The room after the content is measured, so the last section too can scroll up to the top bar.
 
 ### Future ideas (unscheduled)
 

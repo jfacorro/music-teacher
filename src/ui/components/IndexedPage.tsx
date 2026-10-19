@@ -25,7 +25,13 @@ export interface IndexGroup {
 
 const jump = (id: string) => {
   const element = document.getElementById(id);
-  // A folded section (e.g. a finished unit on Learn) opens, so what's in it shows.
+  // A folded section (e.g. a finished unit on Learn) opens, so what's in it shows; any other
+  // opened one folds back, so at most one is open.
+  for (const other of document.querySelectorAll<HTMLDetailsElement>(
+    '.page-layout__content details[open]',
+  )) {
+    if (other !== element) other.open = false;
+  }
   if (element instanceof HTMLDetailsElement) element.open = true;
   element?.scrollIntoView({ block: 'start' });
 };

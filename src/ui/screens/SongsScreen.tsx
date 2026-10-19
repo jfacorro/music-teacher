@@ -41,7 +41,9 @@ export function SongsScreen() {
     stars,
   });
 
+  // My songs first: it grows as songs are imported, and stays easy to find.
   const groups: IndexGroup[] = [
+    { items: [{ id: 'my-songs', label: t('songPractice.mySongs') }] },
     ...SONGS_BY_LEVEL.map(({ level, units }) => ({
       heading: t(`course.levels.${level}`),
       items: units.map(({ unit, number }) => ({
@@ -52,13 +54,35 @@ export function SongsScreen() {
         }),
       })),
     })),
-    { items: [{ id: 'my-songs', label: t('songPractice.mySongs') }] },
   ];
 
   return (
     <section className="screen">
       <h1>{t('songPractice.title')}</h1>
       <IndexedPage groups={groups}>
+        <section className="card unit" id="my-songs">
+          <h2>{t('songPractice.mySongs')}</h2>
+          <p className="muted">
+            {mySongs.length > 0 ? t('songPractice.mySongsIntro') : t('songPractice.mySongsEmpty')}
+          </p>
+          {mySongs.length > 0 && (
+            <ol className="path">
+              {mySongs.map((song) => (
+                <PathItem
+                  key={song.id}
+                  title={song.title}
+                  href={`/practice/my/${song.id}`}
+                  state={stateOf(starsOf(ResultKind.MySong, String(song.id)))}
+                />
+              ))}
+            </ol>
+          )}
+          <div className="button-row unit__actions">
+            <Link className="button" to="/my-songs/import">
+              {t('songPractice.importSong')}
+            </Link>
+          </div>
+        </section>
         <section className="card unit">
           <h2>{t('songPractice.songs')}</h2>
           <p className="muted">{t('songPractice.songsIntro')}</p>
@@ -89,30 +113,6 @@ export function SongsScreen() {
               ))}
             </section>
           ))}
-        </section>
-
-        <section className="card unit" id="my-songs">
-          <h2>{t('songPractice.mySongs')}</h2>
-          <p className="muted">
-            {mySongs.length > 0 ? t('songPractice.mySongsIntro') : t('songPractice.mySongsEmpty')}
-          </p>
-          {mySongs.length > 0 && (
-            <ol className="path">
-              {mySongs.map((song) => (
-                <PathItem
-                  key={song.id}
-                  title={song.title}
-                  href={`/practice/my/${song.id}`}
-                  state={stateOf(starsOf(ResultKind.MySong, String(song.id)))}
-                />
-              ))}
-            </ol>
-          )}
-          <div className="button-row unit__actions">
-            <Link className="button" to="/my-songs/import">
-              {t('songPractice.importSong')}
-            </Link>
-          </div>
         </section>
       </IndexedPage>
     </section>
