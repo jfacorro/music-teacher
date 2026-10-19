@@ -74,6 +74,13 @@
   },
   "settings": {
     "title": "Configuración",
+    "jumpTo": "Ir a",
+    "index": "Secciones de la configuración",
+    "groups": {
+      "keyboard": "Teclado y micrófono",
+      "sound": "Sonido y voz",
+      "look": "Apariencia e idioma"
+    },
     "language": {
       "heading": "Idioma y notación",
       "language": "Idioma",

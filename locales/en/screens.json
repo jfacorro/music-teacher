@@ -74,6 +74,13 @@
   },
   "settings": {
     "title": "Settings",
+    "jumpTo": "Jump to",
+    "index": "Settings sections",
+    "groups": {
+      "keyboard": "Keyboard and microphone",
+      "sound": "Sound and voice",
+      "look": "Look and language"
+    },
     "language": {
       "heading": "Language and notation",
       "language": "Language",

@@ -53,7 +53,7 @@ export function SoundSettings() {
   };
 
   return (
-    <section className="card" id="sound">
+    <section className="card">
       <h2>{t('settings.sound.heading')}</h2>
       <VolumeControls />
       <div className="field">
