@@ -504,6 +504,7 @@ select {
 }
 
 input[type='text'],
+input[type='search'],
 input[type='number'] {
   font: inherit;
   padding: 0.45rem 0.6rem;
@@ -1283,6 +1284,17 @@ input[type='range'] {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+/* My songs: a filter, and a list that scrolls past ten songs (a row is 2.4rem and a border). */
+.my-songs__search {
+  inline-size: 100%;
+  margin-block-end: 0.5rem;
+}
+
+.my-songs__list {
+  max-block-size: calc(10 * (2.4rem + 1px));
+  overflow-y: auto;
 }
 
 .path__item {

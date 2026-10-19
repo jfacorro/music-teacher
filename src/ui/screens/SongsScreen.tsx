@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { unitsByLevel } from '../../content/courses';
 import { SONG_IDS, SONG_UNITS } from '../../content/songs';
 import { useContentText } from '../../i18n/useContentText';
 import { LessonStatus } from '../../content/unlock';
+import { matchesQuery } from '../../lib/text';
 import { useMySongs } from '../../storage/mySongs';
 import { resultKey, ResultKind, useProgress } from '../../storage/progress';
 import { IndexedPage, type IndexGroup } from '../components/IndexedPage';
@@ -35,6 +37,8 @@ export function SongsScreen() {
   const courseText = useContentText('courses');
   const results = useProgress((s) => s.results);
   const mySongs = useMySongs((s) => s.songs);
+  const [query, setQuery] = useState('');
+  const found = mySongs.filter((song) => matchesQuery(query, song.title, song.composer));
   const starsOf = (kind: ResultKind, id: string) => results[resultKey(kind, id)]?.bestStars ?? 0;
   const stateOf = (stars: number) => ({
     status: stars > 0 ? LessonStatus.Completed : LessonStatus.Available,
@@ -66,8 +70,22 @@ export function SongsScreen() {
             {mySongs.length > 0 ? t('songPractice.mySongsIntro') : t('songPractice.mySongsEmpty')}
           </p>
           {mySongs.length > 0 && (
-            <ol className="path">
-              {mySongs.map((song) => (
+            <input
+              type="search"
+              className="my-songs__search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={t('songPractice.searchPlaceholder')}
+              aria-label={t('songPractice.search')}
+            />
+          )}
+          {mySongs.length > 0 && found.length === 0 && (
+            <p className="muted">{t('songPractice.noMatch', { query: query.trim() })}</p>
+          )}
+          {found.length > 0 && (
+            // Ten songs show at a time; more scroll.
+            <ol className="path my-songs__list">
+              {found.map((song) => (
                 <PathItem
                   key={song.id}
                   title={
