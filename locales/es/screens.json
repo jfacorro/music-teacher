@@ -74,8 +74,6 @@
   },
   "settings": {
     "title": "Configuración",
-    "jumpTo": "Ir a",
-    "index": "Secciones de la configuración",
     "groups": {
       "keyboard": "Teclado y micrófono",
       "sound": "Sonido y voz",
@@ -633,6 +631,10 @@
     "songs": "Canciones",
     "songsIntro": "Practica canciones completas cuando quieras, en modo espera o a tempo. Cada una aparece con la unidad que enseña lo que necesita.",
     "mySongs": "Mis canciones",
+    "mySongTitle": "{title} – {composer}",
+    "search": "Buscar una canción",
+    "searchPlaceholder": "Busca una canción por título o compositor",
+    "noMatch": "Ninguna canción coincide con «{query}».",
     "mySongsIntro": "Canciones que importaste. Se guardan en este navegador, en esta computadora.",
     "mySongsEmpty": "Importa un archivo MIDI o MusicXML para practicar tu propia música.",
     "importSong": "Importar una canción",
@@ -752,6 +754,7 @@
       "lateElementary": "Elemental avanzado",
       "earlyIntermediate": "Intermedio inicial"
     },
-    "levelHeading": "{level} · Unidades {first}–{last}"
+    "levelHeading": "{level} · Unidades {first}–{last}",
+    "unitShort": "{number} · {title}"
   }
 }

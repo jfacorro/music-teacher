@@ -341,7 +341,8 @@ a.app-where__section:hover {
   padding: 1.5rem;
 }
 
-.screen > p {
+.screen > p,
+.page-layout__content > p {
   max-width: 65ch;
 }
 
@@ -362,15 +363,7 @@ a.app-where__section:hover {
   align-items: start;
 }
 
-/* Settings: one section after the other. */
-/* Settings: the cards in groups, with an index beside them that follows the scroll. */
-.settings-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 13rem;
-  gap: 1.5rem;
-  align-items: start;
-}
-
+/* Settings: the cards in groups (the index beside them is a page index, below). */
 .settings-list {
   display: flex;
   flex-direction: column;
@@ -389,17 +382,20 @@ a.app-where__section:hover {
   font-size: 0.9rem;
 }
 
-/* Clear of the top bar when a link or the index scrolls to it. */
-.settings-section {
+/* A page with an index of its sections beside it (ui/components/IndexedPage.tsx). */
+.page-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 13rem;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* The sections, clear of the top bar when a link or the index scrolls to them. */
+.page-layout__content [id] {
   scroll-margin-block-start: calc(var(--header-height) + 1rem);
 }
 
-/* Room after the last card, so it too can scroll up to the top bar. */
-.settings-group:last-child > .settings-section:last-child {
-  min-block-size: calc(100dvh - var(--header-height) - 2.5rem);
-}
-
-.settings-index {
+.page-index {
   position: sticky;
   inset-block-start: calc(var(--header-height) + 1rem);
   display: flex;
@@ -408,55 +404,62 @@ a.app-where__section:hover {
   font-size: 0.9rem;
 }
 
-.settings-index__group {
+.page-index__group {
   margin: 0.75rem 0 0.25rem;
   color: var(--muted);
   font-size: 0.8rem;
   font-weight: 600;
 }
 
-.settings-index__group:first-child {
+.page-index__group:first-child {
   margin-block-start: 0;
 }
 
-.settings-index a {
+.page-index .page-index__alone {
+  margin-block-start: 0.75rem;
+}
+
+.page-index a {
+  overflow: hidden;
   padding: 0.25rem 0.6rem;
   border-inline-start: 2px solid var(--border);
   color: var(--muted);
   text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.settings-index a:hover {
+.page-index a:hover {
   color: var(--text);
 }
 
-.settings-index a[aria-current='true'] {
+.page-index a[aria-current='true'] {
   border-inline-start-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 10%, transparent);
   color: var(--text);
   font-weight: 600;
 }
 
-/* Only when there's no room for the index beside the cards. */
-.settings-jump {
+/* Only when there's no room for the index beside the content. */
+.page-jump {
   display: none;
 }
 
 @media (max-width: 1000px) {
-  .settings-layout {
+  .page-layout {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .settings-index {
+  .page-index {
     display: none;
   }
 
   /* Clear of the top bar and the Jump to menu under it. */
-  .settings-section {
+  .page-layout__content [id] {
     scroll-margin-block-start: calc(var(--header-height) + 5rem);
   }
 
-  .settings-jump {
+  .page-jump {
     position: sticky;
     inset-block-start: calc(var(--header-height) + 0.5rem);
     z-index: 5;
@@ -470,7 +473,7 @@ a.app-where__section:hover {
     background: var(--surface);
   }
 
-  .settings-jump select {
+  .page-jump select {
     flex: 1;
     min-inline-size: 0;
     font: inherit;
@@ -501,6 +504,7 @@ select {
 }
 
 input[type='text'],
+input[type='search'],
 input[type='number'] {
   font: inherit;
   padding: 0.45rem 0.6rem;
@@ -1282,6 +1286,17 @@ input[type='range'] {
   padding: 0;
 }
 
+/* My songs: a filter, and a list that scrolls past ten songs (a row is 2.4rem and a border). */
+.my-songs__search {
+  inline-size: 100%;
+  margin-block-end: 0.5rem;
+}
+
+.my-songs__list {
+  max-block-size: calc(10 * (2.4rem + 1px));
+  overflow-y: auto;
+}
+
 .path__item {
   display: flex;
   align-items: center;
@@ -1374,7 +1389,7 @@ a.path__title:hover {
   font-size: 1.5rem;
 }
 
-.progress > .card {
+.progress .page-layout__content > .card {
   margin-block-end: 1rem;
 }
 

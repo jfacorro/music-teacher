@@ -68,5 +68,9 @@
     "label": "Pedal",
     "down": "Sustain pedal down",
     "up": "Sustain pedal up"
+  },
+  "pageIndex": {
+    "label": "On this page",
+    "jumpTo": "Jump to"
   }
 }

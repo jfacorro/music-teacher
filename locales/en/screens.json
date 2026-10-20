@@ -74,8 +74,6 @@
   },
   "settings": {
     "title": "Settings",
-    "jumpTo": "Jump to",
-    "index": "Settings sections",
     "groups": {
       "keyboard": "Keyboard and microphone",
       "sound": "Sound and voice",
@@ -633,6 +631,10 @@
     "songs": "Songs",
     "songsIntro": "Practice whole songs any time, in wait or play-along mode. Each one is listed with the unit that teaches what it needs.",
     "mySongs": "My songs",
+    "mySongTitle": "{title} – {composer}",
+    "search": "Find a song",
+    "searchPlaceholder": "Find a song by title or composer",
+    "noMatch": "No song matches “{query}”.",
     "mySongsIntro": "Songs you imported. They’re kept in this browser, on this computer.",
     "mySongsEmpty": "Import a MIDI or MusicXML file to practice your own music.",
     "importSong": "Import a song",
@@ -752,6 +754,7 @@
       "lateElementary": "Late elementary",
       "earlyIntermediate": "Early intermediate"
     },
-    "levelHeading": "{level} · Units {first}–{last}"
+    "levelHeading": "{level} · Units {first}–{last}",
+    "unitShort": "{number} · {title}"
   }
 }

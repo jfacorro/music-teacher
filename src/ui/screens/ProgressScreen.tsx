@@ -27,6 +27,7 @@ import { Stars } from '../components/Stars';
 import { StarsSize } from '../components/starsSize';
 import { ActivityCalendar } from './ActivityCalendar';
 import { TodayCard } from './TodayCard';
+import { IndexedPage } from '../components/IndexedPage';
 
 const RECENT_LIMIT = 10;
 const DATE_AND_TIME: Intl.DateTimeFormatOptions = { dateStyle: 'medium', timeStyle: 'short' };
@@ -104,82 +105,95 @@ export function ProgressScreen() {
           {t('progress.letsGo')}
         </Link>
       </div>
-      <TodayCard />
-      {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
+      <IndexedPage
+        groups={[
+          {
+            items: [
+              { id: 'today', label: t('today.title') },
+              { id: 'activity', label: t('progress.activity.heading') },
+              { id: 'skills', label: t('progress.skills.heading') },
+              { id: 'recent', label: t('progress.recent') },
+            ],
+          },
+        ]}
+      >
+        <TodayCard />
+        {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
 
-      <div className="stat-grid">
-        <Stat
-          label={t('progress.level')}
-          value={t(`course.levels.${currentUnit.level}`)}
-          detail={t('progress.levelDetail', { number: unitIndex + 1, total: UNITS.length })}
-        />
-        <Stat
-          label={t('progress.lessons')}
-          value={t('progress.outOf', { value: completed, total: LESSON_ORDER.length })}
-        />
-        <Stat
-          label={t('progress.stars')}
-          value={t('progress.outOf', { value: stars, total: LESSON_ORDER.length * MAX_STARS })}
-        />
-        <Stat
-          label={t('progress.streak')}
-          value={t('progress.days', { count: streak })}
-          detail={best > streak ? t('progress.bestStreak', { count: best }) : undefined}
-        />
-        <Stat label={t('progress.time')} value={time(minutes * 60_000)} />
-      </div>
+        <div className="stat-grid">
+          <Stat
+            label={t('progress.level')}
+            value={t(`course.levels.${currentUnit.level}`)}
+            detail={t('progress.levelDetail', { number: unitIndex + 1, total: UNITS.length })}
+          />
+          <Stat
+            label={t('progress.lessons')}
+            value={t('progress.outOf', { value: completed, total: LESSON_ORDER.length })}
+          />
+          <Stat
+            label={t('progress.stars')}
+            value={t('progress.outOf', { value: stars, total: LESSON_ORDER.length * MAX_STARS })}
+          />
+          <Stat
+            label={t('progress.streak')}
+            value={t('progress.days', { count: streak })}
+            detail={best > streak ? t('progress.bestStreak', { count: best }) : undefined}
+          />
+          <Stat label={t('progress.time')} value={time(minutes * 60_000)} />
+        </div>
 
-      <ActivityCalendar days={days} time={time} />
+        <ActivityCalendar days={days} time={time} />
 
-      <section className="card">
-        <h2>{t('progress.skills.heading')}</h2>
-        <ul className="skills">
-          {skills.map((skill) => (
-            <li key={skill.skill} className={`skill skill--${skill.level}`}>
-              <span className="skill__name">{courseText(`skills.${skill.skill}`)}</span>
-              <span className="skill__meter" aria-hidden="true">
-                <span style={{ inlineSize: `${Math.round(skill.mastery * 100)}%` }} />
-              </span>
-              <span className="skill__level">
-                {t(`progress.skills.level.${skill.level}`)}
-                {skill.level !== SkillLevel.NotStarted && (
-                  <span className="muted"> {formatPercent(skill.mastery, i18n.language)}</span>
-                )}
-              </span>
-              <span className="muted skill__lessons">
-                {skill.lessons > 0
-                  ? t('progress.skills.lessons', { played: skill.played, total: skill.lessons })
-                  : t('progress.skills.exercises', { count: skill.played })}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {log.length > 0 && (
-        <section className="card">
-          <h2>{t('progress.recent')}</h2>
-          <table className="events">
-            <tbody>
-              {[...log]
-                .reverse()
-                .slice(0, RECENT_LIMIT)
-                .map((entry) => (
-                  <tr key={entry.id ?? entry.at}>
-                    <td className="muted">
-                      {formatDate(new Date(entry.at), i18n.language, DATE_AND_TIME)}
-                    </td>
-                    <td>{titleOf(entry.kind, entry.refId)}</td>
-                    <td>
-                      <Stars stars={entry.stars} size={StarsSize.Small} />
-                    </td>
-                    <td className="muted">{formatPercent(entry.accuracy, i18n.language)}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+        <section className="card" id="skills">
+          <h2>{t('progress.skills.heading')}</h2>
+          <ul className="skills">
+            {skills.map((skill) => (
+              <li key={skill.skill} className={`skill skill--${skill.level}`}>
+                <span className="skill__name">{courseText(`skills.${skill.skill}`)}</span>
+                <span className="skill__meter" aria-hidden="true">
+                  <span style={{ inlineSize: `${Math.round(skill.mastery * 100)}%` }} />
+                </span>
+                <span className="skill__level">
+                  {t(`progress.skills.level.${skill.level}`)}
+                  {skill.level !== SkillLevel.NotStarted && (
+                    <span className="muted"> {formatPercent(skill.mastery, i18n.language)}</span>
+                  )}
+                </span>
+                <span className="muted skill__lessons">
+                  {skill.lessons > 0
+                    ? t('progress.skills.lessons', { played: skill.played, total: skill.lessons })
+                    : t('progress.skills.exercises', { count: skill.played })}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
-      )}
+
+        {log.length > 0 && (
+          <section className="card" id="recent">
+            <h2>{t('progress.recent')}</h2>
+            <table className="events">
+              <tbody>
+                {[...log]
+                  .reverse()
+                  .slice(0, RECENT_LIMIT)
+                  .map((entry) => (
+                    <tr key={entry.id ?? entry.at}>
+                      <td className="muted">
+                        {formatDate(new Date(entry.at), i18n.language, DATE_AND_TIME)}
+                      </td>
+                      <td>{titleOf(entry.kind, entry.refId)}</td>
+                      <td>
+                        <Stars stars={entry.stars} size={StarsSize.Small} />
+                      </td>
+                      <td className="muted">{formatPercent(entry.accuracy, i18n.language)}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </section>
+        )}
+      </IndexedPage>
     </section>
   );
 }

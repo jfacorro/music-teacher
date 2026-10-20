@@ -826,6 +826,10 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - Settings’ eleven cards are grouped (Keyboard and microphone; Sound and voice; Look and language; Your data, whose card is now named “Import / Export”), with an index beside them: it follows the scroll, highlighting the card under the top bar, and a click jumps to a card. Below 1000 px wide it becomes a “Jump to” menu that stays at the top. Cards showing nothing (the microphone check without a microphone and MIDI) are left out of both. Computer keyboard moved up into the first group.
 - Each card keeps its place at an address (`/settings#sound`, `#voice`, …). There’s room after the last card, so every card can scroll up to the top bar.
 
+**Page indexes** — built
+- The Settings index became a shared `IndexedPage` (`ui/components/IndexedPage.tsx`), used by every page with several sections: Settings; Home (Today, Practice in the last year, Skills, Recent practice); Learn (Up next, then each level’s units); Song practice (My songs first, as it grows with every import, then each unit with songs, by level). My songs also gets a filter (by title or composer, ignoring case and accents) and a list that scrolls past ten songs, each shown with its composer after a dash. Pages with one focus (sight-reading, ear training, free play, a lesson, a song) have none.
+- The same behavior everywhere: the highlight follows the scroll, a click jumps (a folded unit on Learn opens, and any other opened one folds back, so at most one is open), long names show whole on hover, sections showing nothing are left out, and a link to a section (`#id`) shows it. Below 1000 px wide, a “Jump to” menu. The room after the content is measured, so the last section too can scroll up to the top bar.
+
 ### Future ideas (unscheduled)
 
 - Backing tracks / accompaniment for songs.

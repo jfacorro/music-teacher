@@ -76,7 +76,7 @@ export function ActivityCalendar({
   const practiced = shown.filter((day) => day.ms > 0).length;
 
   return (
-    <section className="card activity">
+    <section className="card activity" id="activity">
       <h2>{t('progress.activity.heading')}</h2>
       <p className="muted">
         {practiced > 0
