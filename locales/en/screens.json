@@ -756,5 +756,25 @@
     },
     "levelHeading": "{level} · Units {first}–{last}",
     "unitShort": "{number} · {title}"
+  },
+  "tuner": {
+    "title": "Tuner",
+    "intro": "Sing anything: the note you’re singing, and how far from it.",
+    "listening": "Listening…",
+    "singSomething": "Sing something",
+    "inTune": "in tune",
+    "inTuneBy": "in tune · {offset}",
+    "sharp": "{cents, plural, one {# cent} other {# cents}} sharp",
+    "flat": "{cents, plural, one {# cent} other {# cents}} flat",
+    "last": "The last 5 seconds",
+    "range": "Your range",
+    "rangeValue": "{low} – {high}, from the range test.",
+    "testAgain": "Test again",
+    "noRange": "You haven’t found your vocal range yet.",
+    "findRange": "Find your range",
+    "above": "above your range",
+    "below": "below your range",
+    "addToRange": "Add to my range",
+    "micUnavailable": "The tuner needs a microphone, and none could be started."
   }
 }

@@ -830,6 +830,11 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - The Settings index became a shared `IndexedPage` (`ui/components/IndexedPage.tsx`), used by every page with several sections: Settings; Home (Today, Practice in the last year, Skills, Recent practice); Learn (Up next, then each level’s units); Song practice (My songs first, as it grows with every import, then each unit with songs, by level). My songs also gets a filter (by title or composer, ignoring case and accents) and a list that scrolls past ten songs, each shown with its composer after a dash. Pages with one focus (sight-reading, ear training, free play, a lesson, a song) have none.
 - The same behavior everywhere: the highlight follows the scroll, a click jumps (a folded unit on Learn opens, and any other opened one folds back, so at most one is open), long names show whole on hover, sections showing nothing are left out, and a link to a section (`#id`) shows it. Below 1000 px wide, a “Jump to” menu. The room after the content is measured, so the last section too can scroll up to the top bar.
 
+**Voice tuner** — built
+- The second piece of singing (IDEAS.md › Singing, S.1), on its own page: **Tuner**, in the sidebar after Free play. Sing anything: the note (with its octave) and how far off in cents, averaged over the last 4 readings (about a sixth of a second); a needle with the in-tune zone (±25 cents, as planned for singing exercises); the last 5 seconds as a line over the semitones around the note, breaking where nothing was heard; and the saved vocal range on a keyboard, with the note sung.
+- A note held steadily (half a second, as in the range test) beyond the saved range offers **Add to my range**; without a saved range, the page links to the range test. Like the range test, the page turns the microphone on for itself and off again if it was off, leaving the input setting alone.
+- Built as `engine/tuner.ts` (the averaged note and the in-tune rule; pure, tested) and `ui/screens/TunerScreen.tsx`.
+
 ### Future ideas (unscheduled)
 
 - Backing tracks / accompaniment for songs.

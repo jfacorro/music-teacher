@@ -756,5 +756,25 @@
     },
     "levelHeading": "{level} · Unidades {first}–{last}",
     "unitShort": "{number} · {title}"
+  },
+  "tuner": {
+    "title": "Afinador",
+    "intro": "Canta lo que quieras: la nota que cantas y cuánto te alejas de ella.",
+    "listening": "Escuchando…",
+    "singSomething": "Canta algo",
+    "inTune": "afinada",
+    "inTuneBy": "afinada · {offset}",
+    "sharp": "{cents, plural, one {# cent} other {# cents}} por encima",
+    "flat": "{cents, plural, one {# cent} other {# cents}} por debajo",
+    "last": "Los últimos 5 segundos",
+    "range": "Tu extensión",
+    "rangeValue": "{low} – {high}, según la prueba de extensión.",
+    "testAgain": "Medir de nuevo",
+    "noRange": "Todavía no encontraste tu extensión vocal.",
+    "findRange": "Encontrar mi extensión",
+    "above": "por encima de tu extensión",
+    "below": "por debajo de tu extensión",
+    "addToRange": "Agregar a mi extensión",
+    "micUnavailable": "El afinador necesita un micrófono, y no se pudo iniciar ninguno."
   }
 }

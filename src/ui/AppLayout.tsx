@@ -7,6 +7,7 @@ import {
   IconPiano,
   IconSchool,
   IconSettings,
+  IconWaveSine,
   IconX,
   type Icon,
 } from '@tabler/icons-react';
@@ -40,6 +41,7 @@ const SECTION_ICONS: Readonly<Record<Section, Icon>> = {
   [Section.SightReading]: IconEye,
   [Section.EarTraining]: IconEar,
   [Section.FreePlay]: IconPiano,
+  [Section.Tuner]: IconWaveSine,
   [Section.Settings]: IconSettings,
 };
 const ICON_SIZE = 20;
