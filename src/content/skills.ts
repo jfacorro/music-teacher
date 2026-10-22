@@ -65,3 +65,28 @@ function levelOf(played: number, mastery: number): SkillLevel {
   if (mastery >= STAR_THRESHOLDS[1] - 1e-9) return SkillLevel.Good;
   return SkillLevel.Learning;
 }
+
+/** The areas skills are shown in (Home › Skills), each in the course's order. */
+export const SkillArea = {
+  KeysAndHands: 'keysAndHands',
+  Rhythm: 'rhythm',
+  Reading: 'reading',
+  Musicianship: 'musicianship',
+} as const;
+export type SkillArea = (typeof SkillArea)[keyof typeof SkillArea];
+
+export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
+  [SkillArea.KeysAndHands]: [
+    'keyboard',
+    'finger-numbers',
+    'rh-position',
+    'lh-position',
+    'hands-together',
+    'scales',
+    'thumb-under',
+    'touch',
+  ],
+  [SkillArea.Rhythm]: ['note-values', 'rests', 'eighth-notes', 'steady-tempo'],
+  [SkillArea.Reading]: ['treble-clef', 'bass-clef', 'grand-staff', 'accidentals', 'sight-reading'],
+  [SkillArea.Musicianship]: ['dynamics', 'chords', 'accompaniment', 'minor-keys', 'ear-training'],
+};

@@ -40,10 +40,15 @@ function firstDayOfWeek(language: string): number {
 export function ActivityCalendar({
   days,
   time,
+  streak,
+  best,
 }: {
   days: Readonly<Record<string, number>>;
   /** Formats a practice time, e.g. "12 minutes". */
   time: (ms: number) => string;
+  /** Days in a row practiced up to today, and the most ever. */
+  streak: number;
+  best: number;
 }) {
   const { t, i18n } = useTranslation('screens');
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -78,10 +83,19 @@ export function ActivityCalendar({
   return (
     <section className="card activity" id="activity">
       <h2>{t('progress.activity.heading')}</h2>
-      <p className="muted">
-        {practiced > 0
-          ? t('progress.activity.total', { time: time(total), count: practiced })
-          : t('progress.activity.empty')}
+      <p className="muted activity__summary">
+        <span>
+          {practiced > 0
+            ? t('progress.activity.total', { time: time(total), count: practiced })
+            : t('progress.activity.empty')}
+        </span>
+        {streak > 0 && (
+          <span>
+            {best > streak
+              ? t('progress.activity.streakBest', { count: streak, best })
+              : t('progress.activity.streak', { count: streak })}
+          </span>
+        )}
       </p>
       <div ref={scrollerRef} className="activity__scroller">
         <svg
