@@ -1682,11 +1682,17 @@ button.bars__bar:focus-visible {
   margin-inline-end: 0.25rem;
 }
 
-/* Progress: skills */
+/* Progress: skills, as bars by area (Home › Skills). */
+
+.skill-area__heading {
+  margin-block: 1rem 0.4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
 
 .skills {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.35rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1694,42 +1700,81 @@ button.bars__bar:focus-visible {
 
 .skill {
   display: grid;
-  grid-template-columns: minmax(10rem, 14rem) minmax(6rem, 1fr) auto;
+  grid-template-columns: minmax(9rem, 13rem) minmax(6rem, 1fr) 3rem;
   align-items: center;
-  gap: 0.25rem 1rem;
+  gap: 0.75rem;
 }
 
-.skill__lessons {
-  grid-column: 1 / -1;
-  font-size: 0.8rem;
-  margin-block-start: -0.35rem;
+.skill--notStarted .skill__name {
+  color: var(--muted);
 }
 
-.skill__meter {
-  block-size: 0.5rem;
+.skill__bar {
+  position: relative;
+  block-size: 0.7rem;
   border-radius: 999px;
   background: var(--lane-bg);
-  overflow: hidden;
 }
 
-.skill__meter > span {
-  display: block;
-  block-size: 100%;
+.skill__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
   border-radius: inherit;
-  background: var(--pending);
 }
 
-.skill--good .skill__meter > span {
-  background: color-mix(in srgb, var(--pending) 35%, var(--note-played));
+.skill__tick {
+  position: absolute;
+  inset-block: -0.2rem;
+  inline-size: 1px;
+  background: var(--muted);
+  opacity: 0.5;
 }
 
-.skill--mastered .skill__meter > span {
-  background: var(--note-played);
+.skill__value {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
 }
 
-.skill__level {
-  font-size: 0.9rem;
-  white-space: nowrap;
+/* One color, darker as a skill is mastered. */
+.skill--learning .skill__fill,
+.skills-legend .skill--learning .skills-legend__swatch {
+  background: color-mix(in srgb, var(--accent) 35%, var(--lane-bg));
+}
+
+.skill--good .skill__fill,
+.skills-legend .skill--good .skills-legend__swatch {
+  background: color-mix(in srgb, var(--accent) 70%, var(--lane-bg));
+}
+
+.skill--mastered .skill__fill,
+.skills-legend .skill--mastered .skills-legend__swatch {
+  background: var(--accent);
+}
+
+.skills-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.skills-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.skills-legend__swatch {
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  border-radius: 3px;
+  background: var(--lane-bg);
 }
 
 @media (max-width: 560px) {
@@ -1737,7 +1782,7 @@ button.bars__bar:focus-visible {
     grid-template-columns: 1fr auto;
   }
 
-  .skill__meter {
+  .skill__bar {
     grid-column: 1 / -1;
     grid-row: 2;
   }

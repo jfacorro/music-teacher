@@ -60,3 +60,12 @@ describe('skillProgress', () => {
     });
   });
 });
+
+describe('skill areas', () => {
+  it('put every skill in exactly one area', async () => {
+    const { SKILLS } = await import('./courses');
+    const { SKILL_AREAS } = await import('./skills');
+    const listed = Object.values(SKILL_AREAS).flat();
+    expect([...listed].sort()).toEqual([...SKILLS].sort());
+  });
+});

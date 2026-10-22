@@ -54,7 +54,14 @@
         "good": "Good",
         "mastered": "Mastered"
       },
-      "exercises": "{count, plural, =0 {No exercises yet} one {# exercise} other {# exercises}}"
+      "exercises": "{count, plural, =0 {No exercises yet} one {# exercise} other {# exercises}}",
+      "areas": {
+        "keysAndHands": "Keys and hands",
+        "rhythm": "Rhythm",
+        "reading": "Reading",
+        "musicianship": "Musicianship"
+      },
+      "detail": "{level} · {played}"
     },
     "activity": {
       "heading": "Practice in the last year",

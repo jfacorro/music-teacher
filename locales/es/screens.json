@@ -54,7 +54,14 @@
         "good": "Bien",
         "mastered": "Dominada"
       },
-      "exercises": "{count, plural, =0 {Ningún ejercicio aún} one {# ejercicio} other {# ejercicios}}"
+      "exercises": "{count, plural, =0 {Ningún ejercicio aún} one {# ejercicio} other {# ejercicios}}",
+      "areas": {
+        "keysAndHands": "Teclas y manos",
+        "rhythm": "Ritmo",
+        "reading": "Lectura",
+        "musicianship": "Musicalidad"
+      },
+      "detail": "{level} · {played}"
     },
     "activity": {
       "heading": "Práctica en el último año",

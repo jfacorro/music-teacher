@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { MAX_STARS } from '../../engine/scoring';
+import { MAX_STARS, STAR_THRESHOLDS } from '../../engine/scoring';
 import { Link } from 'react-router';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
 import { lessonStates, nextLessonToPlay } from '../../content/unlock';
-import { skillProgress, SkillLevel } from '../../content/skills';
+import { SKILL_AREAS, SkillArea, skillProgress, SkillLevel } from '../../content/skills';
 import { isSongId } from '../../content/songs';
 import { useMySongs } from '../../storage/mySongs';
 import { formatDate, formatPercent, formatPracticeTime } from '../../i18n/format';
@@ -109,14 +109,15 @@ export function ProgressScreen() {
         groups={[
           {
             items: [
-              { id: 'today', label: t('today.title') },
               { id: 'activity', label: t('progress.activity.heading') },
+              { id: 'today', label: t('today.title') },
               { id: 'skills', label: t('progress.skills.heading') },
               { id: 'recent', label: t('progress.recent') },
             ],
           },
         ]}
       >
+        <ActivityCalendar days={days} time={time} />
         <TodayCard />
         {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
 
@@ -142,28 +143,65 @@ export function ProgressScreen() {
           <Stat label={t('progress.time')} value={time(minutes * 60_000)} />
         </div>
 
-        <ActivityCalendar days={days} time={time} />
-
         <section className="card" id="skills">
           <h2>{t('progress.skills.heading')}</h2>
-          <ul className="skills">
-            {skills.map((skill) => (
-              <li key={skill.skill} className={`skill skill--${skill.level}`}>
-                <span className="skill__name">{courseText(`skills.${skill.skill}`)}</span>
-                <span className="skill__meter" aria-hidden="true">
-                  <span style={{ inlineSize: `${Math.round(skill.mastery * 100)}%` }} />
-                </span>
-                <span className="skill__level">
-                  {t(`progress.skills.level.${skill.level}`)}
-                  {skill.level !== SkillLevel.NotStarted && (
-                    <span className="muted"> {formatPercent(skill.mastery, i18n.language)}</span>
-                  )}
-                </span>
-                <span className="muted skill__lessons">
-                  {skill.lessons > 0
-                    ? t('progress.skills.lessons', { played: skill.played, total: skill.lessons })
-                    : t('progress.skills.exercises', { count: skill.played })}
-                </span>
+          {Object.values(SkillArea).map((area) => (
+            <div key={area} className="skill-area">
+              <h3 className="skill-area__heading">{t(`progress.skills.areas.${area}`)}</h3>
+              <ul className="skills">
+                {skills
+                  .filter((skill) => SKILL_AREAS[area].includes(skill.skill))
+                  .map((skill) => {
+                    const started = skill.level !== SkillLevel.NotStarted;
+                    // The level and lessons played: on hover, and for screen readers.
+                    const detail = t('progress.skills.detail', {
+                      level: t(`progress.skills.level.${skill.level}`),
+                      played:
+                        skill.lessons > 0
+                          ? t('progress.skills.lessons', {
+                              played: skill.played,
+                              total: skill.lessons,
+                            })
+                          : t('progress.skills.exercises', { count: skill.played }),
+                    });
+                    return (
+                      <li
+                        key={skill.skill}
+                        className={`skill skill--${skill.level}`}
+                        title={detail}
+                      >
+                        <span className="skill__name">{courseText(`skills.${skill.skill}`)}</span>
+                        <span className="skill__bar" aria-hidden="true">
+                          {started && (
+                            <span
+                              className="skill__fill"
+                              style={{ inlineSize: `${Math.round(skill.mastery * 100)}%` }}
+                            />
+                          )}
+                          {/* The 1, 2 and 3-star levels. */}
+                          {STAR_THRESHOLDS.map((threshold) => (
+                            <span
+                              key={threshold}
+                              className="skill__tick"
+                              style={{ insetInlineStart: `${threshold * 100}%` }}
+                            />
+                          ))}
+                        </span>
+                        <span className="skill__value">
+                          {started ? formatPercent(skill.mastery, i18n.language) : '—'}
+                        </span>
+                        <span className="visually-hidden">{detail}</span>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          ))}
+          <ul className="skills-legend">
+            {Object.values(SkillLevel).map((level) => (
+              <li key={level} className={`skill--${level}`}>
+                <span className="skills-legend__swatch" aria-hidden="true" />
+                {t(`progress.skills.level.${level}`)}
               </li>
             ))}
           </ul>
