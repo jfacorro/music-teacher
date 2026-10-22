@@ -34,8 +34,8 @@
     }
   },
   "progress": {
-    "welcome": "Te damos la bienvenida",
-    "welcomeBack": "Hola de nuevo",
+    "welcome": "¡Te damos la bienvenida!",
+    "welcomeBack": "¡Hola de nuevo!",
     "empty": "Termina una lección o una canción y tu progreso aparecerá aquí.",
     "recent": "Práctica reciente",
     "underMinute": "Menos de un minuto",
