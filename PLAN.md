@@ -835,6 +835,9 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - The page keeps the furthest notes held steadily (half a second, as in the range test) beyond the saved range since it was opened (“New high: F4”, “New low: E2”), offering **Add to my range** until it’s pressed: one press adds both; without a saved range, the page links to the range test. Like the range test, the page turns the microphone on for itself and off again if it was off, leaving the input setting alone.
 - Built as `engine/tuner.ts` (the averaged note and the in-tune rule; pure, tested) and `ui/screens/TunerScreen.tsx`.
 
+**Reading the sheet ahead** — built
+- The sheet music kept snapping back to its cursor before a run started: the playback position sits a little before the first note (where the count-in begins), so every frame reset the cursor and scrolled to it. Now a cursor already at the start doesn’t count as moving, so the sheet can be scrolled to read the whole piece before starting, or while paused; when the music starts, it comes back to the cursor, and it follows the music while playing as before.
+
 ### Future ideas (unscheduled)
 
 - Backing tracks / accompaniment for songs.

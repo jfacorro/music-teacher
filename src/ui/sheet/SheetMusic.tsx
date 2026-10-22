@@ -181,17 +181,23 @@ export function SheetMusic({
     }
   }, [styleOf, outcomesVersion, status]);
 
-  // Keep the cursor on the notes being played, and scroll it into view.
+  // Keep the cursor on the notes being played, and scroll it into view when it moves or the
+  // music starts. Otherwise the sheet stays where it is, so it can be read ahead (before starting,
+  // or paused).
+  const wasPlaying = useRef(false);
   useAnimationFrame(() => {
     const sheet = rendered.current;
     const scroller = scrollerRef.current;
     if (!sheet || !scroller) return;
     const cursor = sheet.osmd.cursor;
     const beat = transport.position();
-    let moved = false;
+    let moved = transport.playing && !wasPlaying.current;
+    wasPlaying.current = transport.playing;
     if (beat < beatOf(cursor.iterator) - 1e-6) {
+      // Before the start (e.g. the count-in), a cursor already at the start doesn't move.
+      const before = beatOf(cursor.iterator);
       cursor.reset();
-      moved = true;
+      moved ||= beatOf(cursor.iterator) !== before;
     }
     for (;;) {
       const peek = cursor.iterator.clone();
