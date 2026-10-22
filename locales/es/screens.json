@@ -36,15 +36,8 @@
   "progress": {
     "title": "Progreso",
     "empty": "Termina una lección o una canción y tu progreso aparecerá aquí.",
-    "lessons": "Lecciones completadas",
-    "stars": "Estrellas conseguidas",
-    "streak": "Racha de práctica",
-    "time": "Tiempo de práctica",
-    "outOf": "{value} de {total}",
-    "days": "{count, plural, =0 {Aún ningún día} one {# día} other {# días}}",
     "recent": "Práctica reciente",
     "underMinute": "Menos de un minuto",
-    "bestStreak": "Récord: {count, plural, one {# día} other {# días}}",
     "skills": {
       "heading": "Habilidades",
       "lessons": "{played} de {total, plural, one {# lección tocada} other {# lecciones tocadas}}",
@@ -72,13 +65,15 @@
       "day": "{date}: {time}",
       "none": "{date}: sin práctica",
       "less": "Menos",
-      "more": "Más"
+      "more": "Más",
+      "streak": "{count, plural, one {# día seguido} other {# días seguidos}}",
+      "streakBest": "{count, plural, one {# día seguido} other {# días seguidos}} (récord: {best})"
     },
     "deletedSong": "Canción eliminada",
-    "letsGo": "¡Vamos!",
-    "letsGoTip": "Ir a tu camino de aprendizaje",
-    "level": "Nivel",
-    "levelDetail": "Unidad {number} de {total}"
+    "levelDetail": "Unidad {number} de {total}",
+    "course": "Tu curso",
+    "lessonsOf": "{value} de {total} lecciones",
+    "starsOf": "{value} de {total} estrellas"
   },
   "settings": {
     "title": "Configuración",

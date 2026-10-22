@@ -14,7 +14,6 @@ import {
   recordPracticeTime,
   recordResult,
   streakDays,
-  totalPracticeMinutes,
   useProgress,
   ResultKind,
 } from './progress';
@@ -123,8 +122,7 @@ describe('longestStreak', () => {
 });
 
 describe('practice time', () => {
-  it('adds up the days and names local days', () => {
-    expect(totalPracticeMinutes({ '2026-10-12': 90_000, '2026-10-13': 30_000 })).toBe(2);
+  it('finds the days practiced and names local days', () => {
     expect(practicedDays({ '2026-10-12': 0, '2026-10-13': 5 })).toEqual(['2026-10-13']);
     expect(dayOf(at('2026-01-05', '23:30'))).toBe('2026-01-05');
   });

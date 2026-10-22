@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { MAX_STARS, STAR_THRESHOLDS } from '../../engine/scoring';
-import { Link } from 'react-router';
 import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
 import { lessonStates, nextLessonToPlay } from '../../content/unlock';
 import { SKILL_AREAS, SkillArea, skillProgress, SkillLevel } from '../../content/skills';
@@ -19,7 +18,6 @@ import {
   practicedDays,
   resultKey,
   streakDays,
-  totalPracticeMinutes,
   useProgress,
   ResultKind,
 } from '../../storage/progress';
@@ -46,7 +44,6 @@ export function ProgressScreen() {
   const practiced = practicedDays(days);
   const streak = streakDays(practiced);
   const best = longestStreak(practiced);
-  const minutes = totalPracticeMinutes(days);
   // The level of the unit being worked on: the next lesson's (the last unit's once all is done).
   const states = lessonStates(
     UNITS,
@@ -99,16 +96,7 @@ export function ProgressScreen() {
 
   return (
     <section className="screen progress">
-      <div className="progress__header">
-        <h1>{t('progress.title')}</h1>
-        <Link
-          className="button button--primary button--big"
-          to="/learn"
-          title={t('progress.letsGoTip')}
-        >
-          {t('progress.letsGo')}
-        </Link>
-      </div>
+      <h1>{t('progress.title')}</h1>
       <IndexedPage
         groups={[
           {
@@ -121,31 +109,25 @@ export function ProgressScreen() {
           },
         ]}
       >
-        <ActivityCalendar days={days} time={time} />
+        <ActivityCalendar days={days} time={time} streak={streak} best={best} />
         <TodayCard />
         {log.length === 0 && practiced.length === 0 && <p>{t('progress.empty')}</p>}
 
-        <div className="stat-grid">
-          <Stat
-            label={t('progress.level')}
-            value={t(`course.levels.${currentUnit.level}`)}
-            detail={t('progress.levelDetail', { number: unitIndex + 1, total: UNITS.length })}
-          />
-          <Stat
-            label={t('progress.lessons')}
-            value={t('progress.outOf', { value: completed, total: LESSON_ORDER.length })}
-          />
-          <Stat
-            label={t('progress.stars')}
-            value={t('progress.outOf', { value: stars, total: LESSON_ORDER.length * MAX_STARS })}
-          />
-          <Stat
-            label={t('progress.streak')}
-            value={t('progress.days', { count: streak })}
-            detail={best > streak ? t('progress.bestStreak', { count: best }) : undefined}
-          />
-          <Stat label={t('progress.time')} value={time(minutes * 60_000)} />
-        </div>
+        {/* Where you are in the course, on one line. */}
+        <section className="card course-line">
+          <h2 className="course-line__title">{t('progress.course')}</h2>
+          <span className="course-line__facts">
+            <span>{t(`course.levels.${currentUnit.level}`)}</span>
+            <span>{t('progress.levelDetail', { number: unitIndex + 1, total: UNITS.length })}</span>
+            <span>{t('progress.lessonsOf', { value: completed, total: LESSON_ORDER.length })}</span>
+            <span>
+              {t('progress.starsOf', { value: stars, total: LESSON_ORDER.length * MAX_STARS })}
+            </span>
+          </span>
+          <span className="course-line__meter" aria-hidden="true">
+            <span style={{ inlineSize: `${(completed / LESSON_ORDER.length) * 100}%` }} />
+          </span>
+        </section>
 
         <section className="card" id="skills">
           <h2>{t('progress.skills.heading')}</h2>
@@ -255,15 +237,5 @@ export function ProgressScreen() {
         )}
       </IndexedPage>
     </section>
-  );
-}
-
-function Stat({ label, value, detail }: { label: string; value: string; detail?: string }) {
-  return (
-    <div className="card stat">
-      <span className="muted">{label}</span>
-      <strong>{value}</strong>
-      {detail && <span className="muted stat__detail">{detail}</span>}
-    </div>
   );
 }

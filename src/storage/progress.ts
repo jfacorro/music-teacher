@@ -210,10 +210,6 @@ export function longestStreak(practiced: Iterable<string>): number {
 export const practicedDays = (days: Readonly<Record<string, number>>): string[] =>
   Object.keys(days).filter((day) => (days[day] ?? 0) > 0);
 
-export function totalPracticeMinutes(days: Readonly<Record<string, number>>): number {
-  return Object.values(days).reduce((sum, ms) => sum + ms, 0) / 60_000;
-}
-
 export interface CalendarDay {
   day: string;
   date: Date;

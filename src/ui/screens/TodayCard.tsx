@@ -118,19 +118,17 @@ export function TodayCard() {
           return (
             <li
               key={`${item.target.kind}:${item.target.id}`}
-              className={finished ? 'today__item is-done' : 'today__item'}
+              className={finished ? 'is-done' : undefined}
             >
-              <span className="today__mark" aria-hidden="true">
-                {finished ? CHECK : null}
-              </span>
-              <span className="today__body">
+              <Link className="today__item" to={hrefOf(item)}>
+                <span className="today__mark" aria-hidden="true">
+                  {finished ? CHECK : null}
+                </span>
                 <span className="today__kind">{t(`today.kinds.${item.kind}`)}</span>
-                <Link className="today__title" to={hrefOf(item)}>
-                  {titleOf(item.target)}
-                </Link>
-                <span className="muted">{detailOf(item)}</span>
-              </span>
-              {finished && <span className="visually-hidden">{t('today.done')}</span>}
+                <span className="today__title">{titleOf(item.target)}</span>
+                <span className="today__detail">{detailOf(item)}</span>
+                {finished && <span className="visually-hidden">{t('today.done')}</span>}
+              </Link>
             </li>
           );
         })}
