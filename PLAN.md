@@ -729,8 +729,8 @@ Units are grouped in four levels: **Beginner** (Units 1â€“4), **Elementary** (5â
 #### Phase 4 done when
 - [x] The home screen suggests a daily session that follows progress, including reviews of lessons due again and a weak spot to loop.
 - [x] A run can be played back and compared with the written music, with MIDI and with the microphone.
-- [ ] Sight-reading drills only use what has been taught, and are never the same twice.
-  - [ ] TODO (user): once Unit 3 is finished, play a few drills on the Casio (MIDI): they should read well from the sheet, sound like little tunes and fit under the hand; try "New drill", "Try again" and each open level.
+- [x] Sight-reading drills only use what has been taught, and are never the same twice.
+  - [x] Verified 2026-10-22 on the Casio (MIDI), with the two right-hand levels open after Unit 3: the drills read well from the sheet, sound like little tunes and fit under the hand; "New drill", "Try again" and switching levels work. The bass, both-hands and key levels open with Units 4, 5 and 7.
 - [x] Ear-training exercises can be answered on the keyboard, with MIDI and with the microphone.
 - [x] Theme and keyboard size can be chosen and are remembered, in the browser and the desktop app.
 - [x] All new text is in English and Spanish.
