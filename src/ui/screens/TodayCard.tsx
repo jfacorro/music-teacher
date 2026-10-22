@@ -1,3 +1,4 @@
+import { IconCheck } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -21,8 +22,6 @@ import { DrillLevel } from '../../content/sightReading';
 import { useDrillLevelName } from './sightReading/useDrillLevelName';
 import { EarLevel } from '../../content/earTraining';
 import { useEarLevelName } from './earTraining/useEarLevelName';
-
-const CHECK = '✓';
 
 /**
  * Where a suggestion leads: its lesson or song, with the bars to repeat for a weak spot, or a
@@ -122,7 +121,7 @@ export function TodayCard() {
             >
               <Link className="today__item" to={hrefOf(item)}>
                 <span className="today__mark" aria-hidden="true">
-                  {finished ? CHECK : null}
+                  {finished && <IconCheck size={12} stroke={3} />}
                 </span>
                 <span className="today__kind">{t(`today.kinds.${item.kind}`)}</span>
                 <span className="today__title">{titleOf(item.target)}</span>
