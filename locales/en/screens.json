@@ -34,7 +34,8 @@
     }
   },
   "progress": {
-    "title": "Progress",
+    "welcome": "Welcome",
+    "welcomeBack": "Welcome back",
     "empty": "Finish a lesson or a song and your progress will show up here.",
     "recent": "Recent practice",
     "underMinute": "Less than a minute",

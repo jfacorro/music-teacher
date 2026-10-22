@@ -96,7 +96,10 @@ export function ProgressScreen() {
 
   return (
     <section className="screen progress">
-      <h1>{t('progress.title')}</h1>
+      {/* A greeting: back for anyone who has practiced. */}
+      <h1>
+        {log.length > 0 || practiced.length > 0 ? t('progress.welcomeBack') : t('progress.welcome')}
+      </h1>
       <IndexedPage
         groups={[
           {

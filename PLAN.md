@@ -840,7 +840,7 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 
 **Home: the year first, and skills as bars** — built
 - “Practice in the last year” moved to the top of Home (and of its index).
-- Home fits the year, Today and the course on one laptop screen: Today shows one line per suggestion (its kind as a tag, the title, the reason), the whole row a link; the “Let’s Go!” button is gone; the five number boxes became one “Your course” line (level and unit, lessons, stars, and a bar for lessons completed), with the streak joining the year card (“3 days in a row (best: 5)”) next to the time practiced.
+- Home fits the year, Today and the course on one laptop screen: Today shows one line per suggestion (its kind as a tag, the title, the reason), the whole row a link; the “Let’s Go!” button is gone, and the title “Progress” became a greeting (“Welcome back”, or “Welcome” before any practice); the five number boxes became one “Your course” line (level and unit, lessons, stars, and a bar for lessons completed), with the streak joining the year card (“3 days in a row (best: 5)”) next to the time practiced.
 - Skills show as bars in four areas: Keys and hands, Rhythm, Reading, Musicianship (`content/skills.ts › SKILL_AREAS`; a test keeps every skill in exactly one area). Within an area, skills keep the course’s order. Each bar is as long as the skill’s mastery, in one accent color, darker for Learning, Good and Mastered, with thin marks at the 1, 2 and 3-star levels (60, 80, 95%), labeled ★, ★★, ★★★ once above the bars (each showing its percentage on hover); a skill not started has an empty bar and “—”. A legend explains the shades; the level and lessons played show on hover and to screen readers.
 
 ### Future ideas (unscheduled)
