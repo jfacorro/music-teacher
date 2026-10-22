@@ -772,8 +772,8 @@
     "testAgain": "Medir de nuevo",
     "noRange": "Todavía no encontraste tu extensión vocal.",
     "findRange": "Encontrar mi extensión",
-    "above": "por encima de tu extensión",
-    "below": "por debajo de tu extensión",
+    "newLow": "Nueva nota más grave: {note}",
+    "newHigh": "Nueva nota más aguda: {note}",
     "addToRange": "Agregar a mi extensión",
     "micUnavailable": "El afinador necesita un micrófono, y no se pudo iniciar ninguno."
   }

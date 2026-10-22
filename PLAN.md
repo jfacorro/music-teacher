@@ -832,7 +832,7 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 
 **Voice tuner** — built
 - The second piece of singing (IDEAS.md › Singing, S.1), on its own page: **Tuner**, in the sidebar after Free play. Sing anything: the note (with its octave) and how far off in cents, averaged over the last 4 readings (about a sixth of a second); a needle with the in-tune zone (±25 cents, as planned for singing exercises); the last 5 seconds as a line over the semitones around the note, breaking where nothing was heard; and the saved vocal range on a keyboard, with the note sung.
-- A note held steadily (half a second, as in the range test) beyond the saved range offers **Add to my range**; without a saved range, the page links to the range test. Like the range test, the page turns the microphone on for itself and off again if it was off, leaving the input setting alone.
+- The page keeps the furthest notes held steadily (half a second, as in the range test) beyond the saved range since it was opened (“New high: F4”, “New low: E2”), offering **Add to my range** until it’s pressed: one press adds both; without a saved range, the page links to the range test. Like the range test, the page turns the microphone on for itself and off again if it was off, leaving the input setting alone.
 - Built as `engine/tuner.ts` (the averaged note and the in-tune rule; pure, tested) and `ui/screens/TunerScreen.tsx`.
 
 ### Future ideas (unscheduled)

@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { AVERAGE_OF, exactPitch, isInTune, TRACE_MS, tunerNote } from '../../engine/tuner';
+import {
+  AVERAGE_OF,
+  type Beyond,
+  exactPitch,
+  furthestBeyond,
+  isInTune,
+  TRACE_MS,
+  tunerNote,
+} from '../../engine/tuner';
 import { HeldNote } from '../../engine/vocalRange';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { MicStatus, startMic, stopMic, useMic } from '../../input/mic/micInput';
@@ -31,7 +39,7 @@ interface TracePoint {
 
 /**
  * Sing anything: the note being sung and how far off, the last few seconds as a line, and the
- * saved vocal range, which a steady note beyond it can widen.
+ * saved vocal range, which the furthest steady notes sung beyond it can widen.
  */
 export function TunerScreen() {
   const { t } = useTranslation('screens');
@@ -40,8 +48,8 @@ export function TunerScreen() {
   const range = useSettings((s) => s.vocalRange);
   const [recent, setRecent] = useState<number[]>([]);
   const [trace, setTrace] = useState<TracePoint[]>([]);
-  /** A note held steadily (as in the range test), to offer adding it to the range. */
-  const [held, setHeld] = useState<number | null>(null);
+  /** The furthest notes held steadily (as in the range test) beyond the range, to add to it. */
+  const [beyond, setBeyond] = useState<Beyond>({ low: null, high: null });
   const layout = useMemo(() => keyboardLayout(LOWEST_KEY, HIGHEST_KEY), []);
   const noteName = (midi: number, octave = true) => names.name(pitchFromMidi(midi), { octave });
 
@@ -71,12 +79,13 @@ export function TunerScreen() {
         { time: now, pitch },
       ]);
       const steady = hold.update(reading?.midi ?? null, now);
-      setHeld(steady.held >= 1 ? steady.note : null);
+      const saved = useSettings.getState().vocalRange;
+      const held = steady.held >= 1 ? steady.note : null;
+      if (saved && held !== null) setBeyond((previous) => furthestBeyond(previous, saved, held));
     });
   }, []);
 
   const note = tunerNote(recent);
-  const outside = range && held !== null && (held < range.low || held > range.high) ? held : null;
   const status =
     note === null
       ? t('tuner.singSomething')
@@ -111,28 +120,6 @@ export function TunerScreen() {
             {status}
           </span>
           {note !== null && <Needle cents={note.cents} />}
-          {outside !== null && range && (
-            <>
-              <span className="tuner__outside">
-                {outside > range.high ? t('tuner.above') : t('tuner.below')}
-              </span>
-              <button
-                type="button"
-                className="button"
-                onClick={() =>
-                  updateSettings({
-                    vocalRange: {
-                      ...range,
-                      low: Math.min(range.low, outside),
-                      high: Math.max(range.high, outside),
-                    },
-                  })
-                }
-              >
-                {t('tuner.addToRange')}
-              </button>
-            </>
-          )}
         </div>
         <div>
           <p className="muted tuner__trace-label">{t('tuner.last')}</p>
@@ -151,6 +138,32 @@ export function TunerScreen() {
           <p className="muted">
             {t('tuner.noRange')} <Link to="/settings#voice">{t('tuner.findRange')}</Link>
           </p>
+        )}
+        {range && (beyond.low !== null || beyond.high !== null) && (
+          <div className="tuner__beyond">
+            {beyond.low !== null && (
+              <span>{t('tuner.newLow', { note: noteName(beyond.low) })}</span>
+            )}
+            {beyond.high !== null && (
+              <span>{t('tuner.newHigh', { note: noteName(beyond.high) })}</span>
+            )}
+            <button
+              type="button"
+              className="button"
+              onClick={() => {
+                updateSettings({
+                  vocalRange: {
+                    ...range,
+                    low: Math.min(range.low, beyond.low ?? range.low),
+                    high: Math.max(range.high, beyond.high ?? range.high),
+                  },
+                });
+                setBeyond({ low: null, high: null });
+              }}
+            >
+              {t('tuner.addToRange')}
+            </button>
+          </div>
         )}
         <PianoKeyboard
           layout={layout}

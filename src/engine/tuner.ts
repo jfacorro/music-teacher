@@ -23,3 +23,21 @@ export function tunerNote(recent: readonly number[]): { midi: number; cents: num
 }
 
 export const isInTune = (cents: number) => Math.abs(cents) <= IN_TUNE_CENTS;
+
+/** Steady notes sung beyond the saved range so far: the lowest below it, the highest above. */
+export interface Beyond {
+  low: number | null;
+  high: number | null;
+}
+
+/** The furthest steady notes beyond `range`, with `note` just held. */
+export function furthestBeyond(
+  beyond: Beyond,
+  range: { low: number; high: number },
+  note: number,
+): Beyond {
+  return {
+    low: note < range.low ? Math.min(beyond.low ?? note, note) : beyond.low,
+    high: note > range.high ? Math.max(beyond.high ?? note, note) : beyond.high,
+  };
+}

@@ -772,8 +772,8 @@
     "testAgain": "Test again",
     "noRange": "You haven’t found your vocal range yet.",
     "findRange": "Find your range",
-    "above": "above your range",
-    "below": "below your range",
+    "newLow": "New low: {note}",
+    "newHigh": "New high: {note}",
     "addToRange": "Add to my range",
     "micUnavailable": "The tuner needs a microphone, and none could be started."
   }
