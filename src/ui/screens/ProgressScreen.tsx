@@ -64,6 +64,10 @@ export function ProgressScreen() {
     (id) => results[resultKey(ResultKind.Lesson, id)]?.bestAccuracy ?? null,
     exerciseAccuracies(log),
   );
+  const [oneStar, twoStars, threeStars] = STAR_THRESHOLDS.map((threshold) =>
+    formatPercent(threshold, i18n.language),
+  );
+  const starsTip = t('progress.skills.starsTip', { oneStar, twoStars, threeStars });
   const levelName = useDrillLevelName();
   const earLevelName = useEarLevelName();
 
@@ -145,6 +149,22 @@ export function ProgressScreen() {
 
         <section className="card" id="skills">
           <h2>{t('progress.skills.heading')}</h2>
+          {/* The star levels, labeled once over the lines that mark them on every bar. */}
+          <div className="skill skill-stars" title={starsTip}>
+            <span />
+            <span className="skill-stars__labels" aria-hidden="true">
+              {STAR_THRESHOLDS.map((threshold, i) => (
+                <span
+                  key={threshold}
+                  className="skill-stars__label"
+                  style={{ insetInlineStart: `${threshold * 100}%` }}
+                >
+                  {'★'.repeat(i + 1)}
+                </span>
+              ))}
+            </span>
+            <span className="visually-hidden">{starsTip}</span>
+          </div>
           {Object.values(SkillArea).map((area) => (
             <div key={area} className="skill-area">
               <h3 className="skill-area__heading">{t(`progress.skills.areas.${area}`)}</h3>

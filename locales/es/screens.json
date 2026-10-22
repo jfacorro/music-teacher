@@ -61,7 +61,8 @@
         "reading": "Lectura",
         "musicianship": "Musicalidad"
       },
-      "detail": "{level} · {played}"
+      "detail": "{level} · {played}",
+      "starsTip": "La precisión necesaria para 1, 2 y 3 estrellas: {oneStar}, {twoStars} y {threeStars}."
     },
     "activity": {
       "heading": "Práctica en el último año",

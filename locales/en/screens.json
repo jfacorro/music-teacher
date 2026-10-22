@@ -61,7 +61,8 @@
         "reading": "Reading",
         "musicianship": "Musicianship"
       },
-      "detail": "{level} · {played}"
+      "detail": "{level} · {played}",
+      "starsTip": "The accuracy needed for 1, 2 and 3 stars: {oneStar}, {twoStars} and {threeStars}."
     },
     "activity": {
       "heading": "Practice in the last year",

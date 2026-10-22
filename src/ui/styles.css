@@ -1684,6 +1684,27 @@ button.bars__bar:focus-visible {
 
 /* Progress: skills, as bars by area (Home › Skills). */
 
+/* The star levels, labeled once over the lines below them. */
+.skill-stars {
+  block-size: 1.1rem;
+  margin-block-end: -0.6rem;
+}
+
+.skill-stars__labels {
+  position: relative;
+  block-size: 100%;
+}
+
+.skill-stars__label {
+  position: absolute;
+  inset-block-end: 0;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+}
+
 .skill-area__heading {
   margin-block: 1rem 0.4rem;
   color: var(--muted);

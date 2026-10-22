@@ -840,7 +840,7 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 
 **Home: the year first, and skills as bars** — built
 - “Practice in the last year” moved to the top of Home (and of its index).
-- Skills show as bars in four areas: Keys and hands, Rhythm, Reading, Musicianship (`content/skills.ts › SKILL_AREAS`; a test keeps every skill in exactly one area). Within an area, skills keep the course’s order. Each bar is as long as the skill’s mastery, in one accent color, darker for Learning, Good and Mastered, with thin marks at the 1, 2 and 3-star levels (60, 80, 95%); a skill not started has an empty bar and “—”. A legend explains the shades; the level and lessons played show on hover and to screen readers.
+- Skills show as bars in four areas: Keys and hands, Rhythm, Reading, Musicianship (`content/skills.ts › SKILL_AREAS`; a test keeps every skill in exactly one area). Within an area, skills keep the course’s order. Each bar is as long as the skill’s mastery, in one accent color, darker for Learning, Good and Mastered, with thin marks at the 1, 2 and 3-star levels (60, 80, 95%), labeled ★, ★★, ★★★ once above the bars (their meaning on hover); a skill not started has an empty bar and “—”. A legend explains the shades; the level and lessons played show on hover and to screen readers.
 
 ### Future ideas (unscheduled)
 
