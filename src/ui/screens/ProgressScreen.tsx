@@ -150,13 +150,15 @@ export function ProgressScreen() {
         <section className="card" id="skills">
           <h2>{t('progress.skills.heading')}</h2>
           {/* The star levels, labeled once over the lines that mark them on every bar. */}
-          <div className="skill skill-stars" title={starsTip}>
+          <div className="skill skill-stars">
             <span />
             <span className="skill-stars__labels" aria-hidden="true">
               {STAR_THRESHOLDS.map((threshold, i) => (
                 <span
                   key={threshold}
                   className="skill-stars__label"
+                  // On hover, just the accuracy that level needs.
+                  title={formatPercent(threshold, i18n.language)}
                   style={{ insetInlineStart: `${threshold * 100}%` }}
                 >
                   {'★'.repeat(i + 1)}
