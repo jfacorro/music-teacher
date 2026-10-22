@@ -9,6 +9,7 @@ export const Section = {
   SightReading: 'sightReading',
   EarTraining: 'earTraining',
   FreePlay: 'freePlay',
+  Tuner: 'tuner',
   Settings: 'settings',
 } as const;
 export type Section = (typeof Section)[keyof typeof Section];
@@ -22,6 +23,7 @@ export const SECTION_PATHS: Readonly<Record<Section, string>> = {
   [Section.SightReading]: '/sight-reading',
   [Section.EarTraining]: '/ear-training',
   [Section.FreePlay]: '/free-play',
+  [Section.Tuner]: '/tuner',
   [Section.Settings]: '/settings',
 };
 
@@ -33,6 +35,7 @@ const SECTION_PAGES: Readonly<Record<Section, readonly string[]>> = {
   [Section.SightReading]: ['/sight-reading'],
   [Section.EarTraining]: ['/ear-training'],
   [Section.FreePlay]: ['/free-play'],
+  [Section.Tuner]: ['/tuner'],
   [Section.Settings]: ['/settings'],
 };
 

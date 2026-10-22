@@ -133,6 +133,9 @@ system setting (`src/i18n/naming.ts`).
 | Tenuto (held line)                            | tenuto                                               | tenuto                                                  |
 | Vocal range (lowest to highest note sung)     | vocal range                                          | extensión vocal                                         |
 | Voice types                                   | bass, baritone, tenor, alto, mezzo-soprano, soprano  | bajo, barítono, tenor, contralto, mezzosoprano, soprano |
+| Tuner (sing and see the note)                 | tuner                                                | afinador                                                |
+| Cents (hundredths of a semitone)              | cents                                                | cents                                                   |
+| Sharp / flat (sung above / below the note)    | sharp / flat                                         | por encima / por debajo                                 |
 | Phrase                                        | phrase                                               | frase                                                   |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only

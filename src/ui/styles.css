@@ -859,6 +859,110 @@ input[aria-invalid='true'] {
   font-weight: 600;
 }
 
+/* The voice tuner (the Tuner page). */
+.tuner__main {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: center;
+  margin-block-end: 1rem;
+}
+
+.tuner__note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  text-align: center;
+}
+
+.tuner__note strong {
+  font-size: 2.6rem;
+  line-height: 1.05;
+}
+
+.tuner__status {
+  font-weight: 600;
+}
+
+.tuner__status--in {
+  color: var(--ok);
+}
+
+.tuner__status--off {
+  color: var(--pending);
+}
+
+/* The furthest notes sung beyond the range, waiting to be added. */
+.tuner__beyond {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-block-end: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tuner__needle {
+  inline-size: 100%;
+}
+
+.tuner__needle-track {
+  fill: var(--border);
+}
+
+.tuner__needle-zone {
+  fill: color-mix(in srgb, var(--ok) 35%, transparent);
+}
+
+.tuner__needle-center {
+  stroke: var(--muted);
+}
+
+.tuner__needle-in {
+  fill: var(--ok);
+}
+
+.tuner__needle-off {
+  fill: var(--pending);
+}
+
+.tuner__trace-label {
+  margin: 0 0 0.25rem;
+}
+
+.tuner__trace {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.tuner__trace-zone {
+  fill: color-mix(in srgb, var(--ok) 15%, transparent);
+}
+
+.tuner__trace-row {
+  stroke: var(--border);
+}
+
+.tuner__trace-name {
+  fill: var(--muted);
+  font-size: 10px;
+}
+
+.tuner__trace-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 600px) {
+  .tuner__main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* The vocal range test (Settings → Voice). */
 .voice-range__result {
   font-size: 1.4rem;
