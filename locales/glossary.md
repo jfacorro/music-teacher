@@ -32,6 +32,12 @@ system setting (`src/i18n/naming.ts`).
 | Crossing over (one hand over the other)       | crossing over; hand over hand                        | cruzar las manos; mano sobre mano                       |
 | L.H. / R.H. (hand marks in the music)         | L.H. / R.H.                                          | M.I. / M.D.                                             |
 | Natural / harmonic minor (scales)             | natural minor / harmonic minor                       | menor natural / menor armónica                          |
+| Dotted eighth note                            | dotted eighth note                                   | corchea con puntillo                                    |
+| Syncopation; off the beat                     | syncopation; off the beat                            | síncopa; a contratiempo                                 |
+| Repeat sign; first / second ending            | repeat sign; first / second ending                   | signo de repetición; primera / segunda casilla          |
+| Fermata                                       | fermata                                              | calderón                                                |
+| Ritardando (rit.) / a tempo                   | ritardando (rit.) / a tempo                          | ritardando (rit.) / a tempo                             |
+| Strain (a section of a rag)                   | strain                                               | sección                                                 |
 | Velocity (how hard a key is hit)              | velocity                                             | velocidad                                               |
 | Digital piano                                 | digital piano                                        | piano digital                                           |
 | MIDI keyboard                                 | MIDI keyboard                                        | teclado MIDI                                            |

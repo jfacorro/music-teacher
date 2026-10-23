@@ -8,6 +8,7 @@ import {
   Answer,
   answerChord,
   answerNote,
+  answerRhythm,
   answerQuality,
   EAR_LEVELS,
   EAR_UNITS,
@@ -82,7 +83,10 @@ describe('ear training levels', () => {
       EarLevel.Intervals,
       EarLevel.Melodies,
     ]);
-    expect(openEarLevels(UNITS, doneUpTo('u6'))).toEqual(EAR_LEVELS);
+    expect(openEarLevels(UNITS, doneUpTo('u6'))).toEqual(
+      EAR_LEVELS.filter((level) => level !== EarLevel.Rhythms),
+    );
+    expect(openEarLevels(UNITS, doneUpTo('u13'))).toEqual(EAR_LEVELS);
   });
 
   it.each(EAR_LEVELS)('only play keys the course has taught by then (%s)', (level) => {
@@ -183,6 +187,55 @@ describe('earQuestions', () => {
   });
 });
 
+describe('rhythms', () => {
+  const [question] = earQuestions(EarLevel.Rhythms, EVERYTHING, seededRandom(3));
+  const onsets = question!.rhythm!.map((note) => note.start);
+  /** Taps where the rhythm puts them, at `beatMs`, each moved by `off` beats. */
+  const tapped = (beatMs: number, off: (i: number) => number = () => 0) =>
+    onsets.map((onset, i) => 1000 + (onset + off(i)) * beatMs);
+
+  it('asks for a bar of rhythm on one key, easier ones first', () => {
+    const questions = earQuestions(EarLevel.Rhythms, EVERYTHING, seededRandom(3));
+    expect(questions).toHaveLength(QUESTIONS[EarLevel.Rhythms]);
+    for (const q of questions) {
+      expect(new Set(q.notes)).toEqual(new Set([72]));
+      expect(q.notes).toHaveLength(q.rhythm!.length);
+      expect(q.given).toBeNull();
+    }
+    const sixteenths = questions.map((q) => q.rhythm!.some((note) => note.duration < 0.5));
+    expect(sixteenths.slice(0, 3)).toEqual([false, false, false]);
+  });
+
+  it('plays the notes where the rhythm puts them', () => {
+    const notes = promptNotes(question!);
+    expect(notes.map((note) => Math.round(note.at))).toEqual(
+      onsets.map((onset) => Math.round((onset * 60_000) / 90)),
+    );
+  });
+
+  it('takes a rhythm tapped back at any reasonable speed', () => {
+    expect(answerRhythm(question!, tapped(500))).toBe(Answer.Right);
+    expect(answerRhythm(question!, tapped(900))).toBe(Answer.Right);
+    expect(
+      answerRhythm(
+        question!,
+        tapped(600, (i) => (i === 1 ? 0.15 : 0)),
+      ),
+    ).toBe(Answer.Right);
+  });
+
+  it('says when a tap is off, or the speed is out of reach', () => {
+    expect(
+      answerRhythm(
+        question!,
+        tapped(600, (i) => (i === 1 ? 0.3 : 0)),
+      ),
+    ).toBe(Answer.Wrong);
+    expect(answerRhythm(question!, tapped(100))).toBe(Answer.Wrong);
+    expect(answerRhythm(question!, tapped(600).slice(1))).toBe(Answer.Wrong);
+  });
+});
+
 describe('prompts', () => {
   it('play the reference, then the notes one after another', () => {
     const [question] = earQuestions(EarLevel.Notes, FIRST_POSITION, seededRandom(6));
@@ -205,6 +258,7 @@ describe('answers', () => {
     notes: [64, 62, 60],
     given: 64,
     quality: null,
+    rhythm: null,
   };
 
   it('take the notes in order, and say when one is wrong', () => {

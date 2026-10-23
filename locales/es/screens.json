@@ -709,7 +709,8 @@
       "handsTogether": "Ambas manos",
       "keys": "{g} mayor y {f} mayor",
       "accidentals": "Notas vecinas: sostenidos en la música",
-      "moreKeys": "{d} y {bFlat} mayor; {a}, {e} y {d} menor"
+      "moreKeys": "{d} y {bFlat} mayor; {a}, {e} y {d} menor",
+      "sixEight": "6/8 con semicorcheas"
     },
     "lockedLevel": "{level} (después de «{unit}»)",
     "locked": "La lectura a primera vista se abre cuando terminas la unidad «{unit}».",
@@ -729,7 +730,8 @@
       "notes": "Notas sueltas",
       "intervals": "Dos notas (intervalos)",
       "melodies": "Melodías cortas",
-      "chords": "Acordes mayores o menores"
+      "chords": "Acordes mayores o menores",
+      "rhythms": "Ritmos"
     },
     "lockedLevel": "{level} (después de «{unit}»)",
     "locked": "El oído musical se abre cuando terminas la unidad «{unit}».",
@@ -740,7 +742,8 @@
       "intervals": "Oirás dos notas, una tras otra: tócalas empezando por la tecla iluminada.",
       "melodies": "Oirás una melodía corta: tócala empezando por la tecla iluminada.",
       "chords": "Oirás un acorde: tócalo sobre la fundamental iluminada, o elige mayor o menor.",
-      "notesAlone": "Oirás una nota: búscala en el teclado."
+      "notesAlone": "Oirás una nota: búscala en el teclado.",
+      "rhythms": "Vas a escuchar un ritmo corto: repítelo tocando cualquier tecla, a tu propia velocidad."
     },
     "listen": "Escucha…",
     "ask": {
@@ -749,16 +752,20 @@
       "melodies": "Toca la melodía, empezando por la tecla iluminada.",
       "chords": "Toca el acorde sobre la fundamental iluminada, o elige mayor o menor.",
       "chordsMic": "¿Mayor o menor? Elige uno.",
-      "notesAlone": "¿Qué nota era?"
+      "notesAlone": "¿Qué nota era?",
+      "rhythms": "Repite el ritmo con cualquier tecla."
     },
     "wrong": "Esa no: tocaste {note}.",
     "wrongChord": "No exactamente.",
+    "wrongRhythm": "No es exactamente el mismo ritmo: escúchalo otra vez y repítelo.",
     "hint": "La respuesta está iluminada: vuelve a escuchar si quieres.",
+    "hintRhythm": "{count, plural, one {Tiene # nota.} other {Tiene # notas.}}",
     "right": {
       "note": "Bien: {note}.",
       "interval": "Bien: de {from} a {to}, una {interval}.",
       "melody": "¡Bien, esa es la melodía!",
-      "chord": "Bien: {chord}."
+      "chord": "Bien: {chord}.",
+      "rhythm": "¡Ese es el ritmo!"
     },
     "quality": {
       "major": "Mayor",

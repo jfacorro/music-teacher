@@ -1,0 +1,12 @@
+{
+  "steps": {
+    "sixteenths": "Sixteenth notes have two flags, or two beams: four of them fit in one beat, twice as fast as eighth notes. Count them “1 e and a, 2 e and a”, keeping the beat steady and fitting the sixteenths inside it.",
+    "tapSixteenths": "Tap the rhythm: quarters, eighths and sixteenths.",
+    "sixteenthRun": "Four sixteenths on the third beat, and four more on the first beat of the next bar.",
+    "sixteenthRunInTime": "Now in time.",
+    "dotted": "A dot after an eighth note makes it three sixteenths long, and the sixteenth after it completes the beat: long, short. It sounds like skipping.",
+    "tapDotted": "Tap the long-short rhythm.",
+    "skipping": "Skipping up, and back down.",
+    "skippingInTime": "And in time."
+  }
+}

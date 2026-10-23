@@ -1,0 +1,379 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "rit",
+      "music": {
+        "tempo": 60,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "G4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "F4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1,
+            "fermata": true
+          }
+        ],
+        "rit": [
+          {
+            "from": 0,
+            "to": 8
+          }
+        ]
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "fermataPause",
+      "mode": "tempo",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "score": {
+        "tempo": 72,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "F4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "G4",
+            "start": 4,
+            "duration": 2,
+            "hand": "R",
+            "finger": 5,
+            "fermata": true
+          },
+          {
+            "note": "E4",
+            "start": 6,
+            "duration": 2,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "F4",
+            "start": 8,
+            "duration": 1,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 9,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 10,
+            "duration": 1,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 11,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1,
+            "fermata": true
+          }
+        ],
+        "rit": [
+          {
+            "from": 8,
+            "to": 16
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "themeEnding",
+      "mode": "tempo",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "score": {
+        "tempo": 75,
+        "timeSignature": [6, 8],
+        "notes": [
+          {
+            "note": "G4",
+            "start": 0,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 0.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 1,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 1.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 2,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 2.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 3,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 3.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 4,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 4.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 5,
+            "duration": 0.25,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 5.25,
+            "duration": 0.25,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 5.5,
+            "duration": 0.25,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "E4",
+            "start": 5.75,
+            "duration": 0.25,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 6,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 6.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 7,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "A4",
+            "start": 7.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "E4",
+            "start": 8,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "A4",
+            "start": 8.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "G4",
+            "start": 9,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 4
+          },
+          {
+            "note": "E4",
+            "start": 9.5,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "D4",
+            "start": 10,
+            "duration": 0.5,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "C4",
+            "start": 10.5,
+            "duration": 1.5,
+            "hand": "R",
+            "finger": 1,
+            "fermata": true
+          }
+        ],
+        "slurs": [
+          {
+            "from": 0,
+            "to": 2.5,
+            "hand": "R"
+          },
+          {
+            "from": 3,
+            "to": 5.75,
+            "hand": "R"
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "hand": "R"
+          },
+          {
+            "from": 7.5,
+            "to": 8.5,
+            "hand": "R"
+          },
+          {
+            "from": 9,
+            "to": 10.5,
+            "hand": "R"
+          }
+        ],
+        "rit": [
+          {
+            "from": 9,
+            "to": 12
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

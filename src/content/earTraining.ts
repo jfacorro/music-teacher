@@ -1,13 +1,15 @@
 /**
  * Ear training (PLAN.md milestone 4.4): the app plays something and the learner plays it back
  * on the keyboard: a single note (after middle C as a reference), two notes in a row (an
- * interval, the first one shown), a short melody (its first note shown), or a major or minor
- * chord (its root shown; answered by playing it, or by choosing major or minor).
+ * interval, the first one shown), a short melody (its first note shown), a major or minor
+ * chord (its root shown; answered by playing it, or by choosing major or minor), or a rhythm
+ * (tapped back on any key, at the learner's own speed).
  *
  * Levels open as the course teaches the keys they use. A question counts when it's answered
  * without a wrong key, as quiz cards do.
  */
 import { resolvePlayed } from '../engine/micAliases';
+import { parseRhythm } from '../engine/rhythm';
 import type { InputSource } from '../input/types';
 import { dealEvenly, pick, pickWeighted, type Random } from '../lib/random';
 import { ChordQuality } from '../theory/chords';
@@ -24,6 +26,8 @@ export const EarLevel = {
   Melodies: 'melodies',
   /** A major or minor chord, its root shown. */
   Chords: 'chords',
+  /** A bar of rhythm on one key, tapped back on any key. */
+  Rhythms: 'rhythms',
 } as const;
 export type EarLevel = (typeof EarLevel)[keyof typeof EarLevel];
 
@@ -36,6 +40,7 @@ export const EAR_UNITS: Readonly<Record<EarLevel, string>> = {
   [EarLevel.Intervals]: 'u1',
   [EarLevel.Melodies]: 'u2',
   [EarLevel.Chords]: 'u6',
+  [EarLevel.Rhythms]: 'u13',
 };
 
 /** The levels open now, easiest first. */
@@ -61,6 +66,8 @@ export interface EarQuestion {
   given: number | null;
   /** Chords: major or minor. */
   quality: ChordKind | null;
+  /** Rhythms: when each note comes, and how long it lasts (beats); `notes` has its key. */
+  rhythm: readonly { start: number; duration: number }[] | null;
 }
 
 /** Questions in one exercise. */
@@ -69,6 +76,7 @@ export const QUESTIONS: Readonly<Record<EarLevel, number>> = {
   [EarLevel.Intervals]: 10,
   [EarLevel.Melodies]: 6,
   [EarLevel.Chords]: 10,
+  [EarLevel.Rhythms]: 8,
 };
 
 /**
@@ -150,8 +158,23 @@ const question = (
   notes,
   given: notes[0] ?? null,
   quality: null,
+  rhythm: null,
   ...extra,
 });
+
+/**
+ * Bars of rhythm (see engine/rhythm.ts), easier first: quarters, eighths and dotted quarters;
+ * then sixteenths and a dotted eighth with a sixteenth; then syncopation (Unit 13).
+ */
+const RHYTHMS: readonly (readonly string[])[] = [
+  ['q q e e q', 'q e e q q', 'q. e q q', 'e e q q. e', 'q rq e e q'],
+  ['q s s s s q q', 's s e q q q', 'e. s q e. s q', 'q e. s h'],
+  ['e q e q q', 'e q e e q e', 'q e q e q', 's s e e q e q'],
+];
+/** Questions from each set of rhythms, in order. */
+const RHYTHMS_ASKED = [3, 3, 2];
+/** The key rhythms are played on: the C above middle C. */
+const RHYTHM_KEY = 72;
 
 /** A new exercise: the questions of a level, using the keys `range` allows. */
 export function earQuestions(
@@ -183,6 +206,17 @@ export function earQuestions(
       return dealEvenly(random, CHORDS, count).map(([notes, quality]) =>
         question(level, notes, { quality }),
       );
+    case EarLevel.Rhythms:
+      return RHYTHMS.flatMap((set, i) => dealEvenly(random, set, RHYTHMS_ASKED[i]!))
+        .slice(0, count)
+        .map((pattern) => {
+          const rhythm = parseRhythm(pattern, [4, 4]);
+          return question(
+            level,
+            rhythm.map(() => RHYTHM_KEY),
+            { given: null, rhythm },
+          );
+        });
   }
 }
 
@@ -210,6 +244,9 @@ const AFTER_REFERENCE_MS = 700;
 const NOTE_MS = 700;
 const MELODY_NOTE_MS = 500;
 const CHORD_MS = 1600;
+/** Rhythms are played at 90 beats a minute, each note a little shorter than written. */
+const RHYTHM_BEAT_MS = 60_000 / 90;
+const RHYTHM_NOTE_SHARE = 0.8;
 
 /** A key the app plays: from `at` for `length` (ms from the start of the question). */
 export interface PromptNote {
@@ -229,6 +266,13 @@ export function promptNotes(question: EarQuestion): PromptNote[] {
   if (question.quality) {
     notes.push(...question.notes.map((midi) => ({ midi, at, length: CHORD_MS })));
     return notes;
+  }
+  if (question.rhythm) {
+    return question.rhythm.map(({ start, duration }) => ({
+      midi: RHYTHM_KEY,
+      at: at + start * RHYTHM_BEAT_MS,
+      length: Math.min(duration, 1) * RHYTHM_BEAT_MS * RHYTHM_NOTE_SHARE,
+    }));
   }
   const length = question.level === EarLevel.Melodies ? MELODY_NOTE_MS : NOTE_MS;
   for (const midi of question.notes) {
@@ -284,6 +328,30 @@ export function answerChord(question: EarQuestion, held: readonly number[]): Ans
 export const answerQuality = (question: EarQuestion, quality: ChordKind): Answer =>
   quality === question.quality ? Answer.Right : Answer.Wrong;
 
-/** For a hint: the next key due (none for a chord). */
+/** For a hint: the next key due (none for a chord or a rhythm). */
 export const hintKey = (question: EarQuestion, played: number): number | null =>
-  question.quality ? null : (question.notes[played] ?? null);
+  question.quality || question.rhythm ? null : (question.notes[played] ?? null);
+
+/** A tap may be this far from where the rhythm puts it, in beats (at the learner's speed). */
+export const RHYTHM_TOLERANCE = 0.2;
+/** Tapped back slower or faster than this, it isn't the same rhythm (ms per beat). */
+const SLOWEST_BEAT_MS = 2000;
+const FASTEST_BEAT_MS = 250;
+
+/**
+ * A rhythm tapped back, one tap per note (`taps`, ms): right when each tap falls where the
+ * rhythm puts it, at the speed it was tapped (its first and last taps set the speed).
+ */
+export function answerRhythm(question: EarQuestion, taps: readonly number[]): Answer {
+  const onsets = question.rhythm?.map((note) => note.start) ?? [];
+  if (taps.length !== onsets.length || onsets.length === 0) return Answer.Wrong;
+  const span = onsets.at(-1)! - onsets[0]!;
+  if (span <= 0) return Answer.Right;
+  const beatMs = (taps.at(-1)! - taps[0]!) / span;
+  if (beatMs < FASTEST_BEAT_MS || beatMs > SLOWEST_BEAT_MS) return Answer.Wrong;
+  const fits = onsets.every((onset, i) => {
+    const expected = taps[0]! + (onset - onsets[0]!) * beatMs;
+    return Math.abs(taps[i]! - expected) / beatMs <= RHYTHM_TOLERANCE + 1e-9;
+  });
+  return fits ? Answer.Right : Answer.Wrong;
+}

@@ -54,4 +54,17 @@ describe('clicksBetween', () => {
       beats(clicksBetween(-1, 6, { metronome: true, countInFrom: null, beatsPerMeasure: 3 })),
     ).toEqual(['0!', '1', '2', '3!', '4', '5', '6!']);
   });
+
+  it('clicks dotted quarters in 6/8, two to a bar, counting in one bar', () => {
+    expect(
+      beats(
+        clicksBetween(-3.5, 6, {
+          metronome: true,
+          countInFrom: -3,
+          beatsPerMeasure: 3,
+          every: 1.5,
+        }),
+      ),
+    ).toEqual(['-3!', '-1.5', '0!', '1.5', '3!', '4.5', '6!']);
+  });
 });

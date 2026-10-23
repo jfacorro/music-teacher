@@ -5,14 +5,21 @@
  *
  * Each level opens when the unit that teaches its reading is finished, from the right hand in
  * the treble clef with quarter and half notes, to rests and eighth notes, the left hand in the
- * bass clef, both hands, the keys of G and F major, neighbor notes with their sharps, and the
- * keys of Unit 12 (D and B♭ major, A, E and D minor).
+ * bass clef, both hands, the keys of G and F major, neighbor notes with their sharps, the keys
+ * of Unit 12 (D and B♭ major, A, E and D minor), and 6/8 with sixteenth notes (Unit 13).
  *
- * The music follows a few rules so it sounds like a tune and fits the hand: four bars of 4/4 in
- * a five-finger position (no stretching or moving the hand), mostly steps with some small
+ * The music follows a few rules so it sounds like a tune and fits the hand: four bars (of 4/4,
+ * or 6/8) in a five-finger position (no stretching or moving the hand), mostly steps with some small
  * leaps, a step back after a leap, and an ending on the key note, approached by step.
  */
-import { type Finger, Hand, type Score, type ScoreNote, wholeMeasures } from '../engine/score';
+import {
+  beatsPerMeasure,
+  type Finger,
+  Hand,
+  type Score,
+  type ScoreNote,
+  wholeMeasures,
+} from '../engine/score';
 import { HandFilter } from '../engine/session';
 import { newSeed, pick, pickWeighted, type Random, seededRandom, shuffled } from '../lib/random';
 import {
@@ -41,6 +48,8 @@ export const DrillLevel = {
   Accidentals: 'accidentals',
   /** D and B♭ major, A, E and D minor, with their key signatures; either hand. */
   MoreKeys: 'moreKeys',
+  /** 6/8, with sixteenth notes; either hand. */
+  SixEight: 'sixEight',
 } as const;
 export type DrillLevel = (typeof DrillLevel)[keyof typeof DrillLevel];
 
@@ -56,6 +65,7 @@ export const DRILL_UNITS: Readonly<Record<DrillLevel, string>> = {
   [DrillLevel.Keys]: 'u7',
   [DrillLevel.Accidentals]: 'u8',
   [DrillLevel.MoreKeys]: 'u12',
+  [DrillLevel.SixEight]: 'u13',
 };
 
 /** The levels open now, easiest first. */
@@ -148,11 +158,31 @@ const WITH_RESTS: readonly BarRhythm[] = [
 const ENDINGS: readonly BarRhythm[] = [[1, 1, 2], [2, 2], [4]];
 const ENDINGS_WITH_EIGHTHS: readonly BarRhythm[] = [...ENDINGS, [0.5, 0.5, 1, 2]];
 
+/** 6/8 bars (three beats in quarter notes), in groups of three eighth notes. */
+const COMPOUND: readonly BarRhythm[] = [
+  [1.5, 1.5],
+  [1, 0.5, 1, 0.5],
+  [0.5, 0.5, 0.5, 1.5],
+  [1.5, 0.5, 0.5, 0.5],
+  [1, 0.5, 0.5, 0.5, 0.5],
+  [1, -0.5, 1, 0.5],
+];
+/** 6/8 bars with sixteenth notes. */
+const COMPOUND_SIXTEENTHS: readonly BarRhythm[] = [
+  [0.25, 0.25, 0.5, 0.5, 1.5],
+  [1, 0.5, 0.25, 0.25, 0.25, 0.25, 0.5],
+  [0.5, 0.25, 0.25, 0.5, 1.5],
+  [1.5, 0.25, 0.25, 0.5, 0.5],
+];
+const COMPOUND_ENDINGS: readonly BarRhythm[] = [[3], [1.5, 1.5], [1, 0.5, 1.5]];
+
 const RhythmKind = {
   /** Quarter, half and whole notes. */
   Plain: 'plain',
   /** Plus rests and eighth notes: each drill has some of both. */
   Mixed: 'mixed',
+  /** 6/8, with some sixteenth notes in each drill. */
+  Compound: 'compound',
 } as const;
 type RhythmKind = (typeof RhythmKind)[keyof typeof RhythmKind];
 
@@ -163,6 +193,8 @@ interface LevelPlan {
   tempo: number;
   /** Hands together: the left hand plays the bass of each bar in this position. */
   bass?: Position;
+  /** 4/4 unless given. */
+  timeSignature?: [number, number];
   /** One or two neighbor notes a half step below, written with a sharp. */
   neighbors?: boolean;
 }
@@ -215,10 +247,16 @@ const PLANS: Readonly<Record<DrillLevel, LevelPlan>> = {
     rhythm: RhythmKind.Mixed,
     tempo: 66,
   },
+  [DrillLevel.SixEight]: {
+    positions: [C_RIGHT, G_RIGHT, C_LEFT],
+    rhythm: RhythmKind.Compound,
+    tempo: 72,
+    timeSignature: [6, 8],
+  },
 };
 
 const BARS = 4;
-const BEATS_PER_BAR = 4;
+const COMMON_TIME: [number, number] = [4, 4];
 
 export interface Drill {
   level: DrillLevel;
@@ -235,6 +273,7 @@ export function makeDrill(level: DrillLevel, seed: number): Drill {
   const plan = PLANS[level];
   const random = seededRandom(seed);
   const melodyAt = pick(random, plan.positions);
+  const timeSignature = plan.timeSignature ?? COMMON_TIME;
   const rhythm = barRhythms(random, plan.rhythm);
   const lengths = rhythm.flat().filter((beats) => beats > 0);
   const { tune, sharpened } = plan.neighbors
@@ -262,7 +301,8 @@ export function makeDrill(level: DrillLevel, seed: number): Drill {
     }
     beat += Math.abs(beats);
   }
-  if (plan.bass) notes.push(...bassLine(plan.bass, melodyAt, notes));
+  if (plan.bass)
+    notes.push(...bassLine(plan.bass, melodyAt, notes, beatsPerMeasure(timeSignature)));
   notes.sort((a, b) => a.start - b.start || a.pitch.midi - b.pitch.midi);
 
   return {
@@ -270,9 +310,9 @@ export function makeDrill(level: DrillLevel, seed: number): Drill {
     seed,
     score: {
       tempo: plan.tempo,
-      timeSignature: [BEATS_PER_BAR, 4],
+      timeSignature,
       notes,
-      measures: wholeMeasures(notes, [BEATS_PER_BAR, 4]),
+      measures: wholeMeasures(notes, timeSignature),
       ...(melodyAt.keyFifths !== 0 && { keyFifths: melodyAt.keyFifths }),
     },
     hands: plan.bass ? HandFilter.Both : melodyAt.hand,
@@ -309,6 +349,15 @@ function fingerOf(at: Position, index: number): Finger {
 }
 
 function barRhythms(random: Random, kind: RhythmKind): BarRhythm[] {
+  if (kind === RhythmKind.Compound) {
+    // Some sixteenths in every drill, the third bar anything.
+    const sets = shuffled(random, [
+      COMPOUND,
+      COMPOUND_SIXTEENTHS,
+      [...COMPOUND, ...COMPOUND_SIXTEENTHS],
+    ]);
+    return [...sets.map((set) => pick(random, set)), pick(random, COMPOUND_ENDINGS)];
+  }
   if (kind === RhythmKind.Plain) {
     return [
       ...Array.from({ length: BARS - 1 }, () => pick(random, QUARTERS_AND_HALVES)),
@@ -446,14 +495,17 @@ const CHORD_ROOTS = [0, 5, 7];
  * The left hand's bass, a whole note per bar: the chord that fits the bar's melody best (the
  * key chord first and last).
  */
-function bassLine(at: Position, melodyAt: Position, melody: readonly ScoreNote[]): ScoreNote[] {
+function bassLine(
+  at: Position,
+  melodyAt: Position,
+  melody: readonly ScoreNote[],
+  barLength: number,
+): ScoreNote[] {
   const tonicClass = tonicOf(melodyAt.keyFifths);
   const bassPitches = at.notes.map(pitchOf);
   return Array.from({ length: BARS }, (_, bar) => {
-    const start = bar * BEATS_PER_BAR;
-    const inBar = melody.filter(
-      (note) => note.start >= start && note.start < start + BEATS_PER_BAR,
-    );
+    const start = bar * barLength;
+    const inBar = melody.filter((note) => note.start >= start && note.start < start + barLength);
     const fitting = (root: number) => {
       const chord = [0, 4, 7].map((interval) => (tonicClass + root + interval) % 12);
       return inBar.reduce(
@@ -472,7 +524,7 @@ function bassLine(at: Position, melodyAt: Position, melody: readonly ScoreNote[]
     return {
       pitch,
       start,
-      duration: BEATS_PER_BAR,
+      duration: barLength,
       hand: at.hand,
       ...(bar === 0 && { finger: fingerOf(at, index) }),
     };

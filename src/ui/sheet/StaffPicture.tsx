@@ -111,6 +111,7 @@ export function MusicPicture({ score }: { score: Score }) {
         label={t('lesson.staffPicture')}
         barWidth={NOTE_WIDTH * mostInABar}
         spacePx={12}
+        timeSignature={score.timeSignature}
       />
     </div>
   );

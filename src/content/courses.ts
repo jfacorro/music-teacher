@@ -40,6 +40,9 @@ export const SKILLS = [
   'shifts',
   'arpeggios',
   'key-signatures',
+  'compound-time',
+  'syncopation',
+  'form',
   'sight-reading',
   'ear-training',
 ] as const;

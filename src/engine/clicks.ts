@@ -21,13 +21,16 @@ export interface ClickOptions {
    */
   holdBeat?: number;
   beatsPerMeasure: number;
+  /** Quarter notes between clicks: 1, or 1.5 in compound time (see `countedBeat`). */
+  every?: number;
 }
 
-/** Whole beats in (from, to] that should click. */
+/** The counted beats in (from, to] that should click. */
 export function clicksBetween(from: number, to: number, options: ClickOptions): Click[] {
-  const { countInFrom, musicStart = 0, loopEnd = null } = options;
+  const { countInFrom, musicStart = 0, loopEnd = null, every = 1 } = options;
   const clicks: Click[] = [];
-  for (let beat = Math.floor(from) + 1; beat <= to; beat++) {
+  for (let k = Math.floor(from / every + 1e-9) + 1; k * every <= to + 1e-9; k++) {
+    const beat = k * every;
     if (loopEnd !== null && beat >= loopEnd) break;
     if (countInFrom !== null && beat >= countInFrom && beat < musicStart) {
       clicks.push({ beat, accent: isMultiple(beat - countInFrom, options.beatsPerMeasure) });

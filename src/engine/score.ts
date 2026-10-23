@@ -155,6 +155,14 @@ export function beatsPerMeasure([numerator, denominator]: [number, number]): num
   return (numerator * 4) / denominator;
 }
 
+/**
+ * The beat a bar is counted (and the metronome clicks) in, in quarter notes: a dotted quarter in
+ * compound time (6/8, 9/8, 12/8: groups of three eighth notes), otherwise a quarter.
+ */
+export function countedBeat([numerator, denominator]: [number, number]): number {
+  return denominator === 8 && numerator % 3 === 0 && numerator > 3 ? 1.5 : 1;
+}
+
 /** Whole measures from beat 0 until the end of the last note (at least one). */
 export function wholeMeasures(
   notes: readonly ScoreNote[],

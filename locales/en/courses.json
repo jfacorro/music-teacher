@@ -47,6 +47,10 @@
     "u12": {
       "title": "More keys",
       "description": "The keys of {d} major and {bFlat} major, the relative minors, the natural and harmonic minor scales of {a}, {e} and {d}, and reading with these key signatures."
+    },
+    "u13": {
+      "title": "Rhythm and form",
+      "description": "Sixteenth notes and dotted rhythms, 6/8 time, syncopation, repeats with first and second endings, ritardando and the fermata."
     }
   },
   "lessons": {
@@ -108,7 +112,12 @@
     "u12-l2": "{bFlat} major",
     "u12-l3": "Relative minors",
     "u12-l4": "Harmonic minor",
-    "u12-l5": "Reading in new keys"
+    "u12-l5": "Reading in new keys",
+    "u13-l1": "Sixteenth notes",
+    "u13-l2": "6/8 time",
+    "u13-l3": "Syncopation",
+    "u13-l4": "Repeats and endings",
+    "u13-l5": "Slowing down and holding"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -135,6 +144,9 @@
     "shifts": "Position shifts",
     "arpeggios": "Arpeggios",
     "key-signatures": "Key signatures",
+    "compound-time": "6/8 time",
+    "syncopation": "Syncopation",
+    "form": "Repeats and endings",
     "sight-reading": "Sight-reading",
     "ear-training": "Ear training"
   }

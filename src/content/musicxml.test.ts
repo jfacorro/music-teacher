@@ -142,6 +142,45 @@ describe('scoreToMusicXml', () => {
     expect(xml).not.toContain('a tempo');
   });
 
+  it('beams 6/8 in groups of three eighths, sixteenths with a second beam', () => {
+    const score = scoreOf(
+      [
+        ['C4', 0, 0.5],
+        ['D4', 0.5, 0.5],
+        ['E4', 1, 0.5],
+        ['F4', 1.5, 0.25],
+        ['G4', 1.75, 0.25],
+        ['F4', 2, 0.5],
+        ['E4', 2.5, 0.5],
+      ],
+      60,
+      [6, 8],
+    );
+    const beams = [...scoreToMusicXml(score).xml.matchAll(/<note>(.*?)<\/note>/g)].map((match) =>
+      [...match[1]!.matchAll(/<beam number="(\d)">([\w ]+)<\/beam>/g)]
+        .map(([, number, kind]) => `${number}:${kind}`)
+        .join(' '),
+    );
+    expect(beams).toEqual([
+      '1:begin',
+      '1:continue',
+      '1:end',
+      '1:begin 2:begin',
+      '1:continue 2:end',
+      '1:continue',
+      '1:end',
+    ]);
+    // Simple time is left to OSMD's automatic beams.
+    expect(
+      scoreToMusicXml(
+        scoreOf([
+          ['C4', 0, 0.5],
+          ['D4', 0.5, 0.5],
+        ]),
+      ).xml,
+    ).not.toContain('<beam');
+  });
+
   it('writes a one-hand melody on a treble staff', () => {
     const { xml, staves } = scoreToMusicXml(
       scoreOf([

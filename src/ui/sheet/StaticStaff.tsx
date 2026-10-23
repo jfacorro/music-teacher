@@ -23,14 +23,23 @@ interface StaticStaffProps {
   barWidth?: number;
   /** On-screen size of one staff space, px. */
   spacePx?: number;
+  /** A few bars of music: drawn with their time signature, notes beamed by its beats. */
+  timeSignature?: [number, number];
 }
 
-export function StaticStaff({ xml, label, barWidth = 12, spacePx = 17 }: StaticStaffProps) {
+export function StaticStaff({
+  xml,
+  label,
+  barWidth = 12,
+  spacePx = 17,
+  timeSignature,
+}: StaticStaffProps) {
   const { t } = useTranslation('screens');
   const hostRef = useRef<HTMLDivElement>(null);
   const osmdRef = useRef<OpenSheetMusicDisplay | null>(null);
   const [status, setStatus] = useState<LoadStatus>(LoadStatus.Loading);
   const scheme = useColorScheme();
+  const meter = timeSignature?.join('/');
 
   // One renderer, created again only when the colors change.
   useEffect(() => {
@@ -51,7 +60,9 @@ export function StaticStaff({ xml, label, barWidth = 12, spacePx = 17 }: StaticS
           drawPartNames: false,
           drawPartAbbreviations: false,
           drawMeasureNumbers: false,
-          drawTimeSignatures: false,
+          // A few bars of music show their time signature and beams; single notes don't.
+          drawTimeSignatures: timeSignature !== undefined,
+          autoBeam: timeSignature !== undefined,
           renderSingleHorizontalStaffline: true,
           defaultColorMusic: readCssColors(host, { music: '--text' }).music,
         });
@@ -71,7 +82,8 @@ export function StaticStaff({ xml, label, barWidth = 12, spacePx = 17 }: StaticS
       osmdRef.current = null;
       setStatus(LoadStatus.Loading);
     };
-  }, [scheme, barWidth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `meter` stands for the time signature
+  }, [scheme, barWidth, meter]);
 
   useEffect(() => {
     const osmd = osmdRef.current;
