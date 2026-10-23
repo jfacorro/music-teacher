@@ -8,6 +8,8 @@ Larger ideas, worked out enough to plan from later. None is scheduled: an idea b
 
 **Goal:** learn to sing in tune and in time the way the app teaches the piano. Lessons listen through the microphone and give feedback, from matching a single note to singing songs with lyrics and reading melodies from the staff.
 
+**Chosen:** this is now Phase 6 in [PLAN.md](PLAN.md#phase-6--singing), as one app. The design and mockups stay here.
+
 ### What carries over
 
 - **The microphone:** a pitch reading every ~11 ms (McLeod pitch method via `pitchy`, `input/mic/detector.ts`), with how many cents it is off the nearest note. Calibration of background noise, sensitivity and delay works for a voice too.
