@@ -35,6 +35,8 @@ export interface ScoreNote {
   articulations?: Articulation[];
   /** The hand crosses over the other to play it: it's written on the other hand's staff. */
   crossed?: boolean;
+  /** Held longer than written (a fermata): the music waits on it. */
+  fermata?: boolean;
 }
 
 /** Notes played smoothly connected (legato): one hand's notes from `start` to `end` (beats). */
@@ -72,6 +74,46 @@ export interface Measure {
   length: number;
 }
 
+/** A stretch of music played twice (beats, at bar lines): from `start` to the repeat sign at `end`. */
+export interface Repeat {
+  start: number;
+  end: number;
+  /**
+   * First and second endings: the first (ending at the repeat sign) is played the first time
+   * only; the second (starting there) is played instead the second time.
+   */
+  endings?: [Ending, Ending];
+}
+
+export interface Ending {
+  start: number;
+  end: number;
+}
+
+/** Gradually slower from `start` to `end` (rit.), back in tempo after (a tempo). */
+export interface Ritardando {
+  start: number;
+  end: number;
+}
+
+/** A stretch of the written music (`from`–`to`, beats) as played, from beat `at`. */
+export interface Segment {
+  from: number;
+  to: number;
+  at: number;
+}
+
+/**
+ * How music with repeats is written and played: the score as written (for sheet music), and the
+ * written stretches in the order they're played. The played score has every note once per time
+ * it's played; `copies` gives each written note's.
+ */
+export interface Form {
+  written: Score;
+  segments: Segment[];
+  copies: ReadonlyMap<ScoreNote, readonly ScoreNote[]>;
+}
+
 export interface Score {
   tempo: number;
   timeSignature: [number, number];
@@ -88,6 +130,12 @@ export interface Score {
   slurs?: Slur[];
   /** Where the sustain pedal is held, in order, not overlapping. */
   pedal?: PedalMark[];
+  /** Repeat signs and endings, in order (as written; the played score has them unrolled). */
+  repeats?: Repeat[];
+  /** Where the music slows down (rit.), in order. */
+  ritardandos?: Ritardando[];
+  /** A score with repeats, as played: how it's written (see `unroll`, engine/form.ts). */
+  form?: Form;
 }
 
 /** The score marks where to use the sustain pedal. */

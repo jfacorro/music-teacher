@@ -54,8 +54,8 @@ describe('songs use what their unit has taught', () => {
   });
 
   /**
-   * Black keys (pitch classes), time and key signatures, articulations, slurs and pedal marks, up
-   * to a unit.
+   * Black keys (pitch classes), time and key signatures, articulations, slurs, pedal marks,
+   * repeats, fermatas and ritardandos, up to a unit.
    */
   async function taughtUpTo(unitId: string) {
     const { UNITS } = await import('../courses');
@@ -70,6 +70,9 @@ describe('songs use what their unit has taught', () => {
     const articulations = new Set<string>();
     let slurs = false;
     let pedal = false;
+    let repeats = false;
+    let fermata = false;
+    let rit = false;
     const addNote = (note: unknown) => {
       if (typeof note !== 'string') return;
       try {
@@ -95,12 +98,27 @@ describe('songs use what their unit has taught', () => {
       }
       if (Array.isArray(data.slurs) && data.slurs.length > 0) slurs = true;
       if (Array.isArray(data.pedal) && data.pedal.length > 0) pedal = true;
+      if (Array.isArray(data.repeats) && data.repeats.length > 0) repeats = true;
+      if (data.fermata === true) fermata = true;
+      if (Array.isArray(data.rit) && data.rit.length > 0) rit = true;
       Object.values(data).forEach(walk);
     };
     for (const [path, lesson] of Object.entries(lessonFiles)) {
       if (lessons.has(path.slice('../lessons/'.length, -'.json'.length))) walk(lesson);
     }
-    return { black, times, keys, articulations, slurs, pedal, pitchClass, isBlackKey };
+    return {
+      black,
+      times,
+      keys,
+      articulations,
+      slurs,
+      pedal,
+      repeats,
+      fermata,
+      rit,
+      pitchClass,
+      isBlackKey,
+    };
   }
 
   it.each(SONG_IDS)('%s: black keys, time and key signature', async (id) => {
@@ -117,7 +135,7 @@ describe('songs use what their unit has taught', () => {
     expect(keys).toContain(score.keyFifths ?? 0);
   });
 
-  it.each(SONG_IDS)('%s: articulations, slurs and the pedal', async (id) => {
+  it.each(SONG_IDS)('%s: articulations, slurs, the pedal, repeats and tempo', async (id) => {
     const score = await loadSong(id);
     const taught = await taughtUpTo(SONG_UNITS[id]);
     for (const note of score.notes) {
@@ -127,5 +145,8 @@ describe('songs use what their unit has taught', () => {
     }
     if ((score.slurs ?? []).length > 0) expect(taught.slurs, 'slurs').toBe(true);
     if ((score.pedal ?? []).length > 0) expect(taught.pedal, 'pedal').toBe(true);
+    if (score.form) expect(taught.repeats, 'repeats').toBe(true);
+    if (score.notes.some((note) => note.fermata)) expect(taught.fermata, 'fermata').toBe(true);
+    if ((score.ritardandos ?? []).length > 0) expect(taught.rit, 'rit.').toBe(true);
   });
 });

@@ -3,7 +3,7 @@
  * can read it every animation frame without any timer. Milestone 1.4 adds count-in and the
  * metronome on top of this.
  */
-import { beatsToMs, msToBeats } from './score';
+import { TempoMap } from './tempoMap';
 
 export type Clock = () => number;
 
@@ -18,6 +18,8 @@ export class Transport {
   private anchorBeat = 0;
   private anchorTime = 0;
   private state: TransportState;
+  /** Where the music slows down or holds (fermatas, rit.). */
+  private map = TempoMap.NONE;
 
   constructor(tempo: number, clock: Clock = () => performance.now()) {
     this.clock = clock;
@@ -39,12 +41,19 @@ export class Transport {
   /** Where playback was (or will be) at `time` on the clock, e.g. a key press timestamp. */
   positionAt(time: number): number {
     if (!this.state.playing) return this.anchorBeat;
-    return this.anchorBeat + msToBeats(time - this.anchorTime, this.state.tempo);
+    return this.map.beatAfter(this.anchorBeat, time - this.anchorTime, this.state.tempo);
   }
 
   /** Clock time at which playback reaches `beat`, if it keeps playing at this tempo. */
   timeAt(beat: number): number {
-    return this.clock() + beatsToMs(beat - this.position(), this.state.tempo);
+    return this.clock() + this.map.msBetween(this.position(), beat, this.state.tempo);
+  }
+
+  /** Follows the music's fermatas and ritardandos from now on, from where it is. */
+  setTempoMap(map: TempoMap): void {
+    this.anchorBeat = this.position();
+    this.anchorTime = this.clock();
+    this.map = map;
   }
 
   play(): void {

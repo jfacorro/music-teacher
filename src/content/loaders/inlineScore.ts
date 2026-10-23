@@ -7,10 +7,18 @@
  *     "hairpins": [{ "from": 4, "to": 8, "kind": "crescendo" }],
  *     "keyFifths": 1,    (key signature: sharps positive, flats negative)
  *     "slurs": [{ "from": 0, "to": 4, "hand": "R" }],   (legato: that hand's notes from-to)
- *     "pedal": [{ "down": 0, "up": 4 }, { "down": 4, "up": 8 }] }   (the sustain pedal; a mark
+ *     "pedal": [{ "down": 0, "up": 4 }, { "down": 4, "up": 8 }],   (the sustain pedal; a mark
  *     starting where one ends is a pedal change)
- *   A note can have "articulations": ["staccato" | "accent" | "tenuto"], and "crossed": true
- *   when its hand crosses over the other to play it (it's written on the other hand's staff).
+ *     "repeats": [{ "from": 0, "to": 16,   (played twice, at bar lines; endings optional:
+ *       "endings": [{ "from": 12, "to": 16 }, { "from": 16, "to": 20 }] }],   the first ends at
+ *     the repeat sign, the second starts there)
+ *     "rit": [{ "from": 28, "to": 32 }] }   (gradually slower, back in tempo after)
+ *   A note can have "articulations": ["staccato" | "accent" | "tenuto"], "crossed": true when
+ *   its hand crosses over the other to play it (it's written on the other hand's staff), and
+ *   "fermata": true (held longer, the music waiting on it).
+ *
+ * A score with repeats comes back as played (see engine/form.ts › unroll), keeping how it's
+ * written.
  *
  * Validates everything once at load time and reports problems with their location, e.g.
  * `song "ode-to-joy" › notes[3] › note: Invalid note "H4": …`.
@@ -20,11 +28,14 @@ import {
   type Finger,
   Hand,
   type PedalMark,
+  type Repeat,
+  type Ritardando,
   type Score,
   type ScoreNote,
   type Slur,
   wholeMeasures,
 } from '../../engine/score';
+import { unroll } from '../../engine/form';
 import { isMarking, isDynamic, type Marking } from '../../engine/markings';
 import { type Hairpin, HairpinKind, type ScoreDynamics } from '../../engine/dynamics';
 import { describeValues, isValueOf } from '../../lib/values';
@@ -64,17 +75,85 @@ export function parseInlineScore(input: unknown, location: string): Score {
   ) {
     throw new ScoreError(at(location, 'keyFifths'), 'expected a whole number from -7 to 7');
   }
-  return {
+  const measures = wholeMeasures(notes, timeSignature);
+  const end = measures.at(-1)!.start + measures.at(-1)!.length;
+  const repeats = parseRepeats(data.repeats, at(location, 'repeats'), end, measures[0]!.length);
+  const ritardandos = parseRitardandos(data.rit, at(location, 'rit'), end);
+  return unroll({
     tempo,
     timeSignature,
     notes,
-    measures: wholeMeasures(notes, timeSignature),
+    measures,
     ...(markings.length > 0 && { markings }),
     ...(dynamics && { dynamics }),
     ...(data.keyFifths !== undefined && { keyFifths: data.keyFifths as number }),
     ...(slurs.length > 0 && { slurs }),
     ...(pedal.length > 0 && { pedal }),
+    ...(repeats.length > 0 && { repeats }),
+    ...(ritardandos.length > 0 && { ritardandos }),
+  });
+}
+
+function parseRepeats(input: unknown, location: string, end: number, bar: number): Repeat[] {
+  const atBarLine = (beat: number, where: string) => {
+    if (Math.abs(beat / bar - Math.round(beat / bar)) > 1e-9) {
+      throw new ScoreError(where, `expected a bar line (a multiple of ${bar})`);
+    }
+    if (beat > end + 1e-9) throw new ScoreError(where, 'after the end of the music');
+    return beat;
   };
+  const span = (item: unknown, where: string) => {
+    const data = expectObject(item, where);
+    const start = atBarLine(
+      expectNumber(data.from, at(where, 'from'), { min: 0 }),
+      at(where, 'from'),
+    );
+    const stop = atBarLine(
+      expectNumber(data.to, at(where, 'to'), { min: start, exclusive: true }),
+      at(where, 'to'),
+    );
+    return { data, start, end: stop };
+  };
+  let after = 0;
+  return list(input, location).map((item, index) => {
+    const where = at(location, `[${index}]`);
+    const { data, start, end: stop } = span(item, where);
+    if (start < after - 1e-9) throw new ScoreError(where, 'repeats must not overlap');
+    const repeat: Repeat = { start, end: stop };
+    if (data.endings !== undefined) {
+      const endings = list(data.endings, at(where, 'endings'));
+      if (endings.length !== 2) {
+        throw new ScoreError(at(where, 'endings'), 'expected a first and a second ending');
+      }
+      const first = span(endings[0], at(where, 'endings[0]'));
+      const second = span(endings[1], at(where, 'endings[1]'));
+      if (first.start <= start || first.end !== stop || second.start !== stop) {
+        throw new ScoreError(
+          at(where, 'endings'),
+          'the first ending ends at the repeat sign, and the second starts there',
+        );
+      }
+      repeat.endings = [
+        { start: first.start, end: first.end },
+        { start: second.start, end: second.end },
+      ];
+    }
+    after = repeat.endings?.[1].end ?? stop;
+    return repeat;
+  });
+}
+
+function parseRitardandos(input: unknown, location: string, end: number): Ritardando[] {
+  let after = 0;
+  return list(input, location).map((item, index) => {
+    const where = at(location, `[${index}]`);
+    const data = expectObject(item, where);
+    const start = expectNumber(data.from, at(where, 'from'), { min: after });
+    const stop = expectNumber(data.to, at(where, 'to'), { min: start, exclusive: true });
+    if (stop > end + 1e-9) throw new ScoreError(at(where, 'to'), 'after the end of the music');
+    after = stop;
+    return { start, end: stop };
+  });
 }
 
 function parsePedal(input: unknown, location: string): PedalMark[] {
@@ -206,6 +285,12 @@ function parseScoreNote(input: unknown, location: string): ScoreNote {
       throw new ScoreError(at(location, 'crossed'), 'expected true or false');
     }
     if (data.crossed) note.crossed = true;
+  }
+  if (data.fermata !== undefined) {
+    if (typeof data.fermata !== 'boolean') {
+      throw new ScoreError(at(location, 'fermata'), 'expected true or false');
+    }
+    if (data.fermata) note.fermata = true;
   }
   return note;
 }

@@ -44,6 +44,62 @@ describe('parseInlineScore', () => {
     expect(() => parseInlineScore(withNote({ crossed: 'yes' }), 'song')).toThrow(/crossed/);
   });
 
+  it('reads repeats as played, keeping how they are written', () => {
+    const bars = {
+      tempo: 60,
+      timeSignature: [4, 4],
+      notes: ['C4', 'D4', 'E4', 'F4'].map((note, i) => ({
+        note,
+        start: i * 4,
+        duration: 4,
+        hand: 'R',
+        ...(i === 3 && { fermata: true }),
+      })),
+    };
+    const score = parseInlineScore(
+      {
+        ...bars,
+        repeats: [
+          {
+            from: 0,
+            to: 8,
+            endings: [
+              { from: 4, to: 8 },
+              { from: 8, to: 12 },
+            ],
+          },
+        ],
+        rit: [{ from: 12, to: 16 }],
+      },
+      'test',
+    );
+    expect(score.notes.map((note) => note.pitch.midi)).toEqual([60, 62, 60, 64, 65]);
+    expect(score.notes.at(-1)?.fermata).toBe(true);
+    expect(score.ritardandos).toEqual([{ start: 16, end: 20 }]);
+    expect(score.form?.written.repeats).toHaveLength(1);
+    expect(() => parseInlineScore({ ...bars, repeats: [{ from: 1, to: 8 }] }, 'song')).toThrow(
+      /repeats › \[0\] › from: expected a bar line/,
+    );
+    expect(() =>
+      parseInlineScore(
+        {
+          ...bars,
+          repeats: [
+            {
+              from: 0,
+              to: 8,
+              endings: [
+                { from: 4, to: 8 },
+                { from: 12, to: 16 },
+              ],
+            },
+          ],
+        },
+        'song',
+      ),
+    ).toThrow(/the second starts there/);
+  });
+
   it('reads pedal marks, in order, and rejects overlapping ones', () => {
     const score = parseInlineScore(
       {

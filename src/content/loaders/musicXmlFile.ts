@@ -3,10 +3,10 @@
  * one track per staff of each part, notes with their written spelling and fingering, tied
  * notes joined into one.
  *
- * Dynamics, articulations, slurs and pedal marks are kept. Grace notes, cue notes and unpitched
- * (percussion) notes are left out. Repeats are played
- * once, as written. A pickup bar is padded to a whole bar, so the bars line up with the time
- * signature.
+ * Dynamics, articulations, slurs, pedal marks, fermatas, rit. / a tempo, and repeats with first
+ * and second endings are kept. Grace notes, cue notes and unpitched (percussion) notes are left
+ * out. Repeats it can't follow (da capo, segno, coda, more than two endings) are played once, as
+ * written. A pickup bar is padded to a whole bar, so the bars line up with the time signature.
  */
 import {
   type DynamicMark,
@@ -15,7 +15,14 @@ import {
   type ScoreDynamics,
 } from '../../engine/dynamics';
 import { isDynamic, isMarking } from '../../engine/markings';
-import { beatsPerMeasure, type Finger, Articulation, type PedalMark } from '../../engine/score';
+import {
+  beatsPerMeasure,
+  type Finger,
+  Articulation,
+  type PedalMark,
+  type Repeat,
+  type Ritardando,
+} from '../../engine/score';
 import { type Alter, makePitch, type Pitch, type Step, STEPS } from '../../theory/pitch';
 import {
   type ImportedMusic,
@@ -50,7 +57,13 @@ interface Context {
   keyFifths: number | null;
   meters: Set<string>;
   tempos: number[];
-  repeats: boolean;
+  /** Repeat signs and ending brackets, in order, in beats (before padding a pickup bar). */
+  repeatSigns: RepeatSign[];
+  /** Jumps it can't follow: da capo, segno, coda, endings past the second. */
+  otherJumps: boolean;
+  /** Ritardandos as written (before padding a pickup bar), and where an open one started. */
+  ritardandos: Ritardando[];
+  rit: number | null;
   /** Dynamics and hairpins as written, in beats (before padding a pickup bar). */
   marks: DynamicMark[];
   hairpins: Hairpin[];
@@ -92,7 +105,10 @@ export function parseMusicXml(text: string): ImportedMusic {
     keyFifths: null,
     meters: new Set(),
     tempos: [],
-    repeats: false,
+    repeatSigns: [],
+    otherJumps: false,
+    ritardandos: [],
+    rit: null,
     marks: [],
     hairpins: [],
     pedal: [],
@@ -130,7 +146,15 @@ export function parseMusicXml(text: string): ImportedMusic {
   if (rounded) warnings.push(ImportWarning.TimingRounded);
   if (new Set(context.tempos).size > 1) warnings.push(ImportWarning.TempoChanges);
   if (context.meters.size > 1) warnings.push(ImportWarning.TimeSignatureChanges);
-  if (context.repeats) warnings.push(ImportWarning.RepeatsIgnored);
+  const end = Math.max(
+    0,
+    ...tracks.flatMap((track) => track.notes.map((n) => n.start + n.duration)),
+  );
+  const repeats = context.otherJumps
+    ? null
+    : repeatsOf(context.repeatSigns, end, pickup, barLength);
+  if (context.otherJumps || repeats === null) warnings.push(ImportWarning.RepeatsIgnored);
+  if (context.rit !== null) context.ritardandos.push({ start: context.rit, end: end - pickup });
 
   const work = childOf(root, 'work');
   const composer = childrenOf(childOf(root, 'identification'), 'creator').find(
@@ -145,6 +169,8 @@ export function parseMusicXml(text: string): ImportedMusic {
     keyFifths: context.keyFifths ?? 0,
     ...dynamicsOf(context, pickup),
     ...pedalOf(context, pickup),
+    ...(repeats && repeats.length > 0 && { repeats }),
+    ...ritardandosOf(context, pickup),
     tracks,
     warnings,
   };
@@ -185,11 +211,16 @@ function readPart(element: Element, name: string | null, context: Context, first
             const at = barStart + cursor + durationOf(item, divisions, 'offset');
             wedge = readDynamics(item, at, wedge, context);
             pedal = readPedal(item, at, pedal, context);
+            if (first) readTempoWords(item, at, context);
           }
           break;
         }
         case 'barline':
-          if (childOf(item, 'repeat') || childOf(item, 'ending')) context.repeats = true;
+          // A barline goes at the bar's start or (by default) its end.
+          if (first) {
+            const left = item.getAttribute('location') === 'left';
+            readBarline(item, barStart + (left ? 0 : Math.max(length, cursor)), context);
+          }
           break;
         case 'note': {
           if (childOf(item, 'grace')) break; // no time of its own
@@ -248,6 +279,7 @@ function addNote(
   if (finger) note.finger = finger;
   const articulations = articulationsOf(item);
   if (articulations.length > 0) note.articulations = articulations;
+  if (childOf(childOf(item, 'notations'), 'fermata')) note.fermata = true;
   if (slurs.length > 0) note.slurs = slurs;
   const notes = part.staves.get(staff) ?? [];
   notes.push(note);
@@ -363,6 +395,141 @@ function readDynamics(
     }
   }
   return wedge;
+}
+
+/** A repeat sign or an ending's bracket starting or stopping, at a beat. */
+interface RepeatSign {
+  at: number;
+  kind: 'forward' | 'backward' | 'endingStart' | 'endingStop';
+  /** Endings: the first or the second. */
+  ending?: 1 | 2;
+}
+
+function readBarline(item: Element, at: number, context: Context): void {
+  const ending = childOf(item, 'ending');
+  if (ending) {
+    const number = ending.getAttribute('number')?.trim();
+    if (number !== '1' && number !== '2') {
+      context.otherJumps = true;
+    } else {
+      context.repeatSigns.push({
+        at,
+        kind: ending.getAttribute('type') === 'start' ? 'endingStart' : 'endingStop',
+        ending: number === '1' ? 1 : 2,
+      });
+    }
+  }
+  const direction = childOf(item, 'repeat')?.getAttribute('direction');
+  if (direction === 'forward' || direction === 'backward') {
+    context.repeatSigns.push({ at, kind: direction });
+  }
+}
+
+/** "rit." (or rall.) starts slowing down, "a tempo" ends it; da capo and the like are noted. */
+function readTempoWords(direction: Element, at: number, context: Context): void {
+  const sound = childOf(direction, 'sound');
+  if (['dacapo', 'dalsegno', 'tocoda', 'segno', 'coda'].some((jump) => sound?.hasAttribute(jump))) {
+    context.otherJumps = true;
+  }
+  for (const type of childrenOf(direction, 'direction-type')) {
+    if (childOf(type, 'segno') || childOf(type, 'coda')) context.otherJumps = true;
+    const words = textOf(childOf(type, 'words')) ?? '';
+    if (/^(rit|ritard|rall|riten)/i.test(words)) {
+      context.rit ??= at;
+    } else if (/a\s*tempo|tempo\s*(i|primo)\b/i.test(words) && context.rit !== null) {
+      if (at > context.rit) context.ritardandos.push({ start: context.rit, end: at });
+      context.rit = null;
+    } else if (/d\.?\s*c\.?|d\.?\s*s\.?|da capo|dal segno|fine/i.test(words)) {
+      context.otherJumps = true;
+    }
+  }
+}
+
+/**
+ * The repeats the signs make, moved like the notes for a pickup bar, or null when they don't add
+ * up (a backward sign missing, endings out of place) or don't fall on bar lines.
+ */
+function repeatsOf(
+  signs: readonly RepeatSign[],
+  end: number,
+  pickup: number,
+  barLength: number,
+): Repeat[] | null {
+  const repeats: Repeat[] = [];
+  let start = 0;
+  let firstEnding: number | null = null;
+  /** A repeat with a first ending, waiting for its second. */
+  let waiting: { repeat: Repeat; first: number; second: number | null } | null = null;
+  for (const sign of signs) {
+    if (sign.kind === 'forward') {
+      start = sign.at;
+    } else if (sign.kind === 'endingStart' && sign.ending === 1) {
+      firstEnding = sign.at;
+    } else if (sign.kind === 'backward') {
+      const repeat: Repeat = { start, end: sign.at };
+      if (firstEnding !== null) waiting = { repeat, first: firstEnding, second: null };
+      else repeats.push(repeat);
+      firstEnding = null;
+      start = sign.at;
+    } else if (sign.kind === 'endingStart' && sign.ending === 2) {
+      if (!waiting || Math.abs(sign.at - waiting.repeat.end) > EPSILON) return null;
+      waiting.second = sign.at;
+    } else if (sign.kind === 'endingStop' && sign.ending === 2 && waiting?.second != null) {
+      const { repeat, first, second } = waiting;
+      repeats.push({
+        ...repeat,
+        endings: [
+          { start: first, end: repeat.end },
+          { start: second, end: sign.at },
+        ],
+      });
+      waiting = null;
+      start = sign.at;
+    }
+  }
+  if (waiting?.second != null) {
+    // A second ending that runs to the end.
+    const { repeat, first, second } = waiting;
+    repeats.push({
+      ...repeat,
+      endings: [
+        { start: first, end: repeat.end },
+        { start: second, end: Math.max(end - pickup, second + barLength) },
+      ],
+    });
+  } else if (waiting || firstEnding !== null) {
+    return null;
+  }
+  const moved = (beat: number) => beat + pickup;
+  const onBarLine = (beat: number) =>
+    Math.abs(moved(beat) / barLength - Math.round(moved(beat) / barLength)) < EPSILON;
+  const shifted = repeats.map((repeat) => ({
+    start: moved(repeat.start),
+    end: moved(repeat.end),
+    ...(repeat.endings && {
+      endings: repeat.endings.map((ending) => ({
+        start: moved(ending.start),
+        end: moved(ending.end),
+      })) as Repeat['endings'],
+    }),
+  }));
+  const fits = repeats.every(
+    (repeat) =>
+      repeat.end > repeat.start &&
+      [repeat.start, repeat.end, ...(repeat.endings?.flatMap((e) => [e.start, e.end]) ?? [])].every(
+        onBarLine,
+      ),
+  );
+  return fits ? shifted : null;
+}
+
+/** The ritardandos on the sixteenth-note grid, moved like the notes for a pickup bar. */
+function ritardandosOf(context: Context, pickup: number): { ritardandos?: Ritardando[] } {
+  const snap = (beat: number) => Math.round((beat + pickup) / IMPORT_GRID) * IMPORT_GRID;
+  const ritardandos = context.ritardandos
+    .map((rit) => ({ start: snap(rit.start), end: snap(rit.end) }))
+    .filter((rit) => rit.end > rit.start);
+  return ritardandos.length > 0 ? { ritardandos } : {};
 }
 
 /** Reads a direction's pedal marks at `at`; returns where the pedal is held from, if it is. */

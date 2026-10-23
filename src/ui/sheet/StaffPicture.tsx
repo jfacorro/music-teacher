@@ -83,7 +83,7 @@ export function MusicPicture({ score }: { score: Score }) {
   const { t } = useTranslation('screens');
   const xml = useMemo(
     () =>
-      scoreToMusicXml(score, {
+      scoreToMusicXml(score.form?.written ?? score, {
         hands: STAVES[StaffClef.Grand].filter((hand) =>
           score.notes.some((note) => note.hand === hand),
         ),

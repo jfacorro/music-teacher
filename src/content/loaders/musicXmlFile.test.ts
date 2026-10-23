@@ -243,6 +243,58 @@ describe('parseMusicXml', () => {
     expect(parseMusicXml(piece(measure(n('C4', 4)))).tempo).toBe(100);
   });
 
+  it('reads repeats with their endings, fermatas, and rit. up to a tempo', () => {
+    const left = (inner: string) => `<barline location="left">${inner}</barline>`;
+    const right = (inner: string) => `<barline location="right">${inner}</barline>`;
+    const words = (text: string) =>
+      `<direction><direction-type><words>${text}</words></direction-type></direction>`;
+    const music = parseMusicXml(
+      piece(
+        measure(attributes('<divisions>1</divisions>'), n('C4', 4)),
+        measure(left('<repeat direction="forward"/>'), n('D4', 4)),
+        measure(
+          left('<ending number="1" type="start"/>'),
+          n('E4', 4),
+          right('<ending number="1" type="stop"/><repeat direction="backward"/>'),
+        ),
+        measure(
+          left('<ending number="2" type="start"/>'),
+          words('rit.'),
+          n('F4', 4, '<notations><fermata/></notations>'),
+          right('<ending number="2" type="discontinue"/>'),
+        ),
+        measure(words('a tempo'), n('G4', 4)),
+      ),
+    );
+    expect(music.repeats).toEqual([
+      {
+        start: 4,
+        end: 12,
+        endings: [
+          { start: 8, end: 12 },
+          { start: 12, end: 16 },
+        ],
+      },
+    ]);
+    expect(music.ritardandos).toEqual([{ start: 12, end: 16 }]);
+    expect(music.tracks[0]!.notes[3]?.fermata).toBe(true);
+    expect(music.warnings).toEqual([]);
+  });
+
+  it('plays da capo and the like once, as written', () => {
+    const music = parseMusicXml(
+      piece(
+        measure(attributes('<divisions>1</divisions>'), n('C4', 4)),
+        measure(
+          n('D4', 4),
+          '<direction><direction-type><words>D.C. al Fine</words></direction-type></direction>',
+        ),
+      ),
+    );
+    expect(music.warnings).toEqual([ImportWarning.RepeatsIgnored]);
+    expect(music).not.toHaveProperty('repeats');
+  });
+
   it('warns about rounded triplets, tempo and time changes, and repeats', () => {
     const music = parseMusicXml(
       piece(

@@ -2,7 +2,15 @@
  * An imported song's practice score: the learner's choices (which hand plays each track,
  * transposition, tempo) applied to the music read from the file.
  */
-import { Hand, type Score, type ScoreNote, wholeMeasures, type Slur } from '../../engine/score';
+import { unroll } from '../../engine/form';
+import {
+  beatsPerMeasure,
+  Hand,
+  type Score,
+  type ScoreNote,
+  wholeMeasures,
+  type Slur,
+} from '../../engine/score';
 import { MIDDLE_C, PIANO_HIGHEST, PIANO_LOWEST, pitchFromMidi } from '../../theory/pitch';
 import { type ImportedMusic, suggestHands, TrackHand } from './importedMusic';
 
@@ -41,7 +49,15 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
     if (role === TrackHand.None) return;
     /** A slur open on this track: where it started, and in which hand. */
     let slur: { start: number; hand: Hand } | null = null;
-    for (const { pitch, start, duration, finger, articulations, slurs: marks } of track.notes) {
+    for (const {
+      pitch,
+      start,
+      duration,
+      finger,
+      articulations,
+      slurs: marks,
+      fermata,
+    } of track.notes) {
       const midi = pitch.midi + options.transpose;
       if (midi < PIANO_LOWEST || midi > PIANO_HIGHEST) {
         outOfRange++;
@@ -63,23 +79,36 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
         hand,
         ...(finger && options.transpose === 0 && { finger }),
         ...(articulations && { articulations }),
+        ...(fermata && { fermata }),
       });
     }
   });
 
   const playable = oneNotePerKey(notes);
   if (playable.length === 0) return { score: null, outOfRange };
+  // Bars up to the last note, or to the end of the last repeat if it comes later.
+  const bar = beatsPerMeasure(music.timeSignature);
+  const repeatsEnd = Math.max(
+    0,
+    ...(music.repeats ?? []).map((repeat) => repeat.endings?.[1].end ?? repeat.end),
+  );
+  const measures = wholeMeasures(playable, music.timeSignature);
+  while (measures.length * bar < repeatsEnd - 1e-6) {
+    measures.push({ start: measures.length * bar, length: bar });
+  }
   return {
-    score: {
+    score: unroll({
       tempo: options.tempo,
       timeSignature: music.timeSignature,
       keyFifths,
       notes: playable,
-      measures: wholeMeasures(playable, music.timeSignature),
+      measures,
       ...(music.dynamics && { dynamics: music.dynamics }),
       ...(slurs.length > 0 && { slurs }),
       ...(music.pedal && { pedal: music.pedal }),
-    },
+      ...(music.repeats && { repeats: music.repeats }),
+      ...(music.ritardandos && { ritardandos: music.ritardandos }),
+    }),
     outOfRange,
   };
 }
