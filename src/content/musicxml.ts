@@ -3,8 +3,10 @@
  * (rendered by OpenSheetMusicDisplay). One piano part: a treble staff for the right hand and a
  * bass staff for the left hand (only the staves that have notes).
  *
- * Simplifications that fit the current content: each hand plays one line at a time (notes
- * that start together form a chord); durations are multiples of a sixteenth note.
+ * Simplifications that fit the current content: each staff has one line at a time (notes
+ * that start together form a chord); durations are multiples of a sixteenth note. A hand crossing
+ * over the other writes those notes on the other hand's staff, which then holds both hands'
+ * notes in its one line.
  */
 import { HairpinKind } from '../engine/dynamics';
 import { beatsPerMeasure, Hand, type Score, type ScoreNote, slurNotes } from '../engine/score';
@@ -57,6 +59,11 @@ export interface MusicXmlOptions {
   rhythm?: boolean;
   /** A picture of some notes rather than music: no rests and no bar lines are drawn. */
   illustration?: boolean;
+  /**
+   * Written over the first of a crossing hand's notes on the other staff, e.g. "L.H."
+   * (nothing by default).
+   */
+  handLabel?: (hand: Hand) => string;
 }
 
 export const noteKey = (staff: number, startDivision: number, midi: number) =>
@@ -93,16 +100,22 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
   const measureCount = Math.max(1, score.measures.length);
   const index = new Map<string, ScoreNote>();
 
+  const staffOf = (hand: Hand) => staves.find((staff) => staff.hand === hand);
+  /** Where a note is written: its hand's staff, or the other one when the hand crosses over. */
+  const writtenOn = (note: ScoreNote) =>
+    (note.crossed && staffOf(otherHand(note.hand))) || staffOf(note.hand);
   const linesByStaff = staves.map((staff) => ({
     staff,
-    events: eventsFor(score.notes.filter((n) => n.hand === staff.hand)),
+    events: eventsFor(score.notes.filter((n) => writtenOn(n) === staff)),
   }));
 
   const directions = options.illustration
     ? []
-    : [...directionsFor(score, staves[0]), ...pedalFor(score, staves.at(-1))].sort(
-        (a, b) => a.at - b.at || a.order - b.order,
-      );
+    : [
+        ...directionsFor(score, staves[0]),
+        ...pedalFor(score, staves.at(-1)),
+        ...handLabelsFor(score, writtenOn, options.handLabel),
+      ].sort((a, b) => a.at - b.at || a.order - b.order);
   const slurs = slurMarks(score);
 
   const measures: string[] = [];
@@ -328,6 +341,39 @@ function pedalFor(score: Score, staff: StaffInfo | undefined): Direction[] {
       ...(changes ? [] : [direction('stop', 0, mark.up)]),
     ];
   });
+}
+
+const otherHand = (hand: Hand) => (hand === Hand.Right ? Hand.Left : Hand.Right);
+
+/** "L.H." (or "R.H.") over the first note of each stretch a hand plays on the other's staff. */
+function handLabelsFor(
+  score: Score,
+  writtenOn: (note: ScoreNote) => StaffInfo | undefined,
+  label: MusicXmlOptions['handLabel'],
+): Direction[] {
+  if (!label) return [];
+  const labels: Direction[] = [];
+  for (const hand of [Hand.Right, Hand.Left]) {
+    /** Whether the hand's note before was on the other staff (notes in a chord are alike). */
+    let crossing = false;
+    for (const note of score.notes.filter((n) => n.hand === hand)) {
+      const staff = writtenOn(note);
+      const crossed = staff !== undefined && staff.hand !== hand;
+      if (crossed && !crossing && staff) {
+        labels.push({
+          at: Math.round(note.start * DIVISIONS),
+          staff: staff.number,
+          order: 1,
+          xml:
+            '<direction placement="above"><direction-type>' +
+            `<words>${escapeXml(label(hand))}</words></direction-type>` +
+            `<staff>${staff.number}</staff></direction>`,
+        });
+      }
+      crossing = crossed;
+    }
+  }
+  return labels;
 }
 
 /** A length in divisions as written note values (longest first). */

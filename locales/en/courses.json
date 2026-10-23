@@ -39,6 +39,10 @@
     "u10": {
       "title": "The sustain pedal",
       "description": "The right pedal: its marks, changing it with each chord, under broken chords, and when to leave it up."
+    },
+    "u11": {
+      "title": "Around the keyboard",
+      "description": "Moving the hands: position shifts, octave jumps, arpeggios in {c}, {g} and {f} major, and one hand crossing over the other."
     }
   },
   "lessons": {
@@ -90,7 +94,12 @@
     "u10-l1": "Pressing and lifting",
     "u10-l2": "Changing the pedal",
     "u10-l3": "Pedal and broken chords",
-    "u10-l4": "When not to pedal"
+    "u10-l4": "When not to pedal",
+    "u11-l1": "Moving the hand",
+    "u11-l2": "Octave jumps",
+    "u11-l3": "Arpeggios in {c}",
+    "u11-l4": "Arpeggios in {g} and {f}",
+    "u11-l5": "Crossing over"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -114,6 +123,8 @@
     "minor-keys": "Minor keys",
     "touch": "Touch",
     "pedal": "Sustain pedal",
+    "shifts": "Position shifts",
+    "arpeggios": "Arpeggios",
     "sight-reading": "Sight-reading",
     "ear-training": "Ear training"
   }

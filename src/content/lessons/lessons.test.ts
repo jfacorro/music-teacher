@@ -52,7 +52,7 @@ describe('courses', () => {
     expect(groups.map(({ level, units }) => [level, units.map(({ number }) => number)])).toEqual([
       [CourseLevel.Beginner, [1, 2, 3, 4]],
       [CourseLevel.Elementary, [5, 6, 7, 8]],
-      [CourseLevel.LateElementary, [9, 10]],
+      [CourseLevel.LateElementary, [9, 10, 11]],
     ]);
   });
 

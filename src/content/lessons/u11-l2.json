@@ -1,0 +1,563 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "octave",
+      "keys": [
+        {
+          "note": "C4",
+          "finger": 1
+        },
+        {
+          "note": "C5",
+          "finger": 1
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "exercise",
+      "text": "octaveEcho",
+      "mode": "wait",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "E4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 2,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "C5",
+            "start": 6,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E5",
+            "start": 7,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G5",
+            "start": 8,
+            "duration": 1,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "E5",
+            "start": 9,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "C5",
+            "start": 10,
+            "duration": 2,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "octaveEchoInTime",
+      "mode": "tempo",
+      "hands": "R",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E4",
+            "start": 1,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 2,
+            "duration": 1,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "E4",
+            "start": 3,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 2,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "C5",
+            "start": 6,
+            "duration": 1,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E5",
+            "start": 7,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G5",
+            "start": 8,
+            "duration": 1,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "E5",
+            "start": 9,
+            "duration": 1,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "C5",
+            "start": 10,
+            "duration": 2,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "explain",
+      "text": "bassOctaves"
+    },
+    {
+      "type": "exercise",
+      "text": "octaveBass",
+      "mode": "wait",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "score": {
+        "tempo": 66,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E4",
+            "start": 0,
+            "duration": 4,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 0,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "F4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "A4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "B3",
+            "start": 8,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 8,
+            "duration": 4,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "G4",
+            "start": 8,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "C3",
+            "start": 0,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "C2",
+            "start": 2,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "F3",
+            "start": 4,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "F2",
+            "start": 6,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "G3",
+            "start": 8,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "G2",
+            "start": 10,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "C3",
+            "start": 12,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "C2",
+            "start": 14,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          }
+        ],
+        "pedal": [
+          {
+            "down": 0,
+            "up": 4
+          },
+          {
+            "down": 4,
+            "up": 8
+          },
+          {
+            "down": 8,
+            "up": 12
+          },
+          {
+            "down": 12,
+            "up": 16
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "octaveBassInTime",
+      "mode": "tempo",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "score": {
+        "tempo": 66,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E4",
+            "start": 0,
+            "duration": 4,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 0,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "F4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "A4",
+            "start": 4,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "B3",
+            "start": 8,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "D4",
+            "start": 8,
+            "duration": 4,
+            "hand": "R",
+            "finger": 2
+          },
+          {
+            "note": "G4",
+            "start": 8,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 1
+          },
+          {
+            "note": "E4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 3
+          },
+          {
+            "note": "G4",
+            "start": 12,
+            "duration": 4,
+            "hand": "R",
+            "finger": 5
+          },
+          {
+            "note": "C3",
+            "start": 0,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "C2",
+            "start": 2,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "F3",
+            "start": 4,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "F2",
+            "start": 6,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "G3",
+            "start": 8,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "G2",
+            "start": 10,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "C3",
+            "start": 12,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          },
+          {
+            "note": "C2",
+            "start": 14,
+            "duration": 2,
+            "hand": "L",
+            "finger": 5
+          }
+        ],
+        "pedal": [
+          {
+            "down": 0,
+            "up": 4
+          },
+          {
+            "down": 4,
+            "up": 8
+          },
+          {
+            "down": 8,
+            "up": 12
+          },
+          {
+            "down": 12,
+            "up": 16
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

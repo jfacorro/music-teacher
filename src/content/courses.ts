@@ -37,6 +37,8 @@ export const SKILLS = [
   'minor-keys',
   'touch',
   'pedal',
+  'shifts',
+  'arpeggios',
   'sight-reading',
   'ear-training',
 ] as const;

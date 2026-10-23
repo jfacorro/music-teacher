@@ -9,7 +9,8 @@
  *     "slurs": [{ "from": 0, "to": 4, "hand": "R" }],   (legato: that hand's notes from-to)
  *     "pedal": [{ "down": 0, "up": 4 }, { "down": 4, "up": 8 }] }   (the sustain pedal; a mark
  *     starting where one ends is a pedal change)
- *   A note can have "articulations": ["staccato" | "accent" | "tenuto"].
+ *   A note can have "articulations": ["staccato" | "accent" | "tenuto"], and "crossed": true
+ *   when its hand crosses over the other to play it (it's written on the other hand's staff).
  *
  * Validates everything once at load time and reports problems with their location, e.g.
  * `song "ode-to-joy" › notes[3] › note: Invalid note "H4": …`.
@@ -199,6 +200,12 @@ function parseScoreNote(input: unknown, location: string): ScoreNote {
       }
     });
     if (articulations.length > 0) note.articulations = articulations as Articulation[];
+  }
+  if (data.crossed !== undefined) {
+    if (typeof data.crossed !== 'boolean') {
+      throw new ScoreError(at(location, 'crossed'), 'expected true or false');
+    }
+    if (data.crossed) note.crossed = true;
   }
   return note;
 }

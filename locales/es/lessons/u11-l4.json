@@ -1,0 +1,11 @@
+{
+  "steps": {
+    "otherKeys": "En {g} mayor y {f} mayor la digitación es la misma que en {c} mayor: mano derecha 1 2 3 1 2 3 5, mano izquierda 5 4 2 1 3 2 1. Solo cambia el acorde: {g}, {b} y {d}; {f}, {a} y {c}.",
+    "gRight": "{g} mayor, mano derecha.",
+    "gLeft": "{g} mayor, mano izquierda.",
+    "fRight": "{f} mayor, mano derecha.",
+    "fLeft": "{f} mayor, mano izquierda.",
+    "prelude": "El comienzo del Preludio en {c} de Bach (BWV 846), de 1722: cada acorde se reparte en la misma figura que sube y se toca dos veces. La mano izquierda toca las dos notas de abajo; la derecha, las tres de arriba. Aquí está escrito en corcheas, con un pedal nuevo para cada acorde.",
+    "preludeInTime": "Ahora a tempo, fluido y parejo."
+  }
+}

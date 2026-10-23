@@ -37,6 +37,13 @@ describe('parseInlineScore', () => {
     ).toThrow(/slurs › \[0\] › to/);
   });
 
+  it('reads notes played by a hand crossing over the other', () => {
+    const score = parseInlineScore(withNote({ crossed: true }), 'test');
+    expect(score.notes[0]?.crossed).toBe(true);
+    expect(score.notes[1]).not.toHaveProperty('crossed');
+    expect(() => parseInlineScore(withNote({ crossed: 'yes' }), 'song')).toThrow(/crossed/);
+  });
+
   it('reads pedal marks, in order, and rejects overlapping ones', () => {
     const score = parseInlineScore(
       {

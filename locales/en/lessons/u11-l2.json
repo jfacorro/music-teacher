@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "octave": "An octave spans eight white keys, from a note to the next one with the same name. To jump an octave, keep the hand’s shape and move it as a whole: look at where it lands before you go, move early, and land lightly.",
+    "octaveEcho": "A phrase, its echo an octave higher, and home again.",
+    "octaveEchoInTime": "Now in time.",
+    "bassOctaves": "In the left hand, octave jumps make the bass deeper: each bass note, then the same note an octave lower. The pedal, changed with each chord, keeps the sound joined while the hand jumps.",
+    "octaveBass": "The chords from Unit 6, over a bass that jumps down an octave in every bar.",
+    "octaveBassInTime": "And in time."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "crossing": "A veces una mano cruza por encima de la otra para llegar a notas más allá. Aquí la mano izquierda toca su acorde, la derecha toca el siguiente más arriba, y la izquierda pasa por encima de la derecha para tocar el más agudo. Esas notas se escriben en el otro pentagrama, marcadas M.I. Levanta bastante la mano que cruza para pasar, y deja que el pedal sostenga el sonido.",
+    "handOverHand": "{c} mayor, mano sobre mano: izquierda, derecha, la izquierda por encima, y de vuelta.",
+    "handOverHandInTime": "Y a tempo.",
+    "handOverHandG": "{g} mayor, de la misma forma.",
+    "rightOver": "Ahora al revés: la mano derecha cruza por encima de la izquierda para tocar las notas más graves, marcadas M.D."
+  }
+}

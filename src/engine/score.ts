@@ -33,6 +33,8 @@ export interface ScoreNote {
   hand: Hand;
   finger?: Finger;
   articulations?: Articulation[];
+  /** The hand crosses over the other to play it: it's written on the other hand's staff. */
+  crossed?: boolean;
 }
 
 /** Notes played smoothly connected (legato): one hand's notes from `start` to `end` (beats). */

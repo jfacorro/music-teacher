@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "octave": "Una octava abarca ocho teclas blancas, de una nota a la siguiente con el mismo nombre. Para saltar una octava, mantén la forma de la mano y muévela entera: mira dónde va a caer antes de ir, muévete con tiempo y cae suave.",
+    "octaveEcho": "Una frase, su eco una octava más arriba, y de vuelta a casa.",
+    "octaveEchoInTime": "Ahora a tempo.",
+    "bassOctaves": "En la mano izquierda, los saltos de octava hacen el bajo más profundo: cada nota del bajo y luego la misma una octava más abajo. El pedal, cambiado con cada acorde, mantiene el sonido unido mientras la mano salta.",
+    "octaveBass": "Los acordes de la unidad 6, sobre un bajo que salta una octava hacia abajo en cada compás.",
+    "octaveBassInTime": "Y a tempo."
+  }
+}
