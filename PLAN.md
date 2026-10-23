@@ -790,6 +790,7 @@ Every new song passes the "only what's taught" test, extended to articulation, s
   - [x] Touch (5.1).
   - [ ] TODO (user): once Unit 8 is finished, go through Unit 9’s lessons on the Casio (legato and slurs with "Aura Lee", staccato, both together with "Can-Can", accents and tenuto, ties).
   - [x] The pedal (5.2), built.
+  - [ ] TODO (user): play "Gymnopédie No. 1" on the Casio from Song practice (sheet music, both hands, waiting), without the pedal: notes, fingering and the pedal lines read well.
   - [ ] TODO (user): at Unit 10, go through its lessons on the Casio with the pedal plugged in (pressing and lifting, changing it, broken chords and "Gymnopédie No. 1", when not to pedal), and say whether the pedal changes are judged fairly.
 - [ ] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
 - [ ] Repeats play back as written, in practice, Listen and Compare.
