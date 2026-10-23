@@ -84,7 +84,15 @@ describe('drill levels', () => {
       DrillLevel.Bass,
       DrillLevel.HandsTogether,
     ]);
-    expect(openDrillLevels(UNITS, doneUpTo('u7'))).toEqual(DRILL_LEVELS);
+    expect(openDrillLevels(UNITS, doneUpTo('u8'))).toEqual([
+      DrillLevel.Treble,
+      DrillLevel.TrebleRhythm,
+      DrillLevel.Bass,
+      DrillLevel.HandsTogether,
+      DrillLevel.Keys,
+      DrillLevel.Accidentals,
+    ]);
+    expect(openDrillLevels(UNITS, doneUpTo('u12'))).toEqual(DRILL_LEVELS);
   });
 
   it('name units of the course', () => {
@@ -108,13 +116,14 @@ describe('makeDrill', () => {
 
   it.each(DRILL_LEVELS)('writes four bars of 4/4 that end on the key note (%s)', (level) => {
     for (const seed of SEEDS) {
-      const { score } = makeDrill(level, seed);
+      const { score, minor } = makeDrill(level, seed);
       expect(score.timeSignature).toEqual([4, 4]);
       expect(score.measures).toHaveLength(4);
       const melody = score.notes.filter((note) => note.duration < 4 || note.start === 0);
       const last = score.notes.filter((note) => note.start + note.duration === 16);
       expect(last.length).toBeGreaterThan(0);
-      const tonic = ((((score.keyFifths ?? 0) * 7) % 12) + 12) % 12;
+      // The major key's note, or its relative minor's.
+      const tonic = ((((score.keyFifths ?? 0) * 7 + (minor ? 9 : 0)) % 12) + 12) % 12;
       for (const note of last) expect(pitchClass(note.pitch.midi)).toBe(tonic);
       expect(melody[0]?.finger).toBeDefined();
     }
@@ -187,6 +196,31 @@ describe('makeDrill', () => {
       }
     }
     expect([...keys].sort()).toEqual([-1, 1]);
+  });
+
+  it('writes one or two neighbor notes, a sharp a half step below, clear of the ending', () => {
+    for (const seed of SEEDS) {
+      const { score } = makeDrill(DrillLevel.Accidentals, seed);
+      const tune = score.notes;
+      const sharps = tune.flatMap((note, i) => (note.pitch.alter === 1 ? [i] : []));
+      expect(sharps.length, `seed ${seed}`).toBeGreaterThanOrEqual(1);
+      expect(sharps.length, `seed ${seed}`).toBeLessThanOrEqual(2);
+      for (const i of sharps) {
+        const [before, after] = [tune[i - 1]!, tune[i + 1]!];
+        expect(before.pitch.midi - tune[i]!.pitch.midi, `seed ${seed}`).toBe(1);
+        expect(after.pitch.midi, `seed ${seed}`).toBe(before.pitch.midi);
+        expect(i, `seed ${seed}`).toBeLessThan(tune.length - 2);
+      }
+    }
+  });
+
+  it('plays every key of Unit 12, major and minor, in the more keys level', () => {
+    const keys = new Set<string>();
+    for (const seed of SEEDS) {
+      const { score, minor } = makeDrill(DrillLevel.MoreKeys, seed);
+      keys.add(`${score.keyFifths ?? 0}${minor ? 'm' : ''}`);
+    }
+    expect([...keys].sort()).toEqual(['-1m', '-2', '0m', '1m', '2']);
   });
 
   it('gives the same drill for the same seed, and fresh ones for others', () => {

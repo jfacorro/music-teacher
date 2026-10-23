@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "reading": "Antes de tocar una pieza, lee su armadura: nombra sus sostenidos o bemoles, y luego mira la última nota (suele ser la nota de llegada) para distinguir la tonalidad mayor de su relativo menor. Atención a las alteraciones que la armadura no cubre.",
+    "musette": "«Musette en re», del cuaderno que Bach le regaló a su esposa Anna Magdalena en 1725, en {d} mayor. La mano izquierda salta octavas como el bordón de una gaita (una musette es una gaita pequeña); la parte del medio pasa a {a} mayor, con sostenidos que la armadura no tiene. Aquí está escrita con el doble de sus valores, sin sus repeticiones.",
+    "musetteInTime": "Ahora a tempo, con ligereza.",
+    "scarborough": "«Scarborough Fair», una antigua balada inglesa, en {d} menor: un bemol. Una nota le da su sonido antiguo: {b} natural en lugar de {bFlat}, con un becuadro.",
+    "scarboroughInTime": "Y a tempo, con suavidad."
+  }
+}

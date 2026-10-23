@@ -1,0 +1,11 @@
+{
+  "steps": {
+    "key": "{bFlat} major has two flats, {bFlat} and {eFlat}: every {b} and every {e} is played flat. Its scale starts on a black key, so the fingering changes: the right hand starts with finger 4, puts the thumb on {c}, then plays 1 2 3 and 1 2 3 4. The thumb never plays a black key.",
+    "scaleRight": "Up and back down, starting with finger 4.",
+    "scaleRightInTime": "Now in time.",
+    "left": "The left hand starts with finger 3: 3 2 1, then finger 4 crosses over the thumb to {eFlat}: 4 3 2 1, and finger 3 on the top {bFlat}.",
+    "scaleLeft": "The left hand, up and back down.",
+    "lightlyRow": "“Lightly Row” from Unit 3, now in {bFlat} major: watch for {eFlat}.",
+    "lightlyRowInTime": "And in time."
+  }
+}

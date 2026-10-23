@@ -43,6 +43,10 @@
     "u11": {
       "title": "Around the keyboard",
       "description": "Moving the hands: position shifts, octave jumps, arpeggios in {c}, {g} and {f} major, and one hand crossing over the other."
+    },
+    "u12": {
+      "title": "More keys",
+      "description": "The keys of {d} major and {bFlat} major, the relative minors, the natural and harmonic minor scales of {a}, {e} and {d}, and reading with these key signatures."
     }
   },
   "lessons": {
@@ -99,7 +103,12 @@
     "u11-l2": "Octave jumps",
     "u11-l3": "Arpeggios in {c}",
     "u11-l4": "Arpeggios in {g} and {f}",
-    "u11-l5": "Crossing over"
+    "u11-l5": "Crossing over",
+    "u12-l1": "{d} major",
+    "u12-l2": "{bFlat} major",
+    "u12-l3": "Relative minors",
+    "u12-l4": "Harmonic minor",
+    "u12-l5": "Reading in new keys"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -125,6 +134,7 @@
     "pedal": "Sustain pedal",
     "shifts": "Position shifts",
     "arpeggios": "Arpeggios",
+    "key-signatures": "Key signatures",
     "sight-reading": "Sight-reading",
     "ear-training": "Ear training"
   }

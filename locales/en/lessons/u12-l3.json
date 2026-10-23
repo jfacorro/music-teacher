@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "relative": "Every major key shares its key signature with a minor key, its relative minor, whose home note is three half steps lower. {c} major and {a} minor: no sharps or flats. {g} major and {e} minor: one sharp. {f} major and {d} minor: one flat. Played from its own home note with that key signature, a minor key gives its natural minor scale.",
+    "aNatural": "{a} natural minor: the white keys from {a} to {a}.",
+    "eNatural": "{e} natural minor, with the key signature of {g} major: one sharp.",
+    "dNatural": "{d} natural minor, with the key signature of {f} major: one flat.",
+    "eNaturalLeft": "{e} natural minor with the left hand.",
+    "dNaturalLeft": "{d} natural minor with the left hand."
+  }
+}

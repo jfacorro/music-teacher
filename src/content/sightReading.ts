@@ -5,7 +5,8 @@
  *
  * Each level opens when the unit that teaches its reading is finished, from the right hand in
  * the treble clef with quarter and half notes, to rests and eighth notes, the left hand in the
- * bass clef, both hands, and the keys of G and F major.
+ * bass clef, both hands, the keys of G and F major, neighbor notes with their sharps, and the
+ * keys of Unit 12 (D and B♭ major, A, E and D minor).
  *
  * The music follows a few rules so it sounds like a tune and fits the hand: four bars of 4/4 in
  * a five-finger position (no stretching or moving the hand), mostly steps with some small
@@ -14,7 +15,14 @@
 import { type Finger, Hand, type Score, type ScoreNote, wholeMeasures } from '../engine/score';
 import { HandFilter } from '../engine/session';
 import { newSeed, pick, pickWeighted, type Random, seededRandom, shuffled } from '../lib/random';
-import { type NoteString, type Pitch, pitchClass, pitchOf } from '../theory/pitch';
+import {
+  type Alter,
+  makePitch,
+  type NoteString,
+  type Pitch,
+  pitchClass,
+  pitchOf,
+} from '../theory/pitch';
 import type { Unit } from './courses';
 import { isUnitFinished, type LessonState } from './unlock';
 
@@ -29,6 +37,10 @@ export const DrillLevel = {
   HandsTogether: 'handsTogether',
   /** G major or F major, with their key signatures; either hand. */
   Keys: 'keys',
+  /** Neighbor notes a half step below, written with a sharp (C major or A minor). */
+  Accidentals: 'accidentals',
+  /** D and B♭ major, A, E and D minor, with their key signatures; either hand. */
+  MoreKeys: 'moreKeys',
 } as const;
 export type DrillLevel = (typeof DrillLevel)[keyof typeof DrillLevel];
 
@@ -42,6 +54,8 @@ export const DRILL_UNITS: Readonly<Record<DrillLevel, string>> = {
   [DrillLevel.Bass]: 'u4',
   [DrillLevel.HandsTogether]: 'u5',
   [DrillLevel.Keys]: 'u7',
+  [DrillLevel.Accidentals]: 'u8',
+  [DrillLevel.MoreKeys]: 'u12',
 };
 
 /** The levels open now, easiest first. */
@@ -60,14 +74,21 @@ interface Position {
   hand: Hand;
   /** Lowest first: fingers 1–5 for the right hand, 5–1 for the left. */
   notes: readonly NoteString[];
-  /** Key signature (sharps positive, flats negative); its major key is where the music ends. */
+  /** Key signature (sharps positive, flats negative). */
   keyFifths: number;
+  /** The music ends on the signature's minor key note rather than its major one. */
+  minor: boolean;
 }
 
 const position = (hand: Hand, keyFifths: number, ...notes: NoteString[]): Position => ({
   hand,
   notes,
   keyFifths,
+  minor: false,
+});
+const minorPosition = (hand: Hand, keyFifths: number, ...notes: NoteString[]): Position => ({
+  ...position(hand, keyFifths, ...notes),
+  minor: true,
 });
 
 /** C major around middle C (both clefs' first positions, Units 1–4). */
@@ -86,6 +107,18 @@ const G_MAJOR_LEFT = position(Hand.Left, 1, 'C4', 'D4', 'E4', 'F#4', 'G4');
 const G_MAJOR_LEFT_LOW = position(Hand.Left, 1, 'G3', 'A3', 'B3', 'C4', 'D4');
 const F_MAJOR_RIGHT = position(Hand.Right, -1, 'F4', 'G4', 'A4', 'Bb4', 'C5');
 const F_MAJOR_LEFT = position(Hand.Left, -1, 'F3', 'G3', 'A3', 'Bb3', 'C4');
+/** A minor (Unit 8), from its key note. */
+const A_MINOR_RIGHT = minorPosition(Hand.Right, 0, 'A4', 'B4', 'C5', 'D5', 'E5');
+/** Unit 12's keys, each from its key note. */
+const D_MAJOR_RIGHT = position(Hand.Right, 2, 'D4', 'E4', 'F#4', 'G4', 'A4');
+const D_MAJOR_LEFT = position(Hand.Left, 2, 'D3', 'E3', 'F#3', 'G3', 'A3');
+const B_FLAT_MAJOR_RIGHT = position(Hand.Right, -2, 'Bb3', 'C4', 'D4', 'Eb4', 'F4');
+const B_FLAT_MAJOR_LEFT = position(Hand.Left, -2, 'Bb2', 'C3', 'D3', 'Eb3', 'F3');
+const A_MINOR_LEFT = minorPosition(Hand.Left, 0, 'A2', 'B2', 'C3', 'D3', 'E3');
+const E_MINOR_RIGHT = minorPosition(Hand.Right, 1, 'E4', 'F#4', 'G4', 'A4', 'B4');
+const E_MINOR_LEFT = minorPosition(Hand.Left, 1, 'E3', 'F#3', 'G3', 'A3', 'B3');
+const D_MINOR_RIGHT = minorPosition(Hand.Right, -1, 'D4', 'E4', 'F4', 'G4', 'A4');
+const D_MINOR_LEFT = minorPosition(Hand.Left, -1, 'D3', 'E3', 'F3', 'G3', 'A3');
 
 /** A bar's rhythm, in beats (quarter notes); negative: a rest. */
 type BarRhythm = readonly number[];
@@ -130,6 +163,8 @@ interface LevelPlan {
   tempo: number;
   /** Hands together: the left hand plays the bass of each bar in this position. */
   bass?: Position;
+  /** One or two neighbor notes a half step below, written with a sharp. */
+  neighbors?: boolean;
 }
 
 const PLANS: Readonly<Record<DrillLevel, LevelPlan>> = {
@@ -158,6 +193,28 @@ const PLANS: Readonly<Record<DrillLevel, LevelPlan>> = {
     rhythm: RhythmKind.Mixed,
     tempo: 66,
   },
+  [DrillLevel.Accidentals]: {
+    positions: [C_RIGHT, C_LEFT, A_MINOR_RIGHT],
+    rhythm: RhythmKind.Plain,
+    tempo: 60,
+    neighbors: true,
+  },
+  [DrillLevel.MoreKeys]: {
+    positions: [
+      D_MAJOR_RIGHT,
+      D_MAJOR_LEFT,
+      B_FLAT_MAJOR_RIGHT,
+      B_FLAT_MAJOR_LEFT,
+      A_MINOR_RIGHT,
+      A_MINOR_LEFT,
+      E_MINOR_RIGHT,
+      E_MINOR_LEFT,
+      D_MINOR_RIGHT,
+      D_MINOR_LEFT,
+    ],
+    rhythm: RhythmKind.Mixed,
+    tempo: 66,
+  },
 };
 
 const BARS = 4;
@@ -169,6 +226,8 @@ export interface Drill {
   score: Score;
   /** The hands it's for. */
   hands: HandFilter;
+  /** It's in a minor key (the key signature's relative minor). */
+  minor: boolean;
 }
 
 /** The drill for this level and seed (always the same one). */
@@ -178,7 +237,9 @@ export function makeDrill(level: DrillLevel, seed: number): Drill {
   const melodyAt = pick(random, plan.positions);
   const rhythm = barRhythms(random, plan.rhythm);
   const lengths = rhythm.flat().filter((beats) => beats > 0);
-  const tune = melody(random, melodyAt, lengths.length);
+  const { tune, sharpened } = plan.neighbors
+    ? withNeighbors(random, melodyAt, lengths.length)
+    : { tune: melody(random, melodyAt, lengths.length), sharpened: new Set<number>() };
 
   const notes: ScoreNote[] = [];
   let beat = 0;
@@ -186,8 +247,11 @@ export function makeDrill(level: DrillLevel, seed: number): Drill {
   for (const beats of rhythm.flat()) {
     if (beats > 0) {
       const at = tune[index]!;
+      const pitch = pitchOf(melodyAt.notes[at]!);
       notes.push({
-        pitch: pitchOf(melodyAt.notes[at]!),
+        pitch: sharpened.has(index)
+          ? makePitch(pitch.step, (pitch.alter + 1) as Alter, pitch.octave)
+          : pitch,
         start: beat,
         duration: beats,
         hand: melodyAt.hand,
@@ -212,6 +276,7 @@ export function makeDrill(level: DrillLevel, seed: number): Drill {
       ...(melodyAt.keyFifths !== 0 && { keyFifths: melodyAt.keyFifths }),
     },
     hands: plan.bass ? HandFilter.Both : melodyAt.hand,
+    minor: melodyAt.minor,
   };
 }
 
@@ -261,6 +326,8 @@ function barRhythms(random: Random, kind: RhythmKind): BarRhythm[] {
 
 /** The key note's pitch class (C = 0) for a key signature: its major key. */
 const tonicOf = (keyFifths: number) => (((keyFifths * 7) % 12) + 12) % 12;
+/** The key note where a position's music ends: the major key's, or its relative minor's. */
+const keyNoteOf = (at: Position) => (tonicOf(at.keyFifths) + (at.minor ? 9 : 0)) % 12;
 
 /** Moves from one finger to the next, by how many keys, with how often they come. */
 const MOVES: readonly (readonly [number, number])[] = [
@@ -295,9 +362,9 @@ function melody(random: Random, at: Position, count: number): number[] {
   const pitchClasses = midis.map(pitchClass);
   /** An augmented fourth (C to F#, Bb to E) is hard to hear and sing: never leap one. */
   const tritone = (from: number, to: number) => Math.abs(midis[to]! - midis[from]!) === TRITONE;
-  const tonicClass = tonicOf(at.keyFifths);
+  const tonicClass = keyNoteOf(at);
   const tonic = pitchClasses.indexOf(tonicClass);
-  const chord = [0, 4, 7].map((interval) => (tonicClass + interval) % 12);
+  const chord = [0, at.minor ? 3 : 4, 7].map((interval) => (tonicClass + interval) % 12);
   const chordTones = pitchClasses.flatMap((pc, index) => (chord.includes(pc) ? [index] : []));
   const fits = (index: number) => index >= 0 && index < at.notes.length;
 
@@ -328,6 +395,48 @@ function melody(random: Random, at: Position, count: number): number[] {
     const awkward = hasLeapAfterLeap(whole) || tritone(last, approach);
     if (attempt >= MELODY_TRIES || !awkward) return whole;
   }
+}
+
+/**
+ * A melody (keys of the position, by index) with one or two neighbor notes: a key, the one a
+ * whole step below raised a half step, and the key again (Unit 8: E, D♯, E). Returns the
+ * indexes of the notes to sharpen. The neighbors stay clear of the ending.
+ */
+function withNeighbors(
+  random: Random,
+  at: Position,
+  count: number,
+): { tune: number[]; sharpened: Set<number> } {
+  const midis = at.notes.map((note) => pitchOf(note).midi);
+  let tune = melody(random, at, count);
+  for (let attempt = 1; attempt <= MELODY_TRIES; attempt++) {
+    const sharpened = new Set<number>();
+    const result = [...tune];
+    // A figure on note i: i, i + 1 (the neighbor) and i + 2, before the last two notes.
+    const fitsAt = (notes: readonly number[], i: number) => {
+      const key = notes[i]!;
+      if (key < 1 || midis[key]! - midis[key - 1]! !== 2) return false;
+      const next = notes[i + 3];
+      if (next === undefined || Math.abs(next - key) > 3) return false;
+      if (Math.abs(midis[next]! - midis[key]!) === TRITONE) return false;
+      const changed = [...notes];
+      changed.splice(i + 1, 2, key - 1, key);
+      return !hasLeapAfterLeap(changed);
+    };
+    let spots = Array.from({ length: Math.max(0, count - 5) }, (_, i) => i).filter((i) =>
+      fitsAt(result, i),
+    );
+    const wanted = random() < 0.5 ? 2 : 1;
+    while (spots.length > 0 && sharpened.size < wanted) {
+      const i = pick(random, spots);
+      result.splice(i + 1, 2, result[i]! - 1, result[i]!);
+      sharpened.add(i + 1);
+      spots = spots.filter((j) => (j > i + 2 || j + 2 < i) && fitsAt(result, j));
+    }
+    if (sharpened.size > 0) return { tune: result, sharpened };
+    tune = melody(random, at, count);
+  }
+  return { tune, sharpened: new Set() };
 }
 
 /** Chords for the bass: on the key note (I), the fourth (IV) and the fifth (V). */

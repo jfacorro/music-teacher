@@ -43,6 +43,10 @@
     "u11": {
       "title": "Por todo el teclado",
       "description": "Mover las manos: cambios de posición, saltos de octava, arpegios en {c}, {g} y {f} mayor, y una mano que cruza por encima de la otra."
+    },
+    "u12": {
+      "title": "Más tonalidades",
+      "description": "Las tonalidades de {d} mayor y {bFlat} mayor, los relativos menores, las escalas menores natural y armónica de {a}, {e} y {d}, y la lectura con estas armaduras."
     }
   },
   "lessons": {
@@ -99,7 +103,12 @@
     "u11-l2": "Saltos de octava",
     "u11-l3": "Arpegios en {c}",
     "u11-l4": "Arpegios en {g} y {f}",
-    "u11-l5": "Cruzar las manos"
+    "u11-l5": "Cruzar las manos",
+    "u12-l1": "{d} mayor",
+    "u12-l2": "{bFlat} mayor",
+    "u12-l3": "Relativos menores",
+    "u12-l4": "La menor armónica",
+    "u12-l5": "Leer en otras tonalidades"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -125,6 +134,7 @@
     "pedal": "Pedal de resonancia",
     "shifts": "Cambios de posición",
     "arpeggios": "Arpegios",
+    "key-signatures": "Armaduras",
     "sight-reading": "Lectura a primera vista",
     "ear-training": "Oído musical"
   }

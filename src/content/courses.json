@@ -355,6 +355,47 @@
           "skills": ["shifts", "arpeggios"]
         }
       ]
+    },
+    {
+      "id": "u12",
+      "level": "earlyIntermediate",
+      "textVars": {
+        "d": "D4",
+        "bFlat": "Bb4",
+        "a": "A4",
+        "e": "E4"
+      },
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u12-l1",
+          "titleVars": {
+            "d": "D4"
+          },
+          "skills": ["scales", "key-signatures"]
+        },
+        {
+          "id": "u12-l2",
+          "titleVars": {
+            "bFlat": "Bb4"
+          },
+          "skills": ["scales", "key-signatures", "thumb-under"]
+        },
+        {
+          "id": "u12-l3",
+          "skills": ["minor-keys", "scales", "key-signatures"]
+        },
+        {
+          "id": "u12-l4",
+          "skills": ["minor-keys", "scales", "accidentals"]
+        },
+        {
+          "id": "u12-l5",
+          "skills": ["key-signatures", "minor-keys"]
+        }
+      ]
     }
   ]
 }
