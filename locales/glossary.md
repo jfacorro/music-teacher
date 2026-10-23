@@ -38,6 +38,8 @@ system setting (`src/i18n/naming.ts`).
 | Fermata                                       | fermata                                              | calderón                                                |
 | Ritardando (rit.) / a tempo                   | ritardando (rit.) / a tempo                          | ritardando (rit.) / a tempo                             |
 | Strain (a section of a rag)                   | strain                                               | sección                                                 |
+| Contrary motion                               | contrary motion                                      | movimiento contrario                                    |
+| Hand independence                             | hand independence                                    | independencia de las manos                              |
 | Velocity (how hard a key is hit)              | velocity                                             | velocidad                                               |
 | Digital piano                                 | digital piano                                        | piano digital                                           |
 | MIDI keyboard                                 | MIDI keyboard                                        | teclado MIDI                                            |

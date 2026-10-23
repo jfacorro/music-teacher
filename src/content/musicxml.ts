@@ -448,6 +448,8 @@ function barlinesFor(
   const sides = new Map<number, { left?: Barline; right?: Barline }>();
   const length = beatsPerMeasure(score.timeSignature);
   const barAt = (beat: number) => Math.min(measureCount - 1, Math.round(beat / length));
+  // The bar a repeat or ending closes on: the last one, when it closes at the end of the music.
+  const lastBarBefore = (beat: number) => Math.min(measureCount, Math.round(beat / length)) - 1;
   const add = (bar: number, side: 'left' | 'right', barline: Barline) => {
     const current = sides.get(bar) ?? {};
     sides.set(bar, { ...current, [side]: { ...current[side], ...barline } });
@@ -455,14 +457,14 @@ function barlinesFor(
   for (const repeat of score.repeats ?? []) {
     if (repeat.start > 0)
       add(barAt(repeat.start), 'left', { style: 'heavy-light', repeat: 'forward' });
-    const last = barAt(repeat.end) - 1;
+    const last = lastBarBefore(repeat.end);
     add(last, 'right', { style: 'light-heavy', repeat: 'backward' });
     if (!repeat.endings) continue;
     const [first, second] = repeat.endings;
     add(barAt(first.start), 'left', { ending: { number: 1, type: 'start' } });
     add(last, 'right', { ending: { number: 1, type: 'stop' } });
     add(barAt(second.start), 'left', { ending: { number: 2, type: 'start' } });
-    add(barAt(second.end) - 1, 'right', { ending: { number: 2, type: 'discontinue' } });
+    add(lastBarBefore(second.end), 'right', { ending: { number: 2, type: 'discontinue' } });
   }
   return new Map(
     [...sides].map(([bar, { left, right }]) => [

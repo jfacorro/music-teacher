@@ -39,6 +39,7 @@ export const SKILLS = [
   'pedal',
   'shifts',
   'arpeggios',
+  'independence',
   'key-signatures',
   'compound-time',
   'syncopation',

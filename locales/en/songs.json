@@ -82,5 +82,13 @@
   "the-entertainer": {
     "title": "The Entertainer",
     "composer": "Scott Joplin"
+  },
+  "minuet-in-g-as-written": {
+    "title": "Minuet in G (as written)",
+    "composer": "Christian Petzold"
+  },
+  "minuet-in-g-minor": {
+    "title": "Minuet in G minor",
+    "composer": "Christian Petzold"
   }
 }

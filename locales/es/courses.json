@@ -51,6 +51,10 @@
     "u13": {
       "title": "Ritmo y forma",
       "description": "Semicorcheas y ritmos con puntillo, el compás de 6/8, la síncopa, las repeticiones con primera y segunda casilla, el ritardando y el calderón."
+    },
+    "u14": {
+      "title": "Dos manos, dos líneas",
+      "description": "Cada mano con su propia parte: la melodía en la mano izquierda, el movimiento contrario, dos melodías a la vez y los minuetos de Petzold tal como los escribió."
     }
   },
   "lessons": {
@@ -117,7 +121,11 @@
     "u13-l2": "El compás de 6/8",
     "u13-l3": "La síncopa",
     "u13-l4": "Repeticiones y casillas",
-    "u13-l5": "Ritardando y calderón"
+    "u13-l5": "Ritardando y calderón",
+    "u14-l1": "La melodía en la mano izquierda",
+    "u14-l2": "Movimiento contrario",
+    "u14-l3": "Dos melodías a la vez",
+    "u14-l4": "Minueto en {g} menor"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -143,6 +151,7 @@
     "pedal": "Pedal de resonancia",
     "shifts": "Cambios de posición",
     "arpeggios": "Arpegios",
+    "independence": "Independencia de las manos",
     "key-signatures": "Armaduras",
     "compound-time": "Compás de 6/8",
     "syncopation": "Síncopa",

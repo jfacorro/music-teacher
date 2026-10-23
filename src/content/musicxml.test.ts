@@ -142,6 +142,20 @@ describe('scoreToMusicXml', () => {
     expect(xml).not.toContain('a tempo');
   });
 
+  it('closes a repeat that ends with the music on its last bar', () => {
+    const { xml } = scoreToMusicXml({
+      ...scoreOf([
+        ['C4', 0, 4],
+        ['D4', 4, 4],
+      ]),
+      repeats: [{ start: 0, end: 8 }],
+    });
+    const bar = (number: number) =>
+      new RegExp(`<measure number="${number}">(.*?)</measure>`).exec(xml)![1]!;
+    expect(bar(1)).not.toContain('<barline');
+    expect(bar(2)).toMatch(/<repeat direction="backward"\/><\/barline>$/);
+  });
+
   it('beams 6/8 in groups of three eighths, sixteenths with a second beam', () => {
     const score = scoreOf(
       [

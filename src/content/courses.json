@@ -425,6 +425,34 @@
           "skills": ["steady-tempo", "form"]
         }
       ]
+    },
+    {
+      "id": "u14",
+      "level": "earlyIntermediate",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u14-l1",
+          "skills": ["independence", "lh-position"]
+        },
+        {
+          "id": "u14-l2",
+          "skills": ["independence", "hands-together", "scales"]
+        },
+        {
+          "id": "u14-l3",
+          "skills": ["independence", "hands-together"]
+        },
+        {
+          "id": "u14-l4",
+          "titleVars": {
+            "g": "G4"
+          },
+          "skills": ["independence", "minor-keys"]
+        }
+      ]
     }
   ]
 }

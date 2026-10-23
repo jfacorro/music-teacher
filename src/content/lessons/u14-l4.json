@@ -1,0 +1,40 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "gMinor",
+      "textVars": {
+        "g": "G4",
+        "bFlat": "Bb4",
+        "eFlat": "Eb4",
+        "fSharp": "F#4"
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "gMinorMinuet",
+      "song": "minuet-in-g-minor",
+      "mode": "wait",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "gMinorMinuetInTime",
+      "song": "minuet-in-g-minor",
+      "mode": "tempo",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "tempo": 88,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

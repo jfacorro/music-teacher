@@ -731,7 +731,8 @@
       "intervals": "Two notes (intervals)",
       "melodies": "Short melodies",
       "chords": "Major or minor chords",
-      "rhythms": "Rhythms"
+      "rhythms": "Rhythms",
+      "scales": "Major or minor scales"
     },
     "lockedLevel": "{level} (after “{unit}”)",
     "locked": "Ear training opens when you finish the unit “{unit}”.",
@@ -743,7 +744,8 @@
       "melodies": "You’ll hear a short melody: play it back, starting on the lit key.",
       "chords": "You’ll hear a chord: play it on the lit root, or choose major or minor.",
       "notesAlone": "You’ll hear a note: find it on the keyboard.",
-      "rhythms": "You’ll hear a short rhythm: tap it back on any key, at your own speed."
+      "rhythms": "You’ll hear a short rhythm: tap it back on any key, at your own speed.",
+      "scales": "You’ll hear a scale going up from the lit key: is it major or minor?"
     },
     "listen": "Listen…",
     "ask": {
@@ -753,7 +755,8 @@
       "chords": "Play the chord on the lit root, or choose major or minor.",
       "chordsMic": "Major or minor? Choose one.",
       "notesAlone": "Which note was it?",
-      "rhythms": "Tap the rhythm back on any key."
+      "rhythms": "Tap the rhythm back on any key.",
+      "scales": "Major or minor? Choose one."
     },
     "wrong": "Not that one: you played {note}.",
     "wrongChord": "Not quite.",
@@ -765,7 +768,8 @@
       "interval": "Right: {from} up to {to}, a {interval}.",
       "melody": "Right, that’s the melody!",
       "chord": "Right: {chord}.",
-      "rhythm": "That’s the rhythm!"
+      "rhythm": "That’s the rhythm!",
+      "scale": "Right: the {scale} scale."
     },
     "quality": {
       "major": "Major",

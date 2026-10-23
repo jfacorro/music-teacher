@@ -83,7 +83,13 @@ describe('ear training levels', () => {
       EarLevel.Intervals,
       EarLevel.Melodies,
     ]);
-    expect(openEarLevels(UNITS, doneUpTo('u6'))).toEqual(
+    expect(openEarLevels(UNITS, doneUpTo('u6'))).toEqual([
+      EarLevel.Notes,
+      EarLevel.Intervals,
+      EarLevel.Melodies,
+      EarLevel.Chords,
+    ]);
+    expect(openEarLevels(UNITS, doneUpTo('u12'))).toEqual(
       EAR_LEVELS.filter((level) => level !== EarLevel.Rhythms),
     );
     expect(openEarLevels(UNITS, doneUpTo('u13'))).toEqual(EAR_LEVELS);
@@ -184,6 +190,26 @@ describe('earQuestions', () => {
     const qualities = new Set(questions.map((q) => q.quality));
     expect(qualities).toEqual(new Set([ChordQuality.Major, ChordQuality.Minor]));
     for (const question of questions) expect(question.given).toBe(question.notes[0]);
+  });
+});
+
+describe('scales', () => {
+  it('play a major or minor scale going up from its key note, shown', () => {
+    const questions = earQuestions(EarLevel.Scales, EVERYTHING, seededRandom(4));
+    expect(questions).toHaveLength(QUESTIONS[EarLevel.Scales]);
+    expect(new Set(questions.map((q) => q.quality))).toEqual(
+      new Set([ChordQuality.Major, ChordQuality.Minor]),
+    );
+    for (const q of questions) {
+      expect(q.notes).toHaveLength(8);
+      expect(q.notes.at(-1)! - q.notes[0]!).toBe(12);
+      expect(q.given).toBe(q.notes[0]);
+      // A minor scale's third is a half step lower than a major one's.
+      expect(q.notes[2]! - q.notes[0]!).toBe(q.quality === ChordQuality.Major ? 4 : 3);
+    }
+    const notes = promptNotes(questions[0]!);
+    expect(notes.map((note) => note.at)).toEqual([...notes.keys()].map((i) => i * 380));
+    expect(answerQuality(questions[0]!, questions[0]!.quality!)).toBe(Answer.Right);
   });
 });
 
