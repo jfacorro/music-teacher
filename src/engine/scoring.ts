@@ -1,5 +1,6 @@
 /** Accuracy, stars, timing and per-measure stats (PLAN.md §6.3). */
 import type { DynamicsSummary } from './dynamics';
+import type { PedalSummary } from './pedal';
 import type { TouchSummary } from './touch';
 import { Hand, type Measure, type ScoreNote } from './score';
 import { timingOf, type Grade, type TimingWindows, Timing } from './timing';
@@ -58,6 +59,8 @@ export interface Summary extends Tally {
   dynamics: DynamicsSummary | null;
   /** Null without staccato, accents, tenuto or slurs, or without a MIDI keyboard. */
   touch: TouchSummary | null;
+  /** Null without pedal marks, or without a MIDI keyboard. */
+  pedal: PedalSummary | null;
   /**
    * Each hand on its own, when both were played, with the wrong keys put down to each hand;
    * null for one hand.
@@ -119,6 +122,7 @@ export function summarize(
     timing: windows ? timingSummary(errorsMs, windows) : null,
     dynamics: null,
     touch: null,
+    pedal: null,
     hands: byHand(notes, outcomes, wrongHands),
   };
 }

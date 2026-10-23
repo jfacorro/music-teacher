@@ -41,7 +41,8 @@ export function ExerciseStepView({
   const passes = (summary: Summary) =>
     summary.stars >= step.pass.minStars &&
     (!step.pass.dynamics || summary.dynamics === null || summary.dynamics.ok) &&
-    (!step.pass.touch || summary.touch === null || summary.touch.ok);
+    (!step.pass.touch || summary.touch === null || summary.touch.ok) &&
+    (!step.pass.pedal || summary.pedal === null || summary.pedal.ok);
 
   return (
     <div className="lesson__step">
@@ -63,6 +64,7 @@ export function ExerciseStepView({
         )}
         {step.pass.dynamics && <span className="muted">{t('lesson.passDynamics')}</span>}
         {step.pass.touch && <span className="muted">{t('lesson.passTouch')}</span>}
+        {step.pass.pedal && <span className="muted">{t('lesson.passPedal')}</span>}
       </div>
       <PracticeRun
         score={step.score}

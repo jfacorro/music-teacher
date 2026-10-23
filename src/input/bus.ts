@@ -1,12 +1,21 @@
-import { type InputSource, type NoteEvent, type NoteListener, NoteEventType } from './types';
+import {
+  type InputSource,
+  type NoteEvent,
+  type NoteListener,
+  NoteEventType,
+  type PedalEvent,
+  type PedalListener,
+} from './types';
 
 /**
  * Fan-out point between input sources and everything that consumes notes. Regular listeners
  * only hear the active sources (see input/routing); raw listeners hear every source, which
- * calibration needs to compare the microphone with MIDI.
+ * calibration needs to compare the microphone with MIDI. The sustain pedal has listeners of its
+ * own, also only for the active sources.
  */
 const listeners = new Set<NoteListener>();
 const rawListeners = new Set<NoteListener>();
+const pedalListeners = new Set<PedalListener>();
 let isActive: (source: InputSource) => boolean = () => true;
 
 export function emitNote(event: NoteEvent): void {
@@ -23,6 +32,16 @@ export function subscribeNotes(listener: NoteListener): () => void {
 export function subscribeRawNotes(listener: NoteListener): () => void {
   rawListeners.add(listener);
   return () => rawListeners.delete(listener);
+}
+
+export function emitPedal(event: PedalEvent): void {
+  if (!isActive(event.source)) return;
+  for (const listener of pedalListeners) listener(event);
+}
+
+export function subscribePedal(listener: PedalListener): () => void {
+  pedalListeners.add(listener);
+  return () => pedalListeners.delete(listener);
 }
 
 export function setActiveSources(filter: (source: InputSource) => boolean): void {

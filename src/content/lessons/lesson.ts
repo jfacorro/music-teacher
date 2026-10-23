@@ -12,7 +12,7 @@
  * - rhythm:   tap any key along with a rhythm pattern (see engine/rhythm.ts)
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
-import { type Finger, Hand, hasTouchMarks, type Score } from '../../engine/score';
+import { type Finger, Hand, hasPedalMarks, hasTouchMarks, type Score } from '../../engine/score';
 import { GradedMode, HandFilter } from '../../engine/session';
 import { describeValues, isValueOf } from '../../lib/values';
 import { ChordQuality } from '../../theory/chords';
@@ -118,12 +118,11 @@ export interface ExerciseStep extends StepBase {
   /** The song this exercise plays, if any (for its title). */
   song: SongId | null;
   metronome: boolean;
-  /** `dynamics`: the loud and soft parts must be played as written too (on a MIDI keyboard). */
   /**
-   * `dynamics` / `touch`: the loud and soft parts / the staccato, slurs, accents and tenuto
-   * must be played as written too (on a MIDI keyboard).
+   * `dynamics` / `touch` / `pedal`: the loud and soft parts / the staccato, slurs, accents and
+   * tenuto / the pedal marks must be played as written too (on a MIDI keyboard).
    */
-  pass: { minStars: number; dynamics: boolean; touch: boolean };
+  pass: { minStars: number; dynamics: boolean; touch: boolean; pedal: boolean };
 }
 
 /** The staff a quiz card is shown on; "auto": treble from middle C up, bass below. */
@@ -343,6 +342,7 @@ async function exercise(
       ...passRule(data, location),
       dynamics: passDynamics(data, score, location),
       touch: passTouch(data, score, location),
+      pedal: passPedal(data, score, location),
     },
   };
 }
@@ -360,6 +360,18 @@ function passTouch(data: Record<string, unknown>, score: Score, location: string
     );
   }
   return pass.touch;
+}
+
+function passPedal(data: Record<string, unknown>, score: Score, location: string): boolean {
+  const pass = object(data.pass ?? {}, at(location, 'pass'));
+  if (pass.pedal === undefined) return false;
+  if (typeof pass.pedal !== 'boolean') {
+    throw new LessonError(at(location, 'pass › pedal'), 'expected true or false');
+  }
+  if (pass.pedal && !hasPedalMarks(score)) {
+    throw new LessonError(at(location, 'pass › pedal'), 'the score has no pedal marks');
+  }
+  return pass.pedal;
 }
 
 function passDynamics(data: Record<string, unknown>, score: Score, location: string): boolean {

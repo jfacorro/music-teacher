@@ -56,6 +56,15 @@ export function slurNotes(notes: readonly ScoreNote[], slur: Slur): ScoreNote[] 
     .sort((a, b) => a.start - b.start || a.pitch.midi - b.pitch.midi);
 }
 
+/**
+ * The sustain pedal held from `down` to `up` (beats). A mark starting where the one before ends
+ * is a pedal change: up as the new notes play, down again just after.
+ */
+export interface PedalMark {
+  down: number;
+  up: number;
+}
+
 export interface Measure {
   start: number;
   length: number;
@@ -75,6 +84,13 @@ export interface Score {
   dynamics?: ScoreDynamics;
   /** Phrases played legato. */
   slurs?: Slur[];
+  /** Where the sustain pedal is held, in order, not overlapping. */
+  pedal?: PedalMark[];
+}
+
+/** The score marks where to use the sustain pedal. */
+export function hasPedalMarks(score: Score): boolean {
+  return (score.pedal ?? []).length > 0;
 }
 
 /** The score asks for a touch: staccato, accents, tenuto or slurs, among these notes. */

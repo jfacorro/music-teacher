@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { HeldNotes } from '../bus';
+import { emitPedal, HeldNotes } from '../bus';
 import { parseMidiMessage, MidiMessageKind } from './parse';
 import { InputSource } from '../types';
 
@@ -169,10 +169,17 @@ function closePort(): void {
   if (!port) return;
   port.removeEventListener('midimessage', handleMessage);
   held.releaseAll();
+  setSustain(false);
   // Closing frees the device for other apps (Windows allows one app per device).
   port.close().catch(() => {});
   port = null;
-  useMidi.setState({ sustain: false });
+}
+
+/** The pedal went down or up (only changes count: a pedal may send values in between). */
+function setSustain(down: boolean, time = performance.now()): void {
+  if (useMidi.getState().sustain === down) return;
+  useMidi.setState({ sustain: down });
+  emitPedal({ down, time, source: InputSource.Midi });
 }
 
 function handleStateChange(event: MIDIConnectionEvent): void {
@@ -182,8 +189,9 @@ function handleStateChange(event: MIDIConnectionEvent): void {
   if (port && event.port.id === port.id && event.port.state === MidiConnection.Disconnected) {
     port.removeEventListener('midimessage', handleMessage);
     held.releaseAll();
+    setSustain(false);
     port = null;
-    useMidi.setState({ connection: MidiConnection.Disconnected, sustain: false });
+    useMidi.setState({ connection: MidiConnection.Disconnected });
     return;
   }
   const { connection } = useMidi.getState();
@@ -203,7 +211,7 @@ function handleMessage(event: MIDIMessageEvent): void {
       held.off(message.note, event.timeStamp);
       break;
     case MidiMessageKind.Sustain:
-      useMidi.setState({ sustain: message.down });
+      setSustain(message.down, event.timeStamp);
       break;
   }
 }

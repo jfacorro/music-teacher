@@ -648,6 +648,84 @@ describe('PracticeSession: touch', () => {
   });
 });
 
+describe('PracticeSession: the pedal', () => {
+  /** Two half notes, the pedal changed between them. */
+  const pedaled = () => {
+    const t = setup(
+      [
+        ['C4', 0, 2],
+        ['D4', 2, 2],
+      ],
+      { mode: PracticeMode.Wait },
+    );
+    t.score.pedal = [
+      { down: 0, up: 2 },
+      { down: 2, up: 4 },
+    ];
+    const pedal = (down: boolean) =>
+      t.session.handlePedal({ down, time: t.now, source: InputSource.Midi });
+    return { ...t, pedal };
+  };
+
+  it('grades a change: up as the new note plays, down again just after', () => {
+    const t = pedaled();
+    t.session.play();
+    t.at(0);
+    t.press(C4);
+    t.wait(100);
+    t.pedal(true);
+    t.release(C4);
+    t.at(2);
+    t.pedal(false); // while the music waits for D
+    t.press(D4);
+    t.wait(150);
+    t.pedal(true);
+    t.release(D4);
+    t.at(4.01);
+    expect(t.session.getState().summary?.pedal).toEqual({
+      kinds: [
+        { kind: 'down', right: 2, total: 2 },
+        { kind: 'up', right: 1, total: 1 },
+      ],
+      bars: [],
+      ok: true,
+      silent: false,
+    });
+  });
+
+  it('calls a change pressed before the new note wrong', () => {
+    const t = pedaled();
+    t.session.play();
+    t.at(0);
+    t.press(C4);
+    t.pedal(true);
+    t.release(C4);
+    t.at(2);
+    t.pedal(false);
+    t.pedal(true); // before D: it doesn't join the notes
+    t.press(D4);
+    t.release(D4);
+    t.at(4.01);
+    expect(t.session.getState().summary?.pedal?.kinds[0]).toEqual({
+      kind: 'down',
+      right: 1,
+      total: 2,
+    });
+  });
+
+  it('has no pedal to report through the microphone', () => {
+    const t = pedaled();
+    t.session.play();
+    for (const pitch of [C4, D4]) {
+      t.at(t.score.notes.find((n) => n.pitch.midi === pitch)!.start);
+      t.session.handleNote(noteOn(pitch, t.now, InputSource.Mic));
+      t.session.handleNote(noteOff(pitch, t.now + 100, InputSource.Mic));
+    }
+    t.at(4.01);
+    expect(t.session.getState().summary?.pedal).toBeNull();
+  });
+});
+
 describe('PracticeSession: wrong keys of each hand', () => {
   it('puts a wrong key down to the hand playing the nearest note', () => {
     const t = setup(

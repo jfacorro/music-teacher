@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "pedal": "The right pedal is the sustain pedal. Pressing it lifts the dampers off the strings: the notes keep sounding after you let go of the keys, and new ones join them. Keep your heel on the floor and press with the front of your foot, all the way down. With a MIDI keyboard and a pedal plugged into it, the app checks when you press it and lift it.",
+    "marks": "The music marks the pedal with a line under the bottom staff: press it where the line starts, keep it down, and lift it where the line ends. Notes without a line are played with the pedal up.",
+    "pressHold": "Press the pedal with the first note and hold it through the bar: the notes ring together. Lift it as the second bar begins, play those notes clean, and press it again for the last chord.",
+    "pressHoldInTime": "Now in time with the metronome."
+  }
+}

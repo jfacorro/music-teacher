@@ -68,10 +68,18 @@ interface Event {
   notes: ScoreNote[]; // empty = rest
 }
 
-/** A dynamic or a hairpin's start or end, written under the top staff. */
+/**
+ * A dynamic or a hairpin's start or end, written under the top staff; or a pedal mark's start,
+ * change or end, under the bottom one.
+ */
 interface Direction {
   at: number; // divisions
-  /** At the same spot: a hairpin's end (0), then a level (1), then a hairpin's start (2). */
+  /** The staff it's written with. */
+  staff: number;
+  /**
+   * At the same spot: a hairpin's or pedal's end (0), then a level or pedal change (1), then a
+   * hairpin's or pedal's start (2).
+   */
   order: number;
   xml: string;
 }
@@ -90,7 +98,11 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
     events: eventsFor(score.notes.filter((n) => n.hand === staff.hand)),
   }));
 
-  const directions = options.illustration ? [] : directionsFor(score, staves[0]);
+  const directions = options.illustration
+    ? []
+    : [...directionsFor(score, staves[0]), ...pedalFor(score, staves.at(-1))].sort(
+        (a, b) => a.at - b.at || a.order - b.order,
+      );
   const slurs = slurMarks(score);
 
   const measures: string[] = [];
@@ -102,8 +114,10 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
     if (m === 0) parts.push(attributes(score, staves, options.rhythm ?? false));
     linesByStaff.forEach(({ staff, events }, i) => {
       if (i > 0) parts.push(`<backup><duration>${measureDivs}</duration></backup>`);
-      // Directions go with the top staff; the last bar also takes any after the music ends.
-      const inBar = i === 0 ? directions.filter((d) => d.at >= from && (d.at < to || last)) : [];
+      // Directions go with their staff; the last bar also takes any after the music ends.
+      const inBar = directions.filter(
+        (d) => d.staff === staff.number && d.at >= from && (d.at < to || last),
+      );
       parts.push(
         ...measureNotes(
           events,
@@ -263,24 +277,57 @@ function directionsFor(score: Score, staff: StaffInfo | undefined): Direction[] 
     `<direction placement="below"><direction-type>${type}</direction-type>` +
     `<staff>${staff.number}</staff></direction>`;
   const divs = (beat: number) => Math.round(beat * DIVISIONS);
-  const directions: Direction[] = [
+  return [
     ...score.dynamics.marks.map((mark) => ({
       at: divs(mark.beat),
+      staff: staff.number,
       order: 1,
       xml: direction(`<dynamics><${mark.dynamic}/></dynamics>`),
     })),
     ...score.dynamics.hairpins.flatMap((hairpin) => [
       {
         at: divs(hairpin.start),
+        staff: staff.number,
         order: 2,
         xml: direction(
           `<wedge type="${hairpin.kind === HairpinKind.Crescendo ? 'crescendo' : 'diminuendo'}"/>`,
         ),
       },
-      { at: divs(hairpin.end), order: 0, xml: direction('<wedge type="stop"/>') },
+      {
+        at: divs(hairpin.end),
+        staff: staff.number,
+        order: 0,
+        xml: direction('<wedge type="stop"/>'),
+      },
     ]),
   ];
-  return directions.sort((a, b) => a.at - b.at || a.order - b.order);
+}
+
+/**
+ * The pedal marks as MusicXML directions under `staff` (the bottom one): a bracket line from
+ * where the pedal goes down to where it comes up, notched where it's changed.
+ */
+function pedalFor(score: Score, staff: StaffInfo | undefined): Direction[] {
+  if (!staff) return [];
+  const marks = score.pedal ?? [];
+  const at = (beat: number) => Math.round(beat * DIVISIONS);
+  const direction = (type: string, order: number, beat: number): Direction => ({
+    at: at(beat),
+    staff: staff.number,
+    order,
+    xml:
+      '<direction placement="below"><direction-type>' +
+      `<pedal type="${type}" line="yes"/></direction-type>` +
+      `<staff>${staff.number}</staff></direction>`,
+  });
+  return marks.flatMap((mark, i) => {
+    const changed = i > 0 && at(marks[i - 1]!.up) === at(mark.down);
+    const changes = at(marks[i + 1]?.down ?? -1) === at(mark.up);
+    return [
+      direction(changed ? 'change' : 'start', changed ? 1 : 2, mark.down),
+      ...(changes ? [] : [direction('stop', 0, mark.up)]),
+    ];
+  });
 }
 
 /** A length in divisions as written note values (longest first). */

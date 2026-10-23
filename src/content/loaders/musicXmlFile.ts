@@ -3,7 +3,8 @@
  * one track per staff of each part, notes with their written spelling and fingering, tied
  * notes joined into one.
  *
- * Grace notes, cue notes and unpitched (percussion) notes are left out. Repeats are played
+ * Dynamics, articulations, slurs and pedal marks are kept. Grace notes, cue notes and unpitched
+ * (percussion) notes are left out. Repeats are played
  * once, as written. A pickup bar is padded to a whole bar, so the bars line up with the time
  * signature.
  */
@@ -14,7 +15,7 @@ import {
   type ScoreDynamics,
 } from '../../engine/dynamics';
 import { isDynamic, isMarking } from '../../engine/markings';
-import { beatsPerMeasure, type Finger, Articulation } from '../../engine/score';
+import { beatsPerMeasure, type Finger, Articulation, type PedalMark } from '../../engine/score';
 import { type Alter, makePitch, type Pitch, type Step, STEPS } from '../../theory/pitch';
 import {
   type ImportedMusic,
@@ -53,6 +54,8 @@ interface Context {
   /** Dynamics and hairpins as written, in beats (before padding a pickup bar). */
   marks: DynamicMark[];
   hairpins: Hairpin[];
+  /** Pedal marks as written, in beats (before padding a pickup bar). */
+  pedal: PedalMark[];
 }
 
 interface Part {
@@ -92,6 +95,7 @@ export function parseMusicXml(text: string): ImportedMusic {
     repeats: false,
     marks: [],
     hairpins: [],
+    pedal: [],
   };
   const parts = childrenOf(root, 'part').map((part, index) =>
     readPart(part, partNames.get(part.getAttribute('id')) ?? null, context, index === 0),
@@ -140,6 +144,7 @@ export function parseMusicXml(text: string): ImportedMusic {
     timeSignature,
     keyFifths: context.keyFifths ?? 0,
     ...dynamicsOf(context, pickup),
+    ...pedalOf(context, pickup),
     tracks,
     warnings,
   };
@@ -153,6 +158,8 @@ function readPart(element: Element, name: string | null, context: Context, first
   const tied = new Map<string, ImportedNote>();
   /** Where an open crescendo or diminuendo started. */
   let wedge: { start: number; kind: HairpinKind } | null = null;
+  /** Where the pedal went down, while it's held. */
+  let pedal: number | null = null;
 
   for (const measure of childrenOf(element, 'measure')) {
     let cursor = 0; // beats from the start of the bar
@@ -177,6 +184,7 @@ function readPart(element: Element, name: string | null, context: Context, first
           if (item.tagName === 'direction') {
             const at = barStart + cursor + durationOf(item, divisions, 'offset');
             wedge = readDynamics(item, at, wedge, context);
+            pedal = readPedal(item, at, pedal, context);
           }
           break;
         }
@@ -355,6 +363,38 @@ function readDynamics(
     }
   }
   return wedge;
+}
+
+/** Reads a direction's pedal marks at `at`; returns where the pedal is held from, if it is. */
+function readPedal(
+  direction: Element,
+  at: number,
+  open: number | null,
+  context: Context,
+): number | null {
+  let down = open;
+  for (const type of childrenOf(direction, 'direction-type')) {
+    const kind = childOf(type, 'pedal')?.getAttribute('type');
+    if ((kind === 'stop' || kind === 'change') && down !== null && at > down) {
+      context.pedal.push({ down, up: at });
+      down = null;
+    }
+    if (kind === 'start' || kind === 'change') down = at;
+  }
+  return down;
+}
+
+/** The pedal marks on the sixteenth-note grid, moved like the notes for a pickup bar. */
+function pedalOf(context: Context, pickup: number): { pedal?: PedalMark[] } {
+  const snap = (beat: number) => Math.round((beat + pickup) / IMPORT_GRID) * IMPORT_GRID;
+  const pedal: PedalMark[] = [];
+  for (const mark of [...context.pedal].sort((a, b) => a.down - b.down)) {
+    const down = snap(mark.down);
+    const up = snap(mark.up);
+    const previous = pedal.at(-1);
+    if (up > down && (!previous || down >= previous.up)) pedal.push({ down, up });
+  }
+  return pedal.length > 0 ? { pedal } : {};
 }
 
 /**

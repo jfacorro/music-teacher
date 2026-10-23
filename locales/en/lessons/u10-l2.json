@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "change": "When the chord changes, the pedal must change too, or the two chords blur together. Lift it exactly as you play the new chord, and press it again just after: the foot comes up as the hand goes down, then follows it. This is called legato pedaling, and it joins chords the hand can’t join by itself. The notch in the pedal line shows where.",
+    "changeChords": "Four chords, the pedal changed for each one. Your hand can come up a little early before each new chord: the pedal keeps the sound until the change.",
+    "changeChordsInTime": "Now in time: up on the beat with the new chord, down right after.",
+    "bass": "Now with a bass note in the left hand under each chord. Both hands play together; the foot changes after them.",
+    "bothHands": "Both hands, the pedal changed after every chord.",
+    "bothHandsInTime": "And in time."
+  }
+}

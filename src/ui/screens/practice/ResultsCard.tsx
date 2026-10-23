@@ -10,6 +10,7 @@ import { Stars } from '../../components/Stars';
 import { ICONS } from '../../icons';
 import { BarHeatmap } from './BarHeatmap';
 import { DynamicsBreakdown } from './DynamicsBreakdown';
+import { PedalBreakdown } from './PedalBreakdown';
 import { TouchBreakdown } from './TouchBreakdown';
 import { TimingBreakdown } from './TimingBreakdown';
 
@@ -25,6 +26,8 @@ interface ResultsCardProps {
   hasDynamics?: boolean;
   /** The music has staccato, slurs, accents or tenuto (graded only on a MIDI keyboard). */
   hasTouch?: boolean;
+  /** The music has pedal marks (graded only on a MIDI keyboard). */
+  hasPedal?: boolean;
   /** The metronome clicked along: steadily late notes may mean the clicks came late. */
   clicks?: boolean;
   /** Extra actions next to Try again. */
@@ -39,6 +42,7 @@ export function ResultsCard({
   onSelectBar,
   hasDynamics = false,
   hasTouch = false,
+  hasPedal = false,
   clicks = false,
   children,
 }: ResultsCardProps) {
@@ -97,6 +101,11 @@ export function ResultsCard({
         <TouchBreakdown touch={summary.touch} />
       ) : (
         hasTouch && <p className="muted">{t('practice.touch.midiOnly')}</p>
+      )}
+      {summary.pedal ? (
+        <PedalBreakdown pedal={summary.pedal} />
+      ) : (
+        hasPedal && <p className="muted">{t('practice.pedal.midiOnly')}</p>
       )}
       {summary.measures.length > 1 && (
         <BarHeatmap measures={summary.measures} onSelect={onSelectBar} />

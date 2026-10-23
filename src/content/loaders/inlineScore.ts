@@ -6,7 +6,9 @@
  *     "dynamics": [{ "beat": 0, "mark": "p" }, { "beat": 8, "mark": "f" }],
  *     "hairpins": [{ "from": 4, "to": 8, "kind": "crescendo" }],
  *     "keyFifths": 1,    (key signature: sharps positive, flats negative)
- *     "slurs": [{ "from": 0, "to": 4, "hand": "R" }] }   (legato: that hand's notes from-to)
+ *     "slurs": [{ "from": 0, "to": 4, "hand": "R" }],   (legato: that hand's notes from-to)
+ *     "pedal": [{ "down": 0, "up": 4 }, { "down": 4, "up": 8 }] }   (the sustain pedal; a mark
+ *     starting where one ends is a pedal change)
  *   A note can have "articulations": ["staccato" | "accent" | "tenuto"].
  *
  * Validates everything once at load time and reports problems with their location, e.g.
@@ -16,6 +18,7 @@ import {
   Articulation,
   type Finger,
   Hand,
+  type PedalMark,
   type Score,
   type ScoreNote,
   type Slur,
@@ -52,6 +55,7 @@ export function parseInlineScore(input: unknown, location: string): Score {
 
   const markings = parseMarkings(data.markings, at(location, 'markings'));
   const slurs = parseSlurs(data.slurs, at(location, 'slurs'));
+  const pedal = parsePedal(data.pedal, at(location, 'pedal'));
   const dynamics = parseDynamics(data, location);
   if (
     data.keyFifths !== undefined &&
@@ -68,7 +72,26 @@ export function parseInlineScore(input: unknown, location: string): Score {
     ...(dynamics && { dynamics }),
     ...(data.keyFifths !== undefined && { keyFifths: data.keyFifths as number }),
     ...(slurs.length > 0 && { slurs }),
+    ...(pedal.length > 0 && { pedal }),
   };
+}
+
+function parsePedal(input: unknown, location: string): PedalMark[] {
+  const marks = list(input, location).map((item, index) => {
+    const where = at(location, `[${index}]`);
+    const mark = expectObject(item, where);
+    const down = expectNumber(mark.down, at(where, 'down'), { min: 0 });
+    const up = expectNumber(mark.up, at(where, 'up'), { min: down, exclusive: true });
+    return { down, up };
+  });
+  marks.sort((a, b) => a.down - b.down);
+  marks.forEach((mark, index) => {
+    const next = marks[index + 1];
+    if (next && next.down < mark.up - 1e-9) {
+      throw new ScoreError(location, 'pedal marks must not overlap');
+    }
+  });
+  return marks;
 }
 
 function parseSlurs(input: unknown, location: string): Slur[] {

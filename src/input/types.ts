@@ -27,6 +27,16 @@ export interface NoteEvent {
 
 export type NoteListener = (event: NoteEvent) => void;
 
+/** The sustain pedal going down or up (a MIDI keyboard's control change 64). */
+export interface PedalEvent {
+  down: boolean;
+  /** ms on the performance.now() timeline, like `NoteEvent.time`. */
+  time: number;
+  source: InputSource;
+}
+
+export type PedalListener = (event: PedalEvent) => void;
+
 /** Which instrument the app listens to: MIDI, the microphone, or whichever is connected. */
 export const InputMode = {
   Auto: 'auto',

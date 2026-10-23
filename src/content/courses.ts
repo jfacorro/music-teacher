@@ -36,6 +36,7 @@ export const SKILLS = [
   'accidentals',
   'minor-keys',
   'touch',
+  'pedal',
   'sight-reading',
   'ear-training',
 ] as const;

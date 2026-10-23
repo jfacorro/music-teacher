@@ -37,6 +37,39 @@ describe('parseInlineScore', () => {
     ).toThrow(/slurs › \[0\] › to/);
   });
 
+  it('reads pedal marks, in order, and rejects overlapping ones', () => {
+    const score = parseInlineScore(
+      {
+        ...valid,
+        pedal: [
+          { down: 2, up: 4 },
+          { down: 0, up: 2 },
+        ],
+      },
+      'test',
+    );
+    expect(score.pedal).toEqual([
+      { down: 0, up: 2 },
+      { down: 2, up: 4 },
+    ]);
+    expect(parseInlineScore(valid, 'test')).not.toHaveProperty('pedal');
+    expect(() => parseInlineScore({ ...valid, pedal: [{ down: 2, up: 2 }] }, 'song')).toThrow(
+      /pedal › \[0\] › up/,
+    );
+    expect(() =>
+      parseInlineScore(
+        {
+          ...valid,
+          pedal: [
+            { down: 0, up: 3 },
+            { down: 2, up: 4 },
+          ],
+        },
+        'song',
+      ),
+    ).toThrow(/pedal: pedal marks must not overlap/);
+  });
+
   it('parses notes into pitches, keeping spelling and fingering', () => {
     const score = parseInlineScore(valid, 'test');
     expect(score.tempo).toBe(100);

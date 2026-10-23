@@ -1,0 +1,11 @@
+{
+  "steps": {
+    "broken": "Broken chords sound fuller with the pedal: each note keeps ringing while the next one plays, so the whole chord sounds. Change it when the chord changes, with the first note of the new one.",
+    "brokenLeft": "The broken chords from Unit 6, the pedal changed every bar.",
+    "brokenLeftInTime": "Now in time.",
+    "bassChord": "Another way to break a chord: a low bass note first, then the rest of the chord above it. The pedal keeps the bass sounding under the chord, and while the hand moves to the next bass note.",
+    "bassAndChord": "The left hand of the next piece: bass and chord, the pedal changed every bar.",
+    "gymnopedie": "“Gymnopédie No. 1” by Erik Satie, from 1888, a whole step lower than the original so it sits under the hands: the left hand rocks between two chords, a new pedal every bar, and the melody floats above them. Slow and calm.",
+    "gymnopedieInTime": "Now in time, slowly."
+  }
+}

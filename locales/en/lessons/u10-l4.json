@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "notPedal": "The pedal isn’t for everything. Held through a scale or a melody that moves by step, it blurs the notes into a smudge; under staccato notes, it keeps them from being short. Where the music has no pedal line, keep your foot resting on the pedal without pressing it.",
+    "pedalOrNot": "Pedal for the broken chord, none for the scale or the staccato notes, pedal for the next chord and again for the last one.",
+    "pedalOrNotInTime": "Now in time.",
+    "choose": "With both hands, the same choice: the pedal under the chords, and none under the quick scale between them.",
+    "chordsAndScale": "Chords with the pedal, the scale clean.",
+    "chordsAndScaleInTime": "And in time."
+  }
+}

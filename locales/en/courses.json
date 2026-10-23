@@ -35,6 +35,10 @@
     "u9": {
       "title": "Touch",
       "description": "How each key is played: legato and slurs, staccato, accents, tenuto and ties."
+    },
+    "u10": {
+      "title": "The sustain pedal",
+      "description": "The right pedal: its marks, changing it with each chord, under broken chords, and when to leave it up."
     }
   },
   "lessons": {
@@ -82,7 +86,11 @@
     "u9-l2": "Staccato",
     "u9-l3": "Staccato and legato",
     "u9-l4": "Accents and tenuto",
-    "u9-l5": "Ties"
+    "u9-l5": "Ties",
+    "u10-l1": "Pressing and lifting",
+    "u10-l2": "Changing the pedal",
+    "u10-l3": "Pedal and broken chords",
+    "u10-l4": "When not to pedal"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -105,6 +113,7 @@
     "accidentals": "Accidentals",
     "minor-keys": "Minor keys",
     "touch": "Touch",
+    "pedal": "Sustain pedal",
     "sight-reading": "Sight-reading",
     "ear-training": "Ear training"
   }

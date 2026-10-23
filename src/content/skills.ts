@@ -85,6 +85,7 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'scales',
     'thumb-under',
     'touch',
+    'pedal',
   ],
   [SkillArea.Rhythm]: ['note-values', 'rests', 'eighth-notes', 'steady-tempo'],
   [SkillArea.Reading]: ['treble-clef', 'bass-clef', 'grand-staff', 'accidentals', 'sight-reading'],

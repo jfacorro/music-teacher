@@ -1,0 +1,8 @@
+{
+  "steps": {
+    "pedal": "El pedal de la derecha es el pedal de resonancia. Al pisarlo, los apagadores se separan de las cuerdas: las notas siguen sonando después de soltar las teclas, y las nuevas se suman. Apoya el talón en el piso y pisa con la parte delantera del pie, hasta el fondo. Con un teclado MIDI que tenga el pedal conectado, la app comprueba cuándo lo pisas y cuándo lo sueltas.",
+    "marks": "La música marca el pedal con una línea debajo del pentagrama de abajo: písalo donde empieza la línea, mantenlo pisado y suéltalo donde termina. Las notas sin línea se tocan sin pedal.",
+    "pressHold": "Pisa el pedal con la primera nota y mantenlo durante todo el compás: las notas suenan juntas. Suéltalo al empezar el segundo compás, toca esas notas limpias y vuelve a pisarlo para el último acorde.",
+    "pressHoldInTime": "Ahora a tempo, con el metrónomo."
+  }
+}

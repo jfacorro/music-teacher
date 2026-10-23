@@ -478,7 +478,9 @@
       "time": "{elapsed} / {total}",
       "pause": "Pause",
       "resume": "Resume",
-      "paused": "Your last run, paused"
+      "paused": "Your last run, paused",
+      "pedal": "At the bottom: the pedal, as marked (gray) and as you held it.",
+      "pedalLabel": "Ped."
     },
     "touch": {
       "heading": "Touch",
@@ -496,6 +498,21 @@
       },
       "bars": "{count, plural, one {Bar to work on: {bars}} other {Bars to work on: {bars}}}",
       "midiOnly": "Touch (staccato, slurs, accents) is checked with a MIDI keyboard."
+    },
+    "pedal": {
+      "heading": "Pedal",
+      "kinds": {
+        "down": "Pressed",
+        "up": "Lifted",
+        "off": "Without pedal"
+      },
+      "counts": {
+        "down": "{right} of {total} in time",
+        "up": "{right} of {total} in time",
+        "off": "{right} of {total} notes clear"
+      },
+      "silent": "No pedal was heard. Is it plugged into your keyboard?",
+      "midiOnly": "The pedal is checked with a MIDI keyboard."
     },
     "lateSound": "Most notes came in late, by about {ms} ms. If you were playing with the clicks, they may be reaching you late: Bluetooth headphones and speakers delay sound, and the browser can’t tell.",
     "unmeasuredOutput": "Sound goes to {output}, and the clicks’ timing hasn’t been measured for it. If it’s Bluetooth, the clicks will come late, and so will notes played with them.",
@@ -534,7 +551,8 @@
       "tries": "{count, plural, one {# try} other {# tries}}",
       "allTip": "Every try, with its date"
     },
-    "passTouch": "Play the staccato and slurred notes as written too (with a MIDI keyboard)."
+    "passTouch": "Play the staccato and slurred notes as written too (with a MIDI keyboard).",
+    "passPedal": "Use the pedal as marked too (with a MIDI keyboard)."
   },
   "welcome": {
     "title": "Welcome to Piano Teacher",
