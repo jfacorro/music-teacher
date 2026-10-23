@@ -1021,8 +1021,53 @@ input[aria-invalid='true'] {
   line-height: 1.1;
 }
 
+/* Match the note, on the Tuner page: the note to sing, how long it's been held, and a hint. */
+.match {
+  margin-block-end: 1rem;
+}
+
+.match__live {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  margin-block-end: 0.75rem;
+}
+
+.match__note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.match__note strong {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.match__message {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* The results, centered as the other exercises' are. */
+.match--results {
+  text-align: center;
+}
+
+.match--results .button-row {
+  justify-content: center;
+}
+
+.match__work-on {
+  margin-block-start: 0;
+  padding: 0;
+  list-style: none;
+}
+
 /* How long the note has been held, up to the half second that counts. */
-.voice-range__hold {
+.hold-bar {
   display: block;
   inline-size: 100%;
   block-size: 0.35rem;
@@ -1031,7 +1076,7 @@ input[aria-invalid='true'] {
   overflow: hidden;
 }
 
-.voice-range__hold span {
+.hold-bar span {
   display: block;
   block-size: 100%;
   background: var(--accent);

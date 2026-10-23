@@ -90,6 +90,7 @@ export function ProgressScreen() {
     if (kind === ResultKind.MySong) {
       return mySongs.find((song) => String(song.id) === id)?.title ?? t('progress.deletedSong');
     }
+    if (kind === ResultKind.Voice) return t('tuner.match.title');
     const found = findLesson(id);
     return found ? courseText(`lessons.${id}`, found.lesson.titleVars) : id;
   };

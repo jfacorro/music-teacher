@@ -7,7 +7,7 @@
  */
 import { create } from 'zustand';
 import { HeldNotes } from '../bus';
-import { NoteDetector, type PitchReading } from './detector';
+import { NoteDetector, type PitchReading, READING_EVERY_HOPS } from './detector';
 import workletUrl from './capture-processor.js?url&no-inline';
 import { InputSource, NoteEventType } from '../types';
 
@@ -55,7 +55,6 @@ export const useMic = create<MicState>(() => ({
 }));
 
 const HOP_SIZE = 512;
-const UI_EVERY_HOPS = 4;
 /** Hops used to estimate the audio clock → performance clock offset (~5 s). */
 const CLOCK_WINDOW = 470;
 
@@ -235,7 +234,7 @@ function handleHop(current: Capture, samples: Float32Array, frame: number): void
   }
 
   for (const listener of levelListeners) listener(detector.levelDb);
-  if (++current.hops % UI_EVERY_HOPS === 0) {
+  if (++current.hops % READING_EVERY_HOPS === 0) {
     useMic.setState({ levelDb: detector.levelDb, reading: detector.reading });
   }
 }

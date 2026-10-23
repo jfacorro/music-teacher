@@ -814,6 +814,33 @@
     "newLow": "New low: {note}",
     "newHigh": "New high: {note}",
     "addToRange": "Add to my range",
-    "micUnavailable": "The tuner needs a microphone, and none could be started."
+    "micUnavailable": "The tuner needs a microphone, and none could be started.",
+    "match": {
+      "title": "Match the note",
+      "intro": "The app plays a note from your range: sing it back and hold it in tune for half a second. Any octave counts. Ten notes, each counting when you match it within six seconds.",
+      "noRange": "Find your range first, so the notes fit your voice.",
+      "begin": "Start",
+      "progress": "Note {current} of {total}",
+      "listen": "Listen…",
+      "sing": "Sing it back.",
+      "higher": "Higher",
+      "lower": "Lower",
+      "hold": "In tune: hold it",
+      "matched": "Matched!",
+      "matchedLate": "Matched, but too late to count.",
+      "late": "This one won’t count now: keep trying, or skip it.",
+      "hearAgain": "Hear it again",
+      "skip": "Skip",
+      "results": "Results",
+      "matchedCount": "{count} of {total, plural, one {# note} other {# notes}} matched in time.",
+      "allGood": "Every note matched in time, and in tune.",
+      "toWorkOn": "Notes to work on",
+      "workOn": "{note}: {how}",
+      "notInTime": "not matched in time",
+      "notInTimeLow": "not matched in time, sung too low",
+      "notInTimeHigh": "not matched in time, sung too high",
+      "save": "Save recording",
+      "saveTip": "Saves this run’s audio and notes as a file, to improve how singing is judged (fixtures/voice/)."
+    }
   }
 }

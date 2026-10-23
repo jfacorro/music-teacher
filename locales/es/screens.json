@@ -814,6 +814,33 @@
     "newLow": "Nueva nota más grave: {note}",
     "newHigh": "Nueva nota más aguda: {note}",
     "addToRange": "Agregar a mi extensión",
-    "micUnavailable": "El afinador necesita un micrófono, y no se pudo iniciar ninguno."
+    "micUnavailable": "El afinador necesita un micrófono, y no se pudo iniciar ninguno.",
+    "match": {
+      "title": "Canta la misma nota",
+      "intro": "La aplicación toca una nota de tu extensión: cántala y sostenla afinada medio segundo. Vale cualquier octava. Son diez notas, y cada una cuenta si la alcanzas en seis segundos.",
+      "noRange": "Primero encuentra tu extensión, para que las notas se ajusten a tu voz.",
+      "begin": "Empezar",
+      "progress": "Nota {current} de {total}",
+      "listen": "Escucha…",
+      "sing": "Cántala.",
+      "higher": "Más agudo",
+      "lower": "Más grave",
+      "hold": "Afinada: sostenla",
+      "matched": "¡Muy bien!",
+      "matchedLate": "Bien, pero demasiado tarde para que cuente.",
+      "late": "Esta ya no cuenta: sigue intentando o sáltala.",
+      "hearAgain": "Escuchar otra vez",
+      "skip": "Saltar",
+      "results": "Resultados",
+      "matchedCount": "{count} de {total, plural, one {# nota} other {# notas}} alcanzadas a tiempo.",
+      "allGood": "Todas las notas alcanzadas a tiempo y afinadas.",
+      "toWorkOn": "Notas para practicar",
+      "workOn": "{note}: {how}",
+      "notInTime": "no la alcanzaste a tiempo",
+      "notInTimeLow": "no la alcanzaste a tiempo, cantaste más grave",
+      "notInTimeHigh": "no la alcanzaste a tiempo, cantaste más agudo",
+      "save": "Guardar la grabación",
+      "saveTip": "Guarda el audio y las notas de esta ronda en un archivo, para mejorar cómo se evalúa el canto (fixtures/voice/)."
+    }
   }
 }

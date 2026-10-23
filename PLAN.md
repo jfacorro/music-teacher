@@ -832,10 +832,14 @@ One app, as IDEAS.md suggests: a switch between piano and voice, the piano scree
 
 What singing can be graded on: pitch, timing, steadiness and loudness. The app can't judge technique (breath support, tension, vowels, a healthy sound), and lessons say so: a teacher, or listening back to your recordings, covers it. Exercises stay in your range, and lessons are short, with a warm-up first.
 
-**6.1 Match the note**
+**6.1 Match the note** — built (the check with your voice is still to do)
 - On the Tuner page: the app plays a note from your saved range, and you sing it and hold it in tune (within ±50 cents, any octave) for half a second. Ten notes a run, scored like the other exercises (accuracy and stars), with the notes to work on and whether they went flat or sharp. Without a saved range, it asks for the range test first.
 - The first graded singing, small and on its own like the range test and the Tuner: it shows early whether held notes are judged fairly with your voice. Recordings of your voice become test fixtures, kept local like the piano's (`fixtures/mic/`).
 - The app plays, then listens, so it works without headphones.
+- Built as `engine/matchNote.ts` (the notes of a run, the matcher and the summary; pure, tested) and `ui/screens/MatchTheNote.tsx`, a card on the Tuner page between the tuner and the range. The notes come from the saved range, a whole step short of each end when it spans at least an octave and a major third, each as evenly as possible and never twice in a row. Each is played on the piano for 1.2 s, and the microphone is ignored until it has stopped ringing.
+- A note is matched when it's held within ±50 cents of any of its octaves for half a second (gaps up to 150 ms allowed, as in the range test). It counts when it's matched within six seconds of being heard; **Hear it again** starts those over, and a later match moves on without counting. While singing, the card shows the note to sing (also marked on the range's keyboard), a bar filling as it's held, and a hint: Higher, Lower, or In tune: hold it. **Skip** moves on.
+- Results: stars from the notes matched in time (60, 80 and 95%, as elsewhere), and the notes to work on, low to high: those not matched in time (saying whether they were sung too low or too high), and those held outside the tuner's ±25-cent zone (how many cents flat or sharp). Runs are saved (`voice:matchNote`) and count toward practice time; Recent practice lists them as "Match the note".
+- Recordings: the results can save the run's audio, with the notes asked and when the app listened for each (`input/mic/voiceRecording.ts`), into `fixtures/voice/` (kept local, like the piano's). `input/mic/voiceFixtures.test.ts` replays them through the detector and the matcher and prints how many notes match in time; a recording's `minMatched` makes that a check.
 
 **6.2 Piano or voice: Voice Units 1–2**
 - An `instrument` setting, and the switch in the top bar as the first part of the path ("Piano Teacher / Voice / Learn / Unit 1 · Matching one note"), on every page, even with the sidebar collapsed or on a phone. Its list says where you are in each ("Unit 9 of 14", "Not started · find your range first").
@@ -877,6 +881,7 @@ Still to decide, by 6.2: the app's name. "Piano Teacher" no longer fits once it 
 - [ ] Songs show and keep their lyrics, in English and Spanish.
 - [ ] A singing course from one note to songs (Voice Units 1–8), in English and Spanish.
 - [ ] Verified with your voice and microphone.
+  - [ ] TODO (user): sing a run of **Match the note** (Tuner page): are notes matched when in tune and not when off, is six seconds enough, do Higher and Lower point the right way? Then save a recording into `fixtures/voice/`.
 
 ---
 

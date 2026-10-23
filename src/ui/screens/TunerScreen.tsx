@@ -10,6 +10,7 @@ import {
   TRACE_MS,
   tunerNote,
 } from '../../engine/tuner';
+import { Hand } from '../../engine/score';
 import { HeldNote } from '../../engine/vocalRange';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { MicStatus, startMic, stopMic, useMic } from '../../input/mic/micInput';
@@ -18,6 +19,7 @@ import { pitchFromMidi } from '../../theory/pitch';
 import { keyboardLayout } from '../keyboard/layout';
 import { PianoKeyboard } from '../keyboard/PianoKeyboard';
 import { KeyLabels } from '../keyboard/styles';
+import { MatchTheNote } from './MatchTheNote';
 
 /** The keyboard shown, as for the vocal range: from a low bass to a high soprano (E2–C6). */
 const LOWEST_KEY = 40;
@@ -50,6 +52,8 @@ export function TunerScreen() {
   const [trace, setTrace] = useState<TracePoint[]>([]);
   /** The furthest notes held steadily (as in the range test) beyond the range, to add to it. */
   const [beyond, setBeyond] = useState<Beyond>({ low: null, high: null });
+  /** The note to sing in Match the note, shown on the keyboard. */
+  const [target, setTarget] = useState<number | null>(null);
   const layout = useMemo(() => keyboardLayout(LOWEST_KEY, HIGHEST_KEY), []);
   const noteName = (midi: number, octave = true) => names.name(pitchFromMidi(midi), { octave });
 
@@ -127,6 +131,8 @@ export function TunerScreen() {
         </div>
       </div>
 
+      <MatchTheNote onTarget={setTarget} />
+
       <div className="card">
         <h2>{t('tuner.range')}</h2>
         {range ? (
@@ -168,6 +174,7 @@ export function TunerScreen() {
         <PianoKeyboard
           layout={layout}
           pressed={new Set(note === null ? [] : [note.midi])}
+          expected={new Map(target === null ? [] : [[target, { hand: Hand.Right }]])}
           completed={
             new Set(
               range
