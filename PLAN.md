@@ -766,8 +766,11 @@ Built one area at a time, each with the engine work it needs and the unit that u
 - "Gymnopédie No. 1" (Erik Satie, 1888), the first 14 bars, a whole step down in C so it needs no new key signature: the left hand's bass and chord rock between F major 7 and C major 7, the pedal changed every bar, the melody coming in on the third. The song test now also checks that a song's pedal marks have been taught.
 - Built as `engine/pedal.ts` (checks and summary; pure, tested), `engine/score.ts` (`PedalMark`), pedal events on the input bus (`input/bus.ts › subscribePedal`, sent by `input/midi/midiInput.ts`), the session keeping the pedal's presses, `content/musicxml.ts` and `loaders/musicXmlFile.ts` (out and in), `engine/recording.ts` (the pedal held, `soundingEnd`), `ui/screens/practice/PedalBreakdown.tsx`.
 
-**5.3 Around the keyboard: Unit 11**
+**5.3 Around the keyboard: Unit 11** — built
 - Unit 11 (5 lessons): position shifts mid-phrase; octave jumps; arpeggios (C, G and F major, hands separately, the thumb passing under across octaves); crossing over. Song: "Prelude in C" (Bach, BWV 846, the opening), with the pedal.
+- Built as: crossing over is one hand crossing over the other (fingers crossing over the thumb came with the scales, in Unit 7). A note can say its hand crosses over to play it (`"crossed": true`): it's written on the other hand's staff, the first of each stretch marked L.H. or R.H. (M.I. / M.D. in Spanish). That staff still has one line, so a crossing hand's notes don't overlap the other hand's there; practicing that hand alone writes them on its own staff.
+- Unit 11 (late elementary): moving the hand (a shift during a half note, right hand up, left hand down); octave jumps (a phrase and its echo an octave up; Unit 6's chords over a bass jumping down an octave, with the pedal); arpeggios in C (two octaves up and back, right hand 1 2 3 1 2 3 5, left 5 4 2 1 3 2 1); arpeggios in G and F (the same fingering), then the Prelude; crossing over (hand over hand in C and G, the left hand over the top; then the right hand crossing below). New skills: position shifts, arpeggios.
+- "Prelude in C" (Johann Sebastian Bach, BWV 846, 1722), the first four bars: each chord's rising figure twice, written in eighth notes (sixteenths come in Unit 13), so two bars per chord, a new pedal for each. The left hand plays the figure's two lower notes in the bass staff, as Bach wrote them, the right hand the three above.
 
 **5.4 More keys: Unit 12**
 - Unit 12 (5 lessons): D major (two sharps) and B♭ major (two flats), their scales and fingerings; relative minors and minor scales (A, E and D minor, natural and harmonic); reading with these key signatures. Songs: "Musette in D" (Notebook for Anna Magdalena Bach), "Scarborough Fair" (D minor).
@@ -791,6 +794,8 @@ Every new song passes the "only what's taught" test, extended to articulation, s
   - [ ] TODO (user): once Unit 8 is finished, go through Unit 9’s lessons on the Casio (legato and slurs with "Aura Lee", staccato, both together with "Can-Can", accents and tenuto, ties).
   - [x] The pedal (5.2), built.
   - [ ] TODO (user): play "Gymnopédie No. 1" on the Casio from Song practice (sheet music, both hands, waiting), without the pedal: notes, fingering and the pedal lines read well.
+  - [ ] TODO (user): play "Prelude in C" on the Casio from Song practice (sheet music, both hands, waiting): the figures, fingering and pedal lines read well.
+  - [ ] TODO (user): at Unit 11, go through its lessons on the Casio (shifts, octave jumps, the arpeggios, crossing over with its L.H. and R.H. marks).
   - [ ] TODO (user): at Unit 10, go through its lessons on the Casio with the pedal plugged in (pressing and lifting, changing it, broken chords and "Gymnopédie No. 1", when not to pedal), and say whether the pedal changes are judged fairly.
 - [ ] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
 - [ ] Repeats play back as written, in practice, Listen and Compare.

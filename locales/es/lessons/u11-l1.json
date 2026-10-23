@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "shift": "Casi todas las melodías pasan de cinco notas, así que la mano se mueve mientras toca: un cambio de posición. La digitación muestra dónde. Aquí, después del {g} largo con el dedo 5, la mano sube para que el dedo 2 caiga en {a}. Muévete durante la nota larga y mira por delante adónde va la mano.",
+    "shiftRight": "Sube, mueve la mano durante la blanca y sigue en la nueva posición.",
+    "shiftRightInTime": "Ahora a tempo: el movimiento tiene que caber dentro de la blanca.",
+    "shiftLeft": "La mano izquierda se mueve igual. Aquí baja de {g} a {c}, luego se desplaza hacia abajo para que el dedo 2 caiga en {b}, y sigue en una posición nueva.",
+    "walkDown": "Baja, muévete durante la blanca, y sigue.",
+    "walkDownInTime": "Y a tempo."
+  }
+}

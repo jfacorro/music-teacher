@@ -76,6 +76,32 @@ describe('scoreToMusicXml', () => {
     ]);
   });
 
+  it('writes a crossing hand’s notes on the other staff, labeled once per crossing', () => {
+    const base = scoreOf([
+      ['C3', 0, 1, Hand.Left],
+      ['C4', 1, 1, Hand.Right],
+      ['C5', 2, 1, Hand.Left],
+      ['E5', 3, 1, Hand.Left],
+    ]);
+    const score = {
+      ...base,
+      notes: base.notes.map((note) => (note.pitch.midi >= 72 ? { ...note, crossed: true } : note)),
+    };
+    const notes = (xml: string, staff: number) =>
+      written(xml, staff).filter((note) => !note.startsWith('rest'));
+    const { xml, notes: index } = scoreToMusicXml(score, {
+      handLabel: (hand) => (hand === Hand.Left ? 'L.H.' : 'R.H.'),
+    });
+    expect(notes(xml, 1)).toEqual(['C4:quarter', 'C5:quarter', 'E5:quarter']);
+    expect(notes(xml, 2)).toEqual(['C3:quarter']);
+    expect(xml.match(/<words>L\.H\.<\/words>/g)).toHaveLength(1);
+    expect(index.get(noteKey(1, 2 * DIVISIONS, 72))?.hand).toBe(Hand.Left);
+    // The left hand alone keeps all its notes on its own staff.
+    const alone = scoreToMusicXml(score, { hands: [Hand.Left] }).xml;
+    expect(notes(alone, 1)).toEqual(['C3:quarter', 'C5:quarter', 'E5:quarter']);
+    expect(alone).not.toContain('<words>');
+  });
+
   it('writes a one-hand melody on a treble staff', () => {
     const { xml, staves } = scoreToMusicXml(
       scoreOf([

@@ -514,6 +514,10 @@
       "silent": "No pedal was heard. Is it plugged into your keyboard?",
       "midiOnly": "The pedal is checked with a MIDI keyboard."
     },
+    "crossedHand": {
+      "L": "L.H.",
+      "R": "R.H."
+    },
     "lateSound": "Most notes came in late, by about {ms} ms. If you were playing with the clicks, they may be reaching you late: Bluetooth headphones and speakers delay sound, and the browser can’t tell.",
     "unmeasuredOutput": "Sound goes to {output}, and the clicks’ timing hasn’t been measured for it. If it’s Bluetooth, the clicks will come late, and so will notes played with them.",
     "measureTiming": "Measure the timing"

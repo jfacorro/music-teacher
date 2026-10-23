@@ -514,6 +514,10 @@
       "silent": "No se oyó el pedal. ¿Está conectado a tu teclado?",
       "midiOnly": "El pedal se comprueba con un teclado MIDI."
     },
+    "crossedHand": {
+      "L": "M.I.",
+      "R": "M.D."
+    },
     "lateSound": "La mayoría de las notas llegaron tarde, unos {ms} ms. Si tocabas con los clics, puede que te lleguen tarde: los auriculares y altavoces Bluetooth retrasan el sonido, y el navegador no lo sabe.",
     "unmeasuredOutput": "El sonido sale por {output}, y la sincronización de los clics no se midió para esa salida. Si es Bluetooth, los clics sonarán tarde, y también las notas que toques con ellos.",
     "measureTiming": "Medir la sincronización"

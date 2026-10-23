@@ -87,8 +87,9 @@ export function MusicPicture({ score }: { score: Score }) {
         hands: STAVES[StaffClef.Grand].filter((hand) =>
           score.notes.some((note) => note.hand === hand),
         ),
+        handLabel: (hand) => t(`practice.crossedHand.${hand}`),
       }).xml,
-    [score],
+    [score, t],
   );
   const mostInABar = Math.max(
     BAR_BEATS,

@@ -314,6 +314,47 @@
           "skills": ["pedal", "touch"]
         }
       ]
+    },
+    {
+      "id": "u11",
+      "level": "lateElementary",
+      "textVars": {
+        "c": "C4",
+        "g": "G4",
+        "f": "F4"
+      },
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u11-l1",
+          "skills": ["shifts", "rh-position", "lh-position"]
+        },
+        {
+          "id": "u11-l2",
+          "skills": ["shifts", "pedal"]
+        },
+        {
+          "id": "u11-l3",
+          "titleVars": {
+            "c": "C4"
+          },
+          "skills": ["arpeggios", "thumb-under"]
+        },
+        {
+          "id": "u11-l4",
+          "titleVars": {
+            "g": "G4",
+            "f": "F4"
+          },
+          "skills": ["arpeggios", "thumb-under", "pedal"]
+        },
+        {
+          "id": "u11-l5",
+          "skills": ["shifts", "arpeggios"]
+        }
+      ]
     }
   ]
 }

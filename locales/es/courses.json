@@ -39,6 +39,10 @@
     "u10": {
       "title": "El pedal de resonancia",
       "description": "El pedal de la derecha: sus marcas, cómo cambiarlo con cada acorde, con acordes arpegiados y cuándo no usarlo."
+    },
+    "u11": {
+      "title": "Por todo el teclado",
+      "description": "Mover las manos: cambios de posición, saltos de octava, arpegios en {c}, {g} y {f} mayor, y una mano que cruza por encima de la otra."
     }
   },
   "lessons": {
@@ -90,7 +94,12 @@
     "u10-l1": "Pisar y soltar",
     "u10-l2": "Cambiar el pedal",
     "u10-l3": "Pedal y acordes arpegiados",
-    "u10-l4": "Cuándo no usar el pedal"
+    "u10-l4": "Cuándo no usar el pedal",
+    "u11-l1": "Mover la mano",
+    "u11-l2": "Saltos de octava",
+    "u11-l3": "Arpegios en {c}",
+    "u11-l4": "Arpegios en {g} y {f}",
+    "u11-l5": "Cruzar las manos"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -114,6 +123,8 @@
     "minor-keys": "Tonalidades menores",
     "touch": "El toque",
     "pedal": "Pedal de resonancia",
+    "shifts": "Cambios de posición",
+    "arpeggios": "Arpegios",
     "sight-reading": "Lectura a primera vista",
     "ear-training": "Oído musical"
   }

@@ -26,6 +26,11 @@ system setting (`src/i18n/naming.ts`).
 | Legato pedaling (change just after the chord) | legato pedaling                                      | pedal sincopado                                         |
 | Dampers (they stop the strings)               | dampers                                              | apagadores                                              |
 | Notes played without the pedal                | clear                                                | limpias                                                 |
+| Position shift (the hand moves)               | position shift                                       | cambio de posición                                      |
+| Octave jump                                   | octave jump                                          | salto de octava                                         |
+| Arpeggio (a chord spread up the keyboard)     | arpeggio                                             | arpegio                                                 |
+| Crossing over (one hand over the other)       | crossing over; hand over hand                        | cruzar las manos; mano sobre mano                       |
+| L.H. / R.H. (hand marks in the music)         | L.H. / R.H.                                          | M.I. / M.D.                                             |
 | Velocity (how hard a key is hit)              | velocity                                             | velocidad                                               |
 | Digital piano                                 | digital piano                                        | piano digital                                           |
 | MIDI keyboard                                 | MIDI keyboard                                        | teclado MIDI                                            |

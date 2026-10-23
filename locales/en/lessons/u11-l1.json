@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "shift": "Most melodies go beyond five notes, so the hand moves while it plays: a position shift. The fingering shows where. Here, after the long {g} played with finger 5, the hand moves up so finger 2 lands on {a}. Move during the long note, and look ahead to where the hand is going.",
+    "shiftRight": "Climb, move the hand during the half note, and carry on in the new position.",
+    "shiftRightInTime": "Now in time: the move has to fit inside the half note.",
+    "shiftLeft": "The left hand moves the same way. Here it walks down from {g} to {c}, then moves down so finger 2 lands on {b}, and carries on in a new position.",
+    "walkDown": "Down, move during the half note, and on.",
+    "walkDownInTime": "And in time."
+  }
+}

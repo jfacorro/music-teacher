@@ -98,8 +98,9 @@ export function SheetMusic({
         notation === SheetNotation.Names
           ? (note) => names.name(note.pitch, { octave: false })
           : undefined,
+      handLabel: (hand) => t(`practice.crossedHand.${hand}`),
     });
-  }, [score, notation, hands, names, rhythm]);
+  }, [score, notation, hands, names, rhythm, t]);
 
   // Render (again when the music or the color scheme changes).
   useEffect(() => {
