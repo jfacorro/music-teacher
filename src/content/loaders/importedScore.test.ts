@@ -87,6 +87,19 @@ describe('importedScore', () => {
     ]);
   });
 
+  it('plays repeats unrolled, keeping how they are written', () => {
+    const result = importedScore(
+      { ...music([bass]), repeats: [{ start: 0, end: 4 }] },
+      { hands: [TrackHand.Left], transpose: 0, tempo: 96 },
+    );
+    expect(notesOf(result)?.map(([note, start]) => [note, start])).toEqual([
+      ['C3', 0],
+      ['C3', 4],
+      ['G2', 8],
+    ]);
+    expect(result.score?.form?.written.repeats).toEqual([{ start: 0, end: 4 }]);
+  });
+
   it('keeps the pedal marks', () => {
     const pedal = [{ down: 0, up: 4 }];
     const result = importedScore(

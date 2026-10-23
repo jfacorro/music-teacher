@@ -2,12 +2,17 @@
  * Sheet music view (PLAN.md §2.1): the score rendered by OpenSheetMusicDisplay on one
  * horizontal line, with a cursor that follows the transport and scrolls along, and notes
  * colored by how they went (same colors as the falling notes).
+ *
+ * Music with repeats is drawn as written, while the transport plays it unrolled: the cursor goes
+ * back to the repeat's start when the music does, each note shows how it went the last time it
+ * was played, and bars are chosen and shaded as written (engine/form.ts).
  */
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { GraphicalNote, OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { DIVISIONS, noteKey, scoreToMusicXml } from '../../content/musicxml';
 import { SheetNotation } from '../../content/lessons';
+import { playedMeasureOf, writtenBeat, writtenMeasureOf } from '../../engine/form';
 import { Hand, type Score, type ScoreNote } from '../../engine/score';
 import { HandFilter, type LoopRange } from '../../engine/session';
 import { useNoteNames } from '../../i18n/useNoteNames';
@@ -84,15 +89,18 @@ export function SheetMusic({
   const scheme = useColorScheme();
   const names = useNoteNames();
 
+  const { form } = score;
+  // Drawn as written: repeats once, with their signs.
+  const written = form?.written ?? score;
   const music = useMemo(() => {
-    if (rhythm) return scoreToMusicXml(score, { rhythm: true });
+    if (rhythm) return scoreToMusicXml(written, { rhythm: true });
     const staves: Hand[] | undefined =
       notation === SheetNotation.Grand
         ? [Hand.Right, Hand.Left]
         : hands === HandFilter.Both
           ? undefined
           : [hands];
-    return scoreToMusicXml(score, {
+    return scoreToMusicXml(written, {
       hands: staves,
       noteLabel:
         notation === SheetNotation.Names
@@ -100,7 +108,7 @@ export function SheetMusic({
           : undefined,
       handLabel: (hand) => t(`practice.crossedHand.${hand}`),
     });
-  }, [score, notation, hands, names, rhythm, t]);
+  }, [written, notation, hands, names, rhythm, t]);
 
   // Render (again when the music or the color scheme changes).
   useEffect(() => {
@@ -137,6 +145,8 @@ export function SheetMusic({
       });
       await osmd.load(xml);
       if (cancelled) return;
+      // The cursor follows the music as written; repeats are followed by the played position.
+      osmd.EngravingRules.CursorIgnoreRepetitions = true;
       osmd.zoom = ZOOM;
       osmd.render();
       osmd.cursor.show();
@@ -159,8 +169,17 @@ export function SheetMusic({
   useEffect(() => {
     const sheet = rendered.current;
     if (!sheet || status !== LoadStatus.Ready) return;
+    // A written note played more than once shows how it went the last time.
+    const styleOfWritten = (note: ScoreNote) => {
+      const copies = form?.copies.get(note);
+      if (!copies) return styleOf?.(note);
+      const styles = copies.map((copy) => styleOf?.(copy));
+      return (
+        styles.findLast((style) => style !== undefined && style !== NoteStyle.Muted) ?? styles[0]
+      );
+    };
     for (const [note, graphicals] of sheet.graphics) {
-      const style = styleOf?.(note);
+      const style = styleOfWritten(note);
       const color =
         style === NoteStyle.Played
           ? sheet.colors.played
@@ -180,7 +199,7 @@ export function SheetMusic({
         });
       }
     }
-  }, [styleOf, outcomesVersion, status]);
+  }, [styleOf, outcomesVersion, status, form]);
 
   // Keep the cursor on the notes being played, and scroll it into view when it moves or the
   // music starts. Otherwise the sheet stays where it is, so it can be read ahead (before starting,
@@ -191,7 +210,7 @@ export function SheetMusic({
     const scroller = scrollerRef.current;
     if (!sheet || !scroller) return;
     const cursor = sheet.osmd.cursor;
-    const beat = transport.position();
+    const beat = form ? writtenBeat(form, transport.position()) : transport.position();
     let moved = transport.playing && !wasPlaying.current;
     wasPlaying.current = transport.playing;
     if (beat < beatOf(cursor.iterator) - 1e-6) {
@@ -223,8 +242,28 @@ export function SheetMusic({
     const index = bars.findIndex((bar) => x < bar.right);
     return index < 0 ? bars.length - 1 : index;
   };
-  const { selection, handlers } = useBarSelection(onSelectBars, barAt);
-  const shaded = selection ?? loop ?? null;
+  // Bars are chosen as written, and practiced where they're first played.
+  const selectPlayed =
+    onSelectBars &&
+    (form
+      ? (range: LoopRange) => {
+          const first = playedMeasureOf(form, score, range.first);
+          const last = playedMeasureOf(form, score, range.last);
+          onSelectBars({ first: Math.min(first, last), last: Math.max(first, last) });
+        }
+      : onSelectBars);
+  const { selection, handlers } = useBarSelection(selectPlayed, barAt);
+  // The bars repeated, shaded where they're written.
+  const loopWritten =
+    loop && form
+      ? (() => {
+          const bars = score.measures
+            .slice(loop.first, loop.last + 1)
+            .map((measure) => writtenMeasureOf(form, measure));
+          return { first: Math.min(...bars), last: Math.max(...bars) };
+        })()
+      : loop;
+  const shaded = selection ?? loopWritten ?? null;
   const from = shaded && bars[shaded.first];
   const to = shaded && bars[shaded.last];
 

@@ -779,10 +779,13 @@ Built one area at a time, each with the engine work it needs and the unit that u
 - "Musette in D" (BWV Anh. 126, attributed to Bach) from the Mutopia Project's public-domain edition, written at twice its note values (2/4 becomes 4/4, its sixteenths eighths, as sixteenths come in Unit 13), and played A, B, A, as its da capo asks, without its repeats (Unit 13). "Scarborough Fair", the traditional tune as in Paul Hardy's tunebooks ("Trad."), in D minor with its one B natural, the left hand in open fifths.
 - Sight-reading: **Neighbor notes** (opens after Unit 8): one or two neighbor notes in each drill, a key, the one a whole step below raised to a half step below, and the key again (E, D♯, E), written with a sharp, away from the ending, in C major (either hand) or A minor (right hand), with only the sharps Unit 8 plays. **More keys** (opens after Unit 12): D and B♭ major, A, E and D minor, from each key note, either hand; a minor drill starts on a note of the minor chord and ends on its home note.
 
-**5.5 Rhythm and form: Unit 13**
+**5.5 Rhythm and form: Unit 13** — in two parts: the engine (built), then Unit 13
 - Score format and playback: repeats with first and second endings (unrolled for playing, Listen and Compare; the sheet shows them once, the cursor jumping back), fermatas (the music holds), and `rit.` / `a tempo` (a tempo change the transport follows); drawn and imported (MusicXML `<repeat>`, `<ending>`, `<fermata>`, `<sound tempo>`).
 - Unit 13 (5 lessons): sixteenth notes, and a dotted eighth with a sixteenth; 6/8 time; syncopation; repeats and endings; ritardando and the fermata. Songs: "Morning Mood" (Grieg, 6/8, the opening), "The Entertainer" (Joplin, a simplified opening).
 - Sight-reading: a level in 6/8 with sixteenths. Ear training: a rhythm level (hear a rhythm, tap it back).
+- Built as (part 1, the engine): a score can have repeats (`"repeats": [{ "from": 0, "to": 16, "endings": [{ "from": 12, "to": 16 }, { "from": 16, "to": 20 }] }]`, at bar lines; the first ending ends at the repeat sign, the second starts there), fermatas (a note's `"fermata": true`) and ritardandos (`"rit": [{ "from": 28, "to": 32 }]`). Loading unrolls the repeats (`engine/form.ts`): every note once per time it's played, with the written score kept, so practice, falling notes, grading, Listen, Compare and loops work on the music as played with nothing new. Sheet music draws it as written (repeat signs, first and second ending brackets, fermatas, "rit." and "a tempo"), OSMD's cursor kept in written order (`CursorIgnoreRepetitions`) while the played position is mapped onto it, so it jumps back at the repeat; each written note shows how it went the last time it was played, and bars chosen on the sheet are practiced where they're first played. A repeat from the very start has no sign there, as in printed music.
+- The transport follows a tempo map (`engine/tempoMap.ts`): a fermata holds its notes twice as long; a ritardando slows down in quarter-beat steps to 60% of the tempo by its end, back in tempo after. Playing along, the metronome, the other hand, Listen and falling notes all follow it.
+- MusicXML import keeps repeats with first and second endings (`<repeat>`, `<ending>`), fermatas and rit. / rall. up to a tempo; da capo, segno, coda and third endings still play once, as written, with the warning.
 
 **5.6 Two lines: Unit 14**
 - Unit 14 (4 lessons): the melody in the left hand, chords in the right; two melodies at once, first in contrary motion, then independent. Songs: "Minuet in G" with Petzold's own left hand (a second version), "Minuet in G minor" (Petzold).
@@ -802,8 +805,8 @@ Every new song passes the "only what's taught" test, extended to articulation, s
   - [ ] TODO (user): play "Musette in D" and "Scarborough Fair" on the Casio from Song practice (sheet music, both hands, waiting): notes, fingering and accidentals read well.
   - [ ] TODO (user): once Unit 8 is finished, try a few **Neighbor notes** sight-reading drills (the sharps and the natural signs after them read well); at Unit 12, the **More keys** drills.
   - [ ] TODO (user): at Unit 10, go through its lessons on the Casio with the pedal plugged in (pressing and lifting, changing it, broken chords and "Gymnopédie No. 1", when not to pedal), and say whether the pedal changes are judged fairly.
-- [ ] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
-- [ ] Repeats play back as written, in practice, Listen and Compare.
+- [x] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
+- [x] Repeats play back as written, in practice, Listen and Compare (checked in the browser with a test piece: the cursor goes back at the repeat sign, on to the second ending, slows through rit. and holds the fermata).
 - [ ] Sight-reading and ear training gain levels for the new units.
 - [ ] Verified on the Casio, with MIDI and (where it applies) the microphone.
 

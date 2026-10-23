@@ -26,6 +26,7 @@ import {
   PracticeMode,
   SessionStatus,
 } from '../../../engine/session';
+import { tempoMapOf } from '../../../engine/tempoMap';
 import { Transport } from '../../../engine/transport';
 import { weakSpot } from '../../../engine/weakSpots';
 import { formatPercent } from '../../../i18n/format';
@@ -133,7 +134,12 @@ export function PracticeRun({
   const { t, i18n } = useTranslation('screens');
   const names = useNoteNames();
 
-  const [transport] = useState(() => new Transport((score.tempo * speed) / 100));
+  const [transport] = useState(() => {
+    const made = new Transport((score.tempo * speed) / 100);
+    // Fermatas and ritardandos: the music holds and slows down.
+    made.setTempoMap(tempoMapOf(score));
+    return made;
+  });
   const [session] = useState(
     () =>
       new PracticeSession(score, transport, {

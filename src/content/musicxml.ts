@@ -115,8 +115,10 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
         ...directionsFor(score, staves[0]),
         ...pedalFor(score, staves.at(-1)),
         ...handLabelsFor(score, writtenOn, options.handLabel),
+        ...ritardandosFor(score, staves[0]),
       ].sort((a, b) => a.at - b.at || a.order - b.order);
   const slurs = slurMarks(score);
+  const barlines = barlinesFor(score, measureCount);
 
   const measures: string[] = [];
   for (let m = 0; m < measureCount; m++) {
@@ -124,6 +126,8 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
     const to = from + measureDivs;
     const last = m === measureCount - 1;
     const parts: string[] = [];
+    const barline = barlines.get(m);
+    if (barline?.left) parts.push(barline.left);
     if (m === 0) parts.push(attributes(score, staves, options.rhythm ?? false));
     linesByStaff.forEach(({ staff, events }, i) => {
       if (i > 0) parts.push(`<backup><duration>${measureDivs}</duration></backup>`);
@@ -145,6 +149,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
         ),
       );
     });
+    if (barline?.right) parts.push(barline.right);
     if (options.illustration) parts.push(NO_BAR_LINE);
     measures.push(`<measure number="${m + 1}">${parts.join('')}</measure>`);
   }
@@ -268,6 +273,8 @@ function measureNotes(
             slurs: (slurs.get(note) ?? []).filter((mark) =>
               mark.type === 'start' ? !tieStop : !tieStart,
             ),
+            // One fermata per chord, over its first written part.
+            fermata: (note.fermata ?? false) && !tieStop && n === 0,
             rhythm,
             // Chord notes stack their labels on separate lines.
             label: !tieStop && noteLabel ? { text: noteLabel(note), line: n + 1 } : null,
@@ -345,6 +352,78 @@ function pedalFor(score: Score, staff: StaffInfo | undefined): Direction[] {
 
 const otherHand = (hand: Hand) => (hand === Hand.Right ? Hand.Left : Hand.Right);
 
+/** One side of a bar: its line's style, an ending's bracket, a repeat sign. */
+interface Barline {
+  style?: 'heavy-light' | 'light-heavy';
+  ending?: { number: 1 | 2; type: 'start' | 'stop' | 'discontinue' };
+  repeat?: 'forward' | 'backward';
+}
+
+const barlineXml = (location: 'left' | 'right', { style, ending, repeat }: Barline) =>
+  `<barline location="${location}">` +
+  (style ? `<bar-style>${style}</bar-style>` : '') +
+  (ending ? `<ending number="${ending.number}" type="${ending.type}"/>` : '') +
+  (repeat ? `<repeat direction="${repeat}"/>` : '') +
+  '</barline>';
+
+/**
+ * Repeat signs and endings, by bar (from 0): what goes at its start and at its end. A repeat
+ * from the very start has no sign there, as in printed music.
+ */
+function barlinesFor(
+  score: Score,
+  measureCount: number,
+): Map<number, { left?: string; right?: string }> {
+  const sides = new Map<number, { left?: Barline; right?: Barline }>();
+  const length = beatsPerMeasure(score.timeSignature);
+  const barAt = (beat: number) => Math.min(measureCount - 1, Math.round(beat / length));
+  const add = (bar: number, side: 'left' | 'right', barline: Barline) => {
+    const current = sides.get(bar) ?? {};
+    sides.set(bar, { ...current, [side]: { ...current[side], ...barline } });
+  };
+  for (const repeat of score.repeats ?? []) {
+    if (repeat.start > 0)
+      add(barAt(repeat.start), 'left', { style: 'heavy-light', repeat: 'forward' });
+    const last = barAt(repeat.end) - 1;
+    add(last, 'right', { style: 'light-heavy', repeat: 'backward' });
+    if (!repeat.endings) continue;
+    const [first, second] = repeat.endings;
+    add(barAt(first.start), 'left', { ending: { number: 1, type: 'start' } });
+    add(last, 'right', { ending: { number: 1, type: 'stop' } });
+    add(barAt(second.start), 'left', { ending: { number: 2, type: 'start' } });
+    add(barAt(second.end) - 1, 'right', { ending: { number: 2, type: 'discontinue' } });
+  }
+  return new Map(
+    [...sides].map(([bar, { left, right }]) => [
+      bar,
+      {
+        ...(left && { left: barlineXml('left', left) }),
+        ...(right && { right: barlineXml('right', right) }),
+      },
+    ]),
+  );
+}
+
+/** "rit." where the music slows down, and "a tempo" where it's back, if it goes on. */
+function ritardandosFor(score: Score, staff: StaffInfo | undefined): Direction[] {
+  if (!staff) return [];
+  const words = (text: string, beat: number): Direction => ({
+    at: Math.round(beat * DIVISIONS),
+    staff: staff.number,
+    order: 1,
+    xml:
+      '<direction placement="above"><direction-type>' +
+      `<words font-style="italic">${text}</words></direction-type>` +
+      `<staff>${staff.number}</staff></direction>`,
+  });
+  return (score.ritardandos ?? []).flatMap((rit) => [
+    words('rit.', rit.start),
+    ...(score.notes.some((note) => note.start >= rit.end - 1e-6)
+      ? [words('a tempo', rit.end)]
+      : []),
+  ]);
+}
+
 /** "L.H." (or "R.H.") over the first note of each stretch a hand plays on the other's staff. */
 function handLabelsFor(
   score: Score,
@@ -419,6 +498,7 @@ function noteXml(
     tieStop,
     fingering,
     slurs = [],
+    fermata = false,
     rhythm,
     label,
   }: {
@@ -427,6 +507,7 @@ function noteXml(
     tieStop: boolean;
     fingering: boolean;
     slurs?: readonly SlurMark[];
+    fermata?: boolean;
     rhythm: boolean;
     label: { text: string; line: number } | null;
   },
@@ -438,6 +519,8 @@ function noteXml(
     tieStop ? '<tied type="stop"/>' : '',
     tieStart ? '<tied type="start"/>' : '',
     ...slurs.map((mark) => `<slur type="${mark.type}" number="${mark.number}"/>`),
+    // Over the top staff, under the bottom one.
+    fermata ? `<fermata type="${staff.number === 1 ? 'upright' : 'inverted'}"/>` : '',
     articulations.length > 0
       ? `<articulations>${articulations.map((name) => `<${name}/>`).join('')}</articulations>`
       : '',

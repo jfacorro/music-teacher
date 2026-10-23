@@ -6,7 +6,14 @@
  * value the sheet music writes (`musicxml.ts`).
  */
 import type { ScoreDynamics } from '../../engine/dynamics';
-import { type Finger, Hand, type Articulation, type PedalMark } from '../../engine/score';
+import {
+  type Finger,
+  Hand,
+  type Articulation,
+  type PedalMark,
+  type Repeat,
+  type Ritardando,
+} from '../../engine/score';
 import { MIDDLE_C, type Pitch } from '../../theory/pitch';
 
 export interface ImportedNote {
@@ -17,6 +24,8 @@ export interface ImportedNote {
   articulations?: Articulation[];
   /** Slurs starting or stopping on it (MusicXML), in order: stops first. */
   slurs?: ('start' | 'stop')[];
+  /** Held longer than written (MusicXML). */
+  fermata?: boolean;
 }
 
 export interface ImportedTrack {
@@ -41,7 +50,7 @@ export const ImportWarning = {
   TempoChanges: 'tempoChanges',
   /** The time signature changes during the piece: bars follow the first one. */
   TimeSignatureChanges: 'timeSignatureChanges',
-  /** Repeat signs and endings are played once, as written. */
+  /** Jumps it can't follow (da capo, segno, coda, a third ending) are played once, as written. */
   RepeatsIgnored: 'repeatsIgnored',
 } as const;
 export type ImportWarning = (typeof ImportWarning)[keyof typeof ImportWarning];
@@ -62,6 +71,9 @@ export interface ImportedMusic {
   dynamics?: ScoreDynamics;
   /** The sustain pedal, as written (MusicXML only; songs saved before this have none). */
   pedal?: PedalMark[];
+  /** Repeats with their endings, and ritardandos, as written (MusicXML only). */
+  repeats?: Repeat[];
+  ritardandos?: Ritardando[];
 }
 
 export const ImportErrorCode = {

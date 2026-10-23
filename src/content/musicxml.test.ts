@@ -102,6 +102,46 @@ describe('scoreToMusicXml', () => {
     expect(alone).not.toContain('<words>');
   });
 
+  it('writes repeat signs, first and second endings, fermatas and rit.', () => {
+    const base = scoreOf([
+      ['C4', 0, 4],
+      ['D4', 4, 4],
+      ['E4', 8, 4],
+      ['F4', 12, 4],
+      ['G4', 16, 4],
+    ]);
+    const { xml } = scoreToMusicXml({
+      ...base,
+      notes: base.notes.map((note, i) => (i === 4 ? { ...note, fermata: true } : note)),
+      repeats: [
+        {
+          start: 4,
+          end: 12,
+          endings: [
+            { start: 8, end: 12 },
+            { start: 12, end: 16 },
+          ],
+        },
+      ],
+      ritardandos: [{ start: 16, end: 20 }],
+    });
+    const bar = (number: number) =>
+      new RegExp(`<measure number="${number}">(.*?)</measure>`).exec(xml)![1]!;
+    expect(bar(1)).not.toContain('<barline');
+    expect(bar(2)).toMatch(
+      /^<barline location="left"><bar-style>heavy-light<\/bar-style><repeat direction="forward"\/><\/barline>/,
+    );
+    expect(bar(3)).toContain('<ending number="1" type="start"/>');
+    expect(bar(3)).toMatch(
+      /<ending number="1" type="stop"\/><repeat direction="backward"\/><\/barline>$/,
+    );
+    expect(bar(4)).toContain('<ending number="2" type="start"/>');
+    expect(bar(4)).toContain('<ending number="2" type="discontinue"/>');
+    expect(bar(5)).toContain('<fermata type="upright"/>');
+    expect(bar(5)).toContain('<words font-style="italic">rit.</words>');
+    expect(xml).not.toContain('a tempo');
+  });
+
   it('writes a one-hand melody on a treble staff', () => {
     const { xml, staves } = scoreToMusicXml(
       scoreOf([
