@@ -109,7 +109,7 @@
       "finger": 3
     },
     {
-      "note": "E3",
+      "note": "E2",
       "start": 9,
       "duration": 0.5,
       "hand": "L",
@@ -123,14 +123,14 @@
       "finger": 4
     },
     {
-      "note": "G#3",
+      "note": "E3",
       "start": 9.5,
       "duration": 0.5,
       "hand": "L",
-      "finger": 3
+      "finger": 2
     },
     {
-      "note": "B3",
+      "note": "G#3",
       "start": 10,
       "duration": 0.5,
       "hand": "L",
@@ -298,7 +298,7 @@
       "finger": 3
     },
     {
-      "note": "E3",
+      "note": "E2",
       "start": 21,
       "duration": 0.5,
       "hand": "L",
@@ -312,14 +312,14 @@
       "finger": 4
     },
     {
-      "note": "G#3",
+      "note": "E3",
       "start": 21.5,
       "duration": 0.5,
       "hand": "L",
-      "finger": 3
+      "finger": 2
     },
     {
-      "note": "B3",
+      "note": "G#3",
       "start": 22,
       "duration": 0.5,
       "hand": "L",
