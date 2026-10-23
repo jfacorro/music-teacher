@@ -82,5 +82,13 @@
   "the-entertainer": {
     "title": "The Entertainer",
     "composer": "Scott Joplin"
+  },
+  "minuet-in-g-as-written": {
+    "title": "Minueto en sol (como está escrito)",
+    "composer": "Christian Petzold"
+  },
+  "minuet-in-g-minor": {
+    "title": "Minueto en sol menor",
+    "composer": "Christian Petzold"
   }
 }

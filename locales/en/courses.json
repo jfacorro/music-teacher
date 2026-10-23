@@ -51,6 +51,10 @@
     "u13": {
       "title": "Rhythm and form",
       "description": "Sixteenth notes and dotted rhythms, 6/8 time, syncopation, repeats with first and second endings, ritardando and the fermata."
+    },
+    "u14": {
+      "title": "Two hands, two lines",
+      "description": "Each hand its own part: the melody in the left hand, contrary motion, two melodies at once, and Petzold’s minuets as he wrote them."
     }
   },
   "lessons": {
@@ -117,7 +121,11 @@
     "u13-l2": "6/8 time",
     "u13-l3": "Syncopation",
     "u13-l4": "Repeats and endings",
-    "u13-l5": "Slowing down and holding"
+    "u13-l5": "Slowing down and holding",
+    "u14-l1": "The melody in the left hand",
+    "u14-l2": "Contrary motion",
+    "u14-l3": "Two melodies at once",
+    "u14-l4": "Minuet in {g} minor"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -143,6 +151,7 @@
     "pedal": "Sustain pedal",
     "shifts": "Position shifts",
     "arpeggios": "Arpeggios",
+    "independence": "Hand independence",
     "key-signatures": "Key signatures",
     "compound-time": "6/8 time",
     "syncopation": "Syncopation",

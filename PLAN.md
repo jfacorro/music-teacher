@@ -791,14 +791,18 @@ Built one area at a time, each with the engine work it needs and the unit that u
 - "Morning Mood" (Edvard Grieg, Peer Gynt, 1875): only its first four bars, the flute's theme, as the only public-domain text source found (the Norwegian Wikipedia article's engraving; Mutopia and the ABC archives have none) gives just those; a major third down in C, its grace notes left out, the left hand holding a fifth (our own). "The Entertainer" (Scott Joplin, 1902), after the Mutopia Project's public-domain edition: the introduction's last bar, then the first strain with its repeat and two endings; simplified: the melody in single notes (Joplin doubles it in octaves), the left hand Joplin's bass notes on the beats without the chords between, and the second ending closing on C instead of leading on to the next strain.
 - Sight-reading: **6/8 with sixteenth notes** (after Unit 13): four bars of 6/8 in groups of three eighths, with some sixteenths in every drill, either hand. Ear training: **Rhythms** (after Unit 13): a bar of rhythm played on one key, tapped back on any key at the learner's own speed; right when every tap falls within a fifth of a beat of where the rhythm puts it, at the speed tapped (eight per exercise, easier first: then sixteenths and dotted rhythms, then syncopation); after two misses, how many notes it has.
 
-**5.6 Two lines: Unit 14**
+**5.6 Two lines: Unit 14** — built
 - Unit 14 (4 lessons): the melody in the left hand, chords in the right; two melodies at once, first in contrary motion, then independent. Songs: "Minuet in G" with Petzold's own left hand (a second version), "Minuet in G minor" (Petzold).
 - Ear training: major or minor scales by ear.
+- Built as: Unit 14 (early intermediate): the melody in the left hand ("Ode to Joy" low in the left hand alone, then under one soft chord a bar in the right); contrary motion (out from the thumbs and back with the same fingers, then the C scale an octave out and back, both thumbs passing under together); two melodies at once (the right hand holding while the left moves, then the other way round, then "Minuet in G" as written); "Minuet in G minor". New skill: hand independence.
+- "Minuet in G (as written)" (Christian Petzold, BWV Anh. 114): Unit 7's right hand with Petzold's whole left hand, after the Mutopia Project's public-domain edition: the opening chord, the eighth notes in bars 8 and 12, and the repeat. "Minuet in G minor" (Petzold, BWV Anh. 115), after Mutopia's edition: its first part, ending in B♭ major, with the repeat; the ornaments are left out. Both are the first part of their minuet (16 bars); the second parts are left out.
+- Ear training: **Major or minor scales** (after Unit 12): a scale going up an octave from the lit key note, one note after another (C, D or B♭ major; A, E or D minor, natural or harmonic), answered by choosing Major or Minor, with a keyboard too; ten per exercise.
+- Fixed on the way: a repeat or second ending closing at the end of the music was drawn closing a bar early ("The Entertainer" and Unit 13's "Ode to Joy" second endings).
 
 Every new song passes the "only what's taught" test, extended to articulation, slurs, pedal marks and repeats.
 
 #### Phase 5 done when
-- [ ] Units 9–14 are playable in English and Spanish, each ending in songs that need what it teaches.
+- [x] Units 9–14 are playable in English and Spanish, each ending in songs that need what it teaches.
 - [ ] With a MIDI keyboard, touch (staccato, legato, accents) and the pedal are checked and reported; with the microphone, lessons explain them without grading them.
   - [x] Touch (5.1).
   - [ ] TODO (user): once Unit 8 is finished, go through Unit 9’s lessons on the Casio (legato and slurs with "Aura Lee", staccato, both together with "Can-Can", accents and tenuto, ties).
@@ -810,10 +814,11 @@ Every new song passes the "only what's taught" test, extended to articulation, s
   - [ ] TODO (user): once Unit 8 is finished, try a few **Neighbor notes** sight-reading drills (the sharps and the natural signs after them read well); at Unit 12, the **More keys** drills.
   - [ ] TODO (user): play "Morning Mood" and "The Entertainer" on the Casio from Song practice (sheet music, both hands; the Entertainer's repeat and endings, waiting and playing along).
   - [ ] TODO (user): at Unit 13, go through its lessons, the **6/8 with sixteenth notes** drills and the **Rhythms** ear training (tapping back on the Casio).
+  - [ ] TODO (user): play both of Petzold's minuets on the Casio from Song practice (sheet music, both hands, waiting): the left hand's own line, the repeat; at Unit 14, go through its lessons (the left-hand melody, contrary motion, two lines). Once Unit 12 is finished, try the **Major or minor scales** ear training.
   - [ ] TODO (user): at Unit 10, go through its lessons on the Casio with the pedal plugged in (pressing and lifting, changing it, broken chords and "Gymnopédie No. 1", when not to pedal), and say whether the pedal changes are judged fairly.
 - [x] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
 - [x] Repeats play back as written, in practice, Listen and Compare (checked in the browser with a test piece: the cursor goes back at the repeat sign, on to the second ending, slows through rit. and holds the fermata).
-- [ ] Sight-reading and ear training gain levels for the new units.
+- [x] Sight-reading and ear training gain levels for the new units: Neighbor notes, More keys and 6/8 with sixteenth notes; Rhythms and Major or minor scales.
 - [ ] Verified on the Casio, with MIDI and (where it applies) the microphone.
 
 ---

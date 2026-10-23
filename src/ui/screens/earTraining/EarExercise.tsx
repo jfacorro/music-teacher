@@ -87,8 +87,9 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
   const question = questions[index];
   const finished = question === undefined;
   const result = quizResult(firstTry, questions.length);
-  // The microphone hears one note at a time: chords are answered by choosing.
-  const chordByKeys = question?.quality !== null && !usingMic;
+  // The microphone hears one note at a time: chords are answered by choosing. Scales always are.
+  const chordByKeys =
+    question?.quality !== null && question?.level !== EarLevel.Scales && !usingMic;
 
   /** A rhythm's taps so far (ms). */
   const taps = useRef<number[]>([]);
@@ -308,9 +309,10 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
   const name = (midi: number) => names.name(pitchFromMidi(midi), { octave: false });
   const rightMessage = () => {
     if (question.quality !== null) {
-      return t('earTraining.right.chord', {
-        chord: tt(`chords.${question.quality}`, { root: name(question.notes[0]!) }),
-      });
+      const chord = tt(`chords.${question.quality}`, { root: name(question.notes[0]!) });
+      return level === EarLevel.Scales
+        ? t('earTraining.right.scale', { scale: chord })
+        : t('earTraining.right.chord', { chord });
     }
     if (level === EarLevel.Intervals) {
       const interval = identifyInterval([...question.notes]);
@@ -348,11 +350,13 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
             ]
               .filter(Boolean)
               .join(' ')
-          : question.quality !== null && !chordByKeys
-            ? t('earTraining.ask.chordsMic')
-            : level === EarLevel.Notes && !reference
-              ? t('earTraining.ask.notesAlone')
-              : t(`earTraining.ask.${level}`, { c: name(MIDDLE_C) });
+          : level === EarLevel.Scales
+            ? t('earTraining.ask.scales')
+            : question.quality !== null && !chordByKeys
+              ? t('earTraining.ask.chordsMic')
+              : level === EarLevel.Notes && !reference
+                ? t('earTraining.ask.notesAlone')
+                : t(`earTraining.ask.${level}`, { c: name(MIDDLE_C) });
 
   return (
     <div className="quiz ear">

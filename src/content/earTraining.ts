@@ -2,8 +2,9 @@
  * Ear training (PLAN.md milestone 4.4): the app plays something and the learner plays it back
  * on the keyboard: a single note (after middle C as a reference), two notes in a row (an
  * interval, the first one shown), a short melody (its first note shown), a major or minor
- * chord (its root shown; answered by playing it, or by choosing major or minor), or a rhythm
- * (tapped back on any key, at the learner's own speed).
+ * chord (its root shown; answered by playing it, or by choosing major or minor), a rhythm
+ * (tapped back on any key, at the learner's own speed), or a scale going up from the key shown
+ * (answered by choosing major or minor).
  *
  * Levels open as the course teaches the keys they use. A question counts when it's answered
  * without a wrong key, as quiz cards do.
@@ -28,6 +29,8 @@ export const EarLevel = {
   Chords: 'chords',
   /** A bar of rhythm on one key, tapped back on any key. */
   Rhythms: 'rhythms',
+  /** A major or minor scale going up, its key note shown: which is it? */
+  Scales: 'scales',
 } as const;
 export type EarLevel = (typeof EarLevel)[keyof typeof EarLevel];
 
@@ -41,6 +44,7 @@ export const EAR_UNITS: Readonly<Record<EarLevel, string>> = {
   [EarLevel.Melodies]: 'u2',
   [EarLevel.Chords]: 'u6',
   [EarLevel.Rhythms]: 'u13',
+  [EarLevel.Scales]: 'u12',
 };
 
 /** The levels open now, easiest first. */
@@ -77,6 +81,7 @@ export const QUESTIONS: Readonly<Record<EarLevel, number>> = {
   [EarLevel.Melodies]: 6,
   [EarLevel.Chords]: 10,
   [EarLevel.Rhythms]: 8,
+  [EarLevel.Scales]: 10,
 };
 
 /**
@@ -145,6 +150,22 @@ const CHORDS: readonly (readonly [readonly number[], ChordKind])[] = [
   [[60, 63, 67], ChordQuality.Minor],
 ];
 
+/** Steps of the scales (semitones from the key note), and the scales of Units 7 and 12. */
+const MAJOR = [0, 2, 4, 5, 7, 9, 11, 12];
+const NATURAL_MINOR = [0, 2, 3, 5, 7, 8, 10, 12];
+const HARMONIC_MINOR = [0, 2, 3, 5, 7, 8, 11, 12];
+const SCALES: readonly (readonly [number, readonly number[], ChordKind])[] = [
+  [60, MAJOR, ChordQuality.Major],
+  [62, MAJOR, ChordQuality.Major],
+  [58, MAJOR, ChordQuality.Major],
+  [69, NATURAL_MINOR, ChordQuality.Minor],
+  [69, HARMONIC_MINOR, ChordQuality.Minor],
+  [64, NATURAL_MINOR, ChordQuality.Minor],
+  [64, HARMONIC_MINOR, ChordQuality.Minor],
+  [62, NATURAL_MINOR, ChordQuality.Minor],
+  [62, HARMONIC_MINOR, ChordQuality.Minor],
+];
+
 /** Melodies grow from three notes to five over an exercise. */
 const MELODY_LENGTHS = [3, 3, 4, 4, 5, 5];
 
@@ -206,6 +227,14 @@ export function earQuestions(
       return dealEvenly(random, CHORDS, count).map(([notes, quality]) =>
         question(level, notes, { quality }),
       );
+    case EarLevel.Scales:
+      return dealEvenly(random, SCALES, count).map(([keyNote, steps, quality]) =>
+        question(
+          level,
+          steps.map((step) => keyNote + step),
+          { quality },
+        ),
+      );
     case EarLevel.Rhythms:
       return RHYTHMS.flatMap((set, i) => dealEvenly(random, set, RHYTHMS_ASKED[i]!))
         .slice(0, count)
@@ -243,6 +272,7 @@ const REFERENCE_MS = 800;
 const AFTER_REFERENCE_MS = 700;
 const NOTE_MS = 700;
 const MELODY_NOTE_MS = 500;
+const SCALE_NOTE_MS = 380;
 const CHORD_MS = 1600;
 /** Rhythms are played at 90 beats a minute, each note a little shorter than written. */
 const RHYTHM_BEAT_MS = 60_000 / 90;
@@ -263,7 +293,7 @@ export function promptNotes(question: EarQuestion): PromptNote[] {
     notes.push({ midi: question.reference, at, length: REFERENCE_MS });
     at += REFERENCE_MS + AFTER_REFERENCE_MS;
   }
-  if (question.quality) {
+  if (question.quality && question.level !== EarLevel.Scales) {
     notes.push(...question.notes.map((midi) => ({ midi, at, length: CHORD_MS })));
     return notes;
   }
@@ -274,7 +304,12 @@ export function promptNotes(question: EarQuestion): PromptNote[] {
       length: Math.min(duration, 1) * RHYTHM_BEAT_MS * RHYTHM_NOTE_SHARE,
     }));
   }
-  const length = question.level === EarLevel.Melodies ? MELODY_NOTE_MS : NOTE_MS;
+  const length =
+    question.level === EarLevel.Scales
+      ? SCALE_NOTE_MS
+      : question.level === EarLevel.Melodies
+        ? MELODY_NOTE_MS
+        : NOTE_MS;
   for (const midi of question.notes) {
     notes.push({ midi, at, length });
     at += length;

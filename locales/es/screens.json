@@ -731,7 +731,8 @@
       "intervals": "Dos notas (intervalos)",
       "melodies": "Melodías cortas",
       "chords": "Acordes mayores o menores",
-      "rhythms": "Ritmos"
+      "rhythms": "Ritmos",
+      "scales": "Escalas mayores o menores"
     },
     "lockedLevel": "{level} (después de «{unit}»)",
     "locked": "El oído musical se abre cuando terminas la unidad «{unit}».",
@@ -743,7 +744,8 @@
       "melodies": "Oirás una melodía corta: tócala empezando por la tecla iluminada.",
       "chords": "Oirás un acorde: tócalo sobre la fundamental iluminada, o elige mayor o menor.",
       "notesAlone": "Oirás una nota: búscala en el teclado.",
-      "rhythms": "Vas a escuchar un ritmo corto: repítelo tocando cualquier tecla, a tu propia velocidad."
+      "rhythms": "Vas a escuchar un ritmo corto: repítelo tocando cualquier tecla, a tu propia velocidad.",
+      "scales": "Vas a escuchar una escala que sube desde la tecla iluminada: ¿es mayor o menor?"
     },
     "listen": "Escucha…",
     "ask": {
@@ -753,7 +755,8 @@
       "chords": "Toca el acorde sobre la fundamental iluminada, o elige mayor o menor.",
       "chordsMic": "¿Mayor o menor? Elige uno.",
       "notesAlone": "¿Qué nota era?",
-      "rhythms": "Repite el ritmo con cualquier tecla."
+      "rhythms": "Repite el ritmo con cualquier tecla.",
+      "scales": "¿Mayor o menor? Elige una."
     },
     "wrong": "Esa no: tocaste {note}.",
     "wrongChord": "No exactamente.",
@@ -765,7 +768,8 @@
       "interval": "Bien: de {from} a {to}, una {interval}.",
       "melody": "¡Bien, esa es la melodía!",
       "chord": "Bien: {chord}.",
-      "rhythm": "¡Ese es el ritmo!"
+      "rhythm": "¡Ese es el ritmo!",
+      "scale": "Correcto: la escala de {scale}."
     },
     "quality": {
       "major": "Mayor",

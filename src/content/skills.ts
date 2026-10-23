@@ -88,6 +88,7 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'pedal',
     'shifts',
     'arpeggios',
+    'independence',
   ],
   [SkillArea.Rhythm]: [
     'note-values',
