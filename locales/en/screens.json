@@ -707,7 +707,9 @@
       "trebleRhythm": "Right hand: rests and eighth notes",
       "bass": "Left hand: bass clef",
       "handsTogether": "Both hands",
-      "keys": "{g} major and {f} major"
+      "keys": "{g} major and {f} major",
+      "accidentals": "Neighbor notes: sharps in the music",
+      "moreKeys": "{d} and {bFlat} major; {a}, {e} and {d} minor"
     },
     "lockedLevel": "{level} (after “{unit}”)",
     "locked": "Sight-reading opens when you finish the unit “{unit}”.",

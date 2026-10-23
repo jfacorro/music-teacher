@@ -66,5 +66,13 @@
   "prelude-in-c": {
     "title": "Prelude in C",
     "composer": "Johann Sebastian Bach"
+  },
+  "musette-in-d": {
+    "title": "Musette in D",
+    "composer": "Johann Sebastian Bach (attributed)"
+  },
+  "scarborough-fair": {
+    "title": "Scarborough Fair",
+    "composer": "English folk song"
   }
 }

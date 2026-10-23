@@ -707,7 +707,9 @@
       "trebleRhythm": "Mano derecha: silencios y corcheas",
       "bass": "Mano izquierda: clave de fa",
       "handsTogether": "Ambas manos",
-      "keys": "{g} mayor y {f} mayor"
+      "keys": "{g} mayor y {f} mayor",
+      "accidentals": "Notas vecinas: sostenidos en la música",
+      "moreKeys": "{d} y {bFlat} mayor; {a}, {e} y {d} menor"
     },
     "lockedLevel": "{level} (después de «{unit}»)",
     "locked": "La lectura a primera vista se abre cuando terminas la unidad «{unit}».",

@@ -772,9 +772,12 @@ Built one area at a time, each with the engine work it needs and the unit that u
 - Unit 11 (late elementary): moving the hand (a shift during a half note, right hand up, left hand down); octave jumps (a phrase and its echo an octave up; Unit 6's chords over a bass jumping down an octave, with the pedal); arpeggios in C (two octaves up and back, right hand 1 2 3 1 2 3 5, left 5 4 2 1 3 2 1); arpeggios in G and F (the same fingering), then the Prelude; crossing over (hand over hand in C and G, the left hand over the top; then the right hand crossing below). New skills: position shifts, arpeggios.
 - "Prelude in C" (Johann Sebastian Bach, BWV 846, 1722), the first four bars: each chord's rising figure twice, written in eighth notes (sixteenths come in Unit 13), so two bars per chord, a new pedal for each. The left hand plays the figure's two lower notes in the bass staff, as Bach wrote them, the right hand the three above.
 
-**5.4 More keys: Unit 12**
+**5.4 More keys: Unit 12** — built
 - Unit 12 (5 lessons): D major (two sharps) and B♭ major (two flats), their scales and fingerings; relative minors and minor scales (A, E and D minor, natural and harmonic); reading with these key signatures. Songs: "Musette in D" (Notebook for Anna Magdalena Bach), "Scarborough Fair" (D minor).
 - Sight-reading: a level in D and B♭ major and minor keys; one with accidentals (Unit 8).
+- Built as: Unit 12 (early intermediate): D major (the key signature, the scale with each hand, then "Ode to Joy" in D over a bass note per bar); B♭ major (the right hand starting on finger 4, the left on 3; then "Lightly Row" in B♭); relative minors (A, E and D natural minor); the harmonic minor (the seventh raised, an accidental each time); reading in new keys, with the two songs. New skill: key signatures.
+- "Musette in D" (BWV Anh. 126, attributed to Bach) from the Mutopia Project's public-domain edition, written at twice its note values (2/4 becomes 4/4, its sixteenths eighths, as sixteenths come in Unit 13), and played A, B, A, as its da capo asks, without its repeats (Unit 13). "Scarborough Fair", the traditional tune as in Paul Hardy's tunebooks ("Trad."), in D minor with its one B natural, the left hand in open fifths.
+- Sight-reading: **Neighbor notes** (opens after Unit 8): one or two neighbor notes in each drill, a key, the one a whole step below raised to a half step below, and the key again (E, D♯, E), written with a sharp, away from the ending, in C major (either hand) or A minor (right hand), with only the sharps Unit 8 plays. **More keys** (opens after Unit 12): D and B♭ major, A, E and D minor, from each key note, either hand; a minor drill starts on a note of the minor chord and ends on its home note.
 
 **5.5 Rhythm and form: Unit 13**
 - Score format and playback: repeats with first and second endings (unrolled for playing, Listen and Compare; the sheet shows them once, the cursor jumping back), fermatas (the music holds), and `rit.` / `a tempo` (a tempo change the transport follows); drawn and imported (MusicXML `<repeat>`, `<ending>`, `<fermata>`, `<sound tempo>`).
@@ -796,6 +799,8 @@ Every new song passes the "only what's taught" test, extended to articulation, s
   - [ ] TODO (user): play "Gymnopédie No. 1" on the Casio from Song practice (sheet music, both hands, waiting), without the pedal: notes, fingering and the pedal lines read well.
   - [ ] TODO (user): play "Prelude in C" on the Casio from Song practice (sheet music, both hands, waiting): the figures, fingering and pedal lines read well.
   - [ ] TODO (user): at Unit 11, go through its lessons on the Casio (shifts, octave jumps, the arpeggios, crossing over with its L.H. and R.H. marks).
+  - [ ] TODO (user): play "Musette in D" and "Scarborough Fair" on the Casio from Song practice (sheet music, both hands, waiting): notes, fingering and accidentals read well.
+  - [ ] TODO (user): once Unit 8 is finished, try a few **Neighbor notes** sight-reading drills (the sharps and the natural signs after them read well); at Unit 12, the **More keys** drills.
   - [ ] TODO (user): at Unit 10, go through its lessons on the Casio with the pedal plugged in (pressing and lifting, changing it, broken chords and "Gymnopédie No. 1", when not to pedal), and say whether the pedal changes are judged fairly.
 - [ ] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
 - [ ] Repeats play back as written, in practice, Listen and Compare.

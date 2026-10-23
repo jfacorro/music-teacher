@@ -31,6 +31,7 @@ system setting (`src/i18n/naming.ts`).
 | Arpeggio (a chord spread up the keyboard)     | arpeggio                                             | arpegio                                                 |
 | Crossing over (one hand over the other)       | crossing over; hand over hand                        | cruzar las manos; mano sobre mano                       |
 | L.H. / R.H. (hand marks in the music)         | L.H. / R.H.                                          | M.I. / M.D.                                             |
+| Natural / harmonic minor (scales)             | natural minor / harmonic minor                       | menor natural / menor armónica                          |
 | Velocity (how hard a key is hit)              | velocity                                             | velocidad                                               |
 | Digital piano                                 | digital piano                                        | piano digital                                           |
 | MIDI keyboard                                 | MIDI keyboard                                        | teclado MIDI                                            |

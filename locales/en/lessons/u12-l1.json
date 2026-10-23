@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "key": "{d} major has two sharps, {fSharp} and {cSharp}. Rather than next to every note, the music writes them once, at the start of each line: the key signature. Every {f} and every {c} is then played sharp, in every octave. The scale has the same fingering as {c} major: 1 2 3, the thumb under, 1 2 3 4 5.",
+    "scaleRight": "The scale with the right hand, up and back down: the key signature reminds you of the two sharps.",
+    "scaleRightInTime": "Now in time.",
+    "scaleLeft": "The left hand: 5 4 3 2 1, then finger 3 crosses over the thumb: 3 2 1.",
+    "odeInD": "A tune you know, in a new key: “Ode to Joy” in {d} major starts on {fSharp}. No sharp is written next to the notes: the key signature says it.",
+    "odeInDInTime": "And in time."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "harmonic": "Most minor music raises the seventh note a half step, so it leans into the home note as in a major scale: the harmonic minor. The raised note isn’t in the key signature; it’s written as an accidental every time. {a} minor raises {g} to {gSharp}, {e} minor raises {d} to {dSharp}, and {d} minor raises {c} to {cSharp}.",
+    "aHarmonic": "{a} harmonic minor, with {gSharp} near the top.",
+    "eHarmonic": "{e} harmonic minor, with {dSharp}.",
+    "dHarmonic": "{d} harmonic minor, with {cSharp}: a sharp in a key with a flat.",
+    "dHarmonicLeft": "{d} harmonic minor with the left hand."
+  }
+}

@@ -53,6 +53,7 @@ describe('courses', () => {
       [CourseLevel.Beginner, [1, 2, 3, 4]],
       [CourseLevel.Elementary, [5, 6, 7, 8]],
       [CourseLevel.LateElementary, [9, 10, 11]],
+      [CourseLevel.EarlyIntermediate, [12]],
     ]);
   });
 

@@ -1,0 +1,69 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "reading"
+    },
+    {
+      "type": "exercise",
+      "text": "musette",
+      "textVars": {
+        "d": "D4",
+        "a": "A4"
+      },
+      "song": "musette-in-d",
+      "mode": "wait",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "musetteInTime",
+      "song": "musette-in-d",
+      "mode": "tempo",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "tempo": 104,
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "scarborough",
+      "textVars": {
+        "d": "D4",
+        "b": "B4",
+        "bFlat": "Bb4"
+      },
+      "song": "scarborough-fair",
+      "mode": "wait",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "exercise",
+      "text": "scarboroughInTime",
+      "song": "scarborough-fair",
+      "mode": "tempo",
+      "hands": "both",
+      "view": "sheet",
+      "notation": "plain",
+      "metronome": true,
+      "tempo": 88,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}
