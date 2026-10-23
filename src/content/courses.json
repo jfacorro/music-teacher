@@ -289,6 +289,31 @@
           "skills": ["touch", "note-values"]
         }
       ]
+    },
+    {
+      "id": "u10",
+      "level": "lateElementary",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u10-l1",
+          "skills": ["pedal"]
+        },
+        {
+          "id": "u10-l2",
+          "skills": ["pedal", "chords"]
+        },
+        {
+          "id": "u10-l3",
+          "skills": ["pedal", "accompaniment"]
+        },
+        {
+          "id": "u10-l4",
+          "skills": ["pedal", "touch"]
+        }
+      ]
     }
   ]
 }

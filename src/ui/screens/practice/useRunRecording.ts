@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
 import { scheduleAhead } from '../../../audio/lookAhead';
-import { type RecordedNote, Recorder, type Recording } from '../../../engine/recording';
+import {
+  type PedalHeld,
+  type RecordedNote,
+  Recorder,
+  type Recording,
+  soundingEnd,
+} from '../../../engine/recording';
 import {
   type HandFilter,
   type PracticeSession,
@@ -10,7 +16,7 @@ import {
 } from '../../../engine/session';
 import { windowsFor } from '../../../engine/timing';
 import type { Transport } from '../../../engine/transport';
-import { subscribeNotes } from '../../../input/bus';
+import { subscribeNotes, subscribePedal } from '../../../input/bus';
 import { InputSource, NoteEventType } from '../../../input/types';
 import { loadRecording, saveRecording } from '../../../storage/recordings';
 import { useAnimationFrame } from '../../hooks';
@@ -96,10 +102,11 @@ export function useRunRecording({
   // is each time through a loop (which goes on until stopped).
   useEffect(() => {
     if (!enabled || !key) return;
-    const keep = (notes: RecordedNote[]) => {
+    const keep = (notes: RecordedNote[], pedal: PedalHeld[]) => {
       if (notes.length === 0) return;
       const kept: Recording = {
         notes,
+        ...(pedal.length > 0 && { pedal }),
         tempo: transport.tempo,
         hands,
         from: session.musicStart,
@@ -116,11 +123,13 @@ export function useRunRecording({
       if (state.status === SessionStatus.Playing && status === SessionStatus.Ready) {
         recorder.current = new Recorder();
       }
+      const done = recorder.current;
       if (state.status === SessionStatus.Finished && status !== SessionStatus.Finished) {
-        keep(recorder.current?.finish(transport.position()) ?? []);
+        const beat = transport.position();
+        if (done) keep(done.finish(beat), done.pedalHeld(beat));
         recorder.current = null;
-      } else if (state.lastPass && state.lastPass !== lastPass && recorder.current) {
-        keep(recorder.current.finish(session.musicEnd));
+      } else if (state.lastPass && state.lastPass !== lastPass && done) {
+        keep(done.finish(session.musicEnd), done.pedalHeld(session.musicEnd));
         recorder.current = new Recorder();
       }
       if (state.status === SessionStatus.Ready) recorder.current = null; // started over
@@ -149,7 +158,19 @@ export function useRunRecording({
     });
   }, [enabled, session, transport]);
 
-  // Playback: the recorded keys, on the music's timeline, with how hard they were played.
+  // The pedal too, pressed while the run is on.
+  useEffect(() => {
+    if (!enabled) return;
+    return subscribePedal((event) => {
+      const status = session.getState().status;
+      const on = status === SessionStatus.Playing || status === SessionStatus.Waiting;
+      if (event.down && !on) return;
+      recorder.current?.pedal(event.down, transport.positionAt(event.time));
+    });
+  }, [enabled, session, transport]);
+
+  // Playback: the recorded keys, on the music's timeline, with how hard they were played (and
+  // held on by the pedal).
   useEffect(() => {
     if (!listening || !recording) return;
     return scheduleAhead(
@@ -160,7 +181,9 @@ export function useRunRecording({
             audioIfReady()?.accompany(
               note.pitch,
               transport.timeAt(note.start),
-              transport.timeAt(Math.max(note.end, note.start + SHORTEST_BEATS)),
+              transport.timeAt(
+                Math.max(soundingEnd(note, recording.pedal), note.start + SHORTEST_BEATS),
+              ),
               note.velocity / 127,
             );
           }

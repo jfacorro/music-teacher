@@ -11,13 +11,17 @@
  *   whole chord (in both modes).
  * - Dynamics: how hard each note was played on a MIDI keyboard is kept, and the summary says
  *   whether the loud and soft parts were played as written.
+ * - Touch and the pedal: when each key went down and up on a MIDI keyboard, and its sustain
+ *   pedal, are kept, and the summary says whether they were used as written.
  * - Loop: only a range of measures is practiced, over and over; each time through ends with
  *   a quick score instead of the results.
  *
- * The UI calls `tick()` every animation frame and forwards every `NoteEvent` to `handleNote`.
+ * The UI calls `tick()` every animation frame and forwards every `NoteEvent` to `handleNote`
+ * (and every `PedalEvent` to `handlePedal`).
  */
-import { InputSource, type NoteEvent, NoteEventType } from '../input/types';
+import { InputSource, type NoteEvent, NoteEventType, type PedalEvent } from '../input/types';
 import { summarizeDynamics } from './dynamics';
+import { type PedalPress, summarizePedal } from './pedal';
 import { type KeyTouch, summarizeTouch } from './touch';
 import { MIDDLE_C, type Pitch } from '../theory/pitch';
 import { TempoMatcher, TempoResultKind } from './matching/tempoMatcher';
@@ -166,6 +170,8 @@ export class PracticeSession {
   private velocities = new Map<ScoreNote, number>();
   /** When each note's key went down and up, and how hard (MIDI keyboard): its touch. */
   private touches = new Map<ScoreNote, KeyTouch>();
+  /** The sustain pedal going down and up during the run (MIDI keyboard). */
+  private pedal: PedalPress[] = [];
   /** Keys down now, by pitch, and the note each is playing. */
   private keysDown = new Map<number, ScoreNote>();
   private wrongBeats: number[] = [];
@@ -319,6 +325,17 @@ export class PracticeSession {
     const press = { ...event, pitch };
     if (this.mode === PracticeMode.Tempo) this.handleTempoPress(press, beat);
     else this.handleWaitPress(press, beat);
+  }
+
+  handlePedal(event: PedalEvent): void {
+    if (this.state.status !== SessionStatus.Playing && this.state.status !== SessionStatus.Waiting)
+      return;
+    if (this.mode === PracticeMode.Autoplay || event.source !== InputSource.Midi) return;
+    this.pedal.push({
+      down: event.down,
+      time: event.time,
+      beat: this.transport.positionAt(event.time),
+    });
   }
 
   /** Call every animation frame. */
@@ -565,6 +582,7 @@ export class PracticeSession {
       [...this.touches].map(([note, touch]) => [note, { ...touch, up: touch.up ?? now }]),
     );
     summary.touch = summarizeTouch(this.score, this.hands, touches, this.transport.tempo);
+    summary.pedal = summarizePedal(this.score, this.hands, touches, this.pedal);
     this.setState({ status: SessionStatus.Finished, countIn: null, summary });
   }
 
@@ -590,6 +608,7 @@ export class PracticeSession {
     this.outcomes = new Map();
     this.velocities = new Map();
     this.touches = new Map();
+    this.pedal = [];
     this.keysDown = new Map();
     this.wrongBeats = [];
     this.wrongHands = [];

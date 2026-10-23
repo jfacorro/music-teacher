@@ -78,6 +78,7 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
       measures: wholeMeasures(playable, music.timeSignature),
       ...(music.dynamics && { dynamics: music.dynamics }),
       ...(slurs.length > 0 && { slurs }),
+      ...(music.pedal && { pedal: music.pedal }),
     },
     outOfRange,
   };

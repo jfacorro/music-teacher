@@ -756,9 +756,15 @@ Built one area at a time, each with the engine work it needs and the unit that u
 - "Aura Lee" (George R. Poulton, 1861) in G major, four phrases each under a slur. "Can-Can" (the chorus of Offenbach's galop) in C: staccato quarter notes, slurred runs of eighth notes, accented long notes; the octave leap in its fourth bar is simplified to one quarter note. The song test now also checks that every articulation and slur a song uses has been taught.
 - Built as `engine/touch.ts` (checks and summary; pure, tested), `engine/score.ts` (`Articulation`, `Slur`), the session keeping each key's down, up and velocity (MIDI only), `content/musicxml.ts` and `loaders/musicXmlFile.ts` (out and in), `ui/screens/practice/TouchBreakdown.tsx`, `ui/sheet/StaffPicture.tsx › MusicPicture`.
 
-**5.2 The pedal: Unit 10**
+**5.2 The pedal: Unit 10** — built (the check on the Casio waits until you reach Unit 10)
 - Pedal marks in the score (`"pedal": [{ "down": 0, "up": 4 }]`), drawn and imported (MusicXML `<pedal>`); graded with MIDI (CC64): down and up within a window of each mark. Compare gets a pedal strip.
 - Unit 10, the sustain pedal (4 lessons): what it does and the marks; changing it just after a new chord ("legato pedaling"); with broken chords; when not to pedal. Song: "Gymnopédie No. 1" (Satie, the opening).
+- Built as: a mark that starts where the one before ends is a pedal change. Sheet music draws the marks as a bracket line under the bottom staff, notched at each change (MusicXML `<pedal type="start|change|stop" line="yes">`); MusicXML import reads the same.
+- Grading, MIDI only (only changes of CC64 count, so a pedal sending values in between doesn't add presses), in real time, so it works waiting or playing along. **Pressed:** from a quarter of a beat before the mark to half a beat after it, or until the next note if that comes sooner; at a change, also after the new notes are played (legato pedaling). **Lifted:** in the same window around the mark's end; an end at the end of the music isn't checked, so the last notes can ring. **Without pedal:** notes outside the marks (and away from where the pedal goes down or up) start with the pedal up. A kind passes when three in four are right. Results get a **Pedal** section under Touch, with the bars to work on; when no pedal was heard at all, it asks whether one is plugged in. A lesson exercise can require it (`"pass": { "pedal": true }`); with the microphone, results say the pedal needs a MIDI keyboard.
+- Runs record the pedal: Compare shows it in a strip at the bottom (the marks in gray, the pedal as held over them), and listening to a run keeps notes sounding while the pedal held them.
+- Unit 10 (late elementary): pressing and lifting (a bar with the pedal, one without, a chord with it); changing the pedal (I–IV–V–I chords, then with a bass note under each); pedal and broken chords (Unit 6's broken chords, then a bass note with the chord above it, then the song); when not to pedal (a scale and staccato notes left clean, then with both hands). The lessons' own exercises require the pedal; the song doesn't. New skill: sustain pedal.
+- "Gymnopédie No. 1" (Erik Satie, 1888), the first 14 bars, a whole step down in C so it needs no new key signature: the left hand's bass and chord rock between F major 7 and C major 7, the pedal changed every bar, the melody coming in on the third. The song test now also checks that a song's pedal marks have been taught.
+- Built as `engine/pedal.ts` (checks and summary; pure, tested), `engine/score.ts` (`PedalMark`), pedal events on the input bus (`input/bus.ts › subscribePedal`, sent by `input/midi/midiInput.ts`), the session keeping the pedal's presses, `content/musicxml.ts` and `loaders/musicXmlFile.ts` (out and in), `engine/recording.ts` (the pedal held, `soundingEnd`), `ui/screens/practice/PedalBreakdown.tsx`.
 
 **5.3 Around the keyboard: Unit 11**
 - Unit 11 (5 lessons): position shifts mid-phrase; octave jumps; arpeggios (C, G and F major, hands separately, the thumb passing under across octaves); crossing over. Song: "Prelude in C" (Bach, BWV 846, the opening), with the pedal.
@@ -783,6 +789,8 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - [ ] With a MIDI keyboard, touch (staccato, legato, accents) and the pedal are checked and reported; with the microphone, lessons explain them without grading them.
   - [x] Touch (5.1).
   - [ ] TODO (user): once Unit 8 is finished, go through Unit 9’s lessons on the Casio (legato and slurs with "Aura Lee", staccato, both together with "Can-Can", accents and tenuto, ties).
+  - [x] The pedal (5.2), built.
+  - [ ] TODO (user): at Unit 10, go through its lessons on the Casio with the pedal plugged in (pressing and lifting, changing it, broken chords and "Gymnopédie No. 1", when not to pedal), and say whether the pedal changes are judged fairly.
 - [ ] Sheet music shows slurs, staccato dots, ties, pedal marks, repeats with endings and fermatas, and MusicXML import keeps them.
 - [ ] Repeats play back as written, in practice, Listen and Compare.
 - [ ] Sight-reading and ear training gain levels for the new units.

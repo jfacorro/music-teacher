@@ -35,6 +35,10 @@
     "u9": {
       "title": "El toque",
       "description": "Cómo se toca cada tecla: legato y ligaduras de expresión, staccato, acentos, tenuto y ligaduras de prolongación."
+    },
+    "u10": {
+      "title": "El pedal de resonancia",
+      "description": "El pedal de la derecha: sus marcas, cómo cambiarlo con cada acorde, con acordes arpegiados y cuándo no usarlo."
     }
   },
   "lessons": {
@@ -82,7 +86,11 @@
     "u9-l2": "Staccato",
     "u9-l3": "Staccato y legato",
     "u9-l4": "Acentos y tenuto",
-    "u9-l5": "Ligaduras de prolongación"
+    "u9-l5": "Ligaduras de prolongación",
+    "u10-l1": "Pisar y soltar",
+    "u10-l2": "Cambiar el pedal",
+    "u10-l3": "Pedal y acordes arpegiados",
+    "u10-l4": "Cuándo no usar el pedal"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -105,6 +113,7 @@
     "accidentals": "Alteraciones",
     "minor-keys": "Tonalidades menores",
     "touch": "El toque",
+    "pedal": "Pedal de resonancia",
     "sight-reading": "Lectura a primera vista",
     "ear-training": "Oído musical"
   }

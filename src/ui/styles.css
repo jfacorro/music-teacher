@@ -2502,6 +2502,12 @@ button.bars__bar:focus-visible {
   stroke-width: 2;
 }
 
+/* The pedal as held, over its marks. */
+.compare__pedal {
+  fill: var(--text);
+  opacity: 0.85;
+}
+
 .compare__legend {
   display: flex;
   flex-wrap: wrap;
@@ -2729,7 +2735,8 @@ button.bars__bar:focus-visible {
 
 .touch-results__item {
   display: grid;
-  grid-template-columns: 6rem 1fr auto;
+  /* Wide enough for "Without pedal" on one line. */
+  grid-template-columns: 8rem 1fr auto;
   gap: 0.75rem;
   align-items: baseline;
   padding-block: 0.2rem;

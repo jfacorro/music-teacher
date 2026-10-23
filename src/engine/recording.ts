@@ -22,9 +22,17 @@ export interface RecordedNote {
   end: number;
 }
 
+/** The sustain pedal held down, from `start` to `end`, in beats on the music's timeline. */
+export interface PedalHeld {
+  start: number;
+  end: number;
+}
+
 export interface Recording {
   /** Sorted by start, then pitch. */
   notes: RecordedNote[];
+  /** When the sustain pedal was held (MIDI keyboard); runs kept before it was recorded have none. */
+  pedal?: PedalHeld[];
   /** The tempo it was played at (quarter notes per minute). */
   tempo: number;
   /** The hands practiced. */
@@ -36,10 +44,13 @@ export interface Recording {
   windows: TimingWindows | null;
 }
 
-/** Collects the keys pressed and released during a run into notes. */
+/** Collects the keys pressed and released during a run into notes, and the pedal. */
 export class Recorder {
   private readonly held = new Map<number, RecordedNote>();
   private readonly notes: RecordedNote[] = [];
+  private readonly pedalHolds: PedalHeld[] = [];
+  /** Where the pedal went down, while it's held. */
+  private pedalFrom: number | null = null;
 
   press(pitch: number, velocity: number, source: InputSource, beat: number): void {
     this.release(pitch, beat);
@@ -55,6 +66,23 @@ export class Recorder {
     this.held.delete(pitch);
   }
 
+  pedal(down: boolean, beat: number): void {
+    if (down) {
+      this.pedalFrom ??= beat;
+    } else if (this.pedalFrom !== null) {
+      this.pedalHolds.push({ start: this.pedalFrom, end: Math.max(this.pedalFrom, beat) });
+      this.pedalFrom = null;
+    }
+  }
+
+  /** When the pedal was held; if it still is, until `beat`. */
+  pedalHeld(beat: number): PedalHeld[] {
+    const from = this.pedalFrom;
+    return from === null
+      ? [...this.pedalHolds]
+      : [...this.pedalHolds, { start: from, end: Math.max(from, beat) }];
+  }
+
   /** The notes played; keys still down end at `beat`. */
   finish(beat: number): RecordedNote[] {
     for (const pitch of [...this.held.keys()]) this.release(pitch, beat);
@@ -62,6 +90,12 @@ export class Recorder {
       .map((note) => ({ ...note }))
       .sort((a, b) => a.start - b.start || a.pitch - b.pitch);
   }
+}
+
+/** Where a note played stops sounding: when its key came up, or later if the pedal held it. */
+export function soundingEnd(note: RecordedNote, pedal: readonly PedalHeld[] = []): number {
+  const held = pedal.find((hold) => hold.start <= note.end && note.end < hold.end);
+  return held ? held.end : note.end;
 }
 
 export const PlayedVerdict = {

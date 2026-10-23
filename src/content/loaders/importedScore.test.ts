@@ -87,6 +87,19 @@ describe('importedScore', () => {
     ]);
   });
 
+  it('keeps the pedal marks', () => {
+    const pedal = [{ down: 0, up: 4 }];
+    const result = importedScore(
+      { ...music([melody]), pedal },
+      {
+        hands: [TrackHand.Right],
+        transpose: 0,
+        tempo: 96,
+      },
+    );
+    expect(result.score?.pedal).toEqual(pedal);
+  });
+
   it('turns slur starts and stops into slurs for the track’s hand, keeping articulations', () => {
     const marked: ImportedTrack = {
       ...melody,

@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "change": "Cuando cambia el acorde, también hay que cambiar el pedal; si no, los dos acordes se mezclan. Suéltalo justo cuando tocas el acorde nuevo y vuelve a pisarlo enseguida: el pie sube mientras la mano baja, y después la sigue. Se llama pedal sincopado, y une acordes que la mano sola no puede unir. La muesca en la línea del pedal muestra dónde.",
+    "changeChords": "Cuatro acordes, con un cambio de pedal en cada uno. La mano puede subir un poco antes de cada acorde nuevo: el pedal mantiene el sonido hasta el cambio.",
+    "changeChordsInTime": "Ahora a tempo: el pie sube en el tiempo, con el acorde nuevo, y baja justo después.",
+    "bass": "Ahora con una nota grave en la mano izquierda debajo de cada acorde. Las dos manos tocan juntas; el pie cambia después de ellas.",
+    "bothHands": "Con las dos manos, cambiando el pedal después de cada acorde.",
+    "bothHandsInTime": "Y a tempo."
+  }
+}

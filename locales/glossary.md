@@ -20,6 +20,12 @@ system setting (`src/i18n/naming.ts`).
 | Crescendo / diminuendo                        | crescendo (cresc.) / diminuendo (dim.)               | crescendo (cresc.) / diminuendo (dim.)                  |
 | Hairpin (crescendo/diminuendo sign)           | hairpin                                              | regulador                                               |
 | Pedal down / up                               | down / up                                            | pisado / suelto                                         |
+| Press / lift the pedal                        | press / lift                                         | pisar / soltar                                          |
+| Pedal line (the mark under the music)         | pedal line                                           | línea de pedal                                          |
+| Pedal change (up and down again)              | change the pedal                                     | cambiar el pedal                                        |
+| Legato pedaling (change just after the chord) | legato pedaling                                      | pedal sincopado                                         |
+| Dampers (they stop the strings)               | dampers                                              | apagadores                                              |
+| Notes played without the pedal                | clear                                                | limpias                                                 |
 | Velocity (how hard a key is hit)              | velocity                                             | velocidad                                               |
 | Digital piano                                 | digital piano                                        | piano digital                                           |
 | MIDI keyboard                                 | MIDI keyboard                                        | teclado MIDI                                            |

@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { InputSource } from '../input/types';
-import { compareRun, PlayedVerdict, Recorder, type Recording, writtenFor } from './recording';
+import {
+  compareRun,
+  PlayedVerdict,
+  Recorder,
+  type Recording,
+  soundingEnd,
+  writtenFor,
+} from './recording';
 import { Hand } from './score';
 import { HandFilter } from './session';
 import { scoreOf } from './testUtils';
@@ -49,6 +56,28 @@ function recording(
 
 const verdicts = (comparison: ReturnType<typeof compareRun>) =>
   comparison.played.map((note) => [note.pitch, note.verdict]);
+
+describe('Recorder: the pedal', () => {
+  it('keeps when the pedal was held, until the end if it still is', () => {
+    const recorder = new Recorder();
+    recorder.pedal(true, 0);
+    recorder.pedal(true, 0.5); // still down
+    recorder.pedal(false, 2);
+    recorder.pedal(false, 2.5); // still up
+    recorder.pedal(true, 3);
+    expect(recorder.pedalHeld(4)).toEqual([
+      { start: 0, end: 2 },
+      { start: 3, end: 4 },
+    ]);
+  });
+
+  it('lets a note sound on while the pedal holds it', () => {
+    const note = { pitch: 60, velocity: 64, source: InputSource.Midi, start: 0, end: 1 };
+    expect(soundingEnd(note, [{ start: 0.5, end: 3 }])).toBe(3);
+    expect(soundingEnd(note, [{ start: 1.5, end: 3 }])).toBe(1);
+    expect(soundingEnd(note)).toBe(1);
+  });
+});
 
 describe('compareRun', () => {
   const score = scoreOf([

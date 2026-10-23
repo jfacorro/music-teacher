@@ -47,6 +47,35 @@ describe('scoreToMusicXml', () => {
     expect(notes[3]).toContain('<articulations><staccato/><accent/></articulations>');
   });
 
+  it('writes pedal marks under the bottom staff: start, change and stop', () => {
+    const base = scoreOf([
+      ['C4', 0],
+      ['D4', 1],
+      ['E4', 2],
+      ['F4', 3],
+      ['C3', 0, 4, Hand.Left],
+    ]);
+    const { xml } = scoreToMusicXml({
+      ...base,
+      pedal: [
+        { down: 0, up: 2 },
+        { down: 2, up: 3 },
+      ],
+    });
+    const pedals = [...xml.matchAll(/<direction[^>]*>(?:(?!<\/direction>).)*<\/direction>/g)]
+      .map((match) => match[0])
+      .filter((direction) => direction.includes('<pedal'))
+      .map((direction) => [
+        /<pedal type="(\w+)"/.exec(direction)![1],
+        /<staff>(\d)<\/staff>/.exec(direction)![1],
+      ]);
+    expect(pedals).toEqual([
+      ['start', '2'],
+      ['change', '2'],
+      ['stop', '2'],
+    ]);
+  });
+
   it('writes a one-hand melody on a treble staff', () => {
     const { xml, staves } = scoreToMusicXml(
       scoreOf([

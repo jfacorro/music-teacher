@@ -478,7 +478,9 @@
       "time": "{elapsed} / {total}",
       "pause": "Pausa",
       "resume": "Continuar",
-      "paused": "Tu última interpretación, en pausa"
+      "paused": "Tu última interpretación, en pausa",
+      "pedal": "Abajo de todo: el pedal, como está marcado (gris) y como lo pisaste.",
+      "pedalLabel": "Ped."
     },
     "touch": {
       "heading": "Toque",
@@ -496,6 +498,21 @@
       },
       "bars": "{count, plural, one {Compás para trabajar: {bars}} other {Compases para trabajar: {bars}}}",
       "midiOnly": "El toque (staccato, ligaduras, acentos) se comprueba con un teclado MIDI."
+    },
+    "pedal": {
+      "heading": "Pedal",
+      "kinds": {
+        "down": "Pisado",
+        "up": "Soltado",
+        "off": "Sin pedal"
+      },
+      "counts": {
+        "down": "{right} de {total} a tiempo",
+        "up": "{right} de {total} a tiempo",
+        "off": "{right} de {total} notas limpias"
+      },
+      "silent": "No se oyó el pedal. ¿Está conectado a tu teclado?",
+      "midiOnly": "El pedal se comprueba con un teclado MIDI."
     },
     "lateSound": "La mayoría de las notas llegaron tarde, unos {ms} ms. Si tocabas con los clics, puede que te lleguen tarde: los auriculares y altavoces Bluetooth retrasan el sonido, y el navegador no lo sabe.",
     "unmeasuredOutput": "El sonido sale por {output}, y la sincronización de los clics no se midió para esa salida. Si es Bluetooth, los clics sonarán tarde, y también las notas que toques con ellos.",
@@ -534,7 +551,8 @@
       "tries": "{count, plural, one {# intento} other {# intentos}}",
       "allTip": "Todos los intentos, con su fecha"
     },
-    "passTouch": "Toca también las notas staccato y ligadas como están escritas (con un teclado MIDI)."
+    "passTouch": "Toca también las notas staccato y ligadas como están escritas (con un teclado MIDI).",
+    "passPedal": "Usa también el pedal como está marcado (con un teclado MIDI)."
   },
   "welcome": {
     "title": "Bienvenido a Profesor de piano",

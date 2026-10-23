@@ -6,7 +6,7 @@
  * value the sheet music writes (`musicxml.ts`).
  */
 import type { ScoreDynamics } from '../../engine/dynamics';
-import { type Finger, Hand, type Articulation } from '../../engine/score';
+import { type Finger, Hand, type Articulation, type PedalMark } from '../../engine/score';
 import { MIDDLE_C, type Pitch } from '../../theory/pitch';
 
 export interface ImportedNote {
@@ -60,6 +60,8 @@ export interface ImportedMusic {
   warnings: ImportWarning[];
   /** Loud and soft, as written (MusicXML only; songs saved before this have none). */
   dynamics?: ScoreDynamics;
+  /** The sustain pedal, as written (MusicXML only; songs saved before this have none). */
+  pedal?: PedalMark[];
 }
 
 export const ImportErrorCode = {

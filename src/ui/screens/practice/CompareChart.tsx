@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { compareRun, PlayedVerdict, type Recording } from '../../../engine/recording';
-import type { Measure, ScoreNote } from '../../../engine/score';
+import type { Measure, PedalMark, ScoreNote } from '../../../engine/score';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { InputSource } from '../../../input/types';
 import { isBlackKey, pitchFromMidi } from '../../../theory/pitch';
@@ -12,6 +12,7 @@ const ROW = 12;
 const LABELS = 40;
 const HEADER = 18;
 const LOUDNESS = 44;
+const PEDAL = 16;
 
 /** Played notes by verdict: the chart's colors (see styles.css) and the legend. */
 const VERDICT_CLASS: Readonly<Record<PlayedVerdict, string>> = {
@@ -29,14 +30,17 @@ interface CompareChartProps {
   notes: readonly ScoreNote[];
   recording: Recording;
   measures: readonly Measure[];
+  /** Where the music marks the pedal. */
+  pedal?: readonly PedalMark[];
 }
 
 /**
  * A run over the music it was played to (PLAN.md milestone 4.2): the written notes as gray
  * bars, what was played on top in color (right, early, late, wrong key), missed notes outlined;
- * with a MIDI keyboard, a strip below shows how hard each key was played.
+ * with a MIDI keyboard, a strip below shows how hard each key was played, and another the pedal
+ * as written and as held.
  */
-export function CompareChart({ notes, recording, measures }: CompareChartProps) {
+export function CompareChart({ notes, recording, measures, pedal = [] }: CompareChartProps) {
   const { t } = useTranslation('screens');
   const names = useNoteNames();
   const comparison = useMemo(() => compareRun(notes, recording), [notes, recording]);
@@ -58,7 +62,11 @@ export function CompareChart({ notes, recording, measures }: CompareChartProps) 
   const rows = high - low + 1;
   const width = x(to) + 8;
   const loudnessTop = HEADER + rows * ROW + 8;
-  const height = loudnessTop + (showLoudness ? LOUDNESS + 4 : 0);
+  const held = recording.pedal ?? [];
+  const marks = pedal.filter((mark) => mark.up > from && mark.down < to);
+  const showPedal = marks.length > 0 || held.length > 0;
+  const pedalTop = loudnessTop + (showLoudness ? LOUDNESS + 8 : 0);
+  const height = showPedal ? pedalTop + PEDAL + 4 : loudnessTop + (showLoudness ? LOUDNESS + 4 : 0);
 
   const counts = {
     right: comparison.played.filter(
@@ -148,6 +156,38 @@ export function CompareChart({ notes, recording, measures }: CompareChartProps) 
                 y2={loudnessTop + LOUDNESS * (1 - note.velocity / 127)}
               />
             ))}
+          {showPedal && (
+            <g>
+              <text className="compare__label" x={4} y={pedalTop + PEDAL - 4}>
+                {t('practice.recording.pedalLabel')}
+              </text>
+              {marks.map((mark) => (
+                <rect
+                  key={`m${mark.down}`}
+                  className="compare__written"
+                  x={x(Math.max(mark.down, from))}
+                  y={pedalTop + 1}
+                  width={Math.max(
+                    2,
+                    (Math.min(mark.up, to) - Math.max(mark.down, from)) * BEAT - 2,
+                  )}
+                  height={PEDAL - 2}
+                  rx={2}
+                />
+              ))}
+              {held.map((hold) => (
+                <rect
+                  key={`h${hold.start}`}
+                  className="compare__pedal"
+                  x={x(hold.start)}
+                  y={pedalTop + PEDAL * 0.25}
+                  width={Math.max(3, (hold.end - hold.start) * BEAT)}
+                  height={PEDAL * 0.5}
+                  rx={2}
+                />
+              ))}
+            </g>
+          )}
         </svg>
       </div>
       <ul className="compare__legend">
@@ -164,6 +204,7 @@ export function CompareChart({ notes, recording, measures }: CompareChartProps) 
           </li>
         )}
         {showLoudness && <li className="muted">{t('practice.recording.loudness')}</li>}
+        {showPedal && <li className="muted">{t('practice.recording.pedal')}</li>}
       </ul>
     </div>
   );

@@ -134,6 +134,29 @@ describe('parseMusicXml', () => {
     expect(e).toMatchObject({ slurs: ['stop'], articulations: ['tenuto'] });
   });
 
+  it('reads pedal marks: down at a start, up at a stop, both at a change', () => {
+    const pedal = (type: string, offset = 0) =>
+      `<direction placement="below"><direction-type><pedal type="${type}" line="yes"/>` +
+      `</direction-type>${offset ? `<offset>${offset}</offset>` : ''}</direction>`;
+    const music = parseMusicXml(
+      piece(
+        measure(
+          attributes('<divisions>1</divisions>'),
+          pedal('start'),
+          n('C4', 2),
+          pedal('change'),
+          n('E4', 2),
+        ),
+        measure(n('G4', 2), pedal('stop'), rest(2)),
+      ),
+    );
+    expect(music.pedal).toEqual([
+      { down: 0, up: 2 },
+      { down: 2, up: 6 },
+    ]);
+    expect(parseMusicXml(piece(measure(n('C4', 4))))).not.toHaveProperty('pedal');
+  });
+
   it('joins tied notes, also across bar lines', () => {
     const music = parseMusicXml(
       piece(

@@ -11,7 +11,13 @@ import { useTranslation } from 'react-i18next';
 import { startAccompaniment } from '../../../audio/accompaniment';
 import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
-import { beatsPerMeasure, hasTouchMarks, type Score, type ScoreNote } from '../../../engine/score';
+import {
+  beatsPerMeasure,
+  hasPedalMarks,
+  hasTouchMarks,
+  type Score,
+  type ScoreNote,
+} from '../../../engine/score';
 import { type Summary, OutcomeKind } from '../../../engine/scoring';
 import {
   PracticeSession,
@@ -25,7 +31,7 @@ import { weakSpot } from '../../../engine/weakSpots';
 import { formatPercent } from '../../../i18n/format';
 import { isTypingTarget } from '../../../input/dev/devInput';
 import { useNoteNames } from '../../../i18n/useNoteNames';
-import { subscribeNotes } from '../../../input/bus';
+import { subscribeNotes, subscribePedal } from '../../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
 import { useInstrument, Instrument } from '../../../input/routing';
 import { groupByStart } from '../../../engine/matching/waitMatcher';
@@ -155,6 +161,7 @@ export function PracticeRun({
   const [comparing, setComparing] = useState(false);
 
   useEffect(() => subscribeNotes((event) => session.handleNote(event)), [session]);
+  useEffect(() => subscribePedal((event) => session.handlePedal(event)), [session]);
   // After the session hears each key, so it's recorded as the session read it.
   const run = useRunRecording({ key: recordingKey, session, transport, mode, hands });
   useEffect(() => {
@@ -519,6 +526,7 @@ export function PracticeRun({
             onSelectBar={onLoopChange && ((bar) => onLoopChange({ first: bar, last: bar }))}
             hasDynamics={score.dynamics !== undefined}
             hasTouch={hasTouchMarks(score, session.hands)}
+            hasPedal={hasPedalMarks(score)}
             clicks={metronome}
           >
             {weak || extraActions || run.recording ? (
@@ -570,7 +578,12 @@ export function PracticeRun({
           <section className="compare-card">
             <h2 id="compare-heading">{t('practice.recording.heading')}</h2>
             <p className="muted">{t('practice.recording.intro')}</p>
-            <CompareChart notes={score.notes} recording={run.recording} measures={score.measures} />
+            <CompareChart
+              notes={score.notes}
+              recording={run.recording}
+              measures={score.measures}
+              pedal={score.pedal}
+            />
           </section>
         </Modal>
       )}
