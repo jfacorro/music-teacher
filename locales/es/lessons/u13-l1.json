@@ -1,0 +1,12 @@
+{
+  "steps": {
+    "sixteenths": "Las semicorcheas tienen dos corchetes, o dos barras: caben cuatro en un pulso, el doble de rápido que las corcheas. Divide cada pulso en cuatro partes iguales, manteniéndolo parejo, y haz que las semicorcheas quepan dentro.",
+    "tapSixteenths": "Toca el ritmo: negras, corcheas y semicorcheas.",
+    "sixteenthRun": "Cuatro semicorcheas en el tercer pulso, y cuatro más en el primer pulso del compás siguiente.",
+    "sixteenthRunInTime": "Ahora a tempo.",
+    "dotted": "Un puntillo después de una corchea la alarga a tres semicorcheas, y la semicorchea que sigue completa el pulso: largo, corto. Suena como un saltito.",
+    "tapDotted": "Toca el ritmo largo-corto.",
+    "skipping": "Saltando hacia arriba, y de vuelta.",
+    "skippingInTime": "Y a tempo."
+  }
+}

@@ -13,6 +13,7 @@ import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
 import {
   beatsPerMeasure,
+  countedBeat,
   hasPedalMarks,
   hasTouchMarks,
   type Score,
@@ -248,6 +249,7 @@ export function PracticeRun({
           musicStart: session.musicStart,
           loopEnd: session.looping ? session.musicEnd : null,
           beatsPerMeasure: beatsPerMeasure(score.timeSignature),
+          every: countedBeat(score.timeSignature),
           holdBeat: session.holdBeat,
         }),
         (time, accent) => audioIfReady()?.click(time, accent),

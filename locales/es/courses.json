@@ -47,6 +47,10 @@
     "u12": {
       "title": "Más tonalidades",
       "description": "Las tonalidades de {d} mayor y {bFlat} mayor, los relativos menores, las escalas menores natural y armónica de {a}, {e} y {d}, y la lectura con estas armaduras."
+    },
+    "u13": {
+      "title": "Ritmo y forma",
+      "description": "Semicorcheas y ritmos con puntillo, el compás de 6/8, la síncopa, las repeticiones con primera y segunda casilla, el ritardando y el calderón."
     }
   },
   "lessons": {
@@ -108,7 +112,12 @@
     "u12-l2": "{bFlat} mayor",
     "u12-l3": "Relativos menores",
     "u12-l4": "La menor armónica",
-    "u12-l5": "Leer en otras tonalidades"
+    "u12-l5": "Leer en otras tonalidades",
+    "u13-l1": "Semicorcheas",
+    "u13-l2": "El compás de 6/8",
+    "u13-l3": "La síncopa",
+    "u13-l4": "Repeticiones y casillas",
+    "u13-l5": "Ritardando y calderón"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -135,6 +144,9 @@
     "shifts": "Cambios de posición",
     "arpeggios": "Arpegios",
     "key-signatures": "Armaduras",
+    "compound-time": "Compás de 6/8",
+    "syncopation": "Síncopa",
+    "form": "Repeticiones y casillas",
     "sight-reading": "Lectura a primera vista",
     "ear-training": "Oído musical"
   }

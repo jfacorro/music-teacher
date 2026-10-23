@@ -27,7 +27,15 @@ import { MIDDLE_C, type Pitch } from '../theory/pitch';
 import { TempoMatcher, TempoResultKind } from './matching/tempoMatcher';
 import { resolvePlayed } from './micAliases';
 import { WaitMatcher, WaitResultKind } from './matching/waitMatcher';
-import { beatsPerMeasure, msToBeats, scoreEnd, Hand, type Score, type ScoreNote } from './score';
+import {
+  beatsPerMeasure,
+  countedBeat,
+  msToBeats,
+  scoreEnd,
+  Hand,
+  type Score,
+  type ScoreNote,
+} from './score';
 import {
   accuracyOf,
   summarize,
@@ -358,11 +366,11 @@ export class PracticeSession {
       }
     }
 
-    // The count-in, shown 1, 2, 3, 4.
+    // The count-in, shown 1, 2, 3, 4 (in 6/8: 1, 2).
     const from = this.countInFrom;
     const countIn =
       from !== null && position >= from && position < this.musicStart
-        ? Math.floor(position - from) + 1
+        ? Math.floor((position - from) / countedBeat(this.score.timeSignature) + 1e-9) + 1
         : null;
     if (countIn !== this.state.countIn) this.setState({ countIn });
 

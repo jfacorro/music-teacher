@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { parseInlineScore } from '../content/loaders/inlineScore';
-import { beatsToMs, measureAt, msToBeats, notesAt, notesBetween, scoreEnd } from './score';
+import {
+  beatsToMs,
+  countedBeat,
+  measureAt,
+  msToBeats,
+  notesAt,
+  notesBetween,
+  scoreEnd,
+} from './score';
 
 const score = parseInlineScore(
   {
@@ -45,5 +53,15 @@ describe('score helpers', () => {
   it('converts between beats and milliseconds', () => {
     expect(beatsToMs(2, 120)).toBe(1000);
     expect(msToBeats(1000, 60)).toBe(1);
+  });
+});
+
+describe('countedBeat', () => {
+  it('counts dotted quarters in compound time, quarters otherwise', () => {
+    expect(countedBeat([6, 8])).toBe(1.5);
+    expect(countedBeat([12, 8])).toBe(1.5);
+    expect(countedBeat([3, 8])).toBe(1);
+    expect(countedBeat([4, 4])).toBe(1);
+    expect(countedBeat([3, 4])).toBe(1);
   });
 });

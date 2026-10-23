@@ -1,7 +1,8 @@
 /**
  * One ear-training exercise (PLAN.md milestone 4.4): each question is played, then answered on
- * the keyboard (or, for chords, by choosing major or minor). Wrong keys say which note they
- * were; after two the key to play lights up. Scored by the questions answered without a miss.
+ * the keyboard (or, for chords, by choosing major or minor; for rhythms, by tapping any key).
+ * Wrong keys say which note they were; after two the key to play lights up (for a rhythm, how
+ * many notes it has). Scored by the questions answered without a miss.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +12,7 @@ import {
   answerChord,
   answerNote,
   answerQuality,
+  answerRhythm,
   type ChordKind,
   EarLevel,
   type EarQuestion,
@@ -51,6 +53,8 @@ const START_DELAY_MS = 150;
 /** How long the app's piano keeps ringing for the microphone after a question (ms). */
 const RING_MS = 600;
 const CHORD_KINDS: readonly ChordKind[] = [ChordQuality.Major, ChordQuality.Minor];
+/** A rhythm's taps stop counting after a pause this long: tapping again starts over (ms). */
+const TAPS_FORGOTTEN_MS = 3000;
 
 interface EarExerciseProps {
   level: EarLevel;
@@ -86,6 +90,8 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
   // The microphone hears one note at a time: chords are answered by choosing.
   const chordByKeys = question?.quality !== null && !usingMic;
 
+  /** A rhythm's taps so far (ms). */
+  const taps = useRef<number[]>([]);
   const soundTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   // The reference can be turned off, even halfway through.
   const withReference = useRef(reference);
@@ -100,6 +106,7 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
     });
     if (!engine) return;
     engine.stopAccompaniment();
+    taps.current = [];
     const start = performance.now() + START_DELAY_MS + soundLeadMs();
     for (const note of promptNotes(asked)) {
       engine.accompany(note.midi, start + note.at, start + note.at + note.length);
@@ -150,6 +157,22 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
       held.add(event.pitch);
       const asked = current.question;
       if (!asked || !current.started || current.answered || current.sounding) return;
+      if (asked.rhythm) {
+        // Any key is a tap; a long pause starts over.
+        const last = taps.current.at(-1);
+        if (last !== undefined && event.time - last > TAPS_FORGOTTEN_MS) taps.current = [];
+        taps.current.push(event.time);
+        setPlayed(taps.current.length);
+        if (taps.current.length < asked.notes.length) return;
+        const answer = answerRhythm(asked, taps.current);
+        taps.current = [];
+        if (answer === Answer.Right) right(latestMisses.current);
+        else {
+          setPlayed(0);
+          miss(null);
+        }
+        return;
+      }
       if (asked.quality !== null) {
         if (!current.chordByKeys || judged) return;
         const answer = answerChord(asked, [...held]);
@@ -236,9 +259,10 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
   const marks = useMemo(() => {
     if (!question || !started) return new Map<number, KeyMark>();
     const fits = (pitch: number) =>
-      question.quality !== null
+      question.rhythm !== null ||
+      (question.quality !== null
         ? question.notes.some((note) => pitchClass(note) === pitchClass(pitch))
-        : question.notes.includes(pitch);
+        : question.notes.includes(pitch));
     return new Map<number, KeyMark>(
       held.map((note) => [note.pitch, fits(note.pitch) ? KeyMark.Correct : KeyMark.Wrong]),
     );
@@ -298,6 +322,7 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
     }
     if (level === EarLevel.Notes)
       return t('earTraining.right.note', { note: name(question.notes[0]!) });
+    if (level === EarLevel.Rhythms) return t('earTraining.right.rhythm');
     return t('earTraining.right.melody');
   };
   const message = !started
@@ -312,8 +337,14 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
           ? [
               wrongKey !== null
                 ? t('earTraining.wrong', { note: name(wrongKey) })
-                : t('earTraining.wrongChord'),
-              misses >= HINT_AFTER ? t('earTraining.hint') : '',
+                : question.rhythm
+                  ? t('earTraining.wrongRhythm')
+                  : t('earTraining.wrongChord'),
+              misses < HINT_AFTER
+                ? ''
+                : question.rhythm
+                  ? t('earTraining.hintRhythm', { count: question.notes.length })
+                  : t('earTraining.hint'),
             ]
               .filter(Boolean)
               .join(' ')

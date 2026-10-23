@@ -74,5 +74,13 @@
   "scarborough-fair": {
     "title": "Scarborough Fair",
     "composer": "English folk song"
+  },
+  "morning-mood": {
+    "title": "Morning Mood",
+    "composer": "Edvard Grieg"
+  },
+  "the-entertainer": {
+    "title": "The Entertainer",
+    "composer": "Scott Joplin"
   }
 }

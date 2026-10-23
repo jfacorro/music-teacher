@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Hand } from '../engine/score';
+import { beatsPerMeasure, Hand } from '../engine/score';
 import { HandFilter } from '../engine/session';
 import { pitchClass } from '../theory/pitch';
 import { UNITS } from './courses';
@@ -92,7 +92,10 @@ describe('drill levels', () => {
       DrillLevel.Keys,
       DrillLevel.Accidentals,
     ]);
-    expect(openDrillLevels(UNITS, doneUpTo('u12'))).toEqual(DRILL_LEVELS);
+    expect(openDrillLevels(UNITS, doneUpTo('u12'))).toEqual(
+      DRILL_LEVELS.filter((level) => level !== DrillLevel.SixEight),
+    );
+    expect(openDrillLevels(UNITS, doneUpTo('u13'))).toEqual(DRILL_LEVELS);
   });
 
   it('name units of the course', () => {
@@ -114,13 +117,14 @@ describe('makeDrill', () => {
     }
   });
 
-  it.each(DRILL_LEVELS)('writes four bars of 4/4 that end on the key note (%s)', (level) => {
+  it.each(DRILL_LEVELS)('writes four bars that end on the key note (%s)', (level) => {
     for (const seed of SEEDS) {
       const { score, minor } = makeDrill(level, seed);
-      expect(score.timeSignature).toEqual([4, 4]);
+      const bar = beatsPerMeasure(score.timeSignature);
+      expect(score.timeSignature).toEqual(level === DrillLevel.SixEight ? [6, 8] : [4, 4]);
       expect(score.measures).toHaveLength(4);
-      const melody = score.notes.filter((note) => note.duration < 4 || note.start === 0);
-      const last = score.notes.filter((note) => note.start + note.duration === 16);
+      const melody = score.notes.filter((note) => note.duration < bar || note.start === 0);
+      const last = score.notes.filter((note) => note.start + note.duration === 4 * bar);
       expect(last.length).toBeGreaterThan(0);
       // The major key's note, or its relative minor's.
       const tonic = ((((score.keyFifths ?? 0) * 7 + (minor ? 9 : 0)) % 12) + 12) % 12;
@@ -157,6 +161,20 @@ describe('makeDrill', () => {
       expect(score.notes.some((note) => note.duration === 0.5)).toBe(true);
       const played = score.notes.reduce((sum, note) => sum + note.duration, 0);
       expect(played, `seed ${seed}`).toBeLessThan(16);
+    }
+  });
+
+  it('writes 6/8 in groups of three eighth notes, with some sixteenths in each drill', () => {
+    for (const seed of SEEDS) {
+      const { score } = makeDrill(DrillLevel.SixEight, seed);
+      expect(score.notes.some((note) => note.duration === 0.25)).toBe(true);
+      // Every dotted-quarter beat starts on a note or a rest boundary: no note crosses one.
+      for (const note of score.notes) {
+        const beat = Math.floor(note.start / 1.5 + 1e-9);
+        expect(note.start + note.duration, `seed ${seed}`).toBeLessThanOrEqual(
+          note.duration >= 1.5 ? 12 : (beat + 1) * 1.5 + 1e-9,
+        );
+      }
     }
   });
 

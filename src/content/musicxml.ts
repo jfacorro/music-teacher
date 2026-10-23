@@ -9,7 +9,14 @@
  * notes in its one line.
  */
 import { HairpinKind } from '../engine/dynamics';
-import { beatsPerMeasure, Hand, type Score, type ScoreNote, slurNotes } from '../engine/score';
+import {
+  beatsPerMeasure,
+  countedBeat,
+  Hand,
+  type Score,
+  type ScoreNote,
+  slurNotes,
+} from '../engine/score';
 import type { Pitch } from '../theory/pitch';
 
 /** Divisions per quarter note: sixteenths (3) and eighth-note triplets (4) are whole numbers. */
@@ -119,6 +126,12 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
       ].sort((a, b) => a.at - b.at || a.order - b.order);
   const slurs = slurMarks(score);
   const barlines = barlinesFor(score, measureCount);
+  // Compound time is beamed here, in groups of three eighths: OSMD's automatic beams don't
+  // group it. Other times are left to them.
+  const beamEvery =
+    countedBeat(score.timeSignature) === 1
+      ? null
+      : Math.round(countedBeat(score.timeSignature) * DIVISIONS);
 
   const measures: string[] = [];
   for (let m = 0; m < measureCount; m++) {
@@ -146,6 +159,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
           options.rhythm ?? false,
           inBar,
           slurs,
+          beamEvery,
         ),
       );
     });
@@ -218,8 +232,11 @@ function measureNotes(
   rhythm: boolean,
   directions: readonly Direction[],
   slurs: ReadonlyMap<ScoreNote, readonly SlurMark[]> = new Map(),
+  beamEvery: number | null = null,
 ): string[] {
   const out: string[] = [];
+  /** Notes shorter than a quarter, to beam: where each is written (a chord's first note). */
+  const beamable: Beamable[] = [];
   let pending = 0;
   /** Writes the directions up to `at`, before what's written there. */
   const flush = (at: number) => {
@@ -261,6 +278,9 @@ function measureNotes(
     pieces.forEach((value, i) => {
       const tieStop = at > event.start;
       const tieStart = i < pieces.length - 1 || event.end > to;
+      if (beamEvery !== null && value.divs < DIVISIONS) {
+        beamable.push({ index: out.length, at, divs: value.divs });
+      }
       event.notes.forEach((note, n) => {
         index.set(noteKey(staff.number, at, note.pitch.midi), note);
         out.push(
@@ -287,7 +307,58 @@ function measureNotes(
   }
   if (cursor < to) restsBetween(cursor, to);
   flush(Infinity);
+  if (beamEvery !== null) addBeams(out, beamable, from, beamEvery);
   return out;
+}
+
+/** A note to beam: its place among a bar's written elements, where it is and how long. */
+interface Beamable {
+  index: number;
+  at: number;
+  divs: number;
+}
+
+/**
+ * Beams the notes shorter than a quarter that follow each other within a group of `every`
+ * divisions from the bar's start; sixteenths get a second beam, or a hook when alone.
+ */
+function addBeams(out: string[], notes: readonly Beamable[], from: number, every: number): void {
+  const groupOf = (note: Beamable) => Math.floor((note.at - from) / every);
+  const runs: Beamable[][] = [];
+  for (const note of notes) {
+    const run = runs.at(-1);
+    const before = run?.at(-1);
+    if (run && before && groupOf(before) === groupOf(note) && before.at + before.divs === note.at) {
+      run.push(note);
+    } else {
+      runs.push([note]);
+    }
+  }
+  const sixteenth = (note: Beamable | undefined) =>
+    note !== undefined && note.divs <= DIVISIONS / 4;
+  for (const run of runs) {
+    if (run.length < 2) continue;
+    run.forEach((note, i) => {
+      const first = `<beam number="1">${i === 0 ? 'begin' : i === run.length - 1 ? 'end' : 'continue'}</beam>`;
+      let second = '';
+      if (sixteenth(note)) {
+        const before = sixteenth(run[i - 1]);
+        const after = sixteenth(run[i + 1]);
+        const kind =
+          before && after
+            ? 'continue'
+            : before
+              ? 'end'
+              : after
+                ? 'begin'
+                : i === 0
+                  ? 'forward hook'
+                  : 'backward hook';
+        second = `<beam number="2">${kind}</beam>`;
+      }
+      out[note.index] = out[note.index]!.replace('</staff>', `</staff>${first}${second}`);
+    });
+  }
 }
 
 /** The score's dynamics and hairpins as MusicXML directions for `staff`, by position. */

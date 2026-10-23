@@ -396,6 +396,35 @@
           "skills": ["key-signatures", "minor-keys"]
         }
       ]
+    },
+    {
+      "id": "u13",
+      "level": "earlyIntermediate",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "u13-l1",
+          "skills": ["note-values", "steady-tempo"]
+        },
+        {
+          "id": "u13-l2",
+          "skills": ["compound-time", "note-values"]
+        },
+        {
+          "id": "u13-l3",
+          "skills": ["syncopation", "steady-tempo"]
+        },
+        {
+          "id": "u13-l4",
+          "skills": ["form", "syncopation"]
+        },
+        {
+          "id": "u13-l5",
+          "skills": ["steady-tempo", "form"]
+        }
+      ]
     }
   ]
 }
