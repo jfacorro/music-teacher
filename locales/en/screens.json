@@ -840,7 +840,7 @@
       "notInTimeLow": "not matched in time, sung too low",
       "notInTimeHigh": "not matched in time, sung too high",
       "save": "Save recording",
-      "saveTip": "Saves this run’s audio and notes as a file, to improve how singing is judged (fixtures/voice/)."
+      "saveTip": "Saves this run as an audio file (.wav) with the notes asked inside it, to improve how singing is judged. Put it in the project’s fixtures/voice folder."
     }
   }
 }

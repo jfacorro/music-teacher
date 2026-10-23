@@ -1,13 +1,27 @@
 /** Minimal 16-bit PCM mono WAV encoding and decoding, for microphone recordings. */
 
-export function encodeWav(samples: Float32Array, sampleRate: number): Uint8Array<ArrayBuffer> {
-  const bytes = new Uint8Array(44 + samples.length * 2);
+/** A chunk of its own in a WAV file, after the audio (players skip chunks they don't know). */
+export interface WavChunk {
+  /** Four ASCII characters. */
+  id: string;
+  bytes: Uint8Array;
+}
+
+export function encodeWav(
+  samples: Float32Array,
+  sampleRate: number,
+  extra: readonly WavChunk[] = [],
+): Uint8Array<ArrayBuffer> {
+  const dataEnd = 44 + samples.length * 2;
+  const padded = (size: number) => size + (size % 2);
+  const length = extra.reduce((total, chunk) => total + 8 + padded(chunk.bytes.length), dataEnd);
+  const bytes = new Uint8Array(length);
   const view = new DataView(bytes.buffer);
   const text = (offset: number, value: string) =>
     [...value].forEach((char, i) => view.setUint8(offset + i, char.charCodeAt(0)));
 
   text(0, 'RIFF');
-  view.setUint32(4, 36 + samples.length * 2, true);
+  view.setUint32(4, length - 8, true);
   text(8, 'WAVE');
   text(12, 'fmt ');
   view.setUint32(16, 16, true); // fmt chunk size
@@ -23,7 +37,27 @@ export function encodeWav(samples: Float32Array, sampleRate: number): Uint8Array
     const clamped = Math.max(-1, Math.min(1, sample));
     view.setInt16(44 + i * 2, clamped < 0 ? clamped * 0x8000 : clamped * 0x7fff, true);
   });
+  let offset = dataEnd;
+  for (const chunk of extra) {
+    text(offset, chunk.id);
+    view.setUint32(offset + 4, chunk.bytes.length, true);
+    bytes.set(chunk.bytes, offset + 8);
+    offset += 8 + padded(chunk.bytes.length);
+  }
   return bytes;
+}
+
+/** The body of the chunk named `id` in a WAV file, or null when it has none. */
+export function wavChunk(bytes: Uint8Array, id: string): Uint8Array | null {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  for (let offset = 12; offset + 8 <= bytes.length;) {
+    const size = view.getUint32(offset + 4, true);
+    if (String.fromCharCode(...bytes.subarray(offset, offset + 4)) === id) {
+      return bytes.subarray(offset + 8, offset + 8 + size);
+    }
+    offset += 8 + size + (size % 2);
+  }
+  return null;
 }
 
 export function decodeWav(bytes: Uint8Array): { samples: Float32Array; sampleRate: number } {

@@ -1,8 +1,9 @@
 # Voice recordings
 
-Real singing, for tuning how the app judges a voice. Each recording is one `<name>.json`
-with the microphone audio (a 16-bit mono WAV, embedded), the notes asked in a run of Match the
-note, when the app listened for each, and how each went while singing.
+Real singing, for tuning how the app judges a voice. Each recording is one `<name>.wav`: the
+microphone audio (16-bit mono), which plays in any audio player, with the run of Match the note
+inside it, in a `json` chunk after the audio: the notes asked, when the app listened for each,
+and how each went while singing.
 
 ## Making one
 
@@ -15,5 +16,6 @@ Recordings are a few MB each, so they aren't committed (`.gitignore`); they stay
 machine that made them.
 
 `npm test` replays every recording through the detector and the matcher
-(`src/input/mic/voiceFixtures.test.ts`) and prints how many notes it matches in time. Add
-`"minMatched": 8` to a recording's JSON to make the test fail if fewer notes match than that.
+(`src/input/mic/voiceFixtures.test.ts`) and prints how many notes it matches in time. Add a
+`<name>.min.json` beside a recording, such as `{ "minMatched": 8 }`, to make the test fail if
+fewer notes match than that.

@@ -251,7 +251,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
             onClick={() => {
               const file = recorder.current?.save();
               const name = `voice-match-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}`;
-              if (file) downloadBlob(file, `${name}.json`);
+              if (file) downloadBlob(file, `${name}.wav`);
             }}
           >
             {t('tuner.match.save')}

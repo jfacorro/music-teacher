@@ -1,11 +1,11 @@
 /**
  * Recordings of a voice singing Match the note (PLAN.md milestone 6.1), for tuning how singing
- * is judged: the microphone audio, each note asked, and when the app listened for it. Saved as a
- * single `<name>.json` (the audio embedded as a WAV data URL) into `fixtures/voice/`, where
+ * is judged: a WAV file of the microphone audio, which plays anywhere, with each note asked and
+ * when the app listened for it in a chunk of its own. Saved into `fixtures/voice/`, where
  * `voiceFixtures.test.ts` replays it through the detector and the matcher.
  */
 import { subscribeMicAudio } from './micInput';
-import { dataUrlFromBytes, encodeWav } from './wav';
+import { decodeWav, encodeWav, wavChunk } from './wav';
 
 /**
  * A note asked, timed from the first recorded sample (ms), as the app hears it: readings reach
@@ -22,15 +22,36 @@ export interface RecordedTarget {
   inTime: boolean;
 }
 
-export interface VoiceRecordingFile {
+/** The run, kept in the WAV file's `json` chunk. */
+export interface VoiceRecordingInfo {
   version: 1;
-  sampleRate: number;
   /** Detector settings in effect while recording. */
   gateDb: number;
   notes: RecordedTarget[];
   recordedAt: string;
-  /** The microphone audio: a `data:audio/wav;base64,…` URL (16-bit mono). */
-  audio: string;
+}
+
+/** The WAV chunk holding the run. */
+const INFO_CHUNK = 'json';
+
+/** A recording as a WAV file (16-bit mono), the run in its `json` chunk. */
+export function voiceRecordingWav(
+  samples: Float32Array,
+  sampleRate: number,
+  info: VoiceRecordingInfo,
+): Uint8Array<ArrayBuffer> {
+  const bytes = new TextEncoder().encode(JSON.stringify(info));
+  return encodeWav(samples, sampleRate, [{ id: INFO_CHUNK, bytes }]);
+}
+
+/** A recording's audio and run, or null for a WAV file without one. */
+export function readVoiceRecording(
+  bytes: Uint8Array,
+): { samples: Float32Array; sampleRate: number; info: VoiceRecordingInfo } | null {
+  const chunk = wavChunk(bytes, INFO_CHUNK);
+  if (!chunk) return null;
+  const info = JSON.parse(new TextDecoder().decode(chunk)) as VoiceRecordingInfo;
+  return { ...decodeWav(bytes), info };
 }
 
 /** The longest recording kept: a run is about a minute. */
@@ -73,15 +94,13 @@ export function startVoiceRecording(gateDb: number): {
         audio.set(hop, offset);
         offset += hop.length;
       }
-      const file: VoiceRecordingFile = {
+      const info: VoiceRecordingInfo = {
         version: 1,
-        sampleRate,
         gateDb,
         notes,
         recordedAt: new Date().toISOString(),
-        audio: dataUrlFromBytes(encodeWav(audio, sampleRate), 'audio/wav'),
       };
-      return new Blob([JSON.stringify(file)], { type: 'application/json' });
+      return new Blob([voiceRecordingWav(audio, sampleRate, info)], { type: 'audio/wav' });
     },
     stop,
   };

@@ -840,7 +840,7 @@
       "notInTimeLow": "no la alcanzaste a tiempo, cantaste más grave",
       "notInTimeHigh": "no la alcanzaste a tiempo, cantaste más agudo",
       "save": "Guardar la grabación",
-      "saveTip": "Guarda el audio y las notas de esta ronda en un archivo, para mejorar cómo se evalúa el canto (fixtures/voice/)."
+      "saveTip": "Guarda esta ronda como un archivo de audio (.wav) con las notas pedidas adentro, para mejorar cómo se evalúa el canto. Ponlo en la carpeta fixtures/voice del proyecto."
     }
   }
 }
