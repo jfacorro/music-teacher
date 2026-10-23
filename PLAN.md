@@ -12,6 +12,7 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 - Run locally in the browser; optionally package as a desktop app later.
 - Lesson content is **data**, not code, so new lessons and songs are easy to add.
 - **All user-facing text is localized** — UI, lesson content, feedback, song titles, music terminology (including note-naming systems like C D E vs Do Re Mi).
+- From Phase 6, teach singing too: a course of its own, listening through the microphone, in the same app.
 
 ### Non-goals (for now)
 
@@ -820,6 +821,62 @@ Every new song passes the "only what's taught" test, extended to articulation, s
 - [x] Repeats play back as written, in practice, Listen and Compare (checked in the browser with a test piece: the cursor goes back at the repeat sign, on to the second ending, slows through rit. and holds the fermata).
 - [x] Sight-reading and ear training gain levels for the new units: Neighbor notes, More keys and 6/8 with sixteenth notes; Rhythms and Major or minor scales.
 - [ ] Verified on the Casio, with MIDI and (where it applies) the microphone.
+
+### Phase 6 — Singing
+
+**Goal:** learn to sing in tune and in time the way the app teaches the piano. Lessons listen through the microphone and give feedback, from matching one note to singing songs with lyrics and reading melodies from the staff. The design and its mockups are in IDEAS.md › Singing. Its first pieces, the vocal range test and the Tuner, were built between phases.
+
+#### Scope
+
+One app, as IDEAS.md suggests: a switch between piano and voice, the piano screens barely changing, and the voice getting a course, progress and stars of its own. Built one area at a time, each with the engine work it needs and the voice units that use it, so every step can be sung and checked with the microphone.
+
+What singing can be graded on: pitch, timing, steadiness and loudness. The app can't judge technique (breath support, tension, vowels, a healthy sound), and lessons say so: a teacher, or listening back to your recordings, covers it. Exercises stay in your range, and lessons are short, with a warm-up first.
+
+**6.1 Match the note**
+- On the Tuner page: the app plays a note from your saved range, and you sing it and hold it in tune (within ±50 cents, any octave) for half a second. Ten notes a run, scored like the other exercises (accuracy and stars), with the notes to work on and whether they went flat or sharp. Without a saved range, it asks for the range test first.
+- The first graded singing, small and on its own like the range test and the Tuner: it shows early whether held notes are judged fairly with your voice. Recordings of your voice become test fixtures, kept local like the piano's (`fixtures/mic/`).
+- The app plays, then listens, so it works without headphones.
+
+**6.2 Piano or voice: Voice Units 1–2**
+- An `instrument` setting, and the switch in the top bar as the first part of the path ("Piano Teacher / Voice / Learn / Unit 1 · Matching one note"), on every page, even with the sidebar collapsed or on a phone. Its list says where you are in each ("Unit 9 of 14", "Not started · find your range first").
+- The sections follow it: Sight-reading becomes Sight-singing, Free play becomes the Tuner, and Home, Learn and Song practice show that instrument's course and practice. Separate for each instrument: the course, progress, stars, skills, reviews and the Today plan (results, skills and the plan tagged with their instrument). Shared: the practice calendar and streak, settings, the song library and the note names.
+- The input follows the instrument: MIDI (or the microphone) for the piano, the microphone for the voice.
+- The welcome screen asks Piano, Voice or Both. Adding the other one later is a click on the switch, and starts with the range test.
+- A second course file, for the voice. Voice Unit 1, posture and breathing (explained, not graded); Unit 2, matching one note (6.1's exercise as lesson steps, from your comfortable note outward). Each voice lesson starts with a warm-up.
+
+**6.3 Singing a melody: Voice Units 3–4**
+- A voice matcher next to the piano's (`TempoMatcher`, `WaitMatcher`). For each written note it measures how much of its time was in tune (within ±50 cents, ±25 at higher levels), whether it started within the timing window, and how steady it stayed. Any octave counts, with an option to require the written one. Wait for me waits until a note is held in tune for about 0.3 s; Sing along keeps going; Listen first plays it, then you sing.
+- The singing view: note bars in a horizontal lane, on rows named with the note names (solfège if chosen); your voice as a live line through them, green in tune and amber off; a small tuner beside it; switches for the guide melody and the metronome. In sheet music, notes are colored by how in tune they were.
+- Results: in tune, on time and steady, as percentages; the notes to work on (flat or sharp, and by how much); Listen and Compare as for the piano, Compare drawing your pitch line over the written notes.
+- Exercises move into your range by themselves: by whole octaves first, then by key if needed.
+- Singing along through speakers, the microphone hears the app too. Try whether the browser's echo cancellation lets you sing along without bending the pitch; if not, singing along asks for headphones (Listen first works without them).
+- Voice Unit 3, slides and sirens; Unit 4, steps (do-re-mi).
+
+**6.4 Leaps, scales and singing by ear: Voice Units 5–6**
+- Voice Unit 5, leaps; Unit 6, the major scale, then minor.
+- Ear training: "sing it back" answers for single notes, intervals and short melodies; the keyboard still answers if you choose.
+
+**6.5 Reading from the staff: Voice Unit 7**
+- Voice Unit 7, reading melodies from the staff, with solfège.
+- Sight-singing: the sight-reading generator's drills, in your range, sung, with solfège; levels from steps to leaps, as for the piano.
+
+**6.6 Lyrics and songs: Voice Unit 8**
+- Score format: a lyric syllable per note (`"lyric": "Twin-"`), with hyphens and extensions. Lyrics are read from and written to MusicXML (`<lyric>`), and drawn under the staff and in the lane.
+- Lyrics in English and Spanish for the public-domain songs: the original lyrics transcribed from public-domain sources, the translations our own, made to be sung.
+- Song practice for the voice: the same songs, with lyrics, moved into your range, the piano accompaniment playing.
+- Voice Unit 8, songs.
+
+Still to decide, by 6.2: the app's name. "Piano Teacher" no longer fits once it teaches singing (IDEAS.md › Open questions lists some).
+
+#### Phase 6 done when
+- [x] Singing a note shows which note it is and how far off, reliably, with your microphone (the Tuner, verified 2026-10-22).
+- [ ] Piano and voice each have their own course and progress, behind one switch.
+- [ ] Singing exercises are graded for pitch and timing, waiting and singing along.
+- [ ] Exercises and songs fit the singer's range.
+- [ ] Ear training and sight-reading can be answered by singing.
+- [ ] Songs show and keep their lyrics, in English and Spanish.
+- [ ] A singing course from one note to songs (Voice Units 1–8), in English and Spanish.
+- [ ] Verified with your voice and microphone.
 
 ---
 
