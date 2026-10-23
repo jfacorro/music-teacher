@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bytesFromDataUrl, dataUrlFromBytes, decodeWav, encodeWav } from './wav';
+import { bytesFromDataUrl, dataUrlFromBytes, decodeWav, encodeWav, wavChunk } from './wav';
 
 describe('WAV', () => {
   it('round-trips samples through 16-bit PCM', () => {
@@ -23,6 +23,17 @@ describe('WAV', () => {
     const decoded = decodeWav(bytesFromDataUrl(url));
     expect(decoded.samples).toHaveLength(200_000);
     expect(decoded.samples[12_345]).toBeCloseTo(samples[12_345]!, 3);
+  });
+
+  it('keeps chunks of its own after the audio', () => {
+    const notes = new TextEncoder().encode('{"a":1}');
+    const bytes = encodeWav(Float32Array.from([0.5, -0.5, 0.25]), 8000, [
+      { id: 'json', bytes: notes },
+    ]);
+    expect(new DataView(bytes.buffer).getUint32(4, true)).toBe(bytes.length - 8);
+    expect(decodeWav(bytes).samples).toHaveLength(3);
+    expect(new TextDecoder().decode(wavChunk(bytes, 'json')!)).toBe('{"a":1}');
+    expect(wavChunk(bytes, 'none')).toBeNull();
   });
 
   it('rejects other files', () => {

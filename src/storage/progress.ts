@@ -20,6 +20,8 @@ export const ResultKind = {
   Drill: 'drill',
   /** An ear-training exercise: saved by level (its id). */
   Ear: 'ear',
+  /** A singing exercise: saved by its id (Match the note, on the Tuner page). */
+  Voice: 'voice',
 } as const;
 export type ResultKind = (typeof ResultKind)[keyof typeof ResultKind];
 

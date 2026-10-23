@@ -75,6 +75,11 @@ const MIN_ONSET_GAP = 9;
 const MAX_ATTACK_FRAMES = 15;
 /** Allowed distance from a key's exact pitch. */
 const MAX_CENTS = 45;
+/**
+ * The microphone shares its latest pitch reading every this many hops (~43 ms): the tuner and
+ * singing follow these.
+ */
+export const READING_EVERY_HOPS = 4;
 /** Extra stable hops required to switch notes without an onset (legato). */
 const LEGATO_EXTRA_FRAMES = 4;
 /**

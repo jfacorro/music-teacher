@@ -10,3 +10,4 @@ release
 
 # Microphone recordings are large; they stay local (see fixtures/mic/README.md)
 fixtures/mic/*.json
+fixtures/voice/*.wav

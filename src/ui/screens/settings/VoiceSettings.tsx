@@ -184,7 +184,7 @@ export function VoiceSettings() {
                 {live.note === null ? t('settings.voice.listening') : t('settings.voice.singing')}
               </span>
               <strong>{live.note === null ? '—' : noteName(live.note)}</strong>
-              <span className="voice-range__hold">
+              <span className="hold-bar">
                 <span style={{ inlineSize: `${Math.round(live.held * 100)}%` }} />
               </span>
             </div>
