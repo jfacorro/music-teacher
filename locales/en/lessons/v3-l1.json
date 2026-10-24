@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Start with the warm-up, as in every singing lesson: a few easy minutes to wake up your voice.",
+    "siren": "A siren glides from one note to another with no steps in between, like an ambulance going by. It’s the easiest way to move your voice: it stays relaxed, and your ear can follow it all the way. Slide on “oo” or on “ng” (as at the end of “sing”), gently and without pushing.",
+    "lane": "From now on you’ll sing melodies. They go by in a lane, from right to left: each bar is a note, on the row with its name. Sing each note when it reaches the line. Your voice is drawn as a line through them: green while it’s in tune, amber when it’s off. The melody is moved to fit your range, and any octave counts.",
+    "slideUp": "Slide up from the first note to the second, and back down. The music waits at each note: the app plays it, then you slide to it and hold it in tune for a moment.",
+    "slideWider": "Now a wider slide, up to the fifth note of the scale and back. Let the voice glide; there’s no need to land on the note at once."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Start with the warm-up, as in every singing lesson: a few easy minutes to wake up your voice.",
+    "faSol": "Two more steps: fa and sol. Do, re, mi, fa, sol are the first five notes of the scale. Keep each step small and even: the same easy distance from one note to the next.",
+    "fiveSteps": "Up to sol and back down to do, waiting at each note.",
+    "upToSol": "Listen, then sing it in time: up to sol, hold it, and back down.",
+    "alongToSol": "The same, singing along with the guide melody."
+  }
+}

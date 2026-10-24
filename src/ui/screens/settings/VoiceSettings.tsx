@@ -45,6 +45,7 @@ export function VoiceSettings() {
   const { t, i18n } = useTranslation('screens');
   const names = useNoteNames();
   const range = useSettings((s) => s.vocalRange);
+  const echoCancellation = useSettings((s) => s.micEchoCancellation);
   const micStatus = useMic((s) => s.status);
   const [test, setTest] = useState<Test | null>(null);
   const [live, setLive] = useState<{ note: number | null; held: number }>({ note: null, held: 0 });
@@ -142,7 +143,10 @@ export function VoiceSettings() {
             <span className="muted">
               {t('settings.voice.span', {
                 semitones: range.high - range.low,
-                octaves: formatNumber((range.high - range.low) / 12, i18n.language),
+                octaves: formatNumber(
+                  Math.round((range.high - range.low) / 1.2) / 10,
+                  i18n.language,
+                ),
               })}
             </span>
           </p>
@@ -234,6 +238,16 @@ export function VoiceSettings() {
           </>
         )}
       </div>
+      <h3>{t('settings.voice.speakers.heading')}</h3>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={echoCancellation}
+          onChange={(e) => updateSettings({ micEchoCancellation: e.target.checked })}
+        />
+        {t('settings.voice.speakers.echoCancellation')}
+      </label>
+      <p className="muted">{t('settings.voice.speakers.help')}</p>
     </section>
   );
 }

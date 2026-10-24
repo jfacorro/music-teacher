@@ -11,6 +11,7 @@ export const ICONS = {
   restart: textStyle(0x21bb), // ↻
   falling: String.fromCodePoint(0x1f3b9), // 🎹 notes falling onto the keyboard
   sheet: String.fromCodePoint(0x1f3bc), // 🎼 musical score
+  lane: String.fromCodePoint(0x1f3a4), // 🎤 the notes to sing, in a lane
   wait: String.fromCodePoint(0x23f3), // ⏳ the music takes its time
   tempo: String.fromCodePoint(0x23f1, 0xfe0f), // ⏱️ timed
   autoplay: String.fromCodePoint(0x1f916), // 🤖 the app plays by itself

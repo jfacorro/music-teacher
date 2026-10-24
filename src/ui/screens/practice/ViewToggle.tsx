@@ -4,6 +4,8 @@ import { SHEET_NOTATIONS, ScoreView, type SheetNotation } from '../../../content
 import { ICONS } from '../../icons';
 
 const VIEWS: readonly ScoreView[] = [ScoreView.Falling, ScoreView.Sheet];
+/** Singing, the falling notes' place is taken by the notes in a lane. */
+const LANE = { name: 'lane' } as const;
 
 /** Sheet music level: note names, no names, both staves. */
 export function NotationSelect({
@@ -29,35 +31,41 @@ export function NotationSelect({
   );
 }
 
-/** Switch between falling notes and sheet music. */
+/** Switch between falling notes (for the voice, the notes in a lane) and sheet music. */
 export function ViewToggle({
   view,
   onChange,
+  lane = false,
 }: {
   view: ScoreView;
   onChange: (view: ScoreView) => void;
+  /** Singing: the notes go by in a lane instead of falling onto the keys. */
+  lane?: boolean;
 }) {
   const { t } = useTranslation('screens');
   return (
     <div className="segmented" role="radiogroup" aria-label={t('practice.view.label')}>
-      {VIEWS.map((value) => (
-        <button
-          key={value}
-          type="button"
-          role="radio"
-          aria-checked={view === value}
-          className={
-            view === value
-              ? 'segmented__option segmented__option--icon is-selected'
-              : 'segmented__option segmented__option--icon'
-          }
-          aria-label={t(`practice.view.${value}`)}
-          title={t(`practice.tips.${value}`)}
-          onClick={() => onChange(value)}
-        >
-          <span aria-hidden="true">{ICONS[value]}</span>
-        </button>
-      ))}
+      {VIEWS.map((value) => {
+        const name = lane && value === ScoreView.Falling ? LANE.name : value;
+        return (
+          <button
+            key={value}
+            type="button"
+            role="radio"
+            aria-checked={view === value}
+            className={
+              view === value
+                ? 'segmented__option segmented__option--icon is-selected'
+                : 'segmented__option segmented__option--icon'
+            }
+            aria-label={t(`practice.view.${name}`)}
+            title={t(`practice.tips.${name}`)}
+            onClick={() => onChange(value)}
+          >
+            <span aria-hidden="true">{ICONS[name]}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }

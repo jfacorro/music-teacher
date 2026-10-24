@@ -275,7 +275,12 @@
       "tested": "Tested on {date}",
       "testAgain": "Test again",
       "micDenied": "The microphone isn’t allowed. Allow it in the browser, then try again.",
-      "micUnavailable": "The range test needs a microphone, and none could be started."
+      "micUnavailable": "The range test needs a microphone, and none could be started.",
+      "speakers": {
+        "heading": "Singing through speakers",
+        "echoCancellation": "Take the app’s sound out of the microphone",
+        "help": "Singing along with the guide melody through speakers, the microphone hears the app too. This asks the browser to cancel it, as in video calls. It may bend the pitch it hears, so try it: if singing along grades you wrongly, turn it off and use headphones."
+      }
     },
     "data": {
       "heading": "Import / Export",
@@ -386,7 +391,8 @@
     "view": {
       "label": "View",
       "falling": "Falling notes",
-      "sheet": "Sheet music"
+      "sheet": "Sheet music",
+      "lane": "Notes in a lane"
     },
     "sheetLoading": "Loading the sheet music…",
     "sheetError": "Couldn’t show the sheet music. Try falling notes instead.",
@@ -430,7 +436,8 @@
         "R": "Practice the right hand only",
         "L": "Practice the left hand only"
       },
-      "autoplay": "Play it for me: the app plays the music, so you can watch and listen"
+      "autoplay": "Play it for me: the app plays the music, so you can watch and listen",
+      "lane": "Notes in a lane: sing each one as it reaches the line"
     },
     "micChords": "With the microphone, any note of a chord counts for the whole chord. Connect a MIDI keyboard to check every note.",
     "tempoInfo": "{bpm} BPM",
@@ -875,6 +882,46 @@
       "notInTimeHigh": "not matched in time, sung too high",
       "save": "Save recording",
       "saveTip": "Saves this run as an audio file (.wav) with the notes asked inside it, to improve how singing is judged. Put it in the project’s fixtures/voice folder."
+    }
+  },
+  "sing": {
+    "laneLabel": "The notes to sing, going by in a lane, and your voice drawn through them",
+    "noRange": "Find your range first, so the melody fits your voice.",
+    "guide": "Guide melody",
+    "guideTip": {
+      "wait": "The app plays each note before you sing it",
+      "along": "The app plays the melody along with you (use headphones)"
+    },
+    "strict": "In tune means within 25 cents here.",
+    "beyondRange": "This melody goes a little beyond your range. Sing the notes that are easy, and skip any that strain.",
+    "hint": {
+      "wait": "Press ▶. The music waits at each note until you sing it in tune for a moment.",
+      "along": "Press ▶. After a bar counted in, sing each note as it reaches the line.",
+      "listenFirst": "Press ▶. The app plays the melody first; then, after a bar counted in, you sing it."
+    },
+    "listening": "Listen to the melody…",
+    "waiting": "Sing {note} and hold it",
+    "singing": "Sing along: green is in tune, amber is off.",
+    "notHeard": "Not hearing you",
+    "cents": "{cents, plural, one {# cent} other {# cents}}",
+    "headphones": "Singing along with the guide melody, the microphone hears the app too: use headphones, or turn off the guide melody. Listen first works without headphones.",
+    "listenTip": "Listen to your last run",
+    "stopListening": "Stop",
+    "compareTip": "See your voice drawn over the written notes",
+    "compareIntro": "The gray bars are the written notes; the line is your voice, green where it was in tune and amber where it was off.",
+    "compareLabel": "Your voice drawn over the written notes",
+    "legend": {
+      "written": "Written notes",
+      "inTune": "In tune",
+      "off": "Off"
+    },
+    "retryTip": "Sing this melody again from the start",
+    "results": {
+      "inTune": "In tune",
+      "onTime": "On time",
+      "steady": "Steady",
+      "notSung": "not heard",
+      "inTuneShare": "in tune {share} of the time"
     }
   }
 }

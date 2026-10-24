@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Empieza con el calentamiento, como en cada lección de canto: unos minutos tranquilos para despertar la voz.",
+    "siren": "Una sirena se desliza de una nota a otra sin escalones intermedios, como una ambulancia que pasa. Es la forma más fácil de mover la voz: se mantiene relajada y el oído puede seguirla todo el camino. Deslízate con una “u” o con “ng” (como al final de “tango”), con suavidad y sin forzar.",
+    "lane": "A partir de ahora vas a cantar melodías. Pasan por un carril, de derecha a izquierda: cada barra es una nota, en la fila con su nombre. Canta cada nota cuando llega a la línea. Tu voz se dibuja como una línea sobre ellas: verde mientras está afinada y ámbar cuando no. La melodía se ajusta a tu extensión, y vale cualquier octava.",
+    "slideUp": "Desliza la voz hacia arriba, de la primera nota a la segunda, y vuelve a bajar. La música espera en cada nota: la aplicación la toca, y después tú te deslizas hasta ella y la sostienes afinada un momento.",
+    "slideWider": "Ahora un deslizamiento más amplio, hasta la quinta nota de la escala y de vuelta. Deja que la voz se deslice; no hace falta llegar a la nota de golpe."
+  }
+}

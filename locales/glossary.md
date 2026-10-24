@@ -162,6 +162,17 @@ system setting (`src/i18n/naming.ts`).
 | Breathing (in / out)                          | breathing (breathe in / out)                         | respiración (inspirar / espirar)                        |
 | Diaphragmatic (belly) breathing               | diaphragmatic or belly breathing                     | respiración diafragmática o abdominal                   |
 | Phrase                                        | phrase                                               | frase                                                   |
+| Warm-up                                       | warm-up                                              | calentamiento                                           |
+| Siren / slide (gliding between notes)         | siren / slide                                        | sirena / deslizamiento (deslizar la voz)                |
+| Steps (by step, do-re-mi)                     | steps; singing by steps                              | grados conjuntos; cantar por grados conjuntos           |
+| In tune / off (singing)                       | in tune / off                                        | afinada / desafinada                                    |
+| Steady (a held note)                          | steady                                               | estable                                                 |
+| Guide melody (the app plays along)            | guide melody                                         | melodía guía                                            |
+| Sing along (the music keeps going)            | sing along                                           | cantar con la guía                                      |
+| Listen first (the app plays, then you sing)   | listen first                                         | escuchar primero                                        |
+| Notes in a lane (the singing view)            | notes in a lane                                      | notas en un carril                                      |
+| Echo cancellation                             | take the app’s sound out of the microphone           | quitar el sonido de la aplicación del micrófono         |
+| Speakers                                      | speakers                                             | altavoces                                               |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
 their explanations are translated (`theory.json` › `markings`).

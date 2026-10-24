@@ -62,6 +62,8 @@ export const SKILLS = [
   'posture',
   'breathing',
   'pitch-matching',
+  'slides',
+  'stepwise',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];

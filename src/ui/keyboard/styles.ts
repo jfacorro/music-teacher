@@ -1,10 +1,14 @@
 /** How the keyboard and the falling notes are drawn. */
 
-/** played: right in time · missed: never played · muted: not graded (other hand). */
+/**
+ * played: right in time · missed: never played · muted: not graded (other hand) · partly:
+ * sung partly in tune (the voice).
+ */
 export const NoteStyle = {
   Played: 'played',
   Missed: 'missed',
   Muted: 'muted',
+  Partly: 'partly',
 } as const;
 export type NoteStyle = (typeof NoteStyle)[keyof typeof NoteStyle];
 

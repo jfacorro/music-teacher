@@ -55,6 +55,8 @@ export const useMic = create<MicState>(() => ({
 }));
 
 const HOP_SIZE = 512;
+/** The detector's window (its default), samples. */
+const WINDOW_SIZE = 2048;
 /** Hops used to estimate the audio clock → performance clock offset (~5 s). */
 const CLOCK_WINDOW = 470;
 
@@ -76,6 +78,10 @@ const held = new HeldNotes(InputSource.Mic);
 const levelListeners = new Set<(levelDb: number) => void>();
 type AudioListener = (samples: Float32Array, time: number, sampleRate: number) => void;
 const audioListeners = new Set<AudioListener>();
+type ReadingListener = (reading: PitchReading | null, time: number) => void;
+const readingListeners = new Set<ReadingListener>();
+/** Voice-call echo cancellation: off unless chosen (see `setMicEchoCancellation`). */
+let echoCancellation = false;
 
 export function setMicGate(gateDb: number): void {
   useMic.setState({ gateDb });
@@ -102,6 +108,26 @@ export function ignoreMicUntil(time: number): void {
 export function subscribeMicAudio(listener: AudioListener): () => void {
   audioListeners.add(listener);
   return () => audioListeners.delete(listener);
+}
+
+/**
+ * Every pitch reading (~20 per second, null when nothing clear is heard), with when it was sung
+ * on the same timeline as the microphone's note events: for grading singing.
+ */
+export function subscribeMicReadings(listener: ReadingListener): () => void {
+  readingListeners.add(listener);
+  return () => readingListeners.delete(listener);
+}
+
+/**
+ * Lets the browser take the app's own sound out of the microphone (as in voice calls), to try
+ * singing along through speakers; it may bend musical tones (PLAN.md §5.2), so it's off by
+ * default. Turning it on or off restarts the microphone when it's on.
+ */
+export function setMicEchoCancellation(on: boolean): void {
+  if (echoCancellation === on) return;
+  echoCancellation = on;
+  if (capture) void startMic(useMic.getState().deviceId);
 }
 
 /** Every hop's level (~90 per second), for noise calibration. */
@@ -143,8 +169,9 @@ export async function startMic(deviceId: string | null): Promise<void> {
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         deviceId: deviceId ? { exact: deviceId } : undefined,
-        // Voice-call processing distorts musical tones (PLAN.md §5.2).
-        echoCancellation: false,
+        // Voice-call processing distorts musical tones (PLAN.md §5.2); echo cancellation only
+        // when chosen, to sing along through speakers.
+        echoCancellation,
         noiseSuppression: false,
         autoGainControl: false,
         channelCount: 1,
@@ -236,5 +263,8 @@ function handleHop(current: Capture, samples: Float32Array, frame: number): void
   for (const listener of levelListeners) listener(detector.levelDb);
   if (++current.hops % READING_EVERY_HOPS === 0) {
     useMic.setState({ levelDb: detector.levelDb, reading: detector.reading });
+    // A reading is of the detector's window, which ends with this hop: timed at its middle.
+    const sungAt = toEventTime(time + (HOP_SIZE - WINDOW_SIZE / 2) / context.sampleRate);
+    for (const listener of readingListeners) listener(detector.reading, sungAt);
   }
 }

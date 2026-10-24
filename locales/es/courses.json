@@ -63,6 +63,14 @@
     "v2": {
       "title": "Cantar la misma nota",
       "description": "El calentamiento y después cantar la nota que escuchas: primero tu nota cómoda y luego las que están alrededor."
+    },
+    "v3": {
+      "title": "Sirenas y deslizamientos",
+      "description": "Pasar de una nota a otra deslizando la voz: sirenas y deslizamientos, primero esperando cada nota y después a tiempo con el pulso."
+    },
+    "v4": {
+      "title": "Grados conjuntos: do, re, mi",
+      "description": "Melodías que se mueven por grados conjuntos, de do-re-mi hasta sol, y dos melodías conocidas."
     }
   },
   "lessons": {
@@ -138,7 +146,13 @@
     "v1-l2": "La respiración para cantar",
     "v2-l1": "Tu nota",
     "v2-l2": "Notas cercanas",
-    "v2-l3": "Más lejos"
+    "v2-l3": "Más lejos",
+    "v3-l1": "Sirenas",
+    "v3-l2": "Deslizamientos a tiempo",
+    "v3-l3": "Cantar con la guía",
+    "v4-l1": "Do, re, mi",
+    "v4-l2": "Hasta sol",
+    "v4-l3": "Melodías por grados"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -173,6 +187,8 @@
     "ear-training": "Oído musical",
     "posture": "Postura",
     "breathing": "Respiración",
-    "pitch-matching": "Afinación"
+    "pitch-matching": "Afinación",
+    "slides": "Sirenas y deslizamientos",
+    "stepwise": "Cantar por grados conjuntos"
   }
 }

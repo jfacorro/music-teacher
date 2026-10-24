@@ -1,0 +1,81 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "siren"
+    },
+    {
+      "type": "explain",
+      "text": "lane"
+    },
+    {
+      "type": "sing",
+      "text": "slideUp",
+      "mode": "wait",
+      "score": {
+        "tempo": 60,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 2
+          }
+        ]
+      }
+    },
+    {
+      "type": "sing",
+      "text": "slideWider",
+      "mode": "wait",
+      "score": {
+        "tempo": 60,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 2
+          },
+          {
+            "note": "G4",
+            "start": 2,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 2
+          },
+          {
+            "note": "G4",
+            "start": 6,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 8,
+            "duration": 2
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

@@ -12,10 +12,13 @@
  * - rhythm:   tap any key along with a rhythm pattern (see engine/rhythm.ts)
  * - warmUp:   the vocal warm-up that starts each voice lesson (not graded)
  * - match:    sing back notes played from the singer's range (see engine/matchNote.ts)
+ * - sing:     sing a melody (one note at a time), moved into the singer's range: waiting for
+ *             each note, along with it, or after listening first (see engine/singing.ts)
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
 import { type Finger, Hand, hasPedalMarks, hasTouchMarks, type Score } from '../../engine/score';
 import { GradedMode, HandFilter } from '../../engine/session';
+import { SingMode } from '../../engine/singing';
 import { describeValues, isValueOf } from '../../lib/values';
 import { ChordQuality } from '../../theory/chords';
 import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
@@ -31,6 +34,7 @@ export const StepType = {
   Rhythm: 'rhythm',
   WarmUp: 'warmUp',
   Match: 'match',
+  Sing: 'sing',
 } as const;
 export type StepType = (typeof StepType)[keyof typeof StepType];
 
@@ -176,10 +180,29 @@ export interface MatchStep extends StepBase {
   pass: { minStars: number };
 }
 
+/** A melody to sing, in any key and octave: it's moved into the singer's range. */
+export interface SingStep extends StepBase {
+  type: typeof StepType.Sing;
+  mode: SingMode;
+  /** One note at a time; the notes' hands don't matter (written low, it's on the bass staff). */
+  score: Score;
+  /** The view it starts in: the notes in a lane (`falling`) or sheet music. */
+  view: ScoreView;
+  /** In tune within ±25 cents instead of ±50. */
+  strict: boolean;
+  /** Only the written octave counts (after moving into the range). */
+  octave: boolean;
+  /** The app plays the melody along (or each note first, waiting): on by default. */
+  guide: boolean;
+  /** Singing along: the metronome clicks the beat (it always counts in). */
+  metronome: boolean;
+  pass: { minStars: number };
+}
+
 export const QUIZ_CARDS_DEFAULT = 10;
 
 export type LessonStep =
-  ExplainStep | FindStep | ExerciseStep | QuizStep | RhythmStep | WarmUpStep | MatchStep;
+  ExplainStep | FindStep | ExerciseStep | QuizStep | RhythmStep | WarmUpStep | MatchStep | SingStep;
 
 /** The steps graded toward the lesson's stars: all but explanations and warm-ups. */
 export type GradedStep = Exclude<LessonStep, ExplainStep | WarmUpStep>;
@@ -294,9 +317,61 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
         pass: passRule(data, location),
       };
     }
+    case StepType.Sing:
+      return { ...base, type: StepType.Sing, ...sing(data, location) };
     default:
       throw new LessonError(at(location, 'type'), `expected ${describeValues(StepType)}`);
   }
+}
+
+function sing(
+  data: Record<string, unknown>,
+  location: string,
+): Omit<SingStep, keyof StepBase | 'type'> {
+  if (!isValueOf(SingMode, data.mode)) {
+    throw new LessonError(at(location, 'mode'), `expected ${describeValues(SingMode)}`);
+  }
+  // A voice has no hands: notes are written without one.
+  const input = object(data.score, at(location, 'score'));
+  const notes = Array.isArray(input.notes)
+    ? input.notes.map((note: unknown) =>
+        note !== null && typeof note === 'object' ? { hand: Hand.Right, ...note } : note,
+      )
+    : input.notes;
+  const score = inlineScore({ ...input, notes }, at(location, 'score'));
+  if (score.form) {
+    throw new LessonError(at(location, 'score › repeats'), 'a melody to sing has no repeats');
+  }
+  score.notes.slice(1).forEach((note, i) => {
+    const before = score.notes[i]!;
+    if (note.start < before.start + before.duration - 1e-9) {
+      throw new LessonError(
+        at(location, `score › notes[${i + 1}]`),
+        'a melody to sing has one note at a time',
+      );
+    }
+  });
+  const view = data.view ?? ScoreView.Falling;
+  if (!isValueOf(ScoreView, view)) {
+    throw new LessonError(at(location, 'view'), `expected ${describeValues(ScoreView)}`);
+  }
+  const flag = (name: string, fallback: boolean): boolean => {
+    const value = data[name] ?? fallback;
+    if (typeof value !== 'boolean') {
+      throw new LessonError(at(location, name), 'expected true or false');
+    }
+    return value;
+  };
+  return {
+    mode: data.mode,
+    score,
+    view,
+    strict: flag('strict', false),
+    octave: flag('octave', false),
+    guide: flag('guide', true),
+    metronome: flag('metronome', false),
+    pass: passRule(data, location),
+  };
 }
 
 /** How many quiz cards or notes to match: 1–50, ten by default. */
