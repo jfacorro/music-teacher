@@ -2,8 +2,8 @@
   "steps": {
     "progression": "Muchas canciones usan solo tres acordes. Construidos sobre la 1.ª, la 4.ª y la 5.ª nota de la {cScale}, son {cMajor} (I), {fMajor} (IV) y {gMajor} (V). La mano izquierda los toca muy juntos: {c} {e} {g}, {c} {f} {a} y {b} {d} {g}, con los dedos 5-3-1, 5-2-1 y 5-3-1.",
     "leftHand": "I, IV, V y de vuelta a I con la mano izquierda, un compás entero cada uno.",
-    "leftHandInTime": "Ahora a tiempo, dos tiempos por acorde.",
+    "leftHandInTime": "Ahora a tempo, dos tiempos por acorde.",
     "jingleBells": "«Jingle Bells» con la melodía en la mano derecha y I, IV y V en la izquierda: un acorde por compás.",
-    "jingleBellsInTime": "Ahora a tiempo con el metrónomo."
+    "jingleBellsInTime": "Ahora a tempo con el metrónomo."
   }
 }

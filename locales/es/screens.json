@@ -1,14 +1,14 @@
 {
   "home": {
     "title": "Tu camino de aprendizaje",
-    "checkKeyboard": "Comprobar el teclado",
+    "checkKeyboard": "Prueba tu teclado",
     "unit": "Unidad {number}: {title}",
     "startLabel": "Empieza aquí",
     "continueLabel": "Siguiente",
     "start": "Empezar",
     "continue": "Continuar",
     "allDone": "¡Terminaste todas las lecciones disponibles! Repite lecciones para conseguir más estrellas o practica canciones completas en Práctica de canciones.",
-    "unitProgress": "{done} de {total} hechas",
+    "unitProgress": "{done} de {total} terminadas",
     "unitLocked": "{stars, plural, one {Consigue al menos # estrella en cada lección de la unidad anterior para desbloquear esta.} other {Consigue al menos # estrellas en cada lección de la unidad anterior para desbloquear esta.}}",
     "locked": "(bloqueada)",
     "unitStars": "{stars} de {total} estrellas",
@@ -49,7 +49,7 @@
         "good": "Bien",
         "mastered": "Dominada"
       },
-      "exercises": "{count, plural, =0 {Ningún ejercicio aún} one {# ejercicio} other {# ejercicios}}",
+      "exercises": "{count, plural, =0 {Todavía no hay ejercicios} one {# ejercicio} other {# ejercicios}}",
       "areas": {
         "keysAndHands": "Teclas y manos",
         "rhythm": "Ritmo",
@@ -126,7 +126,7 @@
       "octave": "Octava: {octave}",
       "octaveDown": "Bajar una octava",
       "octaveUp": "Subir una octava",
-      "sound": "Tocar un sonido de piano con el teclado de la computadora y el teclado en pantalla",
+      "sound": "Reproducir sonido de piano con el teclado de la computadora y el de la pantalla",
       "delay": "Retraso del sonido: {ms} ms",
       "slowOutput": "Es un retraso notable, normalmente causado por auriculares o altavoces Bluetooth. Los auriculares o altavoces con cable responden mucho más rápido."
     },
@@ -182,7 +182,7 @@
       "measureNoise": "Medir el ruido de fondo",
       "measureDelay": "Medir el retraso",
       "resetDelay": "Restablecer el retraso",
-      "headphones": "Para medir el retraso, toca cualquier tecla en cada clic. Los auriculares ayudan, para que el micrófono no oiga los clics.",
+      "headphones": "Para medir el retraso, toca cualquier tecla en cada clic. Usa auriculares si puedes, para que el micrófono no capte los clics.",
       "noiseRunning": "Midiendo… quédate en silencio 3 segundos.",
       "delayCountIn": "Prepárate… {beat}",
       "delayRunning": "Toca una tecla en cada clic: {beat} de {total}",
@@ -192,7 +192,7 @@
     },
     "micCheck": {
       "heading": "Prueba del micrófono",
-      "intro": "Con el cable MIDI y el micrófono encendidos, toca notas en todo el teclado. MIDI indica qué teclas tocaste de verdad, así que esto muestra qué tan bien las oye el micrófono.",
+      "intro": "Con el teclado MIDI conectado y el micrófono encendido, toca notas por todo el teclado. MIDI le indica a la aplicación qué teclas tocaste de verdad, así que esto muestra qué tan bien las oye el micrófono.",
       "start": "Empezar la prueba",
       "stop": "Detener",
       "played": "Notas sueltas tocadas (MIDI)",
@@ -221,11 +221,11 @@
         "off": "Siempre apagado"
       },
       "metronomeHints": {
-        "auto": "Encendido al tocar a tempo, y cuando una lección lo pide.",
-        "on": "Todos los ejercicios empiezan con el metrónomo encendido, también al esperar cada nota.",
+        "auto": "Encendido al tocar a tempo y cuando una lección lo pide.",
+        "on": "Todos los ejercicios empiezan con el metrónomo encendido, incluso cuando la música espera cada nota.",
         "off": "Todos los ejercicios empiezan con el metrónomo apagado."
       },
-      "intro": "Los auriculares y altavoces Bluetooth reproducen el sonido tarde (a menudo 150–250 ms), y el navegador no lo sabe: los clics suenan después del pulso, y las notas que tocas con ellos parecen tarde. Mide la sincronización para compensarlo: toca cualquier tecla del piano justo con cada clic. Se guarda para cada salida de sonido y se aplica al cambiar de una a otra.",
+      "intro": "Los auriculares y altavoces Bluetooth reproducen el sonido con retraso (a menudo 150–250 ms), y el navegador no lo sabe: los clics suenan después del pulso, y las notas que tocas con ellos parecen atrasadas. Mide la sincronización para compensarlo: toca cualquier tecla del piano justo con cada clic. La corrección se guarda para cada salida de sonido y se aplica automáticamente al cambiar de una a otra.",
       "output": "El sonido sale por: {output}",
       "notMeasured": "Todavía sin medir para esta salida.",
       "correction": "Corrección de sincronización: {ms} ms",
@@ -239,7 +239,7 @@
     },
     "voice": {
       "heading": "Tu extensión vocal",
-      "intro": "Canta desde tu nota más grave cómoda hasta la más aguda. Lleva un minuto, con el micrófono; la aplicación no suena, así que no hacen falta auriculares.",
+      "intro": "Canta desde la nota más grave que te resulte cómoda hasta la más aguda. Lleva alrededor de un minuto y usa el micrófono. La aplicación no emite ningún sonido, así que no necesitas auriculares.",
       "find": "Encontrar mi extensión",
       "steps": {
         "comfortable": "1 · Una nota cómoda",
@@ -252,7 +252,7 @@
         "lowest": "Baja despacio, tan grave como te resulte cómodo, y sostén la nota más grave un momento.",
         "highest": "Ahora sube despacio, tan agudo como te resulte cómodo, y sostén la nota más aguda un momento."
       },
-      "dontPush": "Sin forzar: una nota cuenta cuando se mantiene estable medio segundo.",
+      "dontPush": "Sin forzar: una nota cuenta cuando la mantienes estable durante medio segundo, más o menos.",
       "listening": "Escuchando…",
       "singing": "Estás cantando",
       "thatsLowest": "Esa es mi nota más grave",
@@ -289,7 +289,7 @@
       "replace": "Reemplazar",
       "cancel": "Cancelar",
       "problems": {
-        "notBackup": "Este archivo no es una exportación de Piano Teacher.",
+        "notBackup": "Este archivo no es una exportación de Profesor de piano.",
         "failed": "No se pudo importar el archivo. No se cambió nada."
       }
     },
@@ -320,7 +320,7 @@
       "keysShown": "Teclas a la vista",
       "keysShownOptions": {
         "fit": "Las de la música",
-        "wider": "Más amplio",
+        "wider": "Más teclas",
         "piano": "Piano completo"
       },
       "keysShownHints": {
@@ -370,7 +370,7 @@
         "early": "{count} antes de tiempo",
         "onTime": "{count} a tiempo",
         "late": "{count} tarde",
-        "average": "{direction, select, early {De media, {ms} ms antes de tiempo} late {De media, {ms} ms tarde} other {De media, justo a tiempo}}"
+        "average": "{direction, select, early {En promedio, {ms} ms antes de tiempo} late {En promedio, {ms} ms tarde} other {En promedio, justo a tiempo}}"
       },
       "bars": {
         "heading": "Compás a compás",
@@ -405,7 +405,7 @@
       "to": "a",
       "tip": "Consejo: arrastra sobre los compases de la música para repetirlos.",
       "hint": "Los compases elegidos se repiten hasta que pares.",
-      "lastPass": "{count, plural, one {Una vuelta} other {# vueltas}} · la última {accuracy}"
+      "lastPass": "{count, plural, one {Una vuelta} other {# vueltas}} · última vuelta: {accuracy}"
     },
     "otherHand": "Tocar la otra mano",
     "otherHandMic": "Con el micrófono, usa auriculares para que solo te oiga a ti.",
@@ -446,7 +446,7 @@
         "crescendo": "cresc.",
         "diminuendo": "dim."
       },
-      "right": "Justo",
+      "right": "Bien",
       "tooLoud": "Demasiado fuerte",
       "tooSoft": "Demasiado suave",
       "louder": "Subió de volumen",
@@ -470,19 +470,19 @@
         "right": "Bien",
         "early": "Antes de tiempo",
         "late": "Tarde",
-        "wrong": "Tecla equivocada",
+        "wrong": "Tecla incorrecta",
         "missed": "Sin tocar",
         "ungraded": "Sin calificar (otra mano o entrada)"
       },
       "loudness": "Abajo: con qué fuerza pulsaste cada tecla.",
-      "summary": "{right} bien, {early} antes de tiempo, {late} tarde, {wrong, plural, one {# tecla equivocada} other {# teclas equivocadas}}, {missed} sin tocar.",
+      "summary": "{right} bien, {early} antes de tiempo, {late} tarde, {wrong, plural, one {# tecla incorrecta} other {# teclas incorrectas}}, {missed} sin tocar.",
       "playing": "Escuchando tu última interpretación",
       "position": "Posición de la reproducción",
       "time": "{elapsed} / {total}",
       "pause": "Pausa",
       "resume": "Continuar",
       "paused": "Tu última interpretación, en pausa",
-      "pedal": "Abajo de todo: el pedal, como está marcado (gris) y como lo pisaste.",
+      "pedal": "En la parte inferior: el pedal, como está marcado (gris) y como lo pisaste.",
       "pedalLabel": "Ped."
     },
     "touch": {
@@ -506,7 +506,7 @@
       "heading": "Pedal",
       "kinds": {
         "down": "Pisado",
-        "up": "Soltado",
+        "up": "Suelto",
         "off": "Sin pedal"
       },
       "counts": {
@@ -562,7 +562,7 @@
     "passPedal": "Usa también el pedal como está marcado (con un teclado MIDI)."
   },
   "welcome": {
-    "title": "Bienvenido a Profesor de piano",
+    "title": "Te damos la bienvenida a Profesor de piano",
     "step": "Paso {current} de {total}",
     "skip": "Saltar la configuración",
     "start": "Empezar a aprender",
@@ -591,12 +591,12 @@
     },
     "range": {
       "heading": "Tu extensión vocal",
-      "intro": "Encuentra tu nota más grave y tu nota más aguda cómodas, para que cada ejercicio se ajuste a tu voz. Lleva un minuto; también puedes hacerlo más tarde en Configuración."
+      "intro": "Encuentra la nota más grave y la más aguda que cantas con comodidad, para que cada ejercicio se ajuste a tu voz. Lleva alrededor de un minuto; también puedes hacerlo más tarde en Configuración."
     }
   },
   "quiz": {
     "cardLabel": "Una nota en el pentagrama",
-    "prompt": "¿Qué tecla es esta nota? Tócala.",
+    "prompt": "¿Qué tecla corresponde a esta nota? Tócala.",
     "right": "¡Sí, es {note}!",
     "wrong": "Era {note}. Prueba otra vez.",
     "hint": "Es la tecla iluminada en el teclado.",
@@ -623,7 +623,7 @@
       }
     },
     "setup": {
-      "importTitle": "Prepara la canción",
+      "importTitle": "Preparar la canción",
       "editTitle": "Ajustes de la canción",
       "file": "De {fileName}",
       "title": "Título",
@@ -662,10 +662,10 @@
       "keep": "Conservarla"
     },
     "warnings": {
-      "heading": "Para que sepas",
+      "heading": "Ten en cuenta",
       "timingRounded": "Las notas se alinearon a la semicorchea más cercana, así que los tresillos y el ritmo tocado a mano son aproximados.",
-      "tempoChanges": "El tempo cambia durante la pieza: se usa el primero en toda ella.",
-      "timeSignatureChanges": "El compás cambia durante la pieza: los compases siguen el primero.",
+      "tempoChanges": "El tempo cambia durante la pieza: se usa el tempo inicial en toda ella.",
+      "timeSignatureChanges": "La indicación de compás cambia durante la pieza: se usa la primera en toda ella.",
       "repeatsIgnored": "Las repeticiones se tocan una vez, tal como están escritas.",
       "outOfRange": "{count, plural, one {# nota quedaría} other {# notas quedarían}} fuera del teclado al transportar, así que se {count, plural, one {omite} other {omiten}}."
     }
@@ -673,7 +673,7 @@
   "songPractice": {
     "title": "Práctica de canciones",
     "songs": "Canciones",
-    "songsIntro": "Practica canciones completas cuando quieras, en modo espera o a tempo. Cada una aparece con la unidad que enseña lo que necesita.",
+    "songsIntro": "Practica canciones completas cuando quieras, en modo «Espérame» o «Tocar a tempo». Cada una aparece con la unidad que enseña lo que necesita.",
     "mySongs": "Mis canciones",
     "mySongTitle": "{title} – {composer}",
     "search": "Buscar una canción",
@@ -687,7 +687,7 @@
   "today": {
     "title": "Hoy",
     "intro": "Una sesión de práctica corta, elegida según dónde estás.",
-    "progress": "{done} de {total} hechas",
+    "progress": "{done} de {total} completadas",
     "kinds": {
       "next": "Siguiente lección",
       "review": "Repaso",
@@ -700,15 +700,15 @@
     "details": {
       "next": "Sigue donde lo dejaste.",
       "review": "{days, plural, one {La tocaste ayer: un repaso rápido la mantiene fresca.} other {La tocaste hace # días: un repaso rápido la mantiene fresca.}}",
-      "weakBar": "El compás {bar} necesita trabajo: se repite hasta que pares.",
-      "weakBars": "Los compases {first}–{last} necesitan trabajo: se repiten hasta que pares.",
+      "weakBar": "El compás {bar} necesita un poco más de práctica: se repite hasta que pares.",
+      "weakBars": "Los compases {first}–{last} necesitan un poco más de práctica: se repiten hasta que pares.",
       "newSong": "Una canción que todavía no tocaste.",
       "song": "{days, plural, one {No la tocas desde ayer.} other {No la tocas desde hace # días.}}",
       "skill": "Tu habilidad más débil por ahora: {skill}.",
       "newDrill": "Música nueva para leer a primera vista.",
       "drill": "{days, plural, one {Música nueva para leer: tu último ejercicio fue ayer.} other {Música nueva para leer: tu último ejercicio fue hace # días.}}",
-      "newEar": "Escucha y tócalo de vuelta.",
-      "ear": "{days, plural, one {Escucha y tócalo de vuelta: la última vez fue ayer.} other {Escucha y tócalo de vuelta: la última vez fue hace # días.}}"
+      "newEar": "Escucha y repítelo en el teclado.",
+      "ear": "{days, plural, one {Escucha y repítelo en el teclado: la última vez fue ayer.} other {Escucha y repítelo en el teclado: la última vez fue hace # días.}}"
     },
     "done": "hecha",
     "allDone": "Todo listo por hoy. ¡Buen trabajo!",
@@ -762,8 +762,8 @@
       "melodies": "Oirás una melodía corta: tócala empezando por la tecla iluminada.",
       "chords": "Oirás un acorde: tócalo sobre la fundamental iluminada, o elige mayor o menor.",
       "notesAlone": "Oirás una nota: búscala en el teclado.",
-      "rhythms": "Vas a escuchar un ritmo corto: repítelo tocando cualquier tecla, a tu propia velocidad.",
-      "scales": "Vas a escuchar una escala que sube desde la tecla iluminada: ¿es mayor o menor?"
+      "rhythms": "Oirás un ritmo corto: repítelo tocando cualquier tecla, a tu propia velocidad.",
+      "scales": "Oirás una escala que sube desde la tecla iluminada: ¿es mayor o menor?"
     },
     "listen": "Escucha…",
     "ask": {
@@ -787,7 +787,7 @@
       "melody": "¡Bien, esa es la melodía!",
       "chord": "Bien: {chord}.",
       "rhythm": "¡Ese es el ritmo!",
-      "scale": "Correcto: la escala de {scale}."
+      "scale": "Bien: la escala de {scale}."
     },
     "quality": {
       "major": "Mayor",
@@ -802,7 +802,7 @@
     "results": "Resultados",
     "reference": "Tocar primero el {c} central",
     "allNotes": "Las 12 notas",
-    "allNotesTip": "Todas las teclas del do central al do siguiente, negras incluidas, llegue donde llegue el curso"
+    "allNotesTip": "Todas las teclas del {c} central al {c} siguiente, negras incluidas, aunque el curso todavía no haya llegado a ellas"
   },
   "course": {
     "levels": {
@@ -817,7 +817,7 @@
   },
   "tuner": {
     "title": "Afinador",
-    "intro": "Canta lo que quieras: la nota que cantas y cuánto te alejas de ella.",
+    "intro": "Canta lo que quieras y verás qué nota cantas y qué tan cerca estás de ella.",
     "listening": "Escuchando…",
     "singSomething": "Canta algo",
     "inTune": "afinada",
@@ -856,10 +856,10 @@
       "toWorkOn": "Notas para practicar",
       "workOn": "{note}: {how}",
       "notInTime": "no la alcanzaste a tiempo",
-      "notInTimeLow": "no la alcanzaste a tiempo, cantaste más grave",
-      "notInTimeHigh": "no la alcanzaste a tiempo, cantaste más agudo",
+      "notInTimeLow": "no la alcanzaste a tiempo, cantaste demasiado grave",
+      "notInTimeHigh": "no la alcanzaste a tiempo, cantaste demasiado agudo",
       "save": "Guardar la grabación",
-      "saveTip": "Guarda esta ronda como un archivo de audio (.wav) con las notas pedidas adentro, para mejorar cómo se evalúa el canto. Ponlo en la carpeta fixtures/voice del proyecto."
+      "saveTip": "Guarda esta ronda como un archivo de audio (.wav) que incluye las notas pedidas, para mejorar cómo se evalúa el canto. Ponlo en la carpeta fixtures/voice del proyecto."
     }
   }
 }

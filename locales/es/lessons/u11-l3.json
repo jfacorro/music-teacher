@@ -2,7 +2,7 @@
   "steps": {
     "arpeggio": "Un arpegio es un acorde repartido a lo largo del teclado: {c}, {e} y {g}, luego otra vez una octava más arriba, y así. Como en la escala, el pulgar pasa por debajo para empezar cada octava nueva: en la mano derecha, después del dedo 3. Al bajar, el dedo 3 pasa por encima del pulgar.",
     "rightArpeggio": "Dos octavas hacia arriba y de vuelta, con el pulgar pasando por debajo en cada octava nueva.",
-    "rightArpeggioInTime": "Ahora a tempo, parejo.",
+    "rightArpeggioInTime": "Ahora a tempo, de forma pareja.",
     "leftArpeggio": "La mano izquierda sube con los dedos 5, 4 y 2, luego el pulgar, y el dedo 3 pasa por encima del pulgar hacia la octava siguiente: 5 4 2 1 3 2 1. Al bajar, el pulgar pasa por debajo del dedo 3.",
     "leftUpDown": "Dos octavas hacia arriba y de vuelta, con la mano izquierda sola.",
     "leftUpDownInTime": "Y a tempo."

@@ -182,7 +182,7 @@
       "measureNoise": "Measure background noise",
       "measureDelay": "Measure delay",
       "resetDelay": "Reset delay",
-      "headphones": "To measure the delay, play any key on each click. Headphones help, so the microphone doesn’t hear the clicks.",
+      "headphones": "To measure the delay, play any key on each click. Use headphones if you can, so the microphone doesn’t pick up the clicks.",
       "noiseRunning": "Measuring… stay quiet for 3 seconds.",
       "delayCountIn": "Get ready… {beat}",
       "delayRunning": "Play a key on each click: {beat} of {total}",
@@ -192,7 +192,7 @@
     },
     "micCheck": {
       "heading": "Microphone check",
-      "intro": "With both the MIDI cable and the microphone on, play notes across the keyboard. MIDI says which keys you really played, so this shows how well the microphone hears them.",
+      "intro": "With the MIDI keyboard connected and the microphone on, play notes across the keyboard. MIDI tells the app which keys you really played, so this shows how well the microphone hears them.",
       "start": "Start check",
       "stop": "Stop",
       "played": "Single notes played (MIDI)",
@@ -222,10 +222,10 @@
       },
       "metronomeHints": {
         "auto": "On when playing along, and when a lesson asks for it.",
-        "on": "Every exercise starts with the metronome on, waiting for each note too.",
+        "on": "Every exercise starts with the metronome on, even when the music waits for each note.",
         "off": "Every exercise starts with the metronome off."
       },
-      "intro": "Bluetooth headphones and speakers play sound late (often 150–250 ms), and the browser can’t tell: the clicks come after the beat, and notes played with them look late. Measure the timing to make up for it: tap any key on your piano exactly with each click. It’s kept for each sound output, and followed when you switch.",
+      "intro": "Bluetooth headphones and speakers play sound late (often 150–250 ms), and the browser can’t tell: the clicks come after the beat, and notes played with them look late. Measure the timing to make up for it: tap any key on your piano exactly with each click. The correction is saved for each sound output and applied automatically when you switch.",
       "output": "Sound goes to: {output}",
       "notMeasured": "Not measured for this output yet.",
       "correction": "Timing correction: {ms} ms",
@@ -239,7 +239,7 @@
     },
     "voice": {
       "heading": "Your vocal range",
-      "intro": "Sing from your lowest comfortable note to your highest. It takes about a minute, with the microphone; the app stays quiet, so no headphones are needed.",
+      "intro": "Sing from your lowest comfortable note to your highest. It takes about a minute and uses the microphone. The app makes no sound, so you don’t need headphones.",
       "find": "Find my range",
       "steps": {
         "comfortable": "1 · A comfortable note",
@@ -252,7 +252,7 @@
         "lowest": "Slide down slowly, as low as feels easy, then hold the lowest note for a moment.",
         "highest": "Now slide up slowly, as high as feels easy, and hold the highest note for a moment."
       },
-      "dontPush": "Don’t push: a note counts once it’s steady for about half a second.",
+      "dontPush": "Don’t strain: a note counts once it’s held steady for about half a second.",
       "listening": "Listening…",
       "singing": "You’re singing",
       "thatsLowest": "That’s my lowest",
@@ -596,7 +596,7 @@
   },
   "quiz": {
     "cardLabel": "A note on the staff",
-    "prompt": "Which key is this note? Play it.",
+    "prompt": "Which key plays this note? Play it.",
     "right": "Yes, that’s {note}!",
     "wrong": "That was {note}. Try again.",
     "hint": "It’s the key lit up on the keyboard.",
@@ -673,7 +673,7 @@
   "songPractice": {
     "title": "Song practice",
     "songs": "Songs",
-    "songsIntro": "Practice whole songs any time, in wait or play-along mode. Each one is listed with the unit that teaches what it needs.",
+    "songsIntro": "Practice whole songs any time, in “Wait for me” or “Play along” mode. Each one is listed with the unit that teaches what it needs.",
     "mySongs": "My songs",
     "mySongTitle": "{title} – {composer}",
     "search": "Find a song",
@@ -802,7 +802,7 @@
     "results": "Results",
     "reference": "Play middle {c} first",
     "allNotes": "All 12 notes",
-    "allNotesTip": "Every key from middle C to the C above, black keys included, whatever the course has reached"
+    "allNotesTip": "Every key from middle {c} to the next {c}, black keys included, even ones the course hasn’t reached yet"
   },
   "course": {
     "levels": {
@@ -817,7 +817,7 @@
   },
   "tuner": {
     "title": "Tuner",
-    "intro": "Sing anything: the note you’re singing, and how far from it.",
+    "intro": "Sing anything to see which note you’re singing and how close you are to it.",
     "listening": "Listening…",
     "singSomething": "Sing something",
     "inTune": "in tune",
@@ -836,7 +836,7 @@
     "micUnavailable": "The tuner needs a microphone, and none could be started.",
     "match": {
       "title": "Match the note",
-      "intro": "The app plays a note from your range: sing it back and hold it in tune for half a second. Any octave counts. Ten notes, each counting when you match it within six seconds.",
+      "intro": "The app plays a note from your range: sing it back and hold it in tune for half a second. Any octave counts. There are ten notes, and each one counts if you match it within six seconds.",
       "noRange": "Find your range first, so the notes fit your voice.",
       "begin": "Start",
       "progress": "Note {current} of {total}",

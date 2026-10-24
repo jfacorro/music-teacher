@@ -1,8 +1,8 @@
 {
   "steps": {
     "positions": "Es hora de tocar con las dos manos a la vez. Pon el pulgar derecho en el {c} central y el meñique izquierdo en el {c} una octava más abajo. Cada mano cubre cinco teclas blancas.",
-    "up": "Sube con las dos manos: tocan las mismas notas al mismo tiempo, a una octava. La mano izquierda empieza con el meñique y la derecha con el pulgar.",
+    "up": "Sube con las dos manos: tocan las mismas notas al mismo tiempo, a una octava de distancia. La mano izquierda empieza con el meñique y la derecha con el pulgar.",
     "down": "Ahora baja con las dos manos juntas.",
-    "together": "Sube y baja a tiempo con el metrónomo. Escucha que las dos manos suenen exactamente juntas."
+    "together": "Sube y baja a tempo con el metrónomo. Fíjate en que las dos manos suenen exactamente a la vez."
   }
 }

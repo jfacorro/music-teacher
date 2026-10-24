@@ -2,7 +2,7 @@
   "steps": {
     "legato": "Legato significa suave y unido: mantén cada tecla abajo hasta que baje la siguiente, sin silencio entre las notas. Una línea curva sobre las notas, una ligadura de expresión, lo pide. Con un teclado MIDI, la aplicación lo comprueba.",
     "legatoUpDown": "Sube y baja bajo una sola ligadura: levanta cada dedo justo cuando toca el siguiente.",
-    "legatoInTime": "Ahora a tempo, siempre unido.",
+    "legatoInTime": "Ahora a tempo, sin separar las notas.",
     "phrases": "Las ligaduras también dan forma a la música en frases, como oraciones. Al final de una ligadura, levanta un poco la mano antes de que empiece la siguiente: una pequeña respiración.",
     "auraLee": "«Aura Lee», una canción estadounidense de 1861, en {g} mayor: cuatro frases suaves, cada una bajo su ligadura. Recuerda {fSharp}.",
     "auraLeeInTime": "Ahora a tempo, cantando cada frase."

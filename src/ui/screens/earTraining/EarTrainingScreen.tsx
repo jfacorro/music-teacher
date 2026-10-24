@@ -137,7 +137,12 @@ function Exercises({ open, range }: { open: readonly EarLevel[]; range: EarRange
           </label>
         )}
         {(level === EarLevel.Notes || level === EarLevel.Intervals) && (
-          <label className="checkbox" title={t('earTraining.allNotesTip')}>
+          <label
+            className="checkbox"
+            title={t('earTraining.allNotesTip', {
+              c: names.name(pitchFromMidi(MIDDLE_C), { octave: false }),
+            })}
+          >
             <input
               type="checkbox"
               checked={allNotes}

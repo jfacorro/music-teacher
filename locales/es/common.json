@@ -45,7 +45,7 @@
     "starting": "Activando el micrófono…",
     "denied": "Micrófono bloqueado",
     "error": "Problema con el micrófono",
-    "unsupported": "Sin soporte de micrófono"
+    "unsupported": "Micrófono no compatible"
   },
   "stars": "{stars, plural, =0 {Sin estrellas} one {# estrella de 3} other {# estrellas de 3}}",
   "inputPicker": {
@@ -86,6 +86,6 @@
     "notStarted": "Sin empezar",
     "findRangeFirst": "Sin empezar · primero encuentra tu extensión",
     "unit": "Unidad {number} de {total}",
-    "allDone": "{total, plural, one {La unidad terminada} other {Las # unidades terminadas}}"
+    "allDone": "{total, plural, one {Unidad terminada} other {Las # unidades terminadas}}"
   }
 }

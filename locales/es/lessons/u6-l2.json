@@ -4,6 +4,6 @@
     "majorMinor": "Alterna entre {cMajor} y {cMinor}: solo se mueve el dedo medio. Escucha cómo cambia el color.",
     "whiteMinors": "Tres acordes menores usan solo teclas blancas: {dMinor}, {eMinor} y {aMinor}. La forma de la mano es la misma que en los acordes mayores; la nota del medio está una tecla más abajo que en el acorde mayor.",
     "minors": "Toca {dMinor}, {eMinor} y {aMinor} manteniendo la forma 1-3-5.",
-    "progression": "Una progresión corta que mezcla acordes mayores y menores: {cMajor}, {aMinor}, {dMinor}, {gMajor} y de vuelta a {cMajor}, a tiempo."
+    "progression": "Una progresión corta que mezcla acordes mayores y menores: {cMajor}, {aMinor}, {dMinor}, {gMajor} y de vuelta a {cMajor}, a tempo."
   }
 }

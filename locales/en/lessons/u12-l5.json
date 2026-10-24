@@ -1,7 +1,7 @@
 {
   "steps": {
     "reading": "Before playing a piece, read its key signature: name its sharps or flats, then look at the last note (usually the home note) to tell the major key from its relative minor. Watch for accidentals the key signature doesn’t cover.",
-    "musette": "“Musette in D”, from the notebook Bach gave his wife Anna Magdalena in 1725, in {d} major. The left hand jumps octaves like a bagpipe’s drone (a musette is a small bagpipe); the middle part moves to {a} major, with sharps the key signature doesn’t have. Written here at twice its note values, without its repeats.",
+    "musette": "“Musette in D”, from the notebook Bach gave his wife Anna Magdalena in 1725, in {d} major. The left hand jumps octaves like a bagpipe’s drone (a musette is a small bagpipe); the middle part moves to {a} major, with sharps the key signature doesn’t have. Written here with its note values doubled, and without its repeats.",
     "musetteInTime": "Now in time, lightly.",
     "scarborough": "“Scarborough Fair”, an old English ballad, in {d} minor: one flat. One note gives it its old sound: {b} natural instead of {bFlat}, with a natural sign.",
     "scarboroughInTime": "And in time, gently."

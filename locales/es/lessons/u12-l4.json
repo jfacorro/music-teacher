@@ -1,6 +1,6 @@
 {
   "steps": {
-    "harmonic": "Casi toda la música en menor eleva la séptima nota un semitono, para que se apoye en la nota de llegada como en una escala mayor: la menor armónica. La nota elevada no está en la armadura: se escribe como alteración cada vez. {a} menor eleva {g} a {gSharp}, {e} menor eleva {d} a {dSharp}, y {d} menor eleva {c} a {cSharp}.",
+    "harmonic": "Casi toda la música en menor eleva la séptima nota un semitono, para que tienda hacia la nota de reposo como en una escala mayor: es la escala menor armónica. La nota elevada no está en la armadura: se escribe como alteración cada vez. {a} menor eleva {g} a {gSharp}, {e} menor eleva {d} a {dSharp}, y {d} menor eleva {c} a {cSharp}.",
     "aHarmonic": "{a} menor armónica, con {gSharp} cerca de arriba.",
     "eHarmonic": "{e} menor armónica, con {dSharp}.",
     "dHarmonic": "{d} menor armónica, con {cSharp}: un sostenido en una tonalidad con un bemol.",

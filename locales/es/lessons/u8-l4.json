@@ -1,7 +1,7 @@
 {
   "steps": {
-    "minor": "{a} menor usa las mismas teclas blancas que {c} mayor, pero su nota de llegada es {a}, y suena más oscura. Estas son sus cinco primeras notas.",
-    "leadingNote": "Las piezas en menor suelen subir la séptima nota, {g}, a {gSharp}: a un semitono de {a}, lleva de vuelta a casa. {a} menor no tiene armadura, así que el sostenido se escribe en la partitura cada vez.",
+    "minor": "{a} menor usa las mismas teclas blancas que {c} mayor, pero su nota de reposo es {a}, y su sonido es más oscuro. Estas son sus cinco primeras notas.",
+    "leadingNote": "Las piezas en menor suelen subir la séptima nota, {g}, a {gSharp}: a un semitono de {a}, tiende a volver a ella. {a} menor no tiene armadura, así que el sostenido se escribe en la partitura cada vez.",
     "findMinor": "Busca las cinco notas, y {gSharp} justo debajo.",
     "minorTune": "Una melodía corta en {a} menor. El pulgar toca {gSharp}; el dedo 2 está en {a}.",
     "greensleeves": "«Greensleeves», una melodía inglesa de más de 400 años, en {a} menor. Atención a los sostenidos: {gSharp}, y {fSharp} al volver a subir.",

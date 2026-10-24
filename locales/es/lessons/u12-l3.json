@@ -1,6 +1,6 @@
 {
   "steps": {
-    "relative": "Cada tonalidad mayor comparte su armadura con una tonalidad menor, su relativo menor, cuya nota de llegada está tres semitonos más abajo. {c} mayor y {a} menor: sin sostenidos ni bemoles. {g} mayor y {e} menor: un sostenido. {f} mayor y {d} menor: un bemol. Tocada desde su propia nota de llegada con esa armadura, una tonalidad menor da su escala menor natural.",
+    "relative": "Cada tonalidad mayor comparte su armadura con una tonalidad menor, su relativo menor, cuya nota de reposo está tres semitonos más abajo. {c} mayor y {a} menor: sin sostenidos ni bemoles. {g} mayor y {e} menor: un sostenido. {f} mayor y {d} menor: un bemol. Tocada desde su propia nota de reposo con esa armadura, una tonalidad menor da su escala menor natural.",
     "aNatural": "{a} menor natural: las teclas blancas de {a} a {a}.",
     "eNatural": "{e} menor natural, con la armadura de {g} mayor: un sostenido.",
     "dNatural": "{d} menor natural, con la armadura de {f} mayor: un bemol.",

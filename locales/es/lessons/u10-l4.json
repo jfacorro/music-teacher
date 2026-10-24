@@ -1,6 +1,6 @@
 {
   "steps": {
-    "notPedal": "El pedal no sirve para todo. Si lo mantienes pisado en una escala o en una melodía que avanza por grados conjuntos, mezcla las notas en una mancha; con notas staccato, no las deja ser cortas. Donde la música no tiene línea de pedal, deja el pie apoyado sobre el pedal, sin pisarlo.",
+    "notPedal": "El pedal no sirve para todo. Si lo mantienes pisado en una escala o en una melodía que avanza por grados conjuntos, las notas se mezclan y se emborronan; con notas staccato, no deja que suenen cortas. Donde la música no tiene línea de pedal, deja el pie apoyado sobre el pedal, sin pisarlo.",
     "pedalOrNot": "Pedal para el acorde arpegiado, nada para la escala ni para las notas staccato, pedal para el acorde siguiente y otra vez para el último.",
     "pedalOrNotInTime": "Ahora a tempo.",
     "choose": "Con las dos manos, la misma elección: pedal debajo de los acordes, y nada debajo de la escala rápida que hay entre ellos.",
