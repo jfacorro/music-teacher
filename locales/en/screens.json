@@ -12,7 +12,8 @@
     "unitLocked": "{stars, plural, one {Earn at least # star in every lesson of the previous unit to unlock this one.} other {Earn at least # stars in every lesson of the previous unit to unlock this one.}}",
     "locked": "(locked)",
     "unitStars": "{stars} of {total} stars",
-    "unitToggle": "Show or hide the lessons"
+    "unitToggle": "Show or hide the lessons",
+    "checkRange": "Your vocal range"
   },
   "freePlay": {
     "title": "Free play",
@@ -53,7 +54,8 @@
         "keysAndHands": "Keys and hands",
         "rhythm": "Rhythm",
         "reading": "Reading",
-        "musicianship": "Musicianship"
+        "musicianship": "Musicianship",
+        "singing": "Singing"
       },
       "detail": "{level} · {played}",
       "starsTip": "The accuracy needed for 1, 2 and 3 stars: {oneStar}, {twoStars} and {threeStars}."
@@ -161,6 +163,7 @@
     "mic": {
       "heading": "Microphone",
       "intro": "Place the microphone near the piano. It hears one note at a time; chords come later.",
+      "introVoice": "Sing about an arm’s length from the microphone, facing it. It hears one note at a time.",
       "unsupported": "This browser can’t use the microphone. Use Chrome or Edge.",
       "denied": "Microphone access was blocked. Allow it for this site in the browser’s site settings, then try again.",
       "error": "The microphone couldn’t start. Check that it’s connected and not used by another app.",
@@ -574,6 +577,21 @@
     "test": {
       "heading": "Try it",
       "intro": "Press a few keys. Each one should appear below with its name. You can change all of this later in Settings."
+    },
+    "course": {
+      "heading": "What would you like to learn?",
+      "intro": "The piano, singing, or both: each has its own course, and you can switch between them, or add the other, at any time from the top bar.",
+      "piano": "Piano",
+      "voice": "Voice",
+      "both": "Both"
+    },
+    "microphone": {
+      "heading": "Your microphone",
+      "intro": "Singing is heard through the microphone. Turn it on and choose which one to use; a quiet room works best."
+    },
+    "range": {
+      "heading": "Your vocal range",
+      "intro": "Find your lowest and highest comfortable notes, so every exercise fits your voice. It takes about a minute; you can also do it later in Settings."
     }
   },
   "quiz": {
@@ -794,7 +812,8 @@
       "earlyIntermediate": "Early intermediate"
     },
     "levelHeading": "{level} · Units {first}–{last}",
-    "unitShort": "{number} · {title}"
+    "unitShort": "{number} · {title}",
+    "levelHeadingOne": "{level} · Unit {number}"
   },
   "tuner": {
     "title": "Tuner",

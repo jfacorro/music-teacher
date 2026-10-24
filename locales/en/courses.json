@@ -55,6 +55,10 @@
     "u14": {
       "title": "Two hands, two lines",
       "description": "Each hand its own part: the melody in the left hand, contrary motion, two melodies at once, and Petzold’s minuets as he wrote them."
+    },
+    "v1": {
+      "title": "Getting ready to sing",
+      "description": "How to stand, how to breathe, and what the app can hear."
     }
   },
   "lessons": {
@@ -125,7 +129,9 @@
     "u14-l1": "The melody in the left hand",
     "u14-l2": "Contrary motion",
     "u14-l3": "Two melodies at once",
-    "u14-l4": "Minuet in {g} minor"
+    "u14-l4": "Minuet in {g} minor",
+    "v1-l1": "Standing to sing",
+    "v1-l2": "Breathing for singing"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -157,6 +163,8 @@
     "syncopation": "Syncopation",
     "form": "Repeats and endings",
     "sight-reading": "Sight-reading",
-    "ear-training": "Ear training"
+    "ear-training": "Ear training",
+    "posture": "Posture",
+    "breathing": "Breathing"
   }
 }

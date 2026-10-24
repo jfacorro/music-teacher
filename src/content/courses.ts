@@ -1,5 +1,7 @@
 /**
- * Course structure (PLAN.md §7): units in order, each with its lessons in order.
+ * Course structure (PLAN.md §7): units in order, each with its lessons in order. There are two
+ * courses, the piano (`courses.json`) and the voice (`voiceCourse.json`, PLAN.md Phase 6), each
+ * with its own units and progress; lesson ids are unique across both.
  * Titles live in `locales/<lang>/courses.json`; note names in them are variables.
  *
  * Units are grouped in levels (Beginner, Elementary, Late elementary, Early intermediate), each
@@ -13,6 +15,16 @@
 import { isValueOf } from '../lib/values';
 import { parseNote, type Pitch } from '../theory/pitch';
 import data from './courses.json';
+import voiceData from './voiceCourse.json';
+
+/** What's being learned: each course has its own units, progress and stars. */
+export const Course = {
+  Piano: 'piano',
+  Voice: 'voice',
+} as const;
+export type Course = (typeof Course)[keyof typeof Course];
+
+export const COURSES: readonly Course[] = Object.values(Course);
 
 /** What lessons practice (PLAN.md §2.4), in curriculum order. Names: courses.json › skills. */
 export const SKILLS = [
@@ -46,6 +58,9 @@ export const SKILLS = [
   'form',
   'sight-reading',
   'ear-training',
+  // The voice course.
+  'posture',
+  'breathing',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];
@@ -62,7 +77,7 @@ export interface CourseLesson {
 function skills(lessonId: string, input: readonly string[] | undefined): Skill[] {
   return (input ?? []).map((skill) => {
     if (!(SKILLS as readonly string[]).includes(skill)) {
-      throw new Error(`courses.json › ${lessonId}: unknown skill "${skill}"`);
+      throw new Error(`${lessonId}: unknown skill "${skill}"`);
     }
     return skill as Skill;
   });
@@ -85,7 +100,7 @@ export const COURSE_LEVELS: readonly CourseLevel[] = Object.values(CourseLevel);
 
 function level(unitId: string, input: unknown): CourseLevel {
   if (!isValueOf(CourseLevel, input)) {
-    throw new Error(`courses.json › ${unitId}: unknown level "${String(input)}"`);
+    throw new Error(`${unitId}: unknown level "${String(input)}"`);
   }
   return input;
 }
@@ -101,17 +116,36 @@ export interface Unit {
 const vars = (input: Record<string, string> | undefined) =>
   Object.fromEntries(Object.entries(input ?? {}).map(([name, note]) => [name, parseNote(note)]));
 
-export const UNITS: readonly Unit[] = data.units.map((unit) => ({
-  id: unit.id,
-  level: level(unit.id, (unit as { level?: unknown }).level),
-  textVars: vars((unit as { textVars?: Record<string, string> }).textVars),
-  unlock: (unit as { unlock?: Unit['unlock'] }).unlock ?? null,
-  lessons: unit.lessons.map((lesson) => ({
-    id: lesson.id,
-    titleVars: vars((lesson as { titleVars?: Record<string, string> }).titleVars),
-    skills: skills(lesson.id, (lesson as { skills?: string[] }).skills),
-  })),
-}));
+interface UnitData {
+  id: string;
+  level?: unknown;
+  textVars?: Record<string, string>;
+  unlock?: Unit['unlock'];
+  lessons: { id: string; titleVars?: Record<string, string>; skills?: string[] }[];
+}
+
+const parseUnits = (units: readonly UnitData[]): Unit[] =>
+  units.map((unit) => ({
+    id: unit.id,
+    level: level(unit.id, unit.level),
+    textVars: vars(unit.textVars),
+    unlock: unit.unlock ?? null,
+    lessons: unit.lessons.map((lesson) => ({
+      id: lesson.id,
+      titleVars: vars(lesson.titleVars),
+      skills: skills(lesson.id, lesson.skills),
+    })),
+  }));
+
+/** The piano course's units. */
+export const UNITS: readonly Unit[] = parseUnits(data.units as UnitData[]);
+/** The voice course's units. */
+export const VOICE_UNITS: readonly Unit[] = parseUnits(voiceData.units as UnitData[]);
+
+export const COURSE_UNITS: Readonly<Record<Course, readonly Unit[]>> = {
+  [Course.Piano]: UNITS,
+  [Course.Voice]: VOICE_UNITS,
+};
 
 export interface LevelUnits {
   level: CourseLevel;
@@ -129,19 +163,28 @@ export function unitsByLevel(units: readonly Unit[] = UNITS): LevelUnits[] {
   })).filter(({ units: inLevel }) => inLevel.length > 0);
 }
 
-export const LESSON_ORDER: readonly string[] = UNITS.flatMap((unit) =>
-  unit.lessons.map((lesson) => lesson.id),
-);
+/** A course's lessons, in order. */
+export const lessonOrder = (course: Course): readonly string[] =>
+  COURSE_UNITS[course].flatMap((unit) => unit.lessons.map((lesson) => lesson.id));
 
-export function findLesson(id: string): { unit: Unit; lesson: CourseLesson; index: number } | null {
-  for (const unit of UNITS) {
-    const lesson = unit.lessons.find((l) => l.id === id);
-    if (lesson) return { unit, lesson, index: LESSON_ORDER.indexOf(id) };
+/** The piano course's lessons, in order. */
+export const LESSON_ORDER: readonly string[] = lessonOrder(Course.Piano);
+
+/** A lesson of either course: its course, unit, and place in its course (from 0). */
+export function findLesson(
+  id: string,
+): { course: Course; unit: Unit; lesson: CourseLesson; index: number } | null {
+  for (const course of COURSES) {
+    for (const unit of COURSE_UNITS[course]) {
+      const lesson = unit.lessons.find((l) => l.id === id);
+      if (lesson) return { course, unit, lesson, index: lessonOrder(course).indexOf(id) };
+    }
   }
   return null;
 }
 
+/** The lesson after this one in its course, if any. */
 export function nextLessonId(id: string): string | null {
-  const index = LESSON_ORDER.indexOf(id);
-  return index >= 0 ? (LESSON_ORDER[index + 1] ?? null) : null;
+  const found = findLesson(id);
+  return found ? (lessonOrder(found.course)[found.index + 1] ?? null) : null;
 }

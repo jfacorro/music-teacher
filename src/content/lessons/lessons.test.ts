@@ -1,12 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
 import {
+  Course,
   COURSE_LEVELS,
+  COURSE_UNITS,
   CourseLevel,
+  COURSES,
   EXERCISE_SKILLS,
   LESSON_ORDER,
+  lessonOrder,
   SKILLS,
   UNITS,
+  VOICE_UNITS,
   findLesson,
   nextLessonId,
   unitsByLevel,
@@ -26,6 +31,10 @@ const courseTexts = import.meta.glob<{
 }>('/locales/*/courses.json', { eager: true, import: 'default' });
 const lessonFiles = import.meta.glob('./*.json');
 
+/** Both courses' units and lessons. */
+const ALL_UNITS = COURSES.flatMap((course) => COURSE_UNITS[course]);
+const ALL_LESSONS = COURSES.flatMap((course) => lessonOrder(course));
+
 /** ICU argument names in a message, e.g. "Play {c} and {d}" → c, d. */
 const argumentsOf = (message: string) =>
   [...message.matchAll(/\{(\w+)\}/g)].map((match) => match[1]!).sort();
@@ -33,15 +42,27 @@ const argumentsOf = (message: string) =>
 describe('courses', () => {
   it('lists every lesson file exactly once', () => {
     const files = Object.keys(lessonFiles).map((path) => path.slice(2, -5));
-    expect([...LESSON_ORDER].sort()).toEqual(files.sort());
-    expect(new Set(LESSON_ORDER).size).toBe(LESSON_ORDER.length);
-    for (const id of LESSON_ORDER) expect(lessonExists(id)).toBe(true);
+    expect([...ALL_LESSONS].sort()).toEqual(files.sort());
+    expect(new Set(ALL_LESSONS).size).toBe(ALL_LESSONS.length);
+    for (const id of ALL_LESSONS) expect(lessonExists(id)).toBe(true);
   });
 
-  it('finds lessons and what comes next', () => {
-    expect(findLesson('u1-l2')).toMatchObject({ unit: { id: 'u1' }, index: 1 });
+  it('finds lessons of either course and what comes next in it', () => {
+    expect(findLesson('u1-l2')).toMatchObject({
+      course: Course.Piano,
+      unit: { id: 'u1' },
+      index: 1,
+    });
+    expect(findLesson('v1-l2')).toMatchObject({
+      course: Course.Voice,
+      unit: { id: 'v1' },
+      index: 1,
+    });
     expect(nextLessonId('u1-l6')).toBe('u2-l1');
+    expect(nextLessonId('v1-l1')).toBe('v1-l2');
+    // The end of one course doesn't lead into the other.
     expect(nextLessonId(LESSON_ORDER.at(-1)!)).toBeNull();
+    expect(nextLessonId(lessonOrder(Course.Voice).at(-1)!)).toBeNull();
     expect(findLesson('nope')).toBeNull();
   });
 
@@ -55,10 +76,16 @@ describe('courses', () => {
       [CourseLevel.LateElementary, [9, 10, 11]],
       [CourseLevel.EarlyIntermediate, [12, 13, 14]],
     ]);
+    expect(
+      unitsByLevel(VOICE_UNITS).map(({ level, units }) => [
+        level,
+        units.map(({ number }) => number),
+      ]),
+    ).toEqual([[CourseLevel.Beginner, [1]]]);
   });
 
   it('tags every lesson with what it practices, and every skill is practiced', () => {
-    const lessons = UNITS.flatMap((unit) => unit.lessons);
+    const lessons = ALL_UNITS.flatMap((unit) => unit.lessons);
     for (const lesson of lessons) expect(lesson.skills.length, lesson.id).toBeGreaterThan(0);
     const used = new Set(lessons.flatMap((lesson) => lesson.skills));
     // Skills with exercises of their own aren't in lessons.
@@ -74,7 +101,7 @@ describe('courses', () => {
     });
 
     it('has a title for every unit and lesson, using only the provided note variables', () => {
-      for (const unit of UNITS) {
+      for (const unit of ALL_UNITS) {
         const unitText = texts?.units[unit.id];
         expect(unitText?.title, unit.id).toBeTruthy();
         for (const text of [unitText?.title ?? '', unitText?.description ?? '']) {
@@ -96,7 +123,7 @@ describe('courses', () => {
 
 describe('lessons', () => {
   // Every lesson is parsed here, so a typo in a note or a step fails the test run.
-  describe.each(LESSON_ORDER)('%s', (id) => {
+  describe.each(ALL_LESSONS)('%s', (id) => {
     it('loads and validates', async () => {
       const lesson = await loadLesson(id);
       expect(lesson.steps.length).toBeGreaterThan(0);

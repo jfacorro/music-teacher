@@ -4,7 +4,7 @@
  * it survives browser restarts, and mirrored in a store for the UI.
  */
 import { create } from 'zustand';
-import type { Skill } from '../content/courses';
+import { Course, findLesson, type Skill } from '../content/courses';
 import { nextReview, reviewOf } from '../content/review';
 import type { LoopRange } from '../engine/session';
 import { dayOf, db, type PracticeLogRow, type ResultRow } from './db';
@@ -44,6 +44,13 @@ interface ProgressState {
 export const useProgress = create<ProgressState>(() => ({ results: {}, log: [], days: {} }));
 
 export const resultKey = (kind: ResultKind, id: string) => `${kind}:${id}`;
+
+/** The course a result belongs to: a lesson's own, the voice's exercises, the rest the piano's. */
+export function courseOfResult(kind: ResultKind, id: string): Course {
+  if (kind === ResultKind.Voice) return Course.Voice;
+  if (kind === ResultKind.Lesson) return findLesson(id)?.course ?? Course.Piano;
+  return Course.Piano;
+}
 
 /** Skills practiced by exercises of their own, and the results that count for them. */
 const EXERCISE_RESULTS: Partial<Readonly<Record<Skill, ResultKind>>> = {

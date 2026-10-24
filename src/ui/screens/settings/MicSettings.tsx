@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Course } from '../../../content/courses';
 import { useNoteNames } from '../../../i18n/useNoteNames';
 import { measureDelayByTapping, measureNoiseFloor } from '../../../input/mic/calibrate';
 import { useMic, MicStatus } from '../../../input/mic/micInput';
@@ -37,6 +38,7 @@ export function MicSettings() {
   const noiseFloorDb = useSettings((s) => s.micNoiseFloorDb);
   const sensitivityDb = useSettings((s) => s.micSensitivityDb);
   const latencyMs = useSettings((s) => s.micLatencyMs);
+  const course = useSettings((s) => s.course);
   const [task, setTask] = useState<Task>({ kind: CalibrationTask.Idle });
   const deviceSelectId = useId();
   const sensitivityId = useId();
@@ -78,7 +80,7 @@ export function MicSettings() {
       )}
       {status !== MicStatus.Unsupported && status !== MicStatus.On && (
         <>
-          <p>{t('settings.mic.intro')}</p>
+          <p>{course === Course.Voice ? t('settings.mic.introVoice') : t('settings.mic.intro')}</p>
           {status === MicStatus.Denied && (
             <p className="notice notice--problem">{t('settings.mic.denied')}</p>
           )}

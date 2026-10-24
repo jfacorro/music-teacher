@@ -52,7 +52,9 @@
     "label": "Listen to",
     "auto": "Automatic · {status}",
     "nothing": "nothing connected",
-    "midi": "MIDI keyboard"
+    "midi": "MIDI keyboard",
+    "voiceOn": "Singing is heard through the microphone.",
+    "voiceOff": "Singing is heard through the microphone: click to turn it on."
   },
   "modal": {
     "close": "Close",
@@ -73,5 +75,17 @@
   "pageIndex": {
     "label": "On this page",
     "jumpTo": "Jump to"
+  },
+  "courseSwitch": {
+    "label": "What you’re practicing",
+    "tip": "What you’re practicing: the piano or your voice. Each has its own course and progress.",
+    "courses": {
+      "piano": "Piano",
+      "voice": "Voice"
+    },
+    "notStarted": "Not started",
+    "findRangeFirst": "Not started · find your range first",
+    "unit": "Unit {number} of {total}",
+    "allDone": "All {total, plural, one {# unit} other {# units}} done"
   }
 }

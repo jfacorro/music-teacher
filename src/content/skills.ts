@@ -5,7 +5,7 @@
  * sight-reading drills, which are new each time) counts the accuracy of its latest exercises.
  */
 import { STAR_THRESHOLDS } from '../engine/scoring';
-import type { Skill, Unit } from './courses';
+import { Course, SKILLS, type Skill, type Unit } from './courses';
 
 export const SkillLevel = {
   NotStarted: 'notStarted',
@@ -72,6 +72,8 @@ export const SkillArea = {
   Rhythm: 'rhythm',
   Reading: 'reading',
   Musicianship: 'musicianship',
+  /** The voice course. */
+  Singing: 'singing',
 } as const;
 export type SkillArea = (typeof SkillArea)[keyof typeof SkillArea];
 
@@ -108,4 +110,22 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'sight-reading',
   ],
   [SkillArea.Musicianship]: ['dynamics', 'chords', 'accompaniment', 'minor-keys', 'ear-training'],
+  [SkillArea.Singing]: ['posture', 'breathing'],
 };
+
+/** The areas of each course's skills, in the order Home shows them. */
+export const COURSE_SKILL_AREAS: Readonly<Record<Course, readonly SkillArea[]>> = {
+  [Course.Piano]: [
+    SkillArea.KeysAndHands,
+    SkillArea.Rhythm,
+    SkillArea.Reading,
+    SkillArea.Musicianship,
+  ],
+  [Course.Voice]: [SkillArea.Singing],
+};
+
+/** A course's skills, in the course's order. */
+export const courseSkills = (course: Course): readonly Skill[] =>
+  SKILLS.filter((skill) =>
+    COURSE_SKILL_AREAS[course].some((area) => SKILL_AREAS[area].includes(skill)),
+  );

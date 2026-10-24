@@ -1,0 +1,12 @@
+{
+  "units": [
+    {
+      "id": "v1",
+      "level": "beginner",
+      "lessons": [
+        { "id": "v1-l1", "skills": ["posture"] },
+        { "id": "v1-l2", "skills": ["breathing"] }
+      ]
+    }
+  ]
+}

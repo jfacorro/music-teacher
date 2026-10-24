@@ -9,6 +9,7 @@ import { type PracticeTarget, SuggestionKind } from '../../content/suggestions';
 import { useContentText } from '../../i18n/useContentText';
 import { useMySongs } from '../../storage/mySongs';
 import { ResultKind, useProgress } from '../../storage/progress';
+import { useSettings } from '../../storage/settings';
 import {
   ensureTodayPlan,
   isDone,
@@ -49,14 +50,15 @@ export function TodayCard() {
   const { t } = useTranslation('screens');
   const { t: ts } = useTranslation('songs');
   const courseText = useContentText('courses');
-  const plan = useTodayPlan((s) => s.plan);
+  const course = useSettings((s) => s.course);
+  const plan = useTodayPlan((s) => s.plans[course]);
   const results = useProgress((s) => s.results);
   const mySongs = useMySongs((s) => s.songs);
   const [nothingMore, setNothingMore] = useState(false);
   const levelName = useDrillLevelName();
   const earLevelName = useEarLevelName();
 
-  useEffect(() => ensureTodayPlan(), []);
+  useEffect(() => ensureTodayPlan(course), [course]);
 
   if (!plan || plan.items.length === 0) return null;
 
@@ -142,7 +144,7 @@ export function TodayCard() {
               type="button"
               className="button"
               title={t('today.moreTip')}
-              onClick={() => setNothingMore(!suggestMore())}
+              onClick={() => setNothingMore(!suggestMore(course))}
             >
               {t('today.more')}
             </button>

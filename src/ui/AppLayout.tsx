@@ -15,10 +15,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation } from 'react-router';
 import { updateSettings, useSettings } from '../storage/settings';
+import { CourseSwitch } from './components/CourseSwitch';
 import { InputPicker } from './components/InputPicker';
 import { useMediaQuery } from './hooks';
 import { useTopBar } from './topBar';
-import { Section, SECTION_PATHS, SECTIONS, sectionOf } from './sections';
+import { COURSE_SECTIONS, Section, SECTION_PATHS, sectionOf } from './sections';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
 /** Below this width there's no room for the sidebar: ☰ slides it over the page instead. */
@@ -51,6 +52,7 @@ export function AppLayout() {
   const { t } = useTranslation();
   const firstLaunchDone = useSettings((s) => s.firstLaunchDone);
   const collapsed = useSettings((s) => s.sidebarCollapsed);
+  const course = useSettings((s) => s.course);
   const narrow = useMediaQuery(NARROW);
   const [overOpen, setOverOpen] = useState(false);
   const { pathname } = useLocation();
@@ -116,8 +118,10 @@ export function AppLayout() {
           <img className="app-title__icon" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" />
           <span className="app-title__name">{t('appTitle')}</span>
         </Link>
-        {/* Where you are: "Learn / Unit 9 · Staccato", the section leading back to its page. */}
+        {/* Where you are: "Voice / Learn / Unit 1 · Posture", the section leading back to its
+            page; the course opens the list of both. */}
         <span className={detail ? 'app-where app-where--detail' : 'app-where'}>
+          {firstLaunchDone && <CourseSwitch onChoose={close} />}
           {pathname === SECTION_PATHS[section] ? (
             <span className="app-where__section">{sectionName}</span>
           ) : (
@@ -132,7 +136,7 @@ export function AppLayout() {
       </header>
       <div className="app-body">
         <nav id="app-sidebar" className="app-sidebar" aria-label={t('nav.label')}>
-          {SECTIONS.map((item) => {
+          {COURSE_SECTIONS[course].map((item) => {
             const label = t(`nav.${item}`);
             const SectionIcon = SECTION_ICONS[item];
             return (

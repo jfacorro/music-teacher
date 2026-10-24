@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { Course } from '../content/courses';
 import { db } from './db';
 import {
   activityTimer,
@@ -11,6 +12,7 @@ import {
   practicedDays,
   activityLevel,
   calendarWeeks,
+  courseOfResult,
   recordPracticeTime,
   recordResult,
   streakDays,
@@ -19,6 +21,16 @@ import {
 } from './progress';
 
 const at = (date: string, time = '18:00') => new Date(`${date}T${time}:00`).getTime();
+
+describe('courseOfResult', () => {
+  it('puts lessons in their course, singing in the voice, and everything else in the piano', () => {
+    expect(courseOfResult(ResultKind.Lesson, 'u3-l1')).toBe(Course.Piano);
+    expect(courseOfResult(ResultKind.Lesson, 'v1-l2')).toBe(Course.Voice);
+    expect(courseOfResult(ResultKind.Voice, 'matchNote')).toBe(Course.Voice);
+    expect(courseOfResult(ResultKind.Song, 'can-can')).toBe(Course.Piano);
+    expect(courseOfResult(ResultKind.Ear, 'notes')).toBe(Course.Piano);
+  });
+});
 
 describe('mergeResult', () => {
   it('keeps the best stars and accuracy and counts attempts', () => {

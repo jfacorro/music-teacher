@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { findLesson, UNITS } from '../../../content/courses';
+import { Course, COURSE_UNITS, findLesson } from '../../../content/courses';
 import { lessonNamespace, type Lesson } from '../../../content/lessons';
 import {
   bestResults,
@@ -26,7 +26,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('screens');
   const courseText = useContentText('courses');
   const stepText = useContentText(lessonNamespace(lesson.id));
-  const { unit, lesson: courseLesson } = findLesson(lesson.id)!;
+  const { course, unit, lesson: courseLesson } = findLesson(lesson.id)!;
 
   const [index, setIndex] = useState(0);
   /** Results per graded step (by index): best run for exercises, full marks for find steps. */
@@ -108,7 +108,9 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const next = () => setIndex((i) => i + 1);
   const canContinue = step?.type === StepType.Explain || passed.has(index);
   const title = courseText(`lessons.${lesson.id}`, courseLesson.titleVars);
-  useTopBarDetail(t('lesson.topBar', { number: UNITS.indexOf(unit) + 1, lesson: title }));
+  useTopBarDetail(
+    t('lesson.topBar', { number: COURSE_UNITS[course].indexOf(unit) + 1, lesson: title }),
+  );
 
   return (
     <section className="screen lesson">
@@ -138,7 +140,13 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
             step?.type === StepType.Quiz ||
             step?.type === StepType.Rhythm) && <StepHistory runs={history} />}
           {step?.type === StepType.Explain && (
-            <ExplainStepView key={index} step={step} text={text} />
+            <ExplainStepView
+              key={index}
+              step={step}
+              text={text}
+              // Singing is explained without a keyboard, unless it points at keys.
+              keyboard={course === Course.Piano || step.keys.length > 0}
+            />
           )}
           {step?.type === StepType.Find && (
             <FindStepView

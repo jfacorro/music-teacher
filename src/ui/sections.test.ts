@@ -1,5 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import { Section, SECTION_PATHS, SECTIONS, sectionOf } from './sections';
+import { Course, COURSES } from '../content/courses';
+import { COURSE_SECTIONS, Section, SECTION_PATHS, SECTIONS, sectionOf } from './sections';
+
+describe('COURSE_SECTIONS', () => {
+  it('gives each course Home, Learn and Settings, and the voice the Tuner for Free play', () => {
+    for (const course of COURSES) {
+      const sections = COURSE_SECTIONS[course];
+      expect(sections.slice(0, 2)).toEqual([Section.Home, Section.Learn]);
+      expect(sections.at(-1)).toBe(Section.Settings);
+      // In the sidebar's order.
+      expect(sections).toEqual(SECTIONS.filter((section) => sections.includes(section)));
+    }
+    expect(COURSE_SECTIONS[Course.Piano]).toContain(Section.FreePlay);
+    expect(COURSE_SECTIONS[Course.Piano]).not.toContain(Section.Tuner);
+    expect(COURSE_SECTIONS[Course.Voice]).toEqual([
+      Section.Home,
+      Section.Learn,
+      Section.Tuner,
+      Section.Settings,
+    ]);
+  });
+});
 
 describe('sectionOf', () => {
   it('finds each section from its own page', () => {

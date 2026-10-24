@@ -187,6 +187,79 @@ h3 {
   font-weight: 400;
 }
 
+/* The course, piano or voice: a short list of both, under it. */
+.course-switch {
+  position: relative;
+  flex: none;
+}
+
+.course-switch__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.course-switch__button:hover {
+  color: var(--accent);
+}
+
+.course-switch__list {
+  position: absolute;
+  inset-block-start: calc(100% + 0.5rem);
+  inset-inline-start: 0;
+  z-index: 20;
+  min-inline-size: 16rem;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.2);
+}
+
+.course-switch__choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  inline-size: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: calc(var(--radius) - 2px);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.course-switch__choice:hover,
+.course-switch__choice:focus-visible {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.course-switch__choice[aria-current] .course-switch__name {
+  color: var(--accent);
+}
+
+.course-switch__name {
+  font-weight: 600;
+}
+
+.course-switch__where {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
 .app-where__section {
   flex: none;
   color: var(--text);
@@ -623,6 +696,23 @@ input[aria-invalid='true'] {
 
 .input-picker select:focus {
   outline: none;
+}
+
+/* The voice course's picker: the microphone, a click turning it on. */
+.input-picker--button {
+  padding: 0.3rem 0.75rem;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.input-picker--button:disabled {
+  cursor: default;
+}
+
+.app[data-narrow] .input-picker__text {
+  display: none;
 }
 
 .input-picker option {

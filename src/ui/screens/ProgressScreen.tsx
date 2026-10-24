@@ -1,8 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { MAX_STARS, STAR_THRESHOLDS } from '../../engine/scoring';
-import { LESSON_ORDER, SKILLS, UNITS, findLesson } from '../../content/courses';
+import { COURSE_UNITS, findLesson, lessonOrder } from '../../content/courses';
 import { lessonStates, nextLessonToPlay } from '../../content/unlock';
-import { SKILL_AREAS, SkillArea, skillProgress, SkillLevel } from '../../content/skills';
+import {
+  COURSE_SKILL_AREAS,
+  courseSkills,
+  SKILL_AREAS,
+  skillProgress,
+  SkillLevel,
+} from '../../content/skills';
 import { isSongId } from '../../content/songs';
 import { useMySongs } from '../../storage/mySongs';
 import { formatDate, formatPercent, formatPracticeTime } from '../../i18n/format';
@@ -12,7 +18,9 @@ import { DrillLevel } from '../../content/sightReading';
 import { useDrillLevelName } from './sightReading/useDrillLevelName';
 import { EarLevel } from '../../content/earTraining';
 import { useEarLevelName } from './earTraining/useEarLevelName';
+import { useSettings } from '../../storage/settings';
 import {
+  courseOfResult,
   exerciseAccuracies,
   longestStreak,
   practicedDays,
@@ -37,8 +45,13 @@ export function ProgressScreen() {
   const results = useProgress((s) => s.results);
   const log = useProgress((s) => s.log);
   const days = useProgress((s) => s.days);
+  // The course, its skills and recent practice are the one being practiced; the calendar and
+  // the streak count both.
+  const course = useSettings((s) => s.course);
+  const units = COURSE_UNITS[course];
+  const lessons = lessonOrder(course);
 
-  const lessonResults = LESSON_ORDER.map((id) => results[resultKey(ResultKind.Lesson, id)]);
+  const lessonResults = lessons.map((id) => results[resultKey(ResultKind.Lesson, id)]);
   const completed = lessonResults.filter((result) => (result?.bestStars ?? 0) >= 1).length;
   const stars = lessonResults.reduce((sum, result) => sum + (result?.bestStars ?? 0), 0);
   const practiced = practicedDays(days);
@@ -46,18 +59,18 @@ export function ProgressScreen() {
   const best = longestStreak(practiced);
   // The level of the unit being worked on: the next lesson's (the last unit's once all is done).
   const states = lessonStates(
-    UNITS,
+    units,
     (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0,
   );
-  const next = nextLessonToPlay(UNITS, states);
+  const next = nextLessonToPlay(units, states);
   const unitIndex = Math.max(
     0,
-    next ? UNITS.findIndex((unit) => unit.lessons.some((l) => l.id === next)) : UNITS.length - 1,
+    next ? units.findIndex((unit) => unit.lessons.some((l) => l.id === next)) : units.length - 1,
   );
-  const currentUnit = UNITS[unitIndex]!;
+  const currentUnit = units[unitIndex]!;
   const skills = skillProgress(
-    SKILLS,
-    UNITS,
+    courseSkills(course),
+    units,
     (id) => results[resultKey(ResultKind.Lesson, id)]?.bestAccuracy ?? null,
     exerciseAccuracies(log),
   );
@@ -74,6 +87,7 @@ export function ProgressScreen() {
       : formatPracticeTime(ms / 60_000, i18n.language);
 
   const mySongs = useMySongs((s) => s.songs);
+  const recent = log.filter((entry) => courseOfResult(entry.kind, entry.refId) === course);
 
   const titleOf = (kind: ResultKind, id: string) => {
     if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
@@ -122,14 +136,14 @@ export function ProgressScreen() {
           <h2 className="course-line__title">{t('progress.course')}</h2>
           <span className="course-line__facts">
             <span>{t(`course.levels.${currentUnit.level}`)}</span>
-            <span>{t('progress.levelDetail', { number: unitIndex + 1, total: UNITS.length })}</span>
-            <span>{t('progress.lessonsOf', { value: completed, total: LESSON_ORDER.length })}</span>
+            <span>{t('progress.levelDetail', { number: unitIndex + 1, total: units.length })}</span>
+            <span>{t('progress.lessonsOf', { value: completed, total: lessons.length })}</span>
             <span>
-              {t('progress.starsOf', { value: stars, total: LESSON_ORDER.length * MAX_STARS })}
+              {t('progress.starsOf', { value: stars, total: lessons.length * MAX_STARS })}
             </span>
           </span>
           <span className="course-line__meter" aria-hidden="true">
-            <span style={{ inlineSize: `${(completed / LESSON_ORDER.length) * 100}%` }} />
+            <span style={{ inlineSize: `${(completed / lessons.length) * 100}%` }} />
           </span>
         </section>
 
@@ -153,7 +167,7 @@ export function ProgressScreen() {
             </span>
             <span className="visually-hidden">{starsTip}</span>
           </div>
-          {Object.values(SkillArea).map((area) => (
+          {COURSE_SKILL_AREAS[course].map((area) => (
             <div key={area} className="skill-area">
               <h3 className="skill-area__heading">{t(`progress.skills.areas.${area}`)}</h3>
               <ul className="skills">
@@ -215,12 +229,12 @@ export function ProgressScreen() {
           </ul>
         </section>
 
-        {log.length > 0 && (
+        {recent.length > 0 && (
           <section className="card" id="recent">
             <h2>{t('progress.recent')}</h2>
             <table className="events">
               <tbody>
-                {[...log]
+                {[...recent]
                   .reverse()
                   .slice(0, RECENT_LIMIT)
                   .map((entry) => (

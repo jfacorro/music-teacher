@@ -12,7 +12,8 @@
     "unitLocked": "{stars, plural, one {Consigue al menos # estrella en cada lección de la unidad anterior para desbloquear esta.} other {Consigue al menos # estrellas en cada lección de la unidad anterior para desbloquear esta.}}",
     "locked": "(bloqueada)",
     "unitStars": "{stars} de {total} estrellas",
-    "unitToggle": "Mostrar u ocultar las lecciones"
+    "unitToggle": "Mostrar u ocultar las lecciones",
+    "checkRange": "Tu extensión vocal"
   },
   "freePlay": {
     "title": "Práctica libre",
@@ -53,7 +54,8 @@
         "keysAndHands": "Teclas y manos",
         "rhythm": "Ritmo",
         "reading": "Lectura",
-        "musicianship": "Musicalidad"
+        "musicianship": "Musicalidad",
+        "singing": "Canto"
       },
       "detail": "{level} · {played}",
       "starsTip": "La precisión necesaria para 1, 2 y 3 estrellas: {oneStar}, {twoStars} y {threeStars}."
@@ -161,6 +163,7 @@
     "mic": {
       "heading": "Micrófono",
       "intro": "Coloca el micrófono cerca del piano. Oye una nota a la vez; los acordes llegarán más adelante.",
+      "introVoice": "Canta a un brazo de distancia del micrófono, de frente. Oye una nota a la vez.",
       "unsupported": "Este navegador no puede usar el micrófono. Usa Chrome o Edge.",
       "denied": "Se bloqueó el acceso al micrófono. Permítelo para este sitio en la configuración del navegador y vuelve a intentarlo.",
       "error": "No se pudo iniciar el micrófono. Revisa que esté conectado y que no lo use otra aplicación.",
@@ -574,6 +577,21 @@
     "test": {
       "heading": "Pruébalo",
       "intro": "Pulsa algunas teclas. Cada una debería aparecer abajo con su nombre. Puedes cambiar todo esto más tarde en Configuración."
+    },
+    "course": {
+      "heading": "¿Qué te gustaría aprender?",
+      "intro": "El piano, el canto o los dos: cada uno tiene su propio curso, y puedes cambiar entre ellos, o sumar el otro, cuando quieras desde la barra superior.",
+      "piano": "Piano",
+      "voice": "Voz",
+      "both": "Los dos"
+    },
+    "microphone": {
+      "heading": "Tu micrófono",
+      "intro": "El canto se escucha por el micrófono. Enciéndelo y elige cuál usar; lo mejor es un lugar tranquilo."
+    },
+    "range": {
+      "heading": "Tu extensión vocal",
+      "intro": "Encuentra tu nota más grave y tu nota más aguda cómodas, para que cada ejercicio se ajuste a tu voz. Lleva un minuto; también puedes hacerlo más tarde en Configuración."
     }
   },
   "quiz": {
@@ -794,7 +812,8 @@
       "earlyIntermediate": "Intermedio inicial"
     },
     "levelHeading": "{level} · Unidades {first}–{last}",
-    "unitShort": "{number} · {title}"
+    "unitShort": "{number} · {title}",
+    "levelHeadingOne": "{level} · Unidad {number}"
   },
   "tuner": {
     "title": "Afinador",

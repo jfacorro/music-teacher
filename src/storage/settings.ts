@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Course } from '../content/courses';
 import { SheetNotation } from '../content/lessons';
 import type { NamingSystem } from '../i18n/naming';
 import { DEFAULT_VOLUMES } from '../audio/volume';
@@ -11,6 +12,8 @@ import { db } from './db';
 export interface Settings {
   /** The first-launch setup was finished or skipped. */
   firstLaunchDone: boolean;
+  /** What's being practiced, the piano or the voice: the app's sections follow it. */
+  course: Course;
   /** null = follow the browser's language. */
   language: string | null;
   /** null = the default for the current language. */
@@ -57,6 +60,7 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   firstLaunchDone: false,
+  course: Course.Piano,
   language: null,
   namingSystem: null,
   showOctave: false,

@@ -52,7 +52,9 @@
     "label": "Escuchar",
     "auto": "Automático · {status}",
     "nothing": "nada conectado",
-    "midi": "Teclado MIDI"
+    "midi": "Teclado MIDI",
+    "voiceOn": "El canto se escucha por el micrófono.",
+    "voiceOff": "El canto se escucha por el micrófono: haz clic para encenderlo."
   },
   "modal": {
     "close": "Cerrar",
@@ -73,5 +75,17 @@
   "pageIndex": {
     "label": "En esta página",
     "jumpTo": "Ir a"
+  },
+  "courseSwitch": {
+    "label": "Qué estás practicando",
+    "tip": "Qué estás practicando: el piano o tu voz. Cada uno tiene su propio curso y su progreso.",
+    "courses": {
+      "piano": "Piano",
+      "voice": "Voz"
+    },
+    "notStarted": "Sin empezar",
+    "findRangeFirst": "Sin empezar · primero encuentra tu extensión",
+    "unit": "Unidad {number} de {total}",
+    "allDone": "{total, plural, one {La unidad terminada} other {Las # unidades terminadas}}"
   }
 }

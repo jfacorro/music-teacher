@@ -1,7 +1,10 @@
 /**
  * The app's sections, in the sidebar's order, and the section each page belongs to: a lesson is
- * part of Learn, a song's practice and imported songs part of Song practice.
+ * part of Learn, a song's practice and imported songs part of Song practice. Each course shows
+ * its own: the voice has the Tuner where the piano has Free play.
  */
+import { Course } from '../content/courses';
+
 export const Section = {
   Home: 'home',
   Learn: 'learn',
@@ -15,6 +18,23 @@ export const Section = {
 export type Section = (typeof Section)[keyof typeof Section];
 
 export const SECTIONS: readonly Section[] = Object.values(Section);
+
+/**
+ * The sections each course shows, in the sidebar's order. The voice gets ear training,
+ * sight-singing and songs as they're built (PLAN.md 6.4–6.6).
+ */
+export const COURSE_SECTIONS: Readonly<Record<Course, readonly Section[]>> = {
+  [Course.Piano]: [
+    Section.Home,
+    Section.Learn,
+    Section.Songs,
+    Section.SightReading,
+    Section.EarTraining,
+    Section.FreePlay,
+    Section.Settings,
+  ],
+  [Course.Voice]: [Section.Home, Section.Learn, Section.Tuner, Section.Settings],
+};
 
 export const SECTION_PATHS: Readonly<Record<Section, string>> = {
   [Section.Home]: '/',
