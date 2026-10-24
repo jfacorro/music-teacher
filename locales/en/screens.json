@@ -289,7 +289,7 @@
       "replace": "Replace",
       "cancel": "Cancel",
       "problems": {
-        "notBackup": "This file isn’t a Piano Teacher export.",
+        "notBackup": "This file isn’t a {app} export.",
         "failed": "The file couldn’t be imported. Nothing was changed."
       }
     },
@@ -562,7 +562,7 @@
     "passPedal": "Use the pedal as marked too (with a MIDI keyboard)."
   },
   "welcome": {
-    "title": "Welcome to Piano Teacher",
+    "title": "Welcome to {app}",
     "step": "Step {current} of {total}",
     "skip": "Skip setup",
     "start": "Start learning",

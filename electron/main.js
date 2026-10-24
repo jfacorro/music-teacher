@@ -23,6 +23,8 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+/** The app's name, never translated (src/appName.ts). */
+const APP_NAME = 'Piano Teacher';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const DIST = path.join(ROOT, 'dist');
 const SCHEME = 'app';
@@ -66,7 +68,7 @@ function setMenu(language) {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       {
-        label: text.app,
+        label: APP_NAME,
         submenu: [
           { label: text.reload, role: 'reload' },
           { label: text.fullScreen, role: 'togglefullscreen' },
@@ -94,7 +96,7 @@ function createWindow() {
     height: 860,
     minWidth: 720,
     minHeight: 560,
-    title: 'Piano Teacher',
+    title: APP_NAME,
     // The page's background while it loads (styles.css › --bg).
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#161614' : '#f6f5f2',
     icon: path.join(ROOT, 'build', 'icon.png'),

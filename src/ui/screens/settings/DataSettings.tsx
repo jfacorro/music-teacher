@@ -1,5 +1,6 @@
 import { useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { APP_NAME } from '../../../appName';
 import {
   type Backup,
   BackupError,
@@ -102,7 +103,7 @@ export function DataSettings() {
       </div>
       {problem && (
         <p className="notice notice--problem" role="alert">
-          {t(`settings.data.problems.${problem}`)}
+          {t(`settings.data.problems.${problem}`, { app: APP_NAME })}
         </p>
       )}
       {pending && (

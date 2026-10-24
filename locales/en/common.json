@@ -1,5 +1,4 @@
 {
-  "appTitle": "Piano Teacher",
   "nav": {
     "label": "Main",
     "menu": "Menu",
@@ -12,7 +11,7 @@
     "tuner": "Tuner",
     "settings": "Settings",
     "homeTip": "Your progress",
-    "pageTitle": "{where} · Piano Teacher"
+    "pageTitle": "{where} · {app}"
   },
   "midiBadge": {
     "connecting": "Connecting…",
