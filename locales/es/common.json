@@ -1,5 +1,4 @@
 {
-  "appTitle": "Profesor de piano",
   "nav": {
     "label": "Principal",
     "menu": "Menú",
@@ -12,7 +11,7 @@
     "tuner": "Afinador",
     "settings": "Configuración",
     "homeTip": "Tu progreso",
-    "pageTitle": "{where} · Profesor de piano"
+    "pageTitle": "{where} · {app}"
   },
   "midiBadge": {
     "connecting": "Conectando…",
@@ -45,7 +44,7 @@
     "starting": "Activando el micrófono…",
     "denied": "Micrófono bloqueado",
     "error": "Problema con el micrófono",
-    "unsupported": "Sin soporte de micrófono"
+    "unsupported": "Micrófono no compatible"
   },
   "stars": "{stars, plural, =0 {Sin estrellas} one {# estrella de 3} other {# estrellas de 3}}",
   "inputPicker": {
@@ -63,7 +62,7 @@
   "volume": {
     "metronome": "Volumen del metrónomo",
     "piano": "Volumen del piano",
-    "pianoHint": "El piano de la aplicación: «Tócala por mí», la otra mano y las teclas tocadas en la computadora o en la pantalla. El sonido de un piano digital tiene su propio control de volumen.",
+    "pianoHint": "El piano de la aplicación: “Tócala por mí”, la otra mano y las teclas tocadas en la computadora o en la pantalla. El sonido de un piano digital tiene su propio control de volumen.",
     "button": "Volumen",
     "tip": "Volumen del metrónomo y del piano"
   },
@@ -86,6 +85,6 @@
     "notStarted": "Sin empezar",
     "findRangeFirst": "Sin empezar · primero encuentra tu extensión",
     "unit": "Unidad {number} de {total}",
-    "allDone": "{total, plural, one {La unidad terminada} other {Las # unidades terminadas}}"
+    "allDone": "{total, plural, one {Unidad terminada} other {Las # unidades terminadas}}"
   }
 }

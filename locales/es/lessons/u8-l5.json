@@ -1,9 +1,9 @@
 {
   "steps": {
     "neighbors": "Una nota vecina se aleja un semitono y vuelve enseguida: {e}, {dSharp}, {e}. Tocada con suavidad, es un pequeño temblor alrededor de la nota principal. Los dedos 5 y 4 se balancean entre las dos teclas.",
-    "slowly": "Despacio, una nota por pulso: el comienzo de «Para Elisa».",
-    "flowing": "Ahora fluido, dos notas por pulso, con el metrónomo.",
-    "furEliseRight": "«Para Elisa» de Beethoven, el comienzo, con la mano derecha: el temblor, y luego notas que suben desde abajo.",
+    "slowly": "Despacio, una nota por pulso: el comienzo de “Para Elisa”.",
+    "flowing": "Ahora con fluidez, dos notas por pulso, con el metrónomo.",
+    "furEliseRight": "“Para Elisa” de Beethoven, el comienzo, con la mano derecha: el temblor, y luego notas que suben desde abajo.",
     "furElise": "Las dos manos: la izquierda toca sus tres notas mientras la derecha espera, y luego la derecha responde.",
     "furEliseInTime": "Y a tempo con el metrónomo. Que suene suave."
   }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { APP_NAME } from '../../appName';
 import { Course } from '../../content/courses';
 import { noteName, NamingSystem } from '../../i18n/naming';
 import { updateSettings } from '../../storage/settings';
@@ -51,7 +52,7 @@ export function WelcomeScreen() {
 
   return (
     <section className="screen welcome">
-      <h1>{t('welcome.title')}</h1>
+      <h1>{t('welcome.title', { app: APP_NAME })}</h1>
       <p className="muted">{t('welcome.step', { current: index + 1, total: steps.length })}</p>
       <h2>{t(`welcome.${step}.heading`)}</h2>
       <p>

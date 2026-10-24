@@ -168,3 +168,6 @@ their explanations are translated (`theory.json` › `markings`).
 
 Spanish uses neutral Latin American vocabulary ("computadora", not "ordenador") and the
 informal "tú".
+
+Quotation marks are “ ” in every language (not « » in Spanish), with ‘ ’ for a quote inside a
+quote.

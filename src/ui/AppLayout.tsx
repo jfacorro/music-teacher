@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation } from 'react-router';
+import { APP_NAME } from '../appName';
 import { updateSettings, useSettings } from '../storage/settings';
 import { CourseSwitch } from './components/CourseSwitch';
 import { InputPicker } from './components/InputPicker';
@@ -63,7 +64,7 @@ export function AppLayout() {
   // The browser tab says where you are too: "Staccato · Piano Teacher".
   useEffect(() => {
     const where = detail ?? (section === Section.Home ? null : sectionName);
-    document.title = where ? t('nav.pageTitle', { where }) : t('appTitle');
+    document.title = where ? t('nav.pageTitle', { where, app: APP_NAME }) : APP_NAME;
   }, [t, detail, section, sectionName]);
 
   // Esc closes the sidebar slid over the page.
@@ -112,11 +113,11 @@ export function AppLayout() {
           className="app-title"
           to="/"
           title={t('nav.homeTip')}
-          aria-label={t('appTitle')}
+          aria-label={APP_NAME}
           onClick={close}
         >
           <img className="app-title__icon" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" />
-          <span className="app-title__name">{t('appTitle')}</span>
+          <span className="app-title__name">{APP_NAME}</span>
         </Link>
         {/* Where you are: "Voice / Learn / Unit 1 · Posture", the section leading back to its
             page; the course opens the list of both. */}

@@ -1,10 +1,10 @@
 {
   "steps": {
-    "key": "{d} mayor tiene dos sostenidos, {fSharp} y {cSharp}. En lugar de junto a cada nota, la música los escribe una vez, al comienzo de cada línea: la armadura. Así, todos los {f} y todos los {c} se tocan sostenidos, en todas las octavas. La escala tiene la misma digitación que {c} mayor: 1 2 3, el pulgar por debajo, 1 2 3 4 5.",
+    "key": "{d} mayor tiene dos sostenidos, {fSharp} y {cSharp}. En lugar de escribirlos junto a cada nota, la partitura los pone una sola vez, al comienzo de cada línea: la armadura. Así, todos los {f} y todos los {c} se tocan sostenidos, en todas las octavas. La escala tiene la misma digitación que {c} mayor: 1 2 3, el pulgar por debajo, 1 2 3 4 5.",
     "scaleRight": "La escala con la mano derecha, de subida y de bajada: la armadura te recuerda los dos sostenidos.",
     "scaleRightInTime": "Ahora a tempo.",
     "scaleLeft": "La mano izquierda: 5 4 3 2 1, y luego el dedo 3 pasa por encima del pulgar: 3 2 1.",
-    "odeInD": "Una melodía que conoces, en otra tonalidad: el «Himno a la alegría» en {d} mayor empieza en {fSharp}. No hay ningún sostenido junto a las notas: lo dice la armadura.",
+    "odeInD": "Una melodía que conoces, en otra tonalidad: el “Himno a la alegría” en {d} mayor empieza en {fSharp}. No hay ningún sostenido junto a las notas: lo dice la armadura.",
     "odeInDInTime": "Y a tempo."
   }
 }

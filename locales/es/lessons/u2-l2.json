@@ -1,6 +1,6 @@
 {
   "steps": {
-    "tapRests": "Primero toca el ritmo: un toque por cada nota y silencio en los silencios.",
+    "tapRests": "Primero toca el ritmo: un toque por cada nota y nada durante los silencios.",
     "wholeAndRests": "Una redonda dura cuatro pulsos: un compás entero en esta música. Un silencio es un pulso sin sonido: no toques nada hasta que llegue la siguiente nota.",
     "wholeNotes": "Mantén cada redonda durante cuatro clics.",
     "rests": "Los huecos entre las notas son silencios. No toques durante ellos."
