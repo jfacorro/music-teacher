@@ -248,7 +248,7 @@
         "highest": "3 · Tu nota más aguda"
       },
       "help": {
-        "comfortable": "Canta una «a» fácil, a una altura que podrías sostener todo el día, y mantenla un momento.",
+        "comfortable": "Canta una “a” fácil, a una altura que podrías sostener todo el día, y mantenla un momento.",
         "lowest": "Baja despacio, tan grave como te resulte cómodo, y sostén la nota más grave un momento.",
         "highest": "Ahora sube despacio, tan agudo como te resulte cómodo, y sostén la nota más aguda un momento."
       },
@@ -656,7 +656,7 @@
       "cancel": "Cancelar",
       "chooseAnother": "Elegir otro archivo",
       "delete": "Eliminar canción",
-      "deleteTitle": "¿Eliminar «{title}»?",
+      "deleteTitle": "¿Eliminar “{title}”?",
       "deleteText": "La canción se quita de Mis canciones. Tu historial de práctica se conserva.",
       "deleteConfirm": "Eliminar",
       "keep": "Conservarla"
@@ -673,12 +673,12 @@
   "songPractice": {
     "title": "Práctica de canciones",
     "songs": "Canciones",
-    "songsIntro": "Practica canciones completas cuando quieras, en modo «Espérame» o «Tocar a tempo». Cada una aparece con la unidad que enseña lo que necesita.",
+    "songsIntro": "Practica canciones completas cuando quieras, en modo “Espérame” o “Tocar a tempo”. Cada una aparece con la unidad que enseña lo que necesita.",
     "mySongs": "Mis canciones",
     "mySongTitle": "{title} – {composer}",
     "search": "Buscar una canción",
     "searchPlaceholder": "Busca una canción por título o compositor",
-    "noMatch": "Ninguna canción coincide con «{query}».",
+    "noMatch": "Ninguna canción coincide con “{query}”.",
     "mySongsIntro": "Canciones que importaste. Se guardan en este navegador, en esta computadora.",
     "mySongsEmpty": "Importa un archivo MIDI o MusicXML para practicar tu propia música.",
     "importSong": "Importar una canción",
@@ -730,8 +730,8 @@
       "moreKeys": "{d} y {bFlat} mayor; {a}, {e} y {d} menor",
       "sixEight": "6/8 con semicorcheas"
     },
-    "lockedLevel": "{level} (después de «{unit}»)",
-    "locked": "La lectura a primera vista se abre cuando terminas la unidad «{unit}».",
+    "lockedLevel": "{level} (después de “{unit}”)",
+    "locked": "La lectura a primera vista se abre cuando terminas la unidad “{unit}”.",
     "toLessons": "Ir a las lecciones",
     "newDrill": "Nuevo ejercicio",
     "newDrillTip": "Música nueva en este nivel",
@@ -752,8 +752,8 @@
       "rhythms": "Ritmos",
       "scales": "Escalas mayores o menores"
     },
-    "lockedLevel": "{level} (después de «{unit}»)",
-    "locked": "El oído musical se abre cuando terminas la unidad «{unit}».",
+    "lockedLevel": "{level} (después de “{unit}”)",
+    "locked": "El oído musical se abre cuando terminas la unidad “{unit}”.",
     "toLessons": "Ir a las lecciones",
     "begin": "Empezar a escuchar",
     "start": {

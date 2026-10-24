@@ -1,6 +1,6 @@
 {
   "steps": {
-    "syncopation": "La síncopa desplaza el acento fuera del pulso: una nota empieza en una «y» y se mantiene durante el pulso siguiente, así que ese pulso se siente pero no se toca. Sigue contando parejo y deja que la nota larga cruce el pulso.",
+    "syncopation": "La síncopa desplaza el acento fuera del pulso: una nota empieza en una “y” y se mantiene durante el pulso siguiente, así que ese pulso se siente pero no se toca. Sigue contando parejo y deja que la nota larga cruce el pulso.",
     "tapSyncopation": "Toca los ritmos a contratiempo, contando los pulsos por debajo.",
     "offBeat": "A contratiempo, y luego en el pulso.",
     "offBeatInTime": "Ahora a tempo: el metrónomo marca los pulsos que no tocas."

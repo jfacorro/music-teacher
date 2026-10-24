@@ -1,13 +1,13 @@
 {
   "steps": {
     "intro": "Dos canciones más con la melodía en la mano derecha y notas de bajo en la izquierda. Tócalas despacio primero: la música te espera.",
-    "lightlyRow": "«Hänschen klein»: la mano izquierda solo toca {c3} y {g3}, una por compás.",
+    "lightlyRow": "“Hänschen klein”: la mano izquierda solo toca {c3} y {g3}, una por compás.",
     "lightlyRowInTime": "Ahora a tempo con el metrónomo.",
-    "saints": "«When the Saints Go Marching In»: la mano izquierda empieza sola en {c3} y pasa a {g3} solo en el último compás.",
+    "saints": "“When the Saints Go Marching In”: la mano izquierda empieza sola en {c3} y pasa a {g3} solo en el último compás.",
     "saintsInTime": "Ahora a tempo con el metrónomo.",
     "threeFour": "La próxima canción está en compás de 3/4: tres pulsos en cada compás, el primero un poco más fuerte. Y dos duraciones nuevas: el puntillo añade la mitad de la duración de la nota, así que una blanca con puntillo dura tres pulsos, y una negra con puntillo, un pulso y medio.",
     "threeFourWarmUp": "Cuenta uno, dos, tres con el metrónomo: larga, corta, y una blanca con puntillo para el compás entero.",
-    "brahms": "«Canción de cuna» de Brahms, con suavidad: la mano izquierda toca una nota larga en cada compás.",
+    "brahms": "“Canción de cuna” de Brahms, con suavidad: la mano izquierda toca una nota larga en cada compás.",
     "brahmsInTime": "Ahora a tempo con el metrónomo, suave."
   }
 }
