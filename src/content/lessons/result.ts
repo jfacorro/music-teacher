@@ -1,4 +1,4 @@
-import { type LessonStep, StepType } from './lesson';
+import { isGraded, type LessonStep, StepType } from './lesson';
 
 export interface StepResult {
   stars: number;
@@ -6,14 +6,14 @@ export interface StepResult {
 }
 
 /**
- * A lesson's result from its graded steps (find and exercise): the weakest step's stars and
+ * A lesson's result from its graded steps (all but explanations and warm-ups): the weakest step's stars and
  * the average accuracy. Skipped steps count as zero; a lesson with nothing graded earns 3.
  */
 export function lessonResult(
   steps: readonly LessonStep[],
   results: ReadonlyMap<number, StepResult>,
 ): StepResult {
-  const graded = steps.flatMap((step, index) => (step.type === StepType.Explain ? [] : [index]));
+  const graded = steps.flatMap((step, index) => (isGraded(step) ? [index] : []));
   if (graded.length === 0) return { stars: 3, accuracy: 1 };
   const outcomes = graded.map((index) => results.get(index) ?? { stars: 0, accuracy: 0 });
   return {
@@ -62,7 +62,7 @@ export function earlierSteps(
 ): Map<number, EarlierStep> {
   const earlier = new Map<number, EarlierStep>();
   steps.forEach((step, index) => {
-    if (step.type === StepType.Explain) return;
+    if (!isGraded(step)) return;
     const tries = triesOf(index);
     if (tries.length === 0) {
       if (lessonBest) earlier.set(index, { result: lessonBest, passed: true });

@@ -559,7 +559,22 @@
       "allTip": "Todos los intentos, con su fecha"
     },
     "passTouch": "Toca también las notas staccato y ligadas como están escritas (con un teclado MIDI).",
-    "passPedal": "Usa también el pedal como está marcado (con un teclado MIDI)."
+    "passPedal": "Usa también el pedal como está marcado (con un teclado MIDI).",
+    "match": {
+      "intro": "La aplicación toca una nota: cántala y sostenla afinada medio segundo. Vale cualquier octava. {count, plural, one {Es # nota} other {Son # notas}}, y cada una cuenta si la alcanzas en seis segundos."
+    },
+    "warmUp": {
+      "noRange": "Primero encuentra tu extensión, para que el calentamiento se ajuste a tu voz.",
+      "breathe": "Inspira abajo y a lo ancho, y luego haz una “sss” pareja mientras cuentas hasta 8. Hazlo dos veces.",
+      "hum": "Canta con la boca cerrada, como un “mmm”, tu nota cómoda, {note}, con la mandíbula suelta, hasta sentir que vibra alrededor de los labios y la nariz. Hazlo tres veces, cada una en una respiración tranquila.",
+      "playNote": "Tocar {note}",
+      "siren": "Como una sirena, desliza la voz con suavidad de grave a agudo y de vuelta, con “ng” (el sonido de la n en “tengo”) o con los labios vibrando (“brrr”). Quédate donde es fácil: no fuerces ni arriba ni abajo.",
+      "pattern": "Por último, cinco notas que suben y vuelven a bajar, con “ma”. La aplicación las toca y luego las cantas tú: medio tono más agudo cada vez y después de vuelta hacia abajo.",
+      "play": "Tocar",
+      "stop": "Detener",
+      "listen": "Escucha…",
+      "singBack": "Ahora tú: cántalas"
+    }
   },
   "welcome": {
     "title": "Te damos la bienvenida a {app}",

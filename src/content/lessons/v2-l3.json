@@ -1,0 +1,26 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "edges"
+    },
+    {
+      "type": "match",
+      "text": "fifth",
+      "within": 7,
+      "count": 10
+    },
+    {
+      "type": "match",
+      "text": "range",
+      "count": 10,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

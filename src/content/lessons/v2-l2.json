@@ -1,0 +1,27 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "match",
+      "text": "close",
+      "within": 2,
+      "count": 10
+    },
+    {
+      "type": "explain",
+      "text": "inside"
+    },
+    {
+      "type": "match",
+      "text": "wider",
+      "within": 4,
+      "count": 10,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

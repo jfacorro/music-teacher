@@ -6,6 +6,7 @@ import {
   MATCH_WITHIN_MS,
   matchSummary,
   matchTargets,
+  matchTargetsNear,
   type NoteMatch,
   NoteMatcher,
 } from './matchNote';
@@ -28,6 +29,30 @@ describe('matchTargets', () => {
     const targets = matchTargets({ low: 55, high: 62 }, MATCH_NOTES, seededRandom(2));
     expect(new Set(targets)).toEqual(new Set([55, 56, 57, 58, 59, 60, 61, 62]));
     targets.slice(1).forEach((note, i) => expect(note).not.toBe(targets[i]));
+  });
+});
+
+describe('matchTargetsNear', () => {
+  const range = { low: 48, high: 67, comfortable: 55 };
+
+  it('asks only the comfortable note at 0', () => {
+    expect(matchTargetsNear(range, 0, 4, seededRandom(1))).toEqual([55, 55, 55, 55]);
+  });
+
+  it('deals the notes around the comfortable one, each as evenly as possible', () => {
+    const targets = matchTargetsNear(range, 2, MATCH_NOTES, seededRandom(3));
+    expect(targets).toHaveLength(MATCH_NOTES);
+    expect(new Set(targets)).toEqual(new Set([53, 54, 55, 56, 57]));
+    for (const note of [53, 54, 55, 56, 57]) {
+      expect(targets.filter((target) => target === note)).toHaveLength(2);
+    }
+    targets.slice(1).forEach((note, i) => expect(note).not.toBe(targets[i]));
+  });
+
+  it('stays inside the range', () => {
+    const targets = matchTargetsNear({ ...range, comfortable: 50 }, 7, 30, seededRandom(4));
+    expect(Math.min(...targets)).toBe(48);
+    expect(Math.max(...targets)).toBe(57);
   });
 });
 

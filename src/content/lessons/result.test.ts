@@ -34,6 +34,14 @@ describe('lessonResult', () => {
   it('gives three stars to a lesson with nothing graded', () => {
     expect(lessonResult([step(StepType.Explain)], new Map())).toEqual({ stars: 3, accuracy: 1 });
   });
+
+  it('leaves warm-ups out, and grades matching notes', () => {
+    const voice = [step(StepType.WarmUp), step(StepType.Match)];
+    expect(lessonResult(voice, new Map([[1, { stars: 2, accuracy: 0.8 }]]))).toEqual({
+      stars: 2,
+      accuracy: 0.8,
+    });
+  });
 });
 
 describe('earlierSteps', () => {

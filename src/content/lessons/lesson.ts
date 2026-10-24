@@ -10,6 +10,8 @@
  * - exercise: a graded practice run (wait or tempo mode) of an inline score or a song
  * - quiz:     note-naming flash cards: a note on the staff, play its key
  * - rhythm:   tap any key along with a rhythm pattern (see engine/rhythm.ts)
+ * - warmUp:   the vocal warm-up that starts each voice lesson (not graded)
+ * - match:    sing back notes played from the singer's range (see engine/matchNote.ts)
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
 import { type Finger, Hand, hasPedalMarks, hasTouchMarks, type Score } from '../../engine/score';
@@ -27,6 +29,8 @@ export const StepType = {
   Exercise: 'exercise',
   Quiz: 'quiz',
   Rhythm: 'rhythm',
+  WarmUp: 'warmUp',
+  Match: 'match',
 } as const;
 export type StepType = (typeof StepType)[keyof typeof StepType];
 
@@ -152,9 +156,37 @@ export interface RhythmStep extends StepBase {
   pass: { minStars: number };
 }
 
+/** The vocal warm-up: breathing, humming, a siren and a five-note pattern, from the range. */
+export interface WarmUpStep extends StepBase {
+  type: typeof StepType.WarmUp;
+}
+
+/** The widest a match step reaches around the comfortable note, in semitones. */
+export const MATCH_WITHIN_MAX = 24;
+
+export interface MatchStep extends StepBase {
+  type: typeof StepType.Match;
+  /**
+   * The notes asked: up to this many semitones either side of the comfortable note (within the
+   * saved range); null = the whole range, as on the Tuner page.
+   */
+  within: number | null;
+  /** How many notes. */
+  count: number;
+  pass: { minStars: number };
+}
+
 export const QUIZ_CARDS_DEFAULT = 10;
 
-export type LessonStep = ExplainStep | FindStep | ExerciseStep | QuizStep | RhythmStep;
+export type LessonStep =
+  ExplainStep | FindStep | ExerciseStep | QuizStep | RhythmStep | WarmUpStep | MatchStep;
+
+/** The steps graded toward the lesson's stars: all but explanations and warm-ups. */
+export type GradedStep = Exclude<LessonStep, ExplainStep | WarmUpStep>;
+
+export function isGraded(step: LessonStep): step is GradedStep {
+  return step.type !== StepType.Explain && step.type !== StepType.WarmUp;
+}
 
 export interface Lesson {
   id: string;
@@ -222,10 +254,7 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
       if (!Array.isArray(data.notes) || data.notes.length === 0) {
         throw new LessonError(at(location, 'notes'), 'expected a non-empty array of notes');
       }
-      const count = data.count ?? QUIZ_CARDS_DEFAULT;
-      if (typeof count !== 'number' || !Number.isInteger(count) || count < 1 || count > 50) {
-        throw new LessonError(at(location, 'count'), 'expected a whole number from 1 to 50');
-      }
+      const count = cardCount(data, location);
       const clef = data.clef ?? QuizClef.Auto;
       if (!isValueOf(QuizClef, clef)) {
         throw new LessonError(at(location, 'clef'), `expected ${describeValues(QuizClef)}`);
@@ -241,12 +270,42 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
     }
     case StepType.Rhythm:
       return { ...base, type: StepType.Rhythm, ...rhythm(data, location) };
+    case StepType.WarmUp:
+      return { ...base, type: StepType.WarmUp };
+    case StepType.Match: {
+      const within = data.within ?? null;
+      if (
+        within !== null &&
+        (typeof within !== 'number' ||
+          !Number.isInteger(within) ||
+          within < 0 ||
+          within > MATCH_WITHIN_MAX)
+      ) {
+        throw new LessonError(
+          at(location, 'within'),
+          `expected a whole number of semitones from 0 to ${MATCH_WITHIN_MAX}, or null`,
+        );
+      }
+      return {
+        ...base,
+        type: StepType.Match,
+        within,
+        count: cardCount(data, location),
+        pass: passRule(data, location),
+      };
+    }
     default:
-      throw new LessonError(
-        at(location, 'type'),
-        'expected "explain", "find", "exercise", "quiz" or "rhythm"',
-      );
+      throw new LessonError(at(location, 'type'), `expected ${describeValues(StepType)}`);
   }
+}
+
+/** How many quiz cards or notes to match: 1–50, ten by default. */
+function cardCount(data: Record<string, unknown>, location: string): number {
+  const count = data.count ?? QUIZ_CARDS_DEFAULT;
+  if (typeof count !== 'number' || !Number.isInteger(count) || count < 1 || count > 50) {
+    throw new LessonError(at(location, 'count'), 'expected a whole number from 1 to 50');
+  }
+  return count;
 }
 
 function rhythm(

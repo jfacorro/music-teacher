@@ -61,6 +61,7 @@ export const SKILLS = [
   // The voice course.
   'posture',
   'breathing',
+  'pitch-matching',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];

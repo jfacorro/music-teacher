@@ -559,7 +559,22 @@
       "allTip": "Every try, with its date"
     },
     "passTouch": "Play the staccato and slurred notes as written too (with a MIDI keyboard).",
-    "passPedal": "Use the pedal as marked too (with a MIDI keyboard)."
+    "passPedal": "Use the pedal as marked too (with a MIDI keyboard).",
+    "match": {
+      "intro": "The app plays a note: sing it back and hold it in tune for half a second. Any octave counts. There {count, plural, one {is # note} other {are # notes}}, and each one counts if you match it within six seconds."
+    },
+    "warmUp": {
+      "noRange": "Find your range first, so the warm-up fits your voice.",
+      "breathe": "Breathe in low and wide, then hiss a steady “sss” for a count of 8. Do it twice.",
+      "hum": "Hum your comfortable note, {note}, with your lips closed and your jaw loose, until you feel a buzz around your lips and nose. Hum it three times, each on one easy breath.",
+      "playNote": "Play {note}",
+      "siren": "Like a siren, slide gently from low to high and back down on “ng” (as at the end of “sing”) or on a lip trill (“brrr”). Stay where it’s easy: don’t push at the top or the bottom.",
+      "pattern": "Last, five notes up and back down on “mah”. The app plays them, then you sing them back: a half step higher each time, then back down.",
+      "play": "Play",
+      "stop": "Stop",
+      "listen": "Listen…",
+      "singBack": "Your turn: sing it back"
+    }
   },
   "welcome": {
     "title": "Welcome to {app}",

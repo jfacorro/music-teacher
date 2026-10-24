@@ -16,12 +16,17 @@ import { StepHistory } from './StepHistory';
 import { LessonComplete } from './LessonComplete';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
+import { MatchStepView } from './steps/MatchStepView';
 import { FindStepView } from './steps/FindStepView';
 import { QuizStepView } from './steps/QuizStepView';
 import { RhythmStepView } from './steps/RhythmStepView';
-import { StepType } from '../../../content/lessons/lesson';
+import { WarmUpStepView } from './steps/WarmUpStepView';
+import { isGraded, StepType } from '../../../content/lessons/lesson';
 
-/** Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms. */
+/**
+ * Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms, and
+ * for the voice, warm-ups and matching notes.
+ */
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('screens');
   const courseText = useContentText('courses');
@@ -106,7 +111,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
     });
   const markDone = (stepIndex: number) => setDone((prev) => new Set(prev).add(stepIndex));
   const next = () => setIndex((i) => i + 1);
-  const canContinue = step?.type === StepType.Explain || passed.has(index);
+  const canContinue = (step !== undefined && !isGraded(step)) || passed.has(index);
   const title = courseText(`lessons.${lesson.id}`, courseLesson.titleVars);
   useTopBarDetail(
     t('lesson.topBar', { number: COURSE_UNITS[course].indexOf(unit) + 1, lesson: title }),
@@ -138,7 +143,8 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         <>
           {(step?.type === StepType.Exercise ||
             step?.type === StepType.Quiz ||
-            step?.type === StepType.Rhythm) && <StepHistory runs={history} />}
+            step?.type === StepType.Rhythm ||
+            step?.type === StepType.Match) && <StepHistory runs={history} />}
           {step?.type === StepType.Explain && (
             <ExplainStepView
               key={index}
@@ -167,6 +173,16 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           )}
           {step?.type === StepType.Rhythm && (
             <RhythmStepView
+              key={index}
+              step={step}
+              text={text}
+              onResult={(stepResult, passed) => tried(index, stepResult, passed)}
+              onContinue={next}
+            />
+          )}
+          {step?.type === StepType.WarmUp && <WarmUpStepView key={index} step={step} text={text} />}
+          {step?.type === StepType.Match && (
+            <MatchStepView
               key={index}
               step={step}
               text={text}

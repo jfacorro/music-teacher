@@ -34,6 +34,23 @@ export function matchTargets(
   return quizCards(notes, count, random).map((pitch) => pitch.midi);
 }
 
+/**
+ * The notes of a lesson's run: those up to `within` semitones either side of the comfortable note,
+ * kept inside the range, each as evenly as possible.
+ */
+export function matchTargetsNear(
+  range: { low: number; high: number; comfortable: number },
+  within: number,
+  count = MATCH_NOTES,
+  random: () => number = Math.random,
+): number[] {
+  const notes = [];
+  const low = Math.max(range.low, range.comfortable - within);
+  const high = Math.min(range.high, range.comfortable + within);
+  for (let midi = low; midi <= high; midi++) notes.push(pitchFromMidi(midi));
+  return quizCards(notes, count, random).map((pitch) => pitch.midi);
+}
+
 /** How far `pitch` (in semitones, exact) is from the nearest octave of `target`, in cents. */
 export function centsFrom(target: number, pitch: number): number {
   const cents = Math.round((pitch - target) * 100);

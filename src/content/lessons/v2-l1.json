@@ -1,0 +1,31 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "match"
+    },
+    {
+      "type": "explain",
+      "text": "slide"
+    },
+    {
+      "type": "match",
+      "text": "yourNote",
+      "within": 0,
+      "count": 5
+    },
+    {
+      "type": "match",
+      "text": "around",
+      "within": 2,
+      "count": 10,
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}
