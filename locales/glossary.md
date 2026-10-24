@@ -160,6 +160,7 @@ system setting (`src/i18n/naming.ts`).
 | Singing (the voice course, its skills)        | singing                                              | canto                                                   |
 | Posture                                       | posture                                              | postura                                                 |
 | Breathing (in / out)                          | breathing (breathe in / out)                         | respiración (inspirar / espirar)                        |
+| Diaphragmatic (belly) breathing               | diaphragmatic or belly breathing                     | respiración diafragmática o abdominal                   |
 | Phrase                                        | phrase                                               | frase                                                   |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
