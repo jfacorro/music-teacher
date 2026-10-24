@@ -841,12 +841,16 @@ What singing can be graded on: pitch, timing, steadiness and loudness. The app c
 - Results: stars from the notes matched in time (60, 80 and 95%, as elsewhere), and the notes to work on, low to high: those not matched in time (saying whether they were sung too low or too high), and those held outside the tuner's ±25-cent zone (how many cents flat or sharp). Runs are saved (`voice:matchNote`) and count toward practice time; Recent practice lists them as "Match the note".
 - Recordings: the results can save the run as a WAV file that plays anywhere, with the notes asked and when the app listened for each in a `json` chunk after the audio (`input/mic/voiceRecording.ts`), into `fixtures/voice/` (kept local, like the piano's). `input/mic/voiceFixtures.test.ts` replays them through the detector and the matcher and prints how many notes match in time; a `<name>.min.json` beside one (`{ "minMatched": 8 }`) makes that a check.
 
-**6.2 Piano or voice: Voice Units 1–2**
+**6.2 Piano or voice: Voice Units 1–2** — in two parts: the switch and Voice Unit 1 (built), then Voice Unit 2
 - An `instrument` setting, and the switch in the top bar as the first part of the path ("Piano Teacher / Voice / Learn / Unit 1 · Matching one note"), on every page, even with the sidebar collapsed or on a phone. Its list says where you are in each ("Unit 9 of 14", "Not started · find your range first").
 - The sections follow it: Sight-reading becomes Sight-singing, Free play becomes the Tuner, and Home, Learn and Song practice show that instrument's course and practice. Separate for each instrument: the course, progress, stars, skills, reviews and the Today plan (results, skills and the plan tagged with their instrument). Shared: the practice calendar and streak, settings, the song library and the note names.
 - The input follows the instrument: MIDI (or the microphone) for the piano, the microphone for the voice.
 - The welcome screen asks Piano, Voice or Both. Adding the other one later is a click on the switch, and starts with the range test.
 - A second course file, for the voice. Voice Unit 1, posture and breathing (explained, not graded); Unit 2, matching one note (6.1's exercise as lesson steps, from your comfortable note outward). Each voice lesson starts with a warm-up.
+- Built as (part 1, the switch): the courses are `Course.Piano` and `Course.Voice` (not "instrument", which the code already uses for MIDI or the microphone), the voice's units in `content/voiceCourse.json` beside `courses.json`. Lesson ids are unique across both, and a lesson's next one stays in its course. The `course` setting picks one. The switch (`ui/components/CourseSwitch.tsx`) is the top bar's first part: a list of both, each saying where you are ("Unit 1 of 1", "Not started", "Not started · find your range first"). Choosing the voice turns the microphone on and, without a saved range, opens the range test; otherwise the page stays in the same section when the other course has it, and goes Home when it doesn't.
+- Each course's sections (`ui/sections.ts › COURSE_SECTIONS`): the piano's as before, without the Tuner; the voice's Home, Learn, the Tuner and Settings for now (ear training, sight-singing and songs join it in 6.4–6.6). Learn, Home's course line, the skills (a new Singing area), Recent practice and Today (saved apart, `today:voice`) follow the course; the calendar and the streak count both. With the voice, the app listens to the microphone whatever the piano's input setting says, and the top bar's picker shows it (a click turns it on).
+- The welcome screen asks Piano, Voice or Both after the language. The piano then connects an instrument and tries a key; the voice turns the microphone on (with a hint for singing) and finds its range; both do all of it, starting with the piano.
+- Voice Unit 1 (beginner), explained and not graded: standing to sing (what the app can and can't hear, short sessions without pushing, the feet, shoulders and head, sitting) and breathing low (low and wide, hands on the belly and ribs, a hiss for 4, 8 and 12, even and without squeezing). Explanations in the voice course show no keyboard unless they point at keys. New skills: posture, breathing.
 
 **6.3 Singing a melody: Voice Units 3–4**
 - A voice matcher next to the piano's (`TempoMatcher`, `WaitMatcher`). For each written note it measures how much of its time was in tune (within ±50 cents, ±25 at higher levels), whether it started within the timing window, and how steady it stayed. Any octave counts, with an option to require the written one. Wait for me waits until a note is held in tune for about 0.3 s; Sing along keeps going; Listen first plays it, then you sing.
@@ -870,11 +874,11 @@ What singing can be graded on: pitch, timing, steadiness and loudness. The app c
 - Song practice for the voice: the same songs, with lyrics, moved into your range, the piano accompaniment playing.
 - Voice Unit 8, songs.
 
-Still to decide, by 6.2: the app's name. "Piano Teacher" no longer fits once it teaches singing (IDEAS.md › Open questions lists some).
+Still to decide: the app's name. "Piano Teacher" no longer fits once it teaches singing; Cantabile is taken by another app (IDEAS.md › Open questions lists others).
 
 #### Phase 6 done when
 - [x] Singing a note shows which note it is and how far off, reliably, with your microphone (the Tuner, verified 2026-10-22).
-- [ ] Piano and voice each have their own course and progress, behind one switch.
+- [x] Piano and voice each have their own course and progress, behind one switch (6.2).
 - [ ] Singing exercises are graded for pitch and timing, waiting and singing along.
 - [ ] Exercises and songs fit the singer's range.
 - [ ] Ear training and sight-reading can be answered by singing.

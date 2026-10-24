@@ -1,0 +1,28 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "welcome"
+    },
+    {
+      "type": "explain",
+      "text": "gently"
+    },
+    {
+      "type": "explain",
+      "text": "feet"
+    },
+    {
+      "type": "explain",
+      "text": "shoulders"
+    },
+    {
+      "type": "explain",
+      "text": "head"
+    },
+    {
+      "type": "explain",
+      "text": "sitting"
+    }
+  ]
+}

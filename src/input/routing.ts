@@ -2,9 +2,11 @@
  * Decides which instrument the app listens to (PLAN.md §5): MIDI, the microphone, or
  * automatically MIDI when a keyboard is connected and the microphone otherwise. Only one is
  * active at a time, so the same key isn't counted twice when both are on. The computer
- * keyboard and the on-screen keyboard are always active.
+ * keyboard and the on-screen keyboard are always active. The voice course listens to the
+ * microphone, whatever the setting says for the piano.
  */
 import { create } from 'zustand';
+import { Course } from '../content/courses';
 import { useSettings } from '../storage/settings';
 import { setActiveSources } from './bus';
 import { pruneHeld } from './liveStore';
@@ -34,8 +36,9 @@ export const useInstrument = create<{ instrument: Instrument | null }>(() => ({
 export function startRouting(): () => void {
   let initialized = false;
   const update = () => {
+    const { course, inputMode } = useSettings.getState();
     const instrument = activeInstrument(
-      useSettings.getState().inputMode,
+      course === Course.Voice ? InputMode.Mic : inputMode,
       useMidi.getState().connection === MidiConnection.Connected,
       useMic.getState().status === MicStatus.On,
     );

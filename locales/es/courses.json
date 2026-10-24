@@ -55,6 +55,10 @@
     "u14": {
       "title": "Dos manos, dos líneas",
       "description": "Cada mano con su propia parte: la melodía en la mano izquierda, el movimiento contrario, dos melodías a la vez y los minuetos de Petzold tal como los escribió."
+    },
+    "v1": {
+      "title": "Preparándote para cantar",
+      "description": "La postura, la respiración y lo que la aplicación puede escuchar."
     }
   },
   "lessons": {
@@ -125,7 +129,9 @@
     "u14-l1": "La melodía en la mano izquierda",
     "u14-l2": "Movimiento contrario",
     "u14-l3": "Dos melodías a la vez",
-    "u14-l4": "Minueto en {g} menor"
+    "u14-l4": "Minueto en {g} menor",
+    "v1-l1": "La postura para cantar",
+    "v1-l2": "Respirar desde abajo"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -157,6 +163,8 @@
     "syncopation": "Síncopa",
     "form": "Repeticiones y casillas",
     "sight-reading": "Lectura a primera vista",
-    "ear-training": "Oído musical"
+    "ear-training": "Oído musical",
+    "posture": "Postura",
+    "breathing": "Respiración"
   }
 }

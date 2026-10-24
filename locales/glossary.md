@@ -156,6 +156,10 @@ system setting (`src/i18n/naming.ts`).
 | Tuner (sing and see the note)                 | tuner                                                | afinador                                                |
 | Cents (hundredths of a semitone)              | cents                                                | cents                                                   |
 | Sharp / flat (sung above / below the note)    | sharp / flat                                         | por encima / por debajo                                 |
+| Course (what is practiced: piano or voice)    | piano / voice                                        | piano / voz                                             |
+| Singing (the voice course, its skills)        | singing                                              | canto                                                   |
+| Posture                                       | posture                                              | postura                                                 |
+| Breathing (in / out)                          | breathing (breathe in / out)                         | respiración (inspirar / espirar)                        |
 | Phrase                                        | phrase                                               | frase                                                   |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only

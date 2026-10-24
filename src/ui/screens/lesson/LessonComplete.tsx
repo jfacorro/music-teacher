@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { UNITS, nextLessonId } from '../../../content/courses';
+import { COURSE_UNITS, findLesson, nextLessonId } from '../../../content/courses';
 import { lessonStates, LessonStatus } from '../../../content/unlock';
 import { resultKey, useProgress, ResultKind } from '../../../storage/progress';
 import { Stars } from '../../components/Stars';
@@ -18,7 +18,7 @@ export function LessonComplete({ lessonId, stars, onRestart }: LessonCompletePro
   const best = results[resultKey(ResultKind.Lesson, lessonId)]?.bestStars ?? stars;
   const next = nextLessonId(lessonId);
   const states = lessonStates(
-    UNITS,
+    COURSE_UNITS[findLesson(lessonId)!.course],
     (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0,
   );
   const nextOpen = next !== null && states.get(next)?.status !== LessonStatus.Locked;

@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "welcome": "Te damos la bienvenida al canto. La aplicación escucha por el micrófono y te muestra la nota que cantas y qué tan cerca estás de ella: puede comprobar tu afinación, si vas a tiempo y si la nota se mantiene estable. No puede oír cómo la cantas (la respiración, alguna tensión, un sonido sano): para eso te ayuda un profesor, o escuchar tus grabaciones.",
+    "gently": "Canta en sesiones cortas, calienta primero y nunca fuerces: si te duele la garganta o se te pone ronca la voz, detente y descansa.",
+    "feet": "Párate con los pies separados más o menos al ancho de la cadera, el peso repartido en los dos y las rodillas sueltas, sin trabarlas.",
+    "shoulders": "Deja caer los hombros y que los brazos cuelguen sueltos. Mantén el pecho cómodamente alto y la espalda larga, sin tensarte.",
+    "head": "Mantén la cabeza derecha, como si un hilo la tirara suavemente hacia arriba desde la coronilla: el mentón ni levantado ni hundido, la mandíbula suelta.",
+    "sitting": "También puedes cantar en una silla: sentándote en la parte delantera, los pies apoyados en el piso, la espalda larga, sin recostarte."
+  }
+}

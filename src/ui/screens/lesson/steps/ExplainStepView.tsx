@@ -4,7 +4,16 @@ import type { ExpectedKey } from '../../../keyboard/PianoKeyboard';
 import { MusicPicture, StaffPicture } from '../../../sheet/StaffPicture';
 import { StepKeyboard } from './StepKeyboard';
 
-export function ExplainStepView({ step, text }: { step: ExplainStep; text: string }) {
+export function ExplainStepView({
+  step,
+  text,
+  keyboard = true,
+}: {
+  step: ExplainStep;
+  text: string;
+  /** Show the keyboard (with the step's keys, if any). */
+  keyboard?: boolean;
+}) {
   const highlight = useMemo(
     () =>
       new Map<number, ExpectedKey>(
@@ -28,7 +37,7 @@ export function ExplainStepView({ step, text }: { step: ExplainStep; text: strin
         />
       )}
       {step.music && <MusicPicture score={step.music} />}
-      <StepKeyboard range={step.range} highlight={highlight} />
+      {keyboard && <StepKeyboard range={step.range} highlight={highlight} />}
     </div>
   );
 }

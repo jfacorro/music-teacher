@@ -1,0 +1,24 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "low"
+    },
+    {
+      "type": "explain",
+      "text": "hands"
+    },
+    {
+      "type": "explain",
+      "text": "hiss"
+    },
+    {
+      "type": "explain",
+      "text": "even"
+    },
+    {
+      "type": "explain",
+      "text": "warmUp"
+    }
+  ]
+}

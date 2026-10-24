@@ -1,5 +1,6 @@
 import { IconChevronDown } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+import { Course } from '../../content/courses';
 import { useMic, MicStatus } from '../../input/mic/micInput';
 import { enableMidi, useMidi, MidiAccessState, MidiConnection } from '../../input/midi/midiInput';
 import { INPUT_MODES, useInstrument, InputMode, Instrument } from '../../input/routing';
@@ -60,6 +61,7 @@ export function InputPicker() {
   const connection = useMidi((s) => s.connection);
   const deviceName = useMidi((s) => s.selectedName);
   const micStatus = useMic((s) => s.status);
+  const course = useSettings((s) => s.course);
 
   const midi: Badge =
     access !== MidiAccessState.Granted
@@ -97,6 +99,24 @@ export function InputPicker() {
     if (next === InputMode.Mic && micStatus !== MicStatus.On && micStatus !== MicStatus.Starting)
       void enableMic();
   };
+
+  // Singing is heard through the microphone only: the picker shows it, and turns it on.
+  if (course === Course.Voice) {
+    const listening = micStatus === MicStatus.On || micStatus === MicStatus.Starting;
+    return (
+      <button
+        type="button"
+        className={`input-picker input-picker--button input-picker--${mic.state}`}
+        title={listening ? t('inputPicker.voiceOn') : t('inputPicker.voiceOff')}
+        aria-label={`${mic.text}. ${listening ? t('inputPicker.voiceOn') : t('inputPicker.voiceOff')}`}
+        disabled={listening}
+        onClick={() => void enableMic()}
+      >
+        <span className="input-picker__dot" aria-hidden="true" />
+        <span className="input-picker__text">{mic.text}</span>
+      </button>
+    );
+  }
 
   return (
     <label className={`input-picker input-picker--${state}`}>

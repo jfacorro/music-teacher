@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { UNITS, unitsByLevel } from '../../content/courses';
+import { Course, COURSE_UNITS, lessonOrder, unitsByLevel } from '../../content/courses';
 import {
   isUnitFinished,
   isUnitOpen,
@@ -12,6 +12,7 @@ import {
 import { MAX_STARS } from '../../engine/scoring';
 import { useContentText } from '../../i18n/useContentText';
 import { resultKey, useProgress, ResultKind } from '../../storage/progress';
+import { useSettings } from '../../storage/settings';
 import { IndexedPage, type IndexGroup } from '../components/IndexedPage';
 import { PathItem } from '../components/PathItem';
 
@@ -19,29 +20,30 @@ const CHECK = '✓';
 const STAR = '★';
 const CHEVRON = '▸';
 
-const LEVELS = unitsByLevel();
-
 /**
- * The learning path: what to do next, and every unit's lessons with stars and locks, under
- * their levels (Beginner, Elementary…).
+ * The learning path of the course being practiced: what to do next, and every unit's lessons
+ * with stars and locks, under their levels (Beginner, Elementary…).
  */
 export function HomeScreen() {
   const { t } = useTranslation('screens');
   const courseText = useContentText('courses');
   const results = useProgress((s) => s.results);
+  const course = useSettings((s) => s.course);
+  const units = COURSE_UNITS[course];
+  const levels = useMemo(() => unitsByLevel(units), [units]);
 
   const states = useMemo(
-    () => lessonStates(UNITS, (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0),
-    [results],
+    () => lessonStates(units, (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0),
+    [units, results],
   );
-  const nextId = nextLessonToPlay(UNITS, states);
-  const nextLesson = nextId ? UNITS.flatMap((u) => u.lessons).find((l) => l.id === nextId) : null;
-  const started = Object.keys(results).some((key) => key.startsWith('lesson:'));
+  const nextId = nextLessonToPlay(units, states);
+  const nextLesson = nextId ? units.flatMap((u) => u.lessons).find((l) => l.id === nextId) : null;
+  const started = lessonOrder(course).some((id) => results[resultKey(ResultKind.Lesson, id)]);
   const groups: IndexGroup[] = [
     { items: [{ id: 'next', label: started ? t('home.continueLabel') : t('home.startLabel') }] },
-    ...LEVELS.map(({ level, units }) => ({
+    ...levels.map(({ level, units: inLevel }) => ({
       heading: t(`course.levels.${level}`),
-      items: units.map(({ unit, number }) => ({
+      items: inLevel.map(({ unit, number }) => ({
         id: `unit-${unit.id}`,
         label: t('course.unitShort', {
           number,
@@ -64,9 +66,15 @@ export function HomeScreen() {
                 <Link className="button button--primary" to={`/lesson/${nextLesson.id}`}>
                   {started ? t('home.continue') : t('home.start')}
                 </Link>
-                <Link className="button" to="/settings">
-                  {t('home.checkKeyboard')}
-                </Link>
+                {course === Course.Voice ? (
+                  <Link className="button" to="/settings#voice">
+                    {t('home.checkRange')}
+                  </Link>
+                ) : (
+                  <Link className="button" to="/settings">
+                    {t('home.checkKeyboard')}
+                  </Link>
+                )}
               </div>
             </>
           ) : (
@@ -74,16 +82,21 @@ export function HomeScreen() {
           )}
         </section>
 
-        {LEVELS.map(({ level, units }) => (
+        {levels.map(({ level, units: inLevel }) => (
           <section key={level} className="level" aria-labelledby={`level-${level}`}>
             <h2 id={`level-${level}`} className="level__heading">
-              {t('course.levelHeading', {
-                level: t(`course.levels.${level}`),
-                first: units[0]!.number,
-                last: units.at(-1)!.number,
-              })}
+              {inLevel.length === 1
+                ? t('course.levelHeadingOne', {
+                    level: t(`course.levels.${level}`),
+                    number: inLevel[0]!.number,
+                  })
+                : t('course.levelHeading', {
+                    level: t(`course.levels.${level}`),
+                    first: inLevel[0]!.number,
+                    last: inLevel.at(-1)!.number,
+                  })}
             </h2>
-            {units.map(({ unit, number }) => {
+            {inLevel.map(({ unit, number }) => {
               const open = isUnitOpen(unit, states);
               const finished = isUnitFinished(unit, states);
               const done = unit.lessons.filter(

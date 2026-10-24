@@ -1,11 +1,11 @@
 /**
  * Today's practice plan (PLAN.md milestone 4.1): the day's suggestions, kept so they can be
  * ticked off as they're practiced. A new plan is made on the first visit of each day; more
- * suggestions can be added once it's done.
+ * suggestions can be added once it's done. Each course has its own.
  */
 import { create } from 'zustand';
-import { SKILLS, UNITS } from '../content/courses';
-import { skillProgress } from '../content/skills';
+import { Course, COURSE_UNITS, UNITS } from '../content/courses';
+import { courseSkills, skillProgress } from '../content/skills';
 import { SONG_IDS, SONG_UNITS } from '../content/songs';
 import { type Suggestion, suggestPractice, targetKey } from '../content/suggestions';
 import { openEarLevels } from '../content/earTraining';
@@ -28,34 +28,67 @@ export interface TodayPlan {
   items: PlanItem[];
 }
 
-const KEY = 'today';
+/** Where each course's plan is saved (the piano's kept its first name). */
+const KEYS: Readonly<Record<Course, string>> = {
+  [Course.Piano]: 'today',
+  [Course.Voice]: 'today:voice',
+};
 
-export const useTodayPlan = create<{ plan: TodayPlan | null }>(() => ({ plan: null }));
+export const useTodayPlan = create<{ plans: Partial<Record<Course, TodayPlan>> }>(() => ({
+  plans: {},
+}));
 
 export async function loadTodayPlan(): Promise<void> {
   try {
-    const row = await db.settings.get(KEY);
-    useTodayPlan.setState({ plan: (row?.value as TodayPlan | undefined) ?? null });
+    const courses = Object.values(Course);
+    const rows = await db.settings.bulkGet(courses.map((course) => KEYS[course]));
+    const plans: Partial<Record<Course, TodayPlan>> = {};
+    courses.forEach((course, i) => {
+      const plan = rows[i]?.value as TodayPlan | undefined;
+      if (plan) plans[course] = plan;
+    });
+    useTodayPlan.setState({ plans });
   } catch (error) {
     console.error('Could not load today’s plan', error);
   }
 }
 
-function save(plan: TodayPlan): void {
-  useTodayPlan.setState({ plan });
-  db.settings.put({ key: KEY, value: plan }).catch((error: unknown) => {
+function save(course: Course, plan: TodayPlan): void {
+  useTodayPlan.setState((state) => ({ plans: { ...state.plans, [course]: plan } }));
+  db.settings.put({ key: KEYS[course], value: plan }).catch((error: unknown) => {
     console.error('Could not save today’s plan', error);
   });
 }
 
-/** Suggestions from the progress saved so far. */
-function suggestNow(now: number, exclude?: ReadonlySet<string>): Suggestion[] {
+/** Suggestions for a course from the progress saved so far. */
+function suggestNow(course: Course, now: number, exclude?: ReadonlySet<string>): Suggestion[] {
   const { results, log } = useProgress.getState();
   const lessonResult = (id: string) => results[resultKey(ResultKind.Lesson, id)];
+  const units = COURSE_UNITS[course];
+  const states = lessonStates(units, (id) => lessonResult(id)?.bestStars ?? 0);
+  const skills = skillProgress(
+    courseSkills(course),
+    units,
+    (id) => lessonResult(id)?.bestAccuracy ?? null,
+    exerciseAccuracies(log),
+  );
+  // The voice has its lessons only, for now: the songs, drills and ear training are the piano's.
+  if (course === Course.Voice) {
+    return suggestPractice({
+      units,
+      states,
+      results,
+      songs: [],
+      skills,
+      drillLevels: [],
+      earLevels: [],
+      now,
+      exclude,
+    });
+  }
   const unitIndex = new Map(UNITS.map((unit, index) => [unit.id, index]));
-  const states = lessonStates(UNITS, (id) => lessonResult(id)?.bestStars ?? 0);
   return suggestPractice({
-    units: UNITS,
+    units,
     states,
     results,
     songs: [
@@ -68,51 +101,49 @@ function suggestNow(now: number, exclude?: ReadonlySet<string>): Suggestion[] {
         unit: null,
       })),
     ],
-    skills: skillProgress(
-      SKILLS,
-      UNITS,
-      (id) => lessonResult(id)?.bestAccuracy ?? null,
-      exerciseAccuracies(log),
-    ),
-    drillLevels: openDrillLevels(UNITS, states),
-    earLevels: openEarLevels(UNITS, states),
+    skills,
+    drillLevels: openDrillLevels(units, states),
+    earLevels: openEarLevels(units, states),
     now,
     exclude,
   });
 }
 
-/** Makes today's plan if there's none yet for today. */
-export function ensureTodayPlan(now = Date.now()): void {
-  if (useTodayPlan.getState().plan?.day === dayOf(now)) return;
-  save({
+/** Makes today's plan for a course if there's none yet for today. */
+export function ensureTodayPlan(course: Course, now = Date.now()): void {
+  if (useTodayPlan.getState().plans[course]?.day === dayOf(now)) return;
+  save(course, {
     day: dayOf(now),
-    items: suggestNow(now).map((suggestion) => ({ ...suggestion, since: now })),
+    items: suggestNow(course, now).map((suggestion) => ({ ...suggestion, since: now })),
   });
 }
 
 /** Adds new suggestions to today's plan, none already in it; false if there's nothing new. */
-export function suggestMore(now = Date.now()): boolean {
-  const plan = useTodayPlan.getState().plan;
+export function suggestMore(course: Course, now = Date.now()): boolean {
+  const plan = useTodayPlan.getState().plans[course];
   const current = plan?.day === dayOf(now) ? plan.items : [];
-  const more = suggestNow(now, new Set(current.map((item) => targetKey(item.target))));
+  const more = suggestNow(course, now, new Set(current.map((item) => targetKey(item.target))));
   if (more.length === 0) return false;
-  save({
+  save(course, {
     day: dayOf(now),
     items: [...current, ...more.map((suggestion) => ({ ...suggestion, since: now }))],
   });
   return true;
 }
 
-/** Ticks the plan's items for this lesson or song, practiced without finishing a run. */
+/** Ticks the plans' items for this lesson or song, practiced without finishing a run. */
 export function markPracticed(key: string): void {
-  const plan = useTodayPlan.getState().plan;
-  if (!plan?.items.some((item) => targetKey(item.target) === key && !item.practiced)) return;
-  save({
-    ...plan,
-    items: plan.items.map((item) =>
-      targetKey(item.target) === key ? { ...item, practiced: true } : item,
-    ),
-  });
+  const { plans } = useTodayPlan.getState();
+  for (const course of Object.values(Course)) {
+    const plan = plans[course];
+    if (!plan?.items.some((item) => targetKey(item.target) === key && !item.practiced)) continue;
+    save(course, {
+      ...plan,
+      items: plan.items.map((item) =>
+        targetKey(item.target) === key ? { ...item, practiced: true } : item,
+      ),
+    });
+  }
 }
 
 /** Done: played since it was suggested, or practiced. */

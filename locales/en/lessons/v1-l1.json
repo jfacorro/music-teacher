@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "welcome": "Welcome to singing. The app listens through the microphone and shows the note you sing and how close you are to it: it can check whether you’re in tune, in time and steady. It can’t hear how you sing it (your breath, any tension, a healthy sound): a teacher, or listening back to your recordings, helps with that.",
+    "gently": "Sing in short sessions, warm up first, and never push: if your throat hurts or your voice gets hoarse, stop and rest it.",
+    "feet": "Stand with your feet about hip-width apart, your weight even on both, and your knees soft rather than locked.",
+    "shoulders": "Let your shoulders drop and your arms hang loose. Keep your chest comfortably up and your back long, without stiffening.",
+    "head": "Keep your head level, as if a string drew it gently up from the top: your chin neither raised nor tucked in, your jaw loose.",
+    "sitting": "You can sing sitting down too: on the front of the chair, feet flat on the floor, back long, not leaning back."
+  }
+}
