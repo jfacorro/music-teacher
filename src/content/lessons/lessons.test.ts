@@ -17,7 +17,7 @@ import {
   unitsByLevel,
 } from '../courses';
 import { lessonExists, loadLesson } from '.';
-import { LessonError, parseLesson, StepType } from './lesson';
+import { isGraded, LessonError, parseLesson, StepType } from './lesson';
 
 type LessonText = { steps?: Record<string, string> };
 const lessonTexts = import.meta.glob<LessonText>('/locales/*/lessons/*.json', {
@@ -81,7 +81,7 @@ describe('courses', () => {
         level,
         units.map(({ number }) => number),
       ]),
-    ).toEqual([[CourseLevel.Beginner, [1]]]);
+    ).toEqual([[CourseLevel.Beginner, [1, 2]]]);
   });
 
   it('tags every lesson with what it practices, and every skill is practiced', () => {
@@ -221,6 +221,9 @@ describe('parseLesson', () => {
         { type: 'exercise', text: 'song', mode: 'tempo', song: 'ode-to-joy', tempo: 80 },
         { type: 'quiz', text: 'q', notes: ['C4', 'G4'], count: 5, clef: 'treble' },
         { type: 'rhythm', text: 'r', pattern: 'q q h | e e q rq q', tempo: 90 },
+        { type: 'warmUp', text: 'w' },
+        { type: 'match', text: 'm', within: 2, count: 5, pass: { minStars: 1 } },
+        { type: 'match', text: 'all' },
       ],
     });
     expect(lesson.steps.map((s) => s.type)).toEqual([
@@ -230,6 +233,23 @@ describe('parseLesson', () => {
       'exercise',
       'quiz',
       'rhythm',
+      'warmUp',
+      'match',
+      'match',
+    ]);
+    expect(lesson.steps[7]).toMatchObject({ within: 2, count: 5, pass: { minStars: 1 } });
+    // By default: the whole range, ten notes.
+    expect(lesson.steps[8]).toMatchObject({ within: null, count: 10, pass: { minStars: 0 } });
+    expect(lesson.steps.map(isGraded)).toEqual([
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
     ]);
     expect(lesson.steps[4]).toMatchObject({
       notes: [{ midi: 60 }, { midi: 67 }],
@@ -299,6 +319,9 @@ describe('parseLesson', () => {
     ],
     ['too many quiz cards', { type: 'quiz', text: 'x', notes: ['C4'], count: 100 }, 'count'],
     ['a bad clef', { type: 'quiz', text: 'x', notes: ['C4'], clef: 'alto' }, 'clef'],
+    ['a match reaching too far', { type: 'match', text: 'x', within: 25 }, 'within'],
+    ['a match within part of a step', { type: 'match', text: 'x', within: 1.5 }, 'within'],
+    ['no notes to match', { type: 'match', text: 'x', count: 0 }, 'count'],
     [
       'a rhythm with a short bar',
       { type: 'rhythm', text: 'x', pattern: 'q q q', tempo: 60 },

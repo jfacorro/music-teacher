@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Cada lección de canto empieza con un calentamiento: unos minutos tranquilos para despertar la voz. Haz cada parte con suavidad y después continúa.",
+    "match": "Ahora vas a cantar la misma nota: la aplicación toca una nota y tú la cantas. Escucha, inspira y canta la misma nota con una “a” o una “u” relajadas. Vale cualquier octava, así que no importa si tu voz suena más aguda o más grave que el piano.",
+    "slide": "¿No llegas del todo? La tarjeta dice Más agudo o Más grave: desliza la voz despacio hacia ese lado hasta que diga Afinada y sostenla. Al principio es normal no acertar; con la práctica, el oído y la voz se ponen de acuerdo.",
+    "yourNote": "Primero, tu nota cómoda, cinco veces: la nota más fácil de tu voz.",
+    "around": "Ahora las notas que están a uno o dos semitonos de ella."
+  }
+}

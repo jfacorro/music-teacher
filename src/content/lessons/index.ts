@@ -28,5 +28,15 @@ export type {
   ExerciseStep,
   QuizStep,
   RhythmStep,
+  WarmUpStep,
+  MatchStep,
 } from './lesson';
-export { SHEET_NOTATIONS, QuizClef, ScoreView, SheetNotation, StaffClef, StepType } from './lesson';
+export {
+  isGraded,
+  SHEET_NOTATIONS,
+  QuizClef,
+  ScoreView,
+  SheetNotation,
+  StaffClef,
+  StepType,
+} from './lesson';

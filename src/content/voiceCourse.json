@@ -4,8 +4,32 @@
       "id": "v1",
       "level": "beginner",
       "lessons": [
-        { "id": "v1-l1", "skills": ["posture"] },
-        { "id": "v1-l2", "skills": ["breathing"] }
+        {
+          "id": "v1-l1",
+          "skills": ["posture"]
+        },
+        {
+          "id": "v1-l2",
+          "skills": ["breathing"]
+        }
+      ]
+    },
+    {
+      "id": "v2",
+      "level": "beginner",
+      "lessons": [
+        {
+          "id": "v2-l1",
+          "skills": ["pitch-matching"]
+        },
+        {
+          "id": "v2-l2",
+          "skills": ["pitch-matching"]
+        },
+        {
+          "id": "v2-l3",
+          "skills": ["pitch-matching"]
+        }
       ]
     }
   ]

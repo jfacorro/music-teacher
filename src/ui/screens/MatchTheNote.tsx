@@ -1,9 +1,9 @@
 /**
- * Match the note (PLAN.md milestone 6.1), on the Tuner page: the app plays a note from the saved
- * range, and the singer sings it back and holds it in tune, in any octave. Ten notes a run,
- * scored by the ones matched in time.
+ * Match the note (PLAN.md milestone 6.1), on the Tuner page and in voice lessons: the app plays a
+ * note from the saved range, and the singer sings it back and holds it in tune, in any octave.
+ * Ten notes a run (on the Tuner), scored by the ones matched in time.
  */
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { audioIfReady, soundLeadMs, startAudio } from '../../audio/audio';
@@ -11,26 +11,24 @@ import {
   centsFrom,
   MATCH_CENTS,
   matchSummary,
+  type MatchSummary,
   matchTargets,
   type NoteMatch,
   NoteMatcher,
 } from '../../engine/matchNote';
-import { AVERAGE_OF, exactPitch, IN_TUNE_CENTS } from '../../engine/tuner';
+import { AVERAGE_OF, exactPitch, IN_TUNE_CENTS, TRACE_MS } from '../../engine/tuner';
 import { formatPercent } from '../../i18n/format';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { ignoreMicUntil, useMic } from '../../input/mic/micInput';
 import { downloadBlob } from '../../input/mic/recording';
 import { startVoiceRecording } from '../../input/mic/voiceRecording';
-import {
-  activityTimer,
-  recordPracticeTime,
-  recordResult,
-  ResultKind,
-} from '../../storage/progress';
+import { activityTimer, recordPracticeTime } from '../../storage/progress';
+import { type VocalRange } from '../../engine/vocalRange';
 import { useSettings } from '../../storage/settings';
 import { pitchFromMidi } from '../../theory/pitch';
 import { Stars } from '../components/Stars';
 import { ICONS } from '../icons';
+import { Needle, Trace, type TracePoint } from './TunerParts';
 
 /** The exercise's id in saved results. */
 export const MATCH_ID = 'matchNote';
@@ -45,10 +43,30 @@ const NEXT_NOTE_MS = 1200;
 
 interface MatchTheNoteProps {
   /** The note to sing, while there is one (to show on the range's keyboard). */
-  onTarget: (midi: number | null) => void;
+  onTarget?: (midi: number | null) => void;
+  /** The notes of a run, from the range (by default, the whole range: `matchTargets`). */
+  pick?: (range: VocalRange) => number[];
+  /** A run is over: how it went, and how long it took (ms). */
+  onFinish?: (summary: MatchSummary, durationMs: number) => void;
+  /** More buttons beside Retry on the results (e.g. Continue in a lesson). */
+  actions?: (summary: MatchSummary) => ReactNode;
+  /** What to do, before starting (the Tuner's explanation by default). */
+  intro?: string;
+  /**
+   * Show the tuner's needle and line against the note to sing (in lessons; the Tuner page has its
+   * own above the card).
+   */
+  tuner?: boolean;
 }
 
-export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
+export function MatchTheNote({
+  onTarget,
+  pick,
+  onFinish,
+  actions,
+  intro,
+  tuner = false,
+}: MatchTheNoteProps) {
   const { t, i18n } = useTranslation('screens');
   const names = useNoteNames();
   const range = useSettings((s) => s.vocalRange);
@@ -62,6 +80,8 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
   const [late, setLate] = useState(false);
   /** How far off what's being sung is, in cents from the note (averaged), or null. */
   const [off, setOff] = useState<number | null>(null);
+  /** The last few seconds of singing, for the tuner's line. */
+  const [trace, setTrace] = useState<TracePoint[]>([]);
   const matcher = useRef<NoteMatcher | null>(null);
   const listenFrom = useRef(0);
   const soundTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -76,7 +96,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
   const summary = finished ? matchSummary(done) : null;
   const noteName = (midi: number) => names.name(pitchFromMidi(midi), { octave: true });
 
-  useEffect(() => onTarget(running ? target : null), [running, target, onTarget]);
+  useEffect(() => onTarget?.(running ? target : null), [running, target, onTarget]);
 
   const play = async (midi: number) => {
     // Nothing counts until the note has been heard.
@@ -114,6 +134,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
 
   const ask = (midi: number) => {
     matcher.current = new NoteMatcher(midi);
+    setTrace([]);
     setHeld(0);
     setMatched(false);
     setLate(false);
@@ -122,7 +143,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
 
   const begin = () => {
     if (!range) return;
-    const fresh = matchTargets(range);
+    const fresh = pick ? pick(range) : matchTargets(range);
     startedAt.current = performance.now();
     recorder.current?.stop();
     recorder.current = startVoiceRecording(useMic.getState().gateDb);
@@ -152,12 +173,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
       return;
     }
     recorder.current?.stop();
-    const { stars, accuracy } = matchSummary(results);
-    void recordResult(ResultKind.Voice, MATCH_ID, {
-      stars,
-      accuracy,
-      durationMs: performance.now() - startedAt.current,
-    });
+    onFinish?.(matchSummary(results), performance.now() - startedAt.current);
   };
   const nextRef = useRef(next);
   useEffect(() => {
@@ -184,6 +200,12 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
         recent.push(pitch);
         if (recent.length > AVERAGE_OF) recent.shift();
       }
+      if (tuner) {
+        setTrace((previous) => [
+          ...previous.filter((point) => now - point.time <= TRACE_MS),
+          { time: now, pitch },
+        ]);
+      }
       const average = recent.reduce((sum, value) => sum + value, 0) / recent.length;
       setOff(recent.length === 0 ? null : centsFrom(current.target, average));
       setHeld(current.update(pitch, now));
@@ -197,7 +219,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
       unsubscribe();
       void recordPracticeTime(timer.stop());
     };
-  }, [running]);
+  }, [running, tuner]);
 
   if (!range) {
     return (
@@ -256,6 +278,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
           >
             {t('tuner.match.save')}
           </button>
+          {actions?.(summary)}
         </div>
       </section>
     );
@@ -265,7 +288,7 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
     return (
       <div className="card match">
         <h2>{t('tuner.match.title')}</h2>
-        <p className="muted">{t('tuner.match.intro')}</p>
+        <p className="muted">{intro ?? t('tuner.match.intro')}</p>
         <div className="button-row">
           <button type="button" className="button button--primary" onClick={begin}>
             <span className="button__icon" aria-hidden="true">
@@ -320,6 +343,16 @@ export function MatchTheNote({ onTarget }: MatchTheNoteProps) {
           {message}
         </p>
       </div>
+      {tuner && (
+        <div className="match__tuner">
+          {off !== null && <Needle cents={off} zone={MATCH_CENTS} span={2 * MATCH_CENTS} />}
+          <Trace
+            points={trace}
+            around={target}
+            labelFor={(midi) => names.name(pitchFromMidi(midi), { octave: false })}
+          />
+        </div>
+      )}
       <div className="button-row">
         <button
           type="button"

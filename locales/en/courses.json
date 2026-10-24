@@ -59,6 +59,10 @@
     "v1": {
       "title": "Getting ready to sing",
       "description": "How to stand, how to breathe, and what the app can hear."
+    },
+    "v2": {
+      "title": "Matching one note",
+      "description": "Warming up, then singing back the note you hear: your comfortable note first, then the notes around it."
     }
   },
   "lessons": {
@@ -131,7 +135,10 @@
     "u14-l3": "Two melodies at once",
     "u14-l4": "Minuet in {g} minor",
     "v1-l1": "Posture for singing",
-    "v1-l2": "Breathing for singing"
+    "v1-l2": "Breathing for singing",
+    "v2-l1": "Your note",
+    "v2-l2": "Notes nearby",
+    "v2-l3": "Further out"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -165,6 +172,7 @@
     "sight-reading": "Sight-reading",
     "ear-training": "Ear training",
     "posture": "Posture",
-    "breathing": "Breathing"
+    "breathing": "Breathing",
+    "pitch-matching": "Matching pitch"
   }
 }

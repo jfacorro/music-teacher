@@ -110,7 +110,7 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'sight-reading',
   ],
   [SkillArea.Musicianship]: ['dynamics', 'chords', 'accompaniment', 'minor-keys', 'ear-training'],
-  [SkillArea.Singing]: ['posture', 'breathing'],
+  [SkillArea.Singing]: ['posture', 'breathing', 'pitch-matching'],
 };
 
 /** The areas of each course's skills, in the order Home shows them. */

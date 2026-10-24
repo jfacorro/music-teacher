@@ -59,6 +59,10 @@
     "v1": {
       "title": "Preparación para cantar",
       "description": "La postura, la respiración y lo que la aplicación puede escuchar."
+    },
+    "v2": {
+      "title": "Cantar la misma nota",
+      "description": "El calentamiento y después cantar la nota que escuchas: primero tu nota cómoda y luego las que están alrededor."
     }
   },
   "lessons": {
@@ -131,7 +135,10 @@
     "u14-l3": "Dos melodías a la vez",
     "u14-l4": "Minueto en {g} menor",
     "v1-l1": "La postura para cantar",
-    "v1-l2": "La respiración para cantar"
+    "v1-l2": "La respiración para cantar",
+    "v2-l1": "Tu nota",
+    "v2-l2": "Notas cercanas",
+    "v2-l3": "Más lejos"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -165,6 +172,7 @@
     "sight-reading": "Lectura a primera vista",
     "ear-training": "Oído musical",
     "posture": "Postura",
-    "breathing": "Respiración"
+    "breathing": "Respiración",
+    "pitch-matching": "Afinación"
   }
 }

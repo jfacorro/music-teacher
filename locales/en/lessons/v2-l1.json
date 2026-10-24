@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Every singing lesson starts with a warm-up: a few easy minutes to wake up your voice. Do each part gently, then continue.",
+    "match": "Now you’ll match notes: the app plays a note, and you sing it back. Listen, breathe in, and sing the same note on a relaxed “ah” or “oo”. Any octave counts, so it’s fine if your voice sounds higher or lower than the piano.",
+    "slide": "Not quite on it? The card says Higher or Lower: slide slowly that way until it says In tune, then hold it. Missing at first is normal; your ear and voice learn to agree with practice.",
+    "yourNote": "First, your comfortable note, five times: the easiest note in your voice.",
+    "around": "Now the notes a step or two around it."
+  }
+}

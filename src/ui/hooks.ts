@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { notesAt, type ScoreNote } from '../engine/score';
 import type { Transport, TransportState } from '../engine/transport';
 import { useLiveInput } from '../input/liveStore';
+import { MicStatus, startMic, stopMic, useMic } from '../input/mic/micInput';
+import { useSettings } from '../storage/settings';
 
 /** Keys currently held on any input, as a set of MIDI numbers. */
 export function usePressedKeys(): ReadonlySet<number> {
@@ -57,4 +59,21 @@ export function useActiveNotes(notes: readonly ScoreNote[], transport: Transport
   });
 
   return active;
+}
+
+/** The microphone, while the component is shown (off again afterwards if it was off). */
+export function useMicWhileShown(): void {
+  useEffect(() => {
+    const started = useMic.getState().status !== MicStatus.On;
+    let open = true;
+    if (started) {
+      void startMic(useSettings.getState().micDeviceId).then(() => {
+        if (!open) stopMic();
+      });
+    }
+    return () => {
+      open = false;
+      if (started) stopMic();
+    };
+  }, []);
 }
