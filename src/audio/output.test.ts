@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { isUnmeasuredOutput, outputNameOf, timingForOutput } from './output';
+import {
+  devicesToChoose,
+  isUnmeasuredOutput,
+  outputDeviceIdOf,
+  outputNameOf,
+  timingForOutput,
+} from './output';
 
 const device = (kind: MediaDeviceKind, deviceId: string, groupId: string, label: string) => ({
   kind,
@@ -8,7 +14,47 @@ const device = (kind: MediaDeviceKind, deviceId: string, groupId: string, label:
   label,
 });
 
+const windows = [
+  device('audioinput', 'default', 'usb', 'Default - Microphone (USB Audio)'),
+  device('audioinput', 'communications', 'cam', 'Communications - Microphone (Webcam)'),
+  device('audioinput', 'm1', 'usb', 'Microphone (USB Audio)'),
+  device('audioinput', 'm2', 'cam', 'Microphone (Webcam)'),
+  device('audiooutput', 'default', 'spk', 'Default - Speakers (Realtek Audio)'),
+  device('audiooutput', 'communications', 'spk', 'Communications - Speakers (Realtek Audio)'),
+  device('audiooutput', 'a1', 'spk', 'Speakers (Realtek Audio)'),
+  device('audiooutput', 'a2', 'bt', 'Headphones (WH-1000XM4)'),
+];
+
+describe('devicesToChoose', () => {
+  it('lists each device of a kind once, without the stand-ins', () => {
+    expect(devicesToChoose(windows, 'audioinput')).toEqual([
+      { id: 'm1', label: 'Microphone (USB Audio)' },
+      { id: 'm2', label: 'Microphone (Webcam)' },
+    ]);
+    expect(devicesToChoose(windows, 'audiooutput').map((d) => d.id)).toEqual(['a1', 'a2']);
+  });
+
+  it('skips entries without an id (no permission yet)', () => {
+    expect(devicesToChoose([device('audioinput', '', '', '')], 'audioinput')).toEqual([]);
+  });
+});
+
+describe('outputDeviceIdOf', () => {
+  it('uses the chosen output while it is connected, else the default', () => {
+    expect(outputDeviceIdOf(windows, 'a2')).toBe('a2');
+    expect(outputDeviceIdOf(windows, 'gone')).toBe('');
+    expect(outputDeviceIdOf(windows, null)).toBe('');
+    // A microphone's id is not an output.
+    expect(outputDeviceIdOf(windows, 'm1')).toBe('');
+  });
+});
+
 describe('outputNameOf', () => {
+  it('names the chosen output, or the default one when it is not connected', () => {
+    expect(outputNameOf(windows, 'a2')).toBe('Headphones (WH-1000XM4)');
+    expect(outputNameOf(windows, 'gone')).toBe('Speakers (Realtek Audio)');
+  });
+
   it('names the default output by its own entry', () => {
     expect(
       outputNameOf([

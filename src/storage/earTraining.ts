@@ -1,7 +1,8 @@
 /**
  * Ear training (PLAN.md milestone 4.4): the level chosen last, to start with next time,
- * whether single notes come after middle C, and whether all 12 notes are asked. Kept in the
- * settings table (key `earTraining`).
+ * whether single notes come after middle C, and whether all 12 notes are asked; for the voice
+ * (milestone 6.4), its own level and whether questions are sung back or played on the keyboard.
+ * Kept in the settings table (key `earTraining`).
  */
 import { create } from 'zustand';
 import type { EarLevel } from '../content/earTraining';
@@ -15,12 +16,18 @@ export interface EarTrainingState {
   reference: boolean;
   /** Single notes and intervals use all 12 notes, not only those the course has reached. */
   allNotes: boolean;
+  /** The voice's level chosen last. */
+  voiceLevel: EarLevel | null;
+  /** The voice answers by singing (or else on the keyboard). */
+  singBack: boolean;
 }
 
 export const useEarTraining = create<EarTrainingState>(() => ({
   level: null,
   reference: true,
   allNotes: false,
+  voiceLevel: null,
+  singBack: true,
 }));
 
 export async function loadEarTraining(): Promise<void> {
@@ -31,6 +38,8 @@ export async function loadEarTraining(): Promise<void> {
       level: saved?.level ?? null,
       reference: saved?.reference ?? true,
       allNotes: saved?.allNotes ?? false,
+      voiceLevel: saved?.voiceLevel ?? null,
+      singBack: saved?.singBack ?? true,
     });
   } catch (error) {
     console.error('Could not load ear training', error);
@@ -54,4 +63,12 @@ export function setEarReference(reference: boolean): void {
 
 export function setEarAllNotes(allNotes: boolean): void {
   save({ allNotes });
+}
+
+export function chooseVoiceEarLevel(voiceLevel: EarLevel): void {
+  if (useEarTraining.getState().voiceLevel !== voiceLevel) save({ voiceLevel });
+}
+
+export function setEarSingBack(singBack: boolean): void {
+  save({ singBack });
 }

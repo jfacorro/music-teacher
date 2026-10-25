@@ -1,0 +1,141 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "fourthFifth"
+    },
+    {
+      "type": "sing",
+      "text": "doFaSol",
+      "mode": "wait",
+      "score": {
+        "tempo": 60,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 2
+          },
+          {
+            "note": "F4",
+            "start": 2,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 4,
+            "duration": 2
+          },
+          {
+            "note": "G4",
+            "start": 6,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 8,
+            "duration": 2
+          }
+        ]
+      }
+    },
+    {
+      "type": "sing",
+      "text": "solDo",
+      "mode": "listenFirst",
+      "score": {
+        "tempo": 72,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "G4",
+            "start": 0,
+            "duration": 1
+          },
+          {
+            "note": "C4",
+            "start": 1,
+            "duration": 1
+          },
+          {
+            "note": "F4",
+            "start": 2,
+            "duration": 1
+          },
+          {
+            "note": "C4",
+            "start": 3,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 4,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 6,
+            "duration": 2
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "sing",
+      "text": "leapsAlong",
+      "mode": "along",
+      "score": {
+        "tempo": 72,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 1,
+            "duration": 1
+          },
+          {
+            "note": "F4",
+            "start": 2,
+            "duration": 1
+          },
+          {
+            "note": "E4",
+            "start": 3,
+            "duration": 1
+          },
+          {
+            "note": "D4",
+            "start": 4,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 5,
+            "duration": 1
+          },
+          {
+            "note": "C4",
+            "start": 6,
+            "duration": 2
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { IndexedPage } from '../../components/IndexedPage';
 import { AppearanceSettings } from './AppearanceSettings';
 import { DataSettings } from './DataSettings';
+import { DeviceSettings } from './DeviceSettings';
 import { DevKeyboardSettings } from './DevKeyboardSettings';
 import { InputSettings } from './InputSettings';
 import { LanguageSettings } from './LanguageSettings';
@@ -33,6 +34,7 @@ const GROUPS = [
   {
     heading: 'settings.groups.sound',
     sections: [
+      { id: 'devices', heading: 'settings.devices.heading', Card: DeviceSettings },
       { id: 'sound', heading: 'settings.sound.heading', Card: SoundSettings },
       { id: 'voice', heading: 'settings.voice.heading', Card: VoiceSettings },
     ],

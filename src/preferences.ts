@@ -1,10 +1,17 @@
 /** User preference changes that touch more than the stored settings. */
 import { setSoundTimingCorrection, setVolumes } from './audio/audio';
-import { timingForOutput, useSoundOutput } from './audio/output';
+import { chooseSoundOutput, timingForOutput, useSoundOutput } from './audio/output';
 import { changeLanguage } from './i18n';
 import { detectLanguage } from './i18n/languages';
 import { setDevInputEnabled } from './input/dev/devInput';
-import { setMicDelay, setMicGate, startMic, stopMic } from './input/mic/micInput';
+import {
+  MicStatus,
+  setMicDelay,
+  setMicGate,
+  startMic,
+  stopMic,
+  useMic,
+} from './input/mic/micInput';
 import type { InputMode } from './input/routing';
 import { type Settings, updateSettings, useSettings } from './storage/settings';
 import { applyTheme, type Theme } from './ui/appearance';
@@ -60,6 +67,21 @@ export function setInputMode(inputMode: InputMode): void {
 export async function enableMic(deviceId: string | null = useSettings.getState().micDeviceId) {
   updateSettings({ micEnabled: true, micDeviceId: deviceId });
   await startMic(deviceId);
+}
+
+/**
+ * The microphone to use (null: the default), for the piano and for singing; it restarts with
+ * it when it's on.
+ */
+export async function chooseMicrophone(deviceId: string | null): Promise<void> {
+  updateSettings({ micDeviceId: deviceId });
+  if (useMic.getState().status === MicStatus.On) await startMic(deviceId);
+}
+
+/** The output to play through (null: the system's default), from now on. */
+export function chooseSpeakers(deviceId: string | null): void {
+  updateSettings({ soundOutputId: deviceId });
+  chooseSoundOutput(deviceId);
 }
 
 export function disableMic(): void {
