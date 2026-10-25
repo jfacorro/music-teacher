@@ -105,6 +105,8 @@ export const SheetNotation = {
   Names: 'names',
   Plain: 'plain',
   Grand: 'grand',
+  /** Singing with letter note names: do, re, mi from the key note (movable do). */
+  Syllables: 'syllables',
 } as const;
 export type SheetNotation = (typeof SheetNotation)[keyof typeof SheetNotation];
 
@@ -115,8 +117,15 @@ export const SHEET_NOTATIONS: readonly SheetNotation[] = [
   SheetNotation.Grand,
 ];
 
-/** Singing's (milestone 6.5): one staff, with note names or nothing under the notes. */
-export const SING_NOTATIONS: readonly SheetNotation[] = [SheetNotation.Names, SheetNotation.Plain];
+/**
+ * Singing's (milestone 6.5): one staff, with do, re, mi from the key note, note names or nothing
+ * under the notes. Do, re, mi only with letter note names (`singNotations`).
+ */
+export const SING_NOTATIONS: readonly SheetNotation[] = [
+  SheetNotation.Syllables,
+  SheetNotation.Names,
+  SheetNotation.Plain,
+];
 
 export interface ExerciseStep extends StepBase {
   type: typeof StepType.Exercise;

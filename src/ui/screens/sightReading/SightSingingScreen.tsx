@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { preloadAudio } from '../../../audio/audio';
 import { VOICE_UNITS } from '../../../content/courses';
-import { ScoreView, SheetNotation, SING_NOTATIONS } from '../../../content/lessons';
+import { ScoreView, SheetNotation } from '../../../content/lessons';
 import {
   freshSingDrillSeed,
   makeSingDrill,
@@ -23,6 +23,7 @@ import { SING_CENTS, SingMode } from '../../../engine/singing';
 import { fitToRange } from '../../../engine/transpose';
 import type { VocalRange } from '../../../engine/vocalRange';
 import { useContentText } from '../../../i18n/useContentText';
+import { useNoteNames } from '../../../i18n/useNoteNames';
 import { isValueOf } from '../../../lib/values';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
 import { useSettings } from '../../../storage/settings';
@@ -32,7 +33,8 @@ import { useMicWhileShown } from '../../hooks';
 import { ICONS } from '../../icons';
 import { useTopBarDetail } from '../../topBar';
 import { NotationSelect } from '../practice/ViewToggle';
-import { KeyNoteButton } from '../singing/KeyNoteButton';
+import { KeyNoteButton, MovableDoNote } from '../singing/KeyNoteButton';
+import { singNotations, startNotation } from '../singing/singNotation';
 import { SingRun } from '../singing/SingRun';
 
 type DrillMode = typeof SingMode.Wait | typeof SingMode.Along;
@@ -115,7 +117,8 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
   const inAddress = seed !== null && asked === level;
 
   const [mode, setMode] = useState<DrillMode>(SingMode.Wait);
-  const [notation, setNotation] = useState<SheetNotation>(SheetNotation.Names);
+  const { system } = useNoteNames();
+  const [notation, setNotation] = useState<SheetNotation>(() => startNotation(system, null));
   // Reading at sight: the app doesn't play the melody unless asked to.
   const [guide, setGuide] = useState(false);
   const [metronome, setMetronome] = useState(true);
@@ -192,7 +195,11 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
             </button>
           ))}
         </div>
-        <NotationSelect notation={notation} onChange={setNotation} options={SING_NOTATIONS} />
+        <NotationSelect
+          notation={notation}
+          onChange={setNotation}
+          options={singNotations(system)}
+        />
         <label className="checkbox" title={t(`sing.guideTip.${mode}`)}>
           <input type="checkbox" checked={guide} onChange={(e) => setGuide(e.target.checked)} />
           {t('sing.guide')}
@@ -210,6 +217,7 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
         <KeyNoteButton score={fit.score} />
         <VolumeButton />
       </div>
+      {notation === SheetNotation.Syllables && <MovableDoNote score={fit.score} />}
       {!fit.fits && <p className="notice">{t('sing.beyondRange')}</p>}
 
       <SingRun

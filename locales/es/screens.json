@@ -416,7 +416,8 @@
       "label": "Notación",
       "names": "Con nombres",
       "plain": "Sin nombres",
-      "grand": "Dos pentagramas"
+      "grand": "Dos pentagramas",
+      "syllables": "Do, re, mi desde la tónica"
     },
     "speed": "Velocidad",
     "speedValue": "{percent} · {bpm} BPM",
@@ -967,7 +968,8 @@
       "inTuneShare": "afinada el {share} del tiempo"
     },
     "keyNote": "Tocar {note}",
-    "keyNoteTip": "Escucha la tónica, {note}, para encontrar la primera nota antes de cantar"
+    "keyNoteTip": "Escucha la tónica, {note}, para encontrar la primera nota antes de cantar",
+    "movableDo": "Toda la melodía se mueve para ajustarse a tu registro, así que do es su tónica, caiga donde caiga: aquí, do es {note}."
   },
   "sightSinging": {
     "title": "Lectura cantada",
@@ -984,5 +986,14 @@
       "wait": "Espérame",
       "along": "Cantar a tiempo"
     }
+  },
+  "solfa": {
+    "do": "do",
+    "re": "re",
+    "mi": "mi",
+    "fa": "fa",
+    "sol": "sol",
+    "la": "la",
+    "ti": "si"
   }
 }

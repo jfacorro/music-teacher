@@ -69,16 +69,16 @@
       "description": "Pasar de una nota a otra deslizando la voz: sirenas y deslizamientos, primero esperando cada nota y después a tiempo con el pulso."
     },
     "v4": {
-      "title": "Grados conjuntos: do, re, mi",
-      "description": "Melodías que se mueven por grados conjuntos, de do-re-mi hasta sol, y dos melodías conocidas."
+      "title": "Grados conjuntos",
+      "description": "Melodías que se mueven por grados conjuntos, de la tónica hasta el quinto grado, y dos melodías conocidas."
     },
     "v5": {
       "title": "Saltos",
-      "description": "Pasar por encima de notas: do-mi-sol, cuartas y quintas, la octava y una melodía conocida."
+      "description": "Pasar por encima de notas: 1-3-5, cuartas y quintas, la octava y una melodía conocida."
     },
     "v6": {
       "title": "Escalas mayor y menor",
-      "description": "La escala mayor de do a do, después la menor, y cómo la tercera las distingue."
+      "description": "La escala mayor de tónica a tónica, después la menor, y cómo la tercera las distingue."
     },
     "v7": {
       "title": "Leer en el pentagrama",
@@ -162,10 +162,10 @@
     "v3-l1": "Sirenas",
     "v3-l2": "Deslizamientos a tiempo",
     "v3-l3": "Cantar con la guía",
-    "v4-l1": "Do, re, mi",
-    "v4-l2": "Hasta sol",
+    "v4-l1": "1, 2, 3",
+    "v4-l2": "Hasta el quinto grado",
     "v4-l3": "Melodías por grados",
-    "v5-l1": "Do, mi, sol",
+    "v5-l1": "1, 3, 5",
     "v5-l2": "Cuartas y quintas",
     "v5-l3": "La octava",
     "v6-l1": "La escala mayor",

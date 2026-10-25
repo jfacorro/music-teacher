@@ -416,7 +416,8 @@
       "label": "Notation",
       "names": "Note names",
       "plain": "No names",
-      "grand": "Both staves"
+      "grand": "Both staves",
+      "syllables": "Do, re, mi from the key note"
     },
     "speed": "Speed",
     "speedValue": "{percent} · {bpm} BPM",
@@ -967,7 +968,8 @@
       "inTuneShare": "in tune {share} of the time"
     },
     "keyNote": "Play {note}",
-    "keyNoteTip": "Hear the key note, {note}, to find the first note before you sing"
+    "keyNoteTip": "Hear the key note, {note}, to find the first note before you sing",
+    "movableDo": "The whole melody is moved to fit your range, so do is its key note, wherever that lands: here, do is {note}."
   },
   "sightSinging": {
     "title": "Sight-singing",
@@ -984,5 +986,14 @@
       "wait": "Wait for me",
       "along": "Sing along"
     }
+  },
+  "solfa": {
+    "do": "do",
+    "re": "re",
+    "mi": "mi",
+    "fa": "fa",
+    "sol": "sol",
+    "la": "la",
+    "ti": "ti"
   }
 }

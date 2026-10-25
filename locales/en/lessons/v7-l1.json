@@ -1,9 +1,9 @@
 {
   "steps": {
     "warmUp": "Start with the warm-up, as in every singing lesson: a few easy minutes to wake up your voice.",
-    "staff": "Singers read music from the staff too. Each line and each space is a note: from a line up to the next space, or from a space up to the next line, is one step. The app moves each melody to fit your voice, so it may be written higher or lower than here, in another key, or on the bass staff if your voice is low. To help at first, each note’s name is written under it.",
-    "withNames": "Read along as you sing, with the note names under the notes. With the guide melody on, the app plays the melody once first; then the music waits at each note.",
-    "readSteps": "Now the app doesn’t play the melody first. Press the button to hear the key note, the one the melody comes home to, then read each note and sing it. If you get lost, Hear it again plays the note you’re on.",
-    "noNames": "Steps again, this time without the names under the notes. Hear the key note, then follow the notes up and down the staff."
+    "staff": "Singers read music from the staff too. Each line and each space is a note: from a line up to the next space, or from a space up to the next line, is one step, like do to re. Do is the key note, the one the melody comes home to. The app moves each melody to fit your voice, so for you do may sit on another line, or on the bass staff if your voice is low. To help at first, do, re, mi are written under the notes.",
+    "withNames": "Read along as you sing, with do, re, mi under each note. With the guide melody on, the app plays the melody once first; then the music waits at each note.",
+    "readSteps": "Now the app doesn’t play the melody first. Press the button to hear do, the key note, then read each note and sing it. If you get lost, Hear it again plays the note you’re on.",
+    "noNames": "Steps again, this time without do, re, mi under the notes. Hear do, then follow the notes up and down the staff."
   }
 }

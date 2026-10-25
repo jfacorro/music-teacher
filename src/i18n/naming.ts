@@ -26,7 +26,7 @@ export interface NoteNameOptions {
 /** A spelled note; the MIDI number isn't needed for naming. */
 export type Spelled = Pick<Pitch, 'step' | 'alter' | 'octave'>;
 
-const ACCIDENTAL_SYMBOLS: Record<Alter, string> = {
+export const ACCIDENTAL_SYMBOLS: Record<Alter, string> = {
   [-2]: '𝄫',
   [-1]: '♭',
   0: '',

@@ -52,3 +52,19 @@ export function KeyNoteButton({ score }: { score: Score }) {
     </button>
   );
 }
+
+/**
+ * Under do, re, mi: the melody was moved into the singer's range, so do is wherever its key note
+ * landed (named with the note names).
+ */
+export function MovableDoNote({ score }: { score: Score }) {
+  const { t } = useTranslation('screens');
+  const names = useNoteNames();
+  const keyFifths = score.keyFifths ?? 0;
+  const step = keyStepOf(keyFifths);
+  const note = names.name(
+    { step, alter: keyAlterOf(step, keyFifths), octave: 4 },
+    { octave: false },
+  );
+  return <p className="muted">{t('sing.movableDo', { note })}</p>;
+}
