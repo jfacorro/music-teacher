@@ -31,8 +31,8 @@ const SCHEME = 'app';
 const START_URL = process.env.PIANO_TEACHER_URL ?? `${SCHEME}://piano-teacher/`;
 const SMOKE = process.env.PIANO_TEACHER_SMOKE === '1';
 
-/** What the app may use without asking: the MIDI keyboard and the microphone. */
-const ALLOWED = new Set(['midi', 'midiSysex', 'media']);
+/** What the app may use without asking: the MIDI keyboard, the microphone, the sound output. */
+const ALLOWED = new Set(['midi', 'midiSysex', 'media', 'speaker-selection']);
 
 /** Menu languages (locales/<language>/desktop.json); others fall back to English. */
 const MENU_LANGUAGES = ['en', 'es'];

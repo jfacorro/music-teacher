@@ -7,6 +7,7 @@ import { useMic, MicStatus } from '../../../input/mic/micInput';
 import { disableMic, enableMic, setMicCalibration } from '../../../preferences';
 import { useSettings } from '../../../storage/settings';
 import { pitchFromMidi } from '../../../theory/pitch';
+import { MicrophoneSelect } from './DeviceSettings';
 
 const CalibrationTask = {
   Idle: 'idle',
@@ -33,14 +34,11 @@ type Task =
 export function MicSettings() {
   const { t } = useTranslation('screens');
   const status = useMic((s) => s.status);
-  const devices = useMic((s) => s.devices);
-  const deviceId = useMic((s) => s.deviceId);
   const noiseFloorDb = useSettings((s) => s.micNoiseFloorDb);
   const sensitivityDb = useSettings((s) => s.micSensitivityDb);
   const latencyMs = useSettings((s) => s.micLatencyMs);
   const course = useSettings((s) => s.course);
   const [task, setTask] = useState<Task>({ kind: CalibrationTask.Idle });
-  const deviceSelectId = useId();
   const sensitivityId = useId();
 
   const busy = task.kind === CalibrationTask.Noise || task.kind === CalibrationTask.Delay;
@@ -100,20 +98,7 @@ export function MicSettings() {
 
       {status === MicStatus.On && (
         <>
-          <div className="field">
-            <label htmlFor={deviceSelectId}>{t('settings.mic.device')}</label>
-            <select
-              id={deviceSelectId}
-              value={deviceId ?? ''}
-              onChange={(e) => void enableMic(e.target.value)}
-            >
-              {devices.map((device) => (
-                <option key={device.id} value={device.id}>
-                  {device.label || t('settings.mic.unnamedDevice')}
-                </option>
-              ))}
-            </select>
-          </div>
+          <MicrophoneSelect />
 
           <MicMeter gateDb={noiseFloorDb + sensitivityDb} noiseFloorDb={noiseFloorDb} />
 

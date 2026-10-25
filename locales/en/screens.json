@@ -212,6 +212,20 @@
       "saveHint": "Saves one file (.json) with the microphone audio and the notes you played on MIDI. Put it in the project’s fixtures/mic folder.",
       "together": "Notes played together (not counted yet)"
     },
+    "devices": {
+      "heading": "Microphone and speakers",
+      "intro": "Choose the microphone the app listens to and where its sound plays, for the piano and for singing.",
+      "unnamed": "The browser shows the devices’ names only once the microphone is allowed.",
+      "showNames": "Show device names",
+      "microphone": "Microphone",
+      "speakers": "Speakers or headphones",
+      "unnamedSpeakers": "Sound output",
+      "systemDefault": "System default",
+      "chosenMissing": "Your choice (not connected)",
+      "missingHint": "Your choice isn’t connected, so the system default is used until it is.",
+      "defaultOutputOnly": "This browser always plays through the system’s default output. To choose speakers or headphones, use Chrome, Edge or the desktop app.",
+      "timing": "The click timing is measured for each output (see Sound and timing)."
+    },
     "sound": {
       "heading": "Sound and timing",
       "metronome": "Metronome in exercises",
