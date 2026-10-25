@@ -96,7 +96,7 @@ export function ProgressScreen() {
         ? t('sightReading.logTitle', { level: levelName(id) })
         : t('sightReading.title');
     }
-    if (kind === ResultKind.Ear) {
+    if (kind === ResultKind.Ear || kind === ResultKind.VoiceEar) {
       return isValueOf(EarLevel, id)
         ? t('earTraining.logTitle', { level: earLevelName(id) })
         : t('earTraining.title');

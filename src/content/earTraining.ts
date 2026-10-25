@@ -250,7 +250,7 @@ export function earQuestions(
 }
 
 /** Along a scale: mostly steps, some thirds, no key twice in a row. */
-function melody(random: Random, scale: readonly number[], length: number): number[] {
+export function melody(random: Random, scale: readonly number[], length: number): number[] {
   const indexes = [Math.floor(random() * scale.length)];
   while (indexes.length < length) {
     const last = indexes.at(-1)!;

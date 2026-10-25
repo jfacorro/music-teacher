@@ -16,6 +16,7 @@ describe('COURSE_SECTIONS', () => {
     expect(COURSE_SECTIONS[Course.Voice]).toEqual([
       Section.Home,
       Section.Learn,
+      Section.EarTraining,
       Section.Tuner,
       Section.Settings,
     ]);

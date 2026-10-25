@@ -67,6 +67,42 @@
           "skills": ["stepwise"]
         }
       ]
+    },
+    {
+      "id": "v5",
+      "level": "elementary",
+      "lessons": [
+        {
+          "id": "v5-l1",
+          "skills": ["leaps"]
+        },
+        {
+          "id": "v5-l2",
+          "skills": ["leaps"]
+        },
+        {
+          "id": "v5-l3",
+          "skills": ["leaps"]
+        }
+      ]
+    },
+    {
+      "id": "v6",
+      "level": "elementary",
+      "lessons": [
+        {
+          "id": "v6-l1",
+          "skills": ["singing-scales"]
+        },
+        {
+          "id": "v6-l2",
+          "skills": ["singing-scales"]
+        },
+        {
+          "id": "v6-l3",
+          "skills": ["singing-scales"]
+        }
+      ]
     }
   ]
 }

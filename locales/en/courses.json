@@ -71,6 +71,14 @@
     "v4": {
       "title": "Steps: do, re, mi",
       "description": "Melodies that move by steps, from do-re-mi up to sol, and two well-known tunes."
+    },
+    "v5": {
+      "title": "Leaps",
+      "description": "Skipping over notes: do-mi-sol, fourths and fifths, the octave, and a well-known tune."
+    },
+    "v6": {
+      "title": "Major and minor scales",
+      "description": "The major scale from do to do, then the minor, and how the third tells them apart."
     }
   },
   "lessons": {
@@ -152,7 +160,13 @@
     "v3-l3": "Singing along",
     "v4-l1": "Do, re, mi",
     "v4-l2": "Up to sol",
-    "v4-l3": "Step melodies"
+    "v4-l3": "Step melodies",
+    "v5-l1": "Do, mi, sol",
+    "v5-l2": "Fourths and fifths",
+    "v5-l3": "The octave",
+    "v6-l1": "The major scale",
+    "v6-l2": "The minor scale",
+    "v6-l3": "Major or minor"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -189,6 +203,9 @@
     "breathing": "Breathing",
     "pitch-matching": "Matching pitch",
     "slides": "Slides and sirens",
-    "stepwise": "Singing by steps"
+    "stepwise": "Singing by steps",
+    "leaps": "Singing leaps",
+    "singing-scales": "Singing scales",
+    "singing-by-ear": "Singing by ear"
   }
 }

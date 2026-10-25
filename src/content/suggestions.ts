@@ -62,6 +62,8 @@ export interface PracticeInput {
   drillLevels: readonly DrillLevel[];
   /** Ear-training levels open, easiest first. */
   earLevels: readonly EarLevel[];
+  /** How ear training is saved: the piano's (by default) or the voice's. */
+  earKind?: ResultKind;
   now: number;
   /** Targets not to suggest again (by result key), e.g. already in today's plan. */
   exclude?: ReadonlySet<string>;
@@ -154,7 +156,7 @@ export function suggestPractice(input: PracticeInput): Suggestion[] {
     add({ kind, target: { kind: resultKind, id: level }, ...(last > 0 && { lastPlayedAt: last }) });
   };
   exercise(SuggestionKind.Drill, ResultKind.Drill, input.drillLevels);
-  exercise(SuggestionKind.Ear, ResultKind.Ear, input.earLevels);
+  exercise(SuggestionKind.Ear, input.earKind ?? ResultKind.Ear, input.earLevels);
 
   // The weakest skill started: its lesson played least well (short of three stars), or else an
   // open one not played yet. Lessons already played at three-star accuracy aren't suggested.
