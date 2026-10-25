@@ -79,6 +79,10 @@
     "v6": {
       "title": "Escalas mayor y menor",
       "description": "La escala mayor de do a do, después la menor, y cómo la tercera las distingue."
+    },
+    "v7": {
+      "title": "Leer en el pentagrama",
+      "description": "Melodías leídas en el pentagrama, con do, re, mi bajo las notas y después sin ellos, hasta dos canciones conocidas."
     }
   },
   "lessons": {
@@ -166,7 +170,10 @@
     "v5-l3": "La octava",
     "v6-l1": "La escala mayor",
     "v6-l2": "La escala menor",
-    "v6-l3": "¿Mayor o menor?"
+    "v6-l3": "¿Mayor o menor?",
+    "v7-l1": "Do en el pentagrama",
+    "v7-l2": "Saltos en el pentagrama",
+    "v7-l3": "Leer una melodía"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -206,6 +213,8 @@
     "stepwise": "Cantar por grados conjuntos",
     "leaps": "Cantar saltos",
     "singing-scales": "Cantar escalas",
-    "singing-by-ear": "Cantar de oído"
+    "singing-by-ear": "Cantar de oído",
+    "reading-melodies": "Leer melodías",
+    "sight-singing": "Lectura cantada a primera vista"
   }
 }

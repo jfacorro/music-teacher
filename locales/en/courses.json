@@ -79,6 +79,10 @@
     "v6": {
       "title": "Major and minor scales",
       "description": "The major scale from do to do, then the minor, and how the third tells them apart."
+    },
+    "v7": {
+      "title": "Reading from the staff",
+      "description": "Melodies read from the staff, with do, re, mi under the notes and then without, up to two well-known tunes."
     }
   },
   "lessons": {
@@ -166,7 +170,10 @@
     "v5-l3": "The octave",
     "v6-l1": "The major scale",
     "v6-l2": "The minor scale",
-    "v6-l3": "Major or minor"
+    "v6-l3": "Major or minor",
+    "v7-l1": "Do on the staff",
+    "v7-l2": "Skips on the staff",
+    "v7-l3": "Reading a melody"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -206,6 +213,8 @@
     "stepwise": "Singing by steps",
     "leaps": "Singing leaps",
     "singing-scales": "Singing scales",
-    "singing-by-ear": "Singing by ear"
+    "singing-by-ear": "Singing by ear",
+    "reading-melodies": "Reading melodies",
+    "sight-singing": "Sight-singing"
   }
 }

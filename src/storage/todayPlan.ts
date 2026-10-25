@@ -11,6 +11,7 @@ import { type Suggestion, suggestPractice, targetKey } from '../content/suggesti
 import { openEarLevels } from '../content/earTraining';
 import { openVoiceEarLevels } from '../content/voiceEar';
 import { openDrillLevels } from '../content/sightReading';
+import { openSingDrillLevels } from '../content/sightSinging';
 import { lessonStates } from '../content/unlock';
 import { dayOf, db, type ResultRow } from './db';
 import { useMySongs } from './mySongs';
@@ -73,7 +74,7 @@ function suggestNow(course: Course, now: number, exclude?: ReadonlySet<string>):
     (id) => lessonResult(id)?.bestAccuracy ?? null,
     exerciseAccuracies(log),
   );
-  // The voice has its lessons and ear training, for now: the songs and drills are the piano's.
+  // The voice has its lessons, sight-singing and ear training, for now: the songs are the piano's.
   if (course === Course.Voice) {
     return suggestPractice({
       units,
@@ -81,7 +82,8 @@ function suggestNow(course: Course, now: number, exclude?: ReadonlySet<string>):
       results,
       songs: [],
       skills,
-      drillLevels: [],
+      drillLevels: openSingDrillLevels(units, states),
+      drillKind: ResultKind.VoiceDrill,
       earLevels: openVoiceEarLevels(units, states),
       earKind: ResultKind.VoiceEar,
       now,

@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import type { SingStep } from '../../../../content/lessons';
 import type { StepResult } from '../../../../content/lessons/result';
-import { ScoreView } from '../../../../content/lessons/lesson';
+import { SING_NOTATIONS, ScoreView, SheetNotation } from '../../../../content/lessons/lesson';
 import { SING_CENTS, SING_CENTS_STRICT, SingMode } from '../../../../engine/singing';
 import { fitToRange } from '../../../../engine/transpose';
 import { useSettings } from '../../../../storage/settings';
 import { useMicWhileShown } from '../../../hooks';
 import { NotationSelect, ViewToggle } from '../../practice/ViewToggle';
+import { KeyNoteButton, MovableDoNote } from '../../singing/KeyNoteButton';
 import { SingRun } from '../../singing/SingRun';
 
 interface SingStepViewProps {
@@ -25,7 +26,11 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
   const range = useSettings((s) => s.vocalRange);
   const fit = useMemo(() => (range ? fitToRange(step.score, range) : null), [step, range]);
   const [view, setView] = useState(step.view);
-  const [notation, setNotation] = useState(() => useSettings.getState().sheetNotation);
+  const [notation, setNotation] = useState(() => {
+    if (step.notation) return step.notation;
+    const chosen = useSettings.getState().sheetNotation;
+    return SING_NOTATIONS.includes(chosen) ? chosen : SheetNotation.Names;
+  });
   const [guide, setGuide] = useState(step.guide);
   const [metronome, setMetronome] = useState(step.metronome);
   const passes = (stars: number) => stars >= step.pass.minStars;
@@ -46,7 +51,9 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
       <p className="lesson__text">{text}</p>
       <div className="practice__options">
         <ViewToggle view={view} onChange={setView} lane />
-        {view === ScoreView.Sheet && <NotationSelect notation={notation} onChange={setNotation} />}
+        {view === ScoreView.Sheet && (
+          <NotationSelect notation={notation} onChange={setNotation} options={SING_NOTATIONS} />
+        )}
         {step.mode !== SingMode.ListenFirst && (
           <label className="checkbox" title={t(`sing.guideTip.${step.mode}`)}>
             <input type="checkbox" checked={guide} onChange={(e) => setGuide(e.target.checked)} />
@@ -63,11 +70,15 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
             {t('practice.metronome')}
           </label>
         )}
+        {!guide && step.mode !== SingMode.ListenFirst && <KeyNoteButton score={fit.score} />}
         {step.pass.minStars > 0 && (
           <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
         )}
         {step.strict && <span className="muted">{t('sing.strict')}</span>}
       </div>
+      {view === ScoreView.Sheet && notation === SheetNotation.Syllables && (
+        <MovableDoNote score={fit.score} />
+      )}
       {!fit.fits && <p className="notice">{t('sing.beyondRange')}</p>}
       <SingRun
         // A new range or mode starts over.

@@ -99,19 +99,29 @@ export type ScoreView = (typeof ScoreView)[keyof typeof ScoreView];
 /**
  * Sheet music levels (PLAN.md §2.2): note names under the notes; no names; both staves
  * (the full grand staff even when practicing one hand). The first two show only the staff of
- * the hand being practiced.
+ * the hand being practiced. Singing (milestone 6.5) also has the syllables in movable do under
+ * the notes (do being the key note).
  */
 export const SheetNotation = {
   Names: 'names',
   Plain: 'plain',
   Grand: 'grand',
+  Syllables: 'syllables',
 } as const;
 export type SheetNotation = (typeof SheetNotation)[keyof typeof SheetNotation];
 
+/** The piano's (and the Settings default's) levels. */
 export const SHEET_NOTATIONS: readonly SheetNotation[] = [
   SheetNotation.Names,
   SheetNotation.Plain,
   SheetNotation.Grand,
+];
+
+/** Singing's: one staff, with syllables, note names or nothing under the notes. */
+export const SING_NOTATIONS: readonly SheetNotation[] = [
+  SheetNotation.Syllables,
+  SheetNotation.Names,
+  SheetNotation.Plain,
 ];
 
 export interface ExerciseStep extends StepBase {
@@ -188,6 +198,8 @@ export interface SingStep extends StepBase {
   score: Score;
   /** The view it starts in: the notes in a lane (`falling`) or sheet music. */
   view: ScoreView;
+  /** The sheet music level it starts with (one of `SING_NOTATIONS`); null = from Settings. */
+  notation: SheetNotation | null;
   /** In tune within ±25 cents instead of ±50. */
   strict: boolean;
   /** Only the written octave counts (after moving into the range). */
@@ -366,12 +378,24 @@ function sing(
     mode: data.mode,
     score,
     view,
+    notation: singNotation(data, location),
     strict: flag('strict', false),
     octave: flag('octave', false),
     guide: flag('guide', true),
     metronome: flag('metronome', false),
     pass: passRule(data, location),
   };
+}
+
+function singNotation(data: Record<string, unknown>, location: string): SheetNotation | null {
+  const notation = data.notation ?? null;
+  if (notation !== null && !SING_NOTATIONS.includes(notation as SheetNotation)) {
+    throw new LessonError(
+      at(location, 'notation'),
+      `expected ${SING_NOTATIONS.map((value) => `"${value}"`).join(', ')}`,
+    );
+  }
+  return notation as SheetNotation | null;
 }
 
 /** How many quiz cards or notes to match: 1–50, ten by default. */

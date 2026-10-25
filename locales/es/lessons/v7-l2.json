@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Empieza con el calentamiento, como en cada lección de canto: unos minutos tranquilos para despertar la voz.",
+    "skips": "Cuando una nota va de una línea a la línea siguiente, hacia arriba o hacia abajo, o de un espacio al espacio siguiente, se salta la nota del medio: es una tercera, como de do a mi. Cuanto más separadas están dos notas en el pentagrama, más grande es el salto: si do está en una línea, sol está dos líneas más arriba. Ya cantaste estos saltos en la unidad 5; ahora léelos. Antes de cada salto, escucha la nota siguiente en tu cabeza.",
+    "doMiSol": "Do, mi, sol: de línea a línea (o de espacio a espacio). Toca do primero y después lee y canta. La música espera en cada nota.",
+    "stepsAndSkips": "Grados conjuntos y saltos mezclados, sin do, re, mi bajo las notas. Mira primero cada movimiento: la nota de al lado en el pentagrama es un grado conjunto; una línea o un espacio más allá, un salto.",
+    "inTime": "Ahora a tiempo, con el metrónomo: toca do y, después de un compás de entrada, sigue y lee por adelantado. La música no espera."
+  }
+}

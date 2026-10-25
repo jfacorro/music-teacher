@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Start with the warm-up, as in every singing lesson: a few easy minutes to wake up your voice.",
+    "staff": "Singers read music from the staff too. Each line and each space is a note: from a line up to the next space, or from a space up to the next line, is one step, like do to re. Do is the key note. The app moves each melody to fit your voice, so for you do may sit on another line, or on the bass staff if your voice is low. To help at first, do, re, mi are written under the notes.",
+    "withSyllables": "Read along as you sing, with do, re, mi under each note. With the guide melody on, the app plays the melody once first; then the music waits at each note.",
+    "readSteps": "Now the app doesn’t play the melody first. Press Play do to hear the key note, then read each note and sing it. If you get lost, Hear it again plays the note you’re on.",
+    "noSyllables": "Steps again, this time without do, re, mi under the notes. Find do, then follow the notes up and down the staff."
+  }
+}

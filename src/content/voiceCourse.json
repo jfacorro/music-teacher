@@ -103,6 +103,24 @@
           "skills": ["singing-scales"]
         }
       ]
+    },
+    {
+      "id": "v7",
+      "level": "elementary",
+      "lessons": [
+        {
+          "id": "v7-l1",
+          "skills": ["reading-melodies"]
+        },
+        {
+          "id": "v7-l2",
+          "skills": ["reading-melodies"]
+        },
+        {
+          "id": "v7-l3",
+          "skills": ["reading-melodies"]
+        }
+      ]
     }
   ]
 }

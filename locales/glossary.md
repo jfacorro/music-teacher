@@ -181,6 +181,11 @@ system setting (`src/i18n/naming.ts`).
 | Sing it back (ear training)                   | sing back; answer by singing                         | cantar (lo que oíste); responder cantando               |
 | Singing by ear (skill)                        | singing by ear                                       | cantar de oído                                          |
 | Skip (a question)                             | skip                                                 | saltar                                                  |
+| Movable do (do = the key note)                | do, re, mi from the key note; movable do             | do, re, mi desde la tónica; do móvil                    |
+| Key note (tonic)                              | key note                                             | tónica                                                  |
+| Sight-singing (section and skill)             | sight-singing                                        | lectura cantada (a primera vista)                       |
+| Reading melodies (skill)                      | reading melodies                                     | leer melodías                                           |
+| Play do (hear the key note)                   | Play do                                              | Tocar do                                                |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
 their explanations are translated (`theory.json` › `markings`).

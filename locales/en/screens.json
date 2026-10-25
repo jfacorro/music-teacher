@@ -416,7 +416,8 @@
       "label": "Notation",
       "names": "Note names",
       "plain": "No names",
-      "grand": "Both staves"
+      "grand": "Both staves",
+      "syllables": "Do, re, mi from the key note"
     },
     "speed": "Speed",
     "speedValue": "{percent} · {bpm} BPM",
@@ -733,7 +734,8 @@
       "song": "Song",
       "skill": "Strengthen a skill",
       "drill": "Sight-reading",
-      "ear": "Ear training"
+      "ear": "Ear training",
+      "voiceDrill": "Sight-singing"
     },
     "details": {
       "next": "Pick up where you left off.",
@@ -964,6 +966,34 @@
       "steady": "Steady",
       "notSung": "not heard",
       "inTuneShare": "in tune {share} of the time"
+    },
+    "keyNote": "Play do",
+    "keyNoteTip": "Hear do, the key note, to find the first note before you sing",
+    "movableDo": "The whole melody is moved to fit your range, so do is its key note, wherever that lands: here, do is {note}."
+  },
+  "solfa": {
+    "do": "do",
+    "re": "re",
+    "mi": "mi",
+    "fa": "fa",
+    "sol": "sol",
+    "la": "la",
+    "ti": "ti"
+  },
+  "sightSinging": {
+    "title": "Sight-singing",
+    "intro": "Fresh music every time: read it from the staff and sing it, without hearing it first.",
+    "levels": {
+      "steps": "Steps, do to sol",
+      "leaps": "Leaps up to a fifth",
+      "rhythms": "Leaps, with rests and eighth notes"
+    },
+    "locked": "Sight-singing opens when you finish the unit “{unit}”.",
+    "noRange": "Find your range first, so the music fits your voice.",
+    "logTitle": "Sight-singing: {level}",
+    "modes": {
+      "wait": "Wait for me",
+      "along": "Sing along"
     }
   }
 }
