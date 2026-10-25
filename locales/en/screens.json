@@ -428,6 +428,8 @@
       "to": "to",
       "tip": "Tip: drag across bars on the music to repeat them.",
       "hint": "The chosen bars repeat until you stop.",
+      "weakSpot": "Today’s weak spot: play it through {count} times to tick it off ({done} of {count} so far).",
+      "weakSpotDone": "Today’s weak spot is ticked off. Keep going, or stop whenever you like.",
       "lastPass": "{count, plural, one {Once through} other {# times through}} · last time {accuracy}"
     },
     "otherHand": "Play the other hand",
@@ -740,8 +742,8 @@
     "details": {
       "next": "Pick up where you left off.",
       "review": "{days, plural, one {Last played yesterday: a quick review keeps it fresh.} other {Last played # days ago: a quick review keeps it fresh.}}",
-      "weakBar": "Bar {bar} needs some work: it repeats until you stop.",
-      "weakBars": "Bars {first}–{last} need some work: they repeat until you stop.",
+      "weakBar": "Bar {bar} needs some work: play it through {count} times.",
+      "weakBars": "Bars {first}–{last} need some work: play them through {count} times.",
       "newSong": "A song you haven’t played yet.",
       "song": "{days, plural, one {Not played since yesterday.} other {Not played for # days.}}",
       "skill": "Your weakest skill so far: {skill}.",

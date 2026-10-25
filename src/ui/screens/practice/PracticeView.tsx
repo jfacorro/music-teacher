@@ -6,8 +6,14 @@ import { preloadAudio } from '../../../audio/audio';
 import type { Score } from '../../../engine/score';
 import { HandFilter, type LoopRange, PracticeMode } from '../../../engine/session';
 import { weakSpot } from '../../../engine/weakSpots';
-import { recordResult, resultKey, type ResultKind } from '../../../storage/progress';
-import { markPracticed } from '../../../storage/todayPlan';
+import { recordResult, resultKey, type ResultKind, useProgress } from '../../../storage/progress';
+import {
+  isDone,
+  markPracticed,
+  todaysWeakSpot,
+  useTodayPlan,
+  WEAK_SPOT_PASSES,
+} from '../../../storage/todayPlan';
 import { parseBars } from '../../barSelection';
 import { ScoreView } from '../../../content/lessons';
 import { useSettings } from '../../../storage/settings';
@@ -36,9 +42,6 @@ interface PracticeViewProps {
   actions?: ReactNode;
 }
 
-/** Times through the repeated bars that count as practicing them (for today's plan). */
-const LOOP_PASSES_PRACTICED = 3;
-
 /**
  * Song header and practice options; each combination of options is a fresh run. The address
  * can ask for bars to repeat from the start (`?bars=5-6`, counted from 1).
@@ -63,6 +66,26 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
   const [otherHand, setOtherHand] = useState(false);
   /** Playing the last run back: the practice settings wait. */
   const [listening, setListening] = useState(false);
+
+  // Today's weak spot in this song: repeating its bars ticks it off, and the hint says how far.
+  const key = resultKey(result.kind, result.id);
+  const weak = useTodayPlan((s) => todaysWeakSpot(s.plans, key));
+  const weakDone = useProgress((s) => (weak ? isDone(weak, s.results) : false));
+  /** Times through the weak spot's bars, across modes and hands. */
+  const [weakPasses, setWeakPasses] = useState(0);
+  const onWeakSpot =
+    weak?.bars !== undefined &&
+    looping &&
+    loop.first <= weak.bars.first &&
+    loop.last >= weak.bars.last;
+  useEffect(() => {
+    if (weakPasses >= WEAK_SPOT_PASSES) markPracticed(key);
+  }, [weakPasses, key]);
+  const weakGoal = !onWeakSpot
+    ? null
+    : weakDone
+      ? t('practice.loop.weakSpotDone')
+      : t('practice.loop.weakSpot', { count: WEAK_SPOT_PASSES, done: weakPasses });
 
   /** null: stop repeating (keeping the bars for next time). */
   const chooseLoop = (range: LoopRange | null, on = true) => {
@@ -194,10 +217,11 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
             weakBars: weakSpot(summary.measures),
           })
         }
-        recordingKey={resultKey(result.kind, result.id)}
+        recordingKey={key}
         onListeningChange={setListening}
-        onLoopPass={(count) => {
-          if (count >= LOOP_PASSES_PRACTICED) markPracticed(resultKey(result.kind, result.id));
+        loopGoal={weakGoal}
+        onLoopPass={() => {
+          if (onWeakSpot) setWeakPasses((passes) => passes + 1);
         }}
       />
     </section>

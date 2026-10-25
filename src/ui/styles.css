@@ -2568,12 +2568,27 @@ button.bars__bar:focus-visible {
   font-weight: 600;
 }
 
+/* What to do is never cut: it wraps, below the title on a phone. */
 .today__detail {
+  flex: 1;
   min-inline-size: 0;
-  overflow: hidden;
   color: var(--muted);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .today__item {
+    flex-wrap: wrap;
+    row-gap: 0.2rem;
+  }
+
+  .today__detail {
+    flex-basis: 100%;
+    padding-inline-start: 1.8rem;
+  }
+
+  .today__item::after {
+    display: none;
+  }
 }
 
 .today__footer {

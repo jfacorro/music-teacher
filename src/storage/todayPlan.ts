@@ -7,7 +7,12 @@ import { create } from 'zustand';
 import { Course, COURSE_UNITS, UNITS } from '../content/courses';
 import { courseSkills, skillProgress } from '../content/skills';
 import { SONG_IDS, SONG_UNITS, VOICE_SONG_IDS, VOICE_SONGS_UNIT } from '../content/songs';
-import { type Suggestion, suggestPractice, targetKey } from '../content/suggestions';
+import {
+  type Suggestion,
+  SuggestionKind,
+  suggestPractice,
+  targetKey,
+} from '../content/suggestions';
 import { openEarLevels } from '../content/earTraining';
 import { openVoiceEarLevels } from '../content/voiceEar';
 import { openDrillLevels } from '../content/sightReading';
@@ -139,6 +144,21 @@ export function suggestMore(course: Course, now = Date.now()): boolean {
     items: [...current, ...more.map((suggestion) => ({ ...suggestion, since: now }))],
   });
   return true;
+}
+
+/** Times through a weak spot's bars that tick it off (practiced without finishing a run). */
+export const WEAK_SPOT_PASSES = 3;
+
+/** Today's weak spot for this song in a course's plan, if there's one. */
+export function todaysWeakSpot(
+  plans: Partial<Record<Course, TodayPlan>>,
+  key: string,
+  now = Date.now(),
+): PlanItem | undefined {
+  return Object.values(plans)
+    .filter((plan) => plan.day === dayOf(now))
+    .flatMap((plan) => plan.items)
+    .find((item) => item.kind === SuggestionKind.WeakSpot && targetKey(item.target) === key);
 }
 
 /** Ticks the plans' items for this lesson or song, practiced without finishing a run. */
