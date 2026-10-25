@@ -6,6 +6,7 @@
  * then the track's reported input latency and the calibrated delay are subtracted.
  */
 import { create } from 'zustand';
+import { devicesToChoose, sameDevices } from '../../audio/output';
 import { HeldNotes } from '../bus';
 import { NoteDetector, type PitchReading, READING_EVERY_HOPS } from './detector';
 import workletUrl from './capture-processor.js?url&no-inline';
@@ -147,13 +148,30 @@ export async function micPermission(): Promise<PermissionState | 'unknown'> {
 
 export async function refreshMicDevices(): Promise<void> {
   if (!isMicSupported()) return;
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  useMic.setState({
-    devices: devices
-      .filter((device) => device.kind === 'audioinput' && device.deviceId)
-      .map((device) => ({ id: device.deviceId, label: device.label })),
-  });
+  const devices = devicesToChoose(await navigator.mediaDevices.enumerateDevices(), 'audioinput');
+  if (!sameDevices(devices, useMic.getState().devices)) useMic.setState({ devices });
 }
+
+/**
+ * Asks for the microphone once, without listening, so the browser names the microphones and
+ * outputs to choose from. False if it was refused.
+ */
+export async function allowDeviceNames(): Promise<boolean> {
+  if (!isMicSupported()) return false;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach((track) => track.stop());
+  } catch (error) {
+    console.warn('Microphone access was not allowed', error);
+    if (useMic.getState().status !== MicStatus.On) useMic.setState({ status: MicStatus.Denied });
+    return false;
+  }
+  await refreshMicDevices();
+  return true;
+}
+
+/** Errors for a chosen microphone that isn't connected (any more). */
+const MISSING_DEVICE = new Set(['OverconstrainedError', 'NotFoundError']);
 
 export async function startMic(deviceId: string | null): Promise<void> {
   if (!isMicSupported()) {
@@ -221,6 +239,11 @@ export async function startMic(deviceId: string | null): Promise<void> {
     console.warn('Could not start the microphone', error);
     stream?.getTracks().forEach((track) => track.stop());
     void context?.close();
+    // The chosen microphone was unplugged: the default one is better than none.
+    if (deviceId && error instanceof Error && MISSING_DEVICE.has(error.name)) {
+      await startMic(null);
+      return;
+    }
     const denied =
       error instanceof DOMException &&
       (error.name === 'NotAllowedError' || error.name === 'SecurityError');

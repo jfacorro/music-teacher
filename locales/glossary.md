@@ -173,6 +173,8 @@ system setting (`src/i18n/naming.ts`).
 | Notes in a lane (the singing view)            | notes in a lane                                      | notas en un carril                                      |
 | Echo cancellation                             | take the app’s sound out of the microphone           | quitar el sonido de la aplicación del micrófono         |
 | Speakers                                      | speakers                                             | altavoces                                               |
+| Sound output (device)                         | sound output                                         | salida de sonido                                        |
+| System default (device)                       | system default                                       | predeterminado del sistema                              |
 | Leap (skipping over notes)                    | leap; singing leaps                                  | salto; cantar saltos                                    |
 | Whole step                                    | whole step                                           | tono                                                    |
 | Fourth (interval)                             | fourth                                               | cuarta                                                  |

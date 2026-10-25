@@ -212,6 +212,20 @@
       "saveHint": "Guarda un archivo (.json) con el audio del micrófono y las notas que tocaste por MIDI. Ponlo en la carpeta fixtures/mic del proyecto.",
       "together": "Notas tocadas a la vez (aún no se cuentan)"
     },
+    "devices": {
+      "heading": "Micrófono y altavoces",
+      "intro": "Elige el micrófono que escucha la app y por dónde suena, para el piano y para cantar.",
+      "unnamed": "El navegador muestra los nombres de los dispositivos solo cuando permites el micrófono.",
+      "showNames": "Mostrar nombres de los dispositivos",
+      "microphone": "Micrófono",
+      "speakers": "Altavoces o auriculares",
+      "unnamedSpeakers": "Salida de sonido",
+      "systemDefault": "Predeterminado del sistema",
+      "chosenMissing": "Tu elección (desconectado)",
+      "missingHint": "Lo que elegiste no está conectado, así que se usa el predeterminado del sistema hasta que lo conectes.",
+      "defaultOutputOnly": "Este navegador siempre usa la salida de sonido predeterminada del sistema. Para elegir altavoces o auriculares, usa Chrome, Edge o la app de escritorio.",
+      "timing": "La sincronización de los clics se mide para cada salida (en “Sonido y sincronización”)."
+    },
     "sound": {
       "heading": "Sonido y sincronización",
       "metronome": "Metrónomo en los ejercicios",

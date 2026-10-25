@@ -1,5 +1,10 @@
-import { preloadAudio, setSoundTimingCorrection, setVolumes } from './audio/audio';
-import { useSoundOutput, watchSoundOutput } from './audio/output';
+import {
+  preloadAudio,
+  setSoundOutputDevice,
+  setSoundTimingCorrection,
+  setVolumes,
+} from './audio/audio';
+import { chooseSoundOutput, useSoundOutput, watchSoundOutput } from './audio/output';
 import { startKeySound } from './audio/keySound';
 import { initI18n } from './i18n';
 import { detectLanguage } from './i18n/languages';
@@ -43,6 +48,9 @@ export async function bootstrap(): Promise<void> {
   setSoundTimingCorrection(settings.soundTimingMs);
   // The click timing follows the sound output (Bluetooth headphones need much more).
   useSoundOutput.subscribe(({ name }) => followSoundOutput(name));
+  // Chosen in Settings → Microphone and speakers; the default while it's not connected.
+  useSoundOutput.subscribe(({ deviceId }) => setSoundOutputDevice(deviceId));
+  chooseSoundOutput(settings.soundOutputId);
   watchSoundOutput();
   setVolumes({ metronome: settings.metronomeVolume, piano: settings.pianoVolume });
   preloadAudio(); // so the first key press isn't delayed by loading the audio library

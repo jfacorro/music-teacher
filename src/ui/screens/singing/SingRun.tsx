@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { startAccompaniment } from '../../../audio/accompaniment';
-import { audioIfReady, soundLeadMs, startAudio } from '../../../audio/audio';
+import { audioIfReady, sendToSoundOutput, soundLeadMs, startAudio } from '../../../audio/audio';
 import { startMetronome } from '../../../audio/metronome';
 import { ScoreView, type SheetNotation } from '../../../content/lessons';
 import {
@@ -233,6 +233,7 @@ export function SingRun({
     if (!take) return;
     stopListening();
     const audio = new Audio(take.url);
+    sendToSoundOutput(audio);
     audio.addEventListener('ended', () => setPlayingBack(false));
     player.current = audio;
     setPlayingBack(true);

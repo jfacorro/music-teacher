@@ -28,6 +28,8 @@ export interface Settings {
   soundTimingMs: number;
   /** The timing measured for each sound output, by its name; followed as outputs change. */
   soundTimings: Record<string, number>;
+  /** The output to play through while it's connected; null for the system's default. */
+  soundOutputId: string | null;
   /** Metronome clicks, 0–100 %. */
   metronomeVolume: number;
   /** Whether exercises start with the metronome on: as each one usually does, always or never. */
@@ -39,6 +41,7 @@ export interface Settings {
   /** Which instrument the app listens to (PLAN.md §8 Settings). */
   inputMode: InputMode;
   micEnabled: boolean;
+  /** The microphone to use (Settings → Microphone and speakers); null for the default. */
   micDeviceId: string | null;
   /** Measured background level, dBFS. */
   micNoiseFloorDb: number;
@@ -74,6 +77,7 @@ export const DEFAULT_SETTINGS: Settings = {
   keySound: true,
   soundTimingMs: 0,
   soundTimings: {},
+  soundOutputId: null,
   metronomeVolume: DEFAULT_VOLUMES.metronome,
   exerciseMetronome: MetronomeChoice.Auto,
   pianoVolume: DEFAULT_VOLUMES.piano,

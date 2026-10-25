@@ -62,6 +62,35 @@ export function soundLeadMs(): number {
 
 let engine: Promise<AudioEngine> | null = null;
 let ready: AudioEngine | null = null;
+let audioContext: AudioContext | null = null;
+/** The sound output to play through ('' for the system's default; see output.ts). */
+let outputDeviceId = '';
+
+/** Something that can play through a chosen output (Chrome, Edge and the desktop app can). */
+interface SinkTarget {
+  setSinkId?: (id: string) => Promise<void>;
+}
+
+function playThrough(target: SinkTarget, id: string): void {
+  if (typeof target.setSinkId !== 'function') return;
+  target.setSinkId(id).catch((error: unknown) => {
+    console.warn('Could not switch the sound output', error);
+    // A device that just went away: back to the default.
+    if (id) target.setSinkId?.('').catch(() => {});
+  });
+}
+
+/** Sends the app's sound to an output ('' for the system's default), from now on. */
+export function setSoundOutputDevice(id: string): void {
+  if (id === outputDeviceId) return;
+  outputDeviceId = id;
+  if (audioContext) playThrough(audioContext as SinkTarget, id);
+}
+
+/** Plays a sound element (e.g. a recording) through the same output as the app's sound. */
+export function sendToSoundOutput(element: HTMLMediaElement): void {
+  if (outputDeviceId) playThrough(element as SinkTarget, outputDeviceId);
+}
 
 /** Loads Tone.js ahead of time (no sound, no permission needed). */
 export function preloadAudio(): void {
@@ -83,6 +112,8 @@ async function createEngine(): Promise<AudioEngine> {
   // Hand Tone a native context: its own wrapper hides getOutputTimestamp/outputLatency,
   // which we need to line clicks up with the screen.
   const context = new AudioContext({ latencyHint: 'interactive' });
+  audioContext = context;
+  if (outputDeviceId) playThrough(context as SinkTarget, outputDeviceId);
   Tone.setContext(context);
   await Tone.start();
 
