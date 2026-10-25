@@ -16,6 +16,7 @@ import {
   type PlanItem,
   suggestMore,
   useTodayPlan,
+  WEAK_SPOT_PASSES,
 } from '../../storage/todayPlan';
 import { barsParam } from '../barSelection';
 import { isValueOf } from '../../lib/values';
@@ -94,8 +95,15 @@ export function TodayCard() {
         return t('today.details.review', { days: daysSince(item) });
       case SuggestionKind.WeakSpot:
         return item.bars && item.bars.first !== item.bars.last
-          ? t('today.details.weakBars', { first: item.bars.first + 1, last: item.bars.last + 1 })
-          : t('today.details.weakBar', { bar: (item.bars?.first ?? 0) + 1 });
+          ? t('today.details.weakBars', {
+              first: item.bars.first + 1,
+              last: item.bars.last + 1,
+              count: WEAK_SPOT_PASSES,
+            })
+          : t('today.details.weakBar', {
+              bar: (item.bars?.first ?? 0) + 1,
+              count: WEAK_SPOT_PASSES,
+            });
       case SuggestionKind.Song:
         return item.lastPlayedAt === undefined
           ? t('today.details.newSong')

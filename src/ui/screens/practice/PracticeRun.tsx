@@ -101,6 +101,8 @@ interface PracticeRunProps {
   onFinish?: (summary: Summary, durationMs: number) => void;
   /** Called each time through the repeated bars, with how many times so far. */
   onLoopPass?: (count: number) => void;
+  /** What repeating the bars is for (e.g. ticking off today's weak spot), in place of the tip. */
+  loopGoal?: string | null;
   /** Extra buttons on the results card (e.g. Continue in a lesson). */
   resultsActions?: (summary: Summary) => ReactNode;
   /**
@@ -128,6 +130,7 @@ export function PracticeRun({
   hint,
   onFinish,
   onLoopPass,
+  loopGoal = null,
   resultsActions,
   recordingKey,
   onListeningChange,
@@ -421,7 +424,7 @@ export function PracticeRun({
   const loopHint =
     loop &&
     [
-      t('practice.loop.hint'),
+      loopGoal ?? t('practice.loop.hint'),
       state.lastPass &&
         t('practice.loop.lastPass', {
           count: state.lastPass.count,

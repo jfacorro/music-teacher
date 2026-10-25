@@ -428,6 +428,8 @@
       "to": "a",
       "tip": "Consejo: arrastra sobre los compases de la música para repetirlos.",
       "hint": "Los compases elegidos se repiten hasta que pares.",
+      "weakSpot": "Punto débil de hoy: dale {count} vueltas para marcarlo como hecho (llevas {done} de {count}).",
+      "weakSpotDone": "El punto débil de hoy ya está hecho. Sigue practicando o para cuando quieras.",
       "lastPass": "{count, plural, one {Una vuelta} other {# vueltas}} · última vuelta: {accuracy}"
     },
     "otherHand": "Tocar la otra mano",
@@ -740,8 +742,8 @@
     "details": {
       "next": "Sigue donde lo dejaste.",
       "review": "{days, plural, one {La tocaste ayer: un repaso rápido la mantiene fresca.} other {La tocaste hace # días: un repaso rápido la mantiene fresca.}}",
-      "weakBar": "El compás {bar} necesita un poco más de práctica: se repite hasta que pares.",
-      "weakBars": "Los compases {first}–{last} necesitan un poco más de práctica: se repiten hasta que pares.",
+      "weakBar": "El compás {bar} necesita un poco más de práctica: dale {count} vueltas.",
+      "weakBars": "Los compases {first}–{last} necesitan un poco más de práctica: dales {count} vueltas.",
       "newSong": "Una canción que todavía no tocaste.",
       "song": "{days, plural, one {No la tocas desde ayer.} other {No la tocas desde hace # días.}}",
       "skill": "Tu habilidad más débil por ahora: {skill}.",

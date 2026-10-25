@@ -10,6 +10,7 @@ import {
   loadTodayPlan,
   markPracticed,
   suggestMore,
+  todaysWeakSpot,
   useTodayPlan,
 } from './todayPlan';
 
@@ -82,6 +83,19 @@ describe('today’s plan', () => {
 
     markPracticed(`${second!.target.kind}:${second!.target.id}`);
     expect(isDone(pianoPlan()!.items[1]!, {})).toBe(true);
+  });
+
+  it('finds today’s weak spot in a song, only on the day it was suggested', () => {
+    const weak = {
+      kind: SuggestionKind.WeakSpot,
+      target: { kind: 'song', id: 'ode-to-joy' },
+      bars: { first: 1, last: 1 },
+      since: MORNING,
+    } as const;
+    const plans = { [Course.Piano]: { day: '2026-10-16', items: [weak] } };
+    expect(todaysWeakSpot(plans, 'song:ode-to-joy', EVENING)).toBe(weak);
+    expect(todaysWeakSpot(plans, 'song:jingle-bells', EVENING)).toBeUndefined();
+    expect(todaysWeakSpot(plans, 'song:ode-to-joy', TOMORROW)).toBeUndefined();
   });
 
   it('adds more suggestions without repeating any', () => {
