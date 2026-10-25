@@ -3,7 +3,7 @@ import { scoreOf } from '../engine/testUtils';
 import { loadSong, SONG_IDS } from './songs';
 import { DIVISIONS, noteCardXml, noteKey, scoreToMusicXml, Clef } from './musicxml';
 import { pitchOf } from '../theory/pitch';
-import { Articulation, beatsPerMeasure, Hand } from '../engine/score';
+import { Articulation, beatsPerMeasure, Hand, Syllabic } from '../engine/score';
 
 /** The <note> elements of a staff, as short strings: "C4:quarter", "rest:half", "D4:eighth.". */
 function written(xml: string, staff: number): string[] {
@@ -445,5 +445,33 @@ describe('scoreToMusicXml', () => {
         expect(durations.reduce((a, b) => a + b, 0)).toBe(bar);
       }
     }
+  });
+});
+
+describe('scoreToMusicXml with words', () => {
+  it('writes the syllables in the language asked for, above the note labels', () => {
+    const score = scoreOf([
+      ['C4', 0],
+      ['D4', 1],
+    ]);
+    const notes = score.notes.map((note, i) => ({
+      ...note,
+      lyrics: {
+        en:
+          i === 0
+            ? { text: 'Twin', syllabic: Syllabic.Begin }
+            : { text: 'kle', syllabic: Syllabic.End, extend: true },
+      },
+    }));
+    const { xml } = scoreToMusicXml(
+      { ...score, notes },
+      { lyrics: 'en', noteLabel: (note) => note.pitch.step },
+    );
+    expect(xml).toContain(
+      '<lyric number="1"><syllabic>begin</syllabic><text>Twin</text></lyric>' +
+        '<lyric number="2"><syllabic>single</syllabic><text>C</text></lyric>',
+    );
+    expect(xml).toContain('<text>kle</text><extend/></lyric>');
+    expect(scoreToMusicXml({ ...score, notes }, { lyrics: 'es' }).xml).not.toContain('<lyric');
   });
 });

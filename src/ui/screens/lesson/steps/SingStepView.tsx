@@ -6,11 +6,14 @@ import type { StepResult } from '../../../../content/lessons/result';
 import { ScoreView, SheetNotation } from '../../../../content/lessons/lesson';
 import { useNoteNames } from '../../../../i18n/useNoteNames';
 import { SING_CENTS, SING_CENTS_STRICT, SingMode } from '../../../../engine/singing';
+import { moveAccompaniment } from '../../../../engine/lyrics';
 import { fitToRange } from '../../../../engine/transpose';
 import { useSettings } from '../../../../storage/settings';
 import { useMicWhileShown } from '../../../hooks';
 import { NotationSelect, ViewToggle } from '../../practice/ViewToggle';
 import { KeyNoteButton, MovableDoNote } from '../../singing/KeyNoteButton';
+import { LyricsSelect } from '../../singing/lyrics';
+import { useLyricsLanguage } from '../../singing/useLyricsLanguage';
 import { singNotations, startNotation } from '../../singing/singNotation';
 import { SingRun } from '../../singing/SingRun';
 
@@ -27,6 +30,13 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
   useMicWhileShown();
   const range = useSettings((s) => s.vocalRange);
   const fit = useMemo(() => (range ? fitToRange(step.score, range) : null), [step, range]);
+  // A song's piano part, moved with its melody.
+  const piano = useMemo(
+    () => (fit ? moveAccompaniment(step.score, step.accompaniment, fit.semitones) : []),
+    [step, fit],
+  );
+  const lyrics = useLyricsLanguage(step.score);
+  const [accompanied, setAccompanied] = useState(true);
   const [view, setView] = useState(step.view);
   const { system } = useNoteNames();
   const [notation, setNotation] = useState(() => startNotation(system, step.notation));
@@ -57,10 +67,21 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
             options={singNotations(system)}
           />
         )}
+        <LyricsSelect score={step.score} />
         {step.mode !== SingMode.ListenFirst && (
           <label className="checkbox" title={t(`sing.guideTip.${step.mode}`)}>
             <input type="checkbox" checked={guide} onChange={(e) => setGuide(e.target.checked)} />
             {t('sing.guide')}
+          </label>
+        )}
+        {step.mode === SingMode.Along && piano.length > 0 && (
+          <label className="checkbox" title={t('voiceSongs.pianoTip')}>
+            <input
+              type="checkbox"
+              checked={accompanied}
+              onChange={(e) => setAccompanied(e.target.checked)}
+            />
+            {t('voiceSongs.piano')}
           </label>
         )}
         {step.mode !== SingMode.Wait && (
@@ -94,6 +115,9 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
         metronome={metronome}
         view={view}
         notation={notation}
+        {...(lyrics && { lyrics })}
+        accompaniment={piano}
+        accompanied={accompanied && piano.length > 0}
         onFinish={({ stars, accuracy }) => onResult({ stars, accuracy }, passes(stars))}
         resultsActions={(summary) =>
           passes(summary.stars) ? (

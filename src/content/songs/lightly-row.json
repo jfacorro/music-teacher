@@ -1,6 +1,10 @@
 {
   "tempo": 104,
   "timeSignature": [4, 4],
+  "lyrics": {
+    "en": "Light-ly row, | light-ly row, / | o'er the glass-y | waves we go; / | smooth-ly glide, | smooth-ly glide, / | on the si-lent | tide. / | Let the winds and | wa-ters be / | min-gled with our | mel-o-dy; / | sing and float, | sing and float, / | in our lit-tle | boat.",
+    "es": "Sua-ve~a-sí, | sua-ve~a-sí, / | so-bre~el a-gua | de cris-tal; / | va-mos ya, | va-mos ya, / | por el mar en | paz. / | Vien-to~y a-gua | can-ta-rán / | con no-so-tros | a la par; / | a can-tar, | a flo-tar, / | en mi bo-te~al | mar."
+  },
   "notes": [
     {
       "note": "G4",

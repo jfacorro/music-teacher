@@ -83,7 +83,7 @@ describe('courses', () => {
       ]),
     ).toEqual([
       [CourseLevel.Beginner, [1, 2, 3, 4]],
-      [CourseLevel.Elementary, [5, 6, 7]],
+      [CourseLevel.Elementary, [5, 6, 7, 8]],
     ]);
   });
 

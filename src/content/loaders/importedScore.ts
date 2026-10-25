@@ -6,6 +6,7 @@ import { unroll } from '../../engine/form';
 import {
   beatsPerMeasure,
   Hand,
+  LYRICS_AS_WRITTEN,
   type Score,
   type ScoreNote,
   wholeMeasures,
@@ -57,6 +58,7 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
       articulations,
       slurs: marks,
       fermata,
+      lyric,
     } of track.notes) {
       const midi = pitch.midi + options.transpose;
       if (midi < PIANO_LOWEST || midi > PIANO_HIGHEST) {
@@ -80,6 +82,7 @@ export function importedScore(music: ImportedMusic, options: ImportOptions): Imp
         ...(finger && options.transpose === 0 && { finger }),
         ...(articulations && { articulations }),
         ...(fermata && { fermata }),
+        ...(lyric && { lyrics: { [LYRICS_AS_WRITTEN]: lyric } }),
       });
     }
   });

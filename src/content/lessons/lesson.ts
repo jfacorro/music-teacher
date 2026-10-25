@@ -13,10 +13,19 @@
  * - warmUp:   the vocal warm-up that starts each voice lesson (not graded)
  * - match:    sing back notes played from the singer's range (see engine/matchNote.ts)
  * - sing:     sing a melody (one note at a time), moved into the singer's range: waiting for
- *             each note, along with it, or after listening first (see engine/singing.ts)
+ *             each note, along with it, or after listening first (see engine/singing.ts); an
+ *             inline score, or a song with words (its melody, the piano playing the rest)
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
-import { type Finger, Hand, hasPedalMarks, hasTouchMarks, type Score } from '../../engine/score';
+import { songParts } from '../../engine/lyrics';
+import {
+  type Finger,
+  Hand,
+  hasPedalMarks,
+  hasTouchMarks,
+  type Score,
+  type ScoreNote,
+} from '../../engine/score';
 import { GradedMode, HandFilter } from '../../engine/session';
 import { SingMode } from '../../engine/singing';
 import { describeValues, isValueOf } from '../../lib/values';
@@ -199,6 +208,10 @@ export interface SingStep extends StepBase {
   mode: SingMode;
   /** One note at a time; the notes' hands don't matter (written low, it's on the bass staff). */
   score: Score;
+  /** The song whose melody it is, if any: its words are on the notes. */
+  song: SongId | null;
+  /** A song's piano part, played along when singing along (none for an inline melody). */
+  accompaniment: ScoreNote[];
   /** The view it starts in: the notes in a lane (`falling`) or sheet music. */
   view: ScoreView;
   /** The sheet music level it starts with (one of `SING_NOTATIONS`); null = from Settings. */
@@ -333,27 +346,47 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
       };
     }
     case StepType.Sing:
-      return { ...base, type: StepType.Sing, ...sing(data, location) };
+      return { ...base, type: StepType.Sing, ...(await sing(data, location)) };
     default:
       throw new LessonError(at(location, 'type'), `expected ${describeValues(StepType)}`);
   }
 }
 
-function sing(
+async function sing(
   data: Record<string, unknown>,
   location: string,
-): Omit<SingStep, keyof StepBase | 'type'> {
+): Promise<Omit<SingStep, keyof StepBase | 'type'>> {
   if (!isValueOf(SingMode, data.mode)) {
     throw new LessonError(at(location, 'mode'), `expected ${describeValues(SingMode)}`);
   }
-  // A voice has no hands: notes are written without one.
-  const input = object(data.score, at(location, 'score'));
-  const notes = Array.isArray(input.notes)
-    ? input.notes.map((note: unknown) =>
-        note !== null && typeof note === 'object' ? { hand: Hand.Right, ...note } : note,
-      )
-    : input.notes;
-  const score = inlineScore({ ...input, notes }, at(location, 'score'));
+  let score: Score;
+  let song: SongId | null = null;
+  let accompaniment: ScoreNote[] = [];
+  if (data.song !== undefined) {
+    if (typeof data.song !== 'string' || !isSongId(data.song)) {
+      throw new LessonError(at(location, 'song'), `unknown song "${String(data.song)}"`);
+    }
+    song = data.song;
+    const parts = songParts(await loadSong(song));
+    if (!parts) throw new LessonError(at(location, 'song'), `"${song}" has no words to sing`);
+    score = parts.melody;
+    accompaniment = parts.accompaniment;
+    if (data.tempo !== undefined) {
+      if (typeof data.tempo !== 'number' || data.tempo <= 0) {
+        throw new LessonError(at(location, 'tempo'), 'expected a positive number');
+      }
+      score = { ...score, tempo: data.tempo };
+    }
+  } else {
+    // A voice has no hands: notes are written without one.
+    const input = object(data.score, at(location, 'score'));
+    const notes = Array.isArray(input.notes)
+      ? input.notes.map((note: unknown) =>
+          note !== null && typeof note === 'object' ? { hand: Hand.Right, ...note } : note,
+        )
+      : input.notes;
+    score = inlineScore({ ...input, notes }, at(location, 'score'));
+  }
   if (score.form) {
     throw new LessonError(at(location, 'score › repeats'), 'a melody to sing has no repeats');
   }
@@ -380,6 +413,8 @@ function sing(
   return {
     mode: data.mode,
     score,
+    song,
+    accompaniment,
     view,
     notation: singNotation(data, location),
     strict: flag('strict', false),

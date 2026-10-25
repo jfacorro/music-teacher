@@ -16,6 +16,7 @@ describe('COURSE_SECTIONS', () => {
     expect(COURSE_SECTIONS[Course.Voice]).toEqual([
       Section.Home,
       Section.Learn,
+      Section.Songs,
       Section.SightSinging,
       Section.EarTraining,
       Section.Tuner,
@@ -34,6 +35,7 @@ describe('sectionOf', () => {
     expect(sectionOf('/practice/can-can')).toBe(Section.Songs);
     expect(sectionOf('/practice/my/12')).toBe(Section.Songs);
     expect(sectionOf('/my-songs/import')).toBe(Section.Songs);
+    expect(sectionOf('/sing/twinkle-twinkle')).toBe(Section.Songs);
   });
 
   it('is Home for anything else, without matching a longer name', () => {

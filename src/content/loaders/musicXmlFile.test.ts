@@ -281,6 +281,28 @@ describe('parseMusicXml', () => {
     expect(music.warnings).toEqual([]);
   });
 
+  it('reads the first line of words, with held and joined syllables', () => {
+    const lyric = (number: number, syllabic: string, text: string, extra = '') =>
+      `<lyric number="${number}"><syllabic>${syllabic}</syllabic><text>${text}</text>${extra}</lyric>`;
+    const music = parseMusicXml(
+      piece(
+        measure(
+          attributes('<divisions>1</divisions>'),
+          n('C4', 1, lyric(2, 'single', 'x') + lyric(1, 'begin', 'Twin')),
+          n('D4', 1, lyric(1, 'end', 'kle', '<extend/>')),
+          n('E4', 1),
+          n('F4', 1, '<lyric><text>que</text><elision/><text>a</text></lyric>'),
+        ),
+      ),
+    );
+    expect(music.tracks[0]!.notes.map((note) => note.lyric)).toEqual([
+      { text: 'Twin', syllabic: 'begin' },
+      { text: 'kle', syllabic: 'end', extend: true },
+      undefined,
+      { text: 'que‿a', syllabic: 'single' },
+    ]);
+  });
+
   it('plays da capo and the like once, as written', () => {
     const music = parseMusicXml(
       piece(

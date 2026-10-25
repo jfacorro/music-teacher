@@ -39,6 +39,8 @@ interface SheetMusicProps {
   onSelectBars?: (range: LoopRange) => void;
   /** A rhythm exercise: one line, no pitches. */
   rhythm?: boolean;
+  /** The language of the words to write under the notes that have them (none by default). */
+  lyrics?: string;
 }
 
 /** Where a bar is drawn: px from the left of the sheet. */
@@ -81,6 +83,7 @@ export function SheetMusic({
   loop,
   onSelectBars,
   rhythm = false,
+  lyrics,
 }: SheetMusicProps) {
   const { t } = useTranslation('screens');
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -112,8 +115,9 @@ export function SheetMusic({
             ? (note) => solfa(note.pitch, written.keyFifths)
             : undefined,
       handLabel: (hand) => t(`practice.crossedHand.${hand}`),
+      ...(lyrics && { lyrics }),
     });
-  }, [written, notation, hands, names, solfa, rhythm, t]);
+  }, [written, notation, hands, names, solfa, rhythm, t, lyrics]);
 
   // Render (again when the music or the color scheme changes).
   useEffect(() => {

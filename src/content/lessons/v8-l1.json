@@ -1,0 +1,33 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "words"
+    },
+    {
+      "type": "sing",
+      "text": "hotCross",
+      "mode": "wait",
+      "song": "hot-cross-buns"
+    },
+    {
+      "type": "sing",
+      "text": "hotCrossAlong",
+      "mode": "along",
+      "song": "hot-cross-buns"
+    },
+    {
+      "type": "sing",
+      "text": "auClair",
+      "mode": "along",
+      "song": "au-clair-de-la-lune",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

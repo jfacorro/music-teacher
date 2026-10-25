@@ -10,6 +10,7 @@ import {
   type Finger,
   Hand,
   type Articulation,
+  type Lyric,
   type PedalMark,
   type Repeat,
   type Ritardando,
@@ -26,6 +27,8 @@ export interface ImportedNote {
   slurs?: ('start' | 'stop')[];
   /** Held longer than written (MusicXML). */
   fermata?: boolean;
+  /** The syllable sung on it (MusicXML's first line of words). */
+  lyric?: Lyric;
 }
 
 export interface ImportedTrack {

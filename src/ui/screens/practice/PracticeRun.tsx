@@ -16,6 +16,7 @@ import {
   countedBeat,
   hasPedalMarks,
   hasTouchMarks,
+  LYRICS_AS_WRITTEN,
   type Score,
   type ScoreNote,
 } from '../../../engine/score';
@@ -608,6 +609,8 @@ export function PracticeRun({
               loop={loop}
               onSelectBars={selectBars}
               rhythm={rhythm}
+              // An imported song's words, if it has them (the built-in songs' are sung).
+              lyrics={LYRICS_AS_WRITTEN}
             />
           ) : (
             <FallingNotes

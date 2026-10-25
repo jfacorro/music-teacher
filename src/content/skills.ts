@@ -120,6 +120,7 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'singing-scales',
     'singing-by-ear',
     'reading-melodies',
+    'singing-songs',
     'sight-singing',
   ],
 };

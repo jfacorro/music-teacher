@@ -15,6 +15,7 @@ import { SightSingingScreen } from './ui/screens/sightReading/SightSingingScreen
 import { EarTrainingScreen } from './ui/screens/earTraining/EarTrainingScreen';
 import { SongsScreen } from './ui/screens/SongsScreen';
 import { TunerScreen } from './ui/screens/TunerScreen';
+import { VoiceSongScreen } from './ui/screens/singing/VoiceSongScreen';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { path: 'tuner', element: <TunerScreen /> },
       { path: 'practice/:songId', element: <PracticeScreen /> },
       { path: 'practice/my/:songId', element: <MySongPracticeScreen /> },
+      { path: 'sing/:songId', element: <VoiceSongScreen /> },
       { path: 'my-songs/import', element: <ImportSongScreen /> },
       { path: 'my-songs/:songId', element: <MySongScreen /> },
       { path: 'lesson/:lessonId', element: <LessonScreen /> },

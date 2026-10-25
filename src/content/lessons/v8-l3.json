@@ -1,0 +1,33 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "melisma"
+    },
+    {
+      "type": "sing",
+      "text": "graceWait",
+      "mode": "wait",
+      "song": "amazing-grace",
+      "view": "sheet",
+      "notation": "plain"
+    },
+    {
+      "type": "sing",
+      "text": "graceAlong",
+      "mode": "along",
+      "song": "amazing-grace",
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "explain",
+      "text": "more"
+    }
+  ]
+}

@@ -26,6 +26,8 @@ export const ResultKind = {
   VoiceEar: 'voiceEar',
   /** A sight-singing drill: saved by level (its id), each drill being new. */
   VoiceDrill: 'voiceDrill',
+  /** A song sung with its words (the voice's Song practice): saved by the song's id. */
+  VoiceSong: 'voiceSong',
 } as const;
 export type ResultKind = (typeof ResultKind)[keyof typeof ResultKind];
 
@@ -51,7 +53,12 @@ export const resultKey = (kind: ResultKind, id: string) => `${kind}:${id}`;
 
 /** The course a result belongs to: a lesson's own, the voice's exercises, the rest the piano's. */
 export function courseOfResult(kind: ResultKind, id: string): Course {
-  if (kind === ResultKind.Voice || kind === ResultKind.VoiceEar || kind === ResultKind.VoiceDrill)
+  if (
+    kind === ResultKind.Voice ||
+    kind === ResultKind.VoiceEar ||
+    kind === ResultKind.VoiceDrill ||
+    kind === ResultKind.VoiceSong
+  )
     return Course.Voice;
   if (kind === ResultKind.Lesson) return findLesson(id)?.course ?? Course.Piano;
   return Course.Piano;

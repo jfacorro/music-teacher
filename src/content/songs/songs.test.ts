@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { TRANSLATED_LANGUAGES } from '../../i18n/languages';
-import { SONG_IDS, SONG_UNITS, isSongId, loadSong } from '.';
+import { songParts } from '../../engine/lyrics';
+import { SONG_IDS, SONG_UNITS, VOICE_SONG_IDS, isSongId, loadSong } from '.';
 
 const titles = import.meta.glob<Record<string, { title?: string }>>('/locales/*/songs.json', {
   eager: true,
@@ -17,6 +18,23 @@ describe('songs', () => {
   it.each(TRANSLATED_LANGUAGES)('every song has a title in %s', (language) => {
     const songs = titles[`/locales/${language}/songs.json`] ?? {};
     for (const id of SONG_IDS) expect(songs[id]?.title, id).toBeTruthy();
+  });
+
+  it('has words in English and Spanish for the songs sung, and only those', async () => {
+    for (const id of SONG_IDS) {
+      const score = await loadSong(id);
+      const languages = Object.keys(score.lyrics?.lines ?? {});
+      if (VOICE_SONG_IDS.includes(id)) {
+        expect(languages, id).toEqual(expect.arrayContaining([...TRANSLATED_LANGUAGES]));
+        // Every note sung has a syllable, unless it holds the one before.
+        const melody = songParts(score)!.melody.notes;
+        for (const language of languages) {
+          expect(melody[0]!.lyrics?.[language], `${id} ${language}`).toBeDefined();
+        }
+      } else {
+        expect(languages, id).toEqual([]);
+      }
+    }
   });
 
   it('recognises song ids', () => {

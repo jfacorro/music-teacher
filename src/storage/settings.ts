@@ -67,6 +67,8 @@ export interface Settings {
   keysShown: KeysShown;
   /** The latest vocal range test (Settings → Voice); null until one is done. */
   vocalRange: VocalRange | null;
+  /** The language songs' words are sung in, when a song has them (null: the app's language). */
+  lyricsLanguage: string | null;
   /** The sidebar shows only its icons (on a wide window; a narrow one hides it anyway). */
   sidebarCollapsed: boolean;
 }
@@ -100,6 +102,7 @@ export const DEFAULT_SETTINGS: Settings = {
   keyHeight: KeyHeight.Normal,
   keysShown: KeysShown.Fit,
   vocalRange: null,
+  lyricsLanguage: null,
   sidebarCollapsed: false,
 };
 

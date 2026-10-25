@@ -1,11 +1,13 @@
 /**
  * The singing view (PLAN.md milestone 6.3): the notes to sing as bars in a horizontal lane, on
  * rows named with the note names, moving toward a line where they're due; the voice drawn as a
- * line through them, green while in tune and amber off.
+ * line through them, green while in tune and amber off. A song's words go under its notes
+ * (milestone 6.6).
  */
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { beatsPerMeasure, notesBetween, type Score, type ScoreNote } from '../../../engine/score';
+import { syllableText } from '../../../engine/lyrics';
 import type { TrailPoint } from '../../../engine/singSession';
 import { TuneLevel } from '../../../engine/singing';
 import type { Transport } from '../../../engine/transport';
@@ -39,6 +41,7 @@ const COLORS = {
   inTune: '--ok',
   offTune: '--pending',
   voice: '--accent',
+  lyric: '--text',
 };
 type Colors = Record<keyof typeof COLORS, string>;
 
@@ -55,6 +58,8 @@ export interface SingLaneProps {
   trail: () => readonly TrailPoint[];
   /** What's being sung now (drawn as a dot on the line), and whether in tune; read every frame. */
   voice: () => { pitch: number; inTune: boolean } | null;
+  /** The language of the words to write under the notes that have them (none by default). */
+  lyrics?: string;
 }
 
 export function SingLane({
@@ -65,6 +70,7 @@ export function SingLane({
   levelOf,
   trail,
   voice,
+  lyrics,
 }: SingLaneProps) {
   const { t } = useTranslation('screens');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -88,13 +94,14 @@ export function SingLane({
         levelOf,
         trail: trail(),
         voice: voice(),
+        lyrics: lyrics ?? null,
         colors,
       });
       frame = requestAnimationFrame(draw);
     };
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [size, score, transport, secondsAhead, labelFor, levelOf, trail, voice, scheme]);
+  }, [size, score, transport, secondsAhead, labelFor, levelOf, trail, voice, lyrics, scheme]);
 
   return (
     <div ref={containerRef} className="sing-lane">
@@ -116,6 +123,7 @@ interface LaneState {
   levelOf: (note: ScoreNote) => TuneLevel | undefined;
   trail: readonly TrailPoint[];
   voice: { pitch: number; inTune: boolean } | null;
+  lyrics: string | null;
   colors: Colors;
 }
 
@@ -123,7 +131,7 @@ function drawLane(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  { score, position, aheadBeats, labelFor, levelOf, trail, voice, colors }: LaneState,
+  { score, position, aheadBeats, labelFor, levelOf, trail, voice, lyrics, colors }: LaneState,
 ): void {
   const { low, high } = laneRows(score.notes);
   const rows = high - low + 1;
@@ -179,6 +187,24 @@ function drawLane(
       ctx.fillStyle = colors.noteText;
       ctx.fillText(labelFor(note.pitch.midi), left + 6, y(note.pitch.midi), right - left - 8);
     }
+  }
+
+  // The words, under their notes: drawn after all the notes, so none covers them.
+  if (lyrics) {
+    const lyricSize = Math.max(12, Math.min(16, rowHeight * 0.9));
+    ctx.font = `600 ${lyricSize}px system-ui, sans-serif`;
+    ctx.fillStyle = colors.lyric;
+    ctx.textBaseline = 'top';
+    for (const note of notesBetween(score.notes, position - behindBeats, position + aheadBeats)) {
+      const lyric = note.lyrics?.[lyrics];
+      if (!lyric) continue;
+      ctx.fillText(
+        syllableText(lyric),
+        x(note.start) + 2,
+        Math.min(height - lyricSize - 2, y(note.pitch.midi) + barHeight / 2 + 3),
+      );
+    }
+    ctx.textBaseline = 'middle';
   }
 
   // The voice: a line, green in tune and amber off, broken where nothing clear was heard.

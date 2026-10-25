@@ -17,6 +17,11 @@
  *   its hand crosses over the other to play it (it's written on the other hand's staff), and
  *   "fermata": true (held longer, the music waiting on it).
  *
+ * A song's words (PLAN.md milestone 6.6), by language, sung by one hand's notes (the right
+ * hand's unless `lyricsHand` says otherwise; one note at a time, no repeats), written as in
+ * engine/lyrics.ts:
+ *   "lyrics": { "en": "Twin-kle, twin-kle, | lit-tle star, / …", "es": "…" }, "lyricsHand": "L"
+ *
  * A score with repeats comes back as played (see engine/form.ts › unroll), keeping how it's
  * written.
  *
@@ -31,10 +36,12 @@ import {
   type Repeat,
   type Ritardando,
   type Score,
+  type ScoreLyrics,
   type ScoreNote,
   type Slur,
   wholeMeasures,
 } from '../../engine/score';
+import { LyricsError, lyricLines, parseLyrics } from '../../engine/lyrics';
 import { unroll } from '../../engine/form';
 import { isMarking, isDynamic, type Marking } from '../../engine/markings';
 import { type Hairpin, HairpinKind, type ScoreDynamics } from '../../engine/dynamics';
@@ -79,6 +86,10 @@ export function parseInlineScore(input: unknown, location: string): Score {
   const end = measures.at(-1)!.start + measures.at(-1)!.length;
   const repeats = parseRepeats(data.repeats, at(location, 'repeats'), end, measures[0]!.length);
   const ritardandos = parseRitardandos(data.rit, at(location, 'rit'), end);
+  const lyrics = parseLyricsOf(data, notes, timeSignature, location);
+  if (lyrics && repeats.length > 0) {
+    throw new ScoreError(at(location, 'lyrics'), 'a song with words has no repeats');
+  }
   return unroll({
     tempo,
     timeSignature,
@@ -91,7 +102,59 @@ export function parseInlineScore(input: unknown, location: string): Score {
     ...(pedal.length > 0 && { pedal }),
     ...(repeats.length > 0 && { repeats }),
     ...(ritardandos.length > 0 && { ritardandos }),
+    ...(lyrics && { lyrics }),
   });
+}
+
+/** The song's words, put on the notes that sing them; null when it has none. */
+function parseLyricsOf(
+  data: Record<string, unknown>,
+  notes: ScoreNote[],
+  timeSignature: [number, number],
+  location: string,
+): ScoreLyrics | null {
+  if (data.lyrics === undefined) {
+    if (data.lyricsHand !== undefined) {
+      throw new ScoreError(at(location, 'lyricsHand'), 'there are no lyrics');
+    }
+    return null;
+  }
+  const texts = expectObject(data.lyrics, at(location, 'lyrics'));
+  const hand = data.lyricsHand ?? Hand.Right;
+  if (!isValueOf(Hand, hand)) {
+    throw new ScoreError(at(location, 'lyricsHand'), `expected ${describeValues(Hand)}`);
+  }
+  const melody = notes.filter((note) => note.hand === hand);
+  melody.slice(1).forEach((note, i) => {
+    const before = melody[i]!;
+    if (note.start < before.start + before.duration - 1e-9) {
+      throw new ScoreError(at(location, 'lyrics'), 'the notes sung have one note at a time');
+    }
+  });
+  const lines: Record<string, string[]> = {};
+  for (const [language, text] of Object.entries(texts)) {
+    const where = at(location, `lyrics › ${language}`);
+    if (!/^[a-z]{2}$/.test(language)) {
+      throw new ScoreError(where, 'expected a two-letter language code, such as "en"');
+    }
+    if (typeof text !== 'string') throw new ScoreError(where, 'expected the words as text');
+    let syllables;
+    try {
+      syllables = parseLyrics(text, melody, timeSignature);
+    } catch (error) {
+      if (error instanceof LyricsError) throw new ScoreError(where, error.message);
+      throw error;
+    }
+    melody.forEach((note, i) => {
+      const lyric = syllables[i];
+      if (lyric) note.lyrics = { ...note.lyrics, [language]: lyric };
+    });
+    lines[language] = lyricLines(text);
+  }
+  if (Object.keys(lines).length === 0) {
+    throw new ScoreError(at(location, 'lyrics'), 'expected the words in at least one language');
+  }
+  return { hand, lines };
 }
 
 function parseRepeats(input: unknown, location: string, end: number, bar: number): Repeat[] {
