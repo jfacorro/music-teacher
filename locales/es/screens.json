@@ -903,7 +903,7 @@
   },
   "tuner": {
     "title": "Afinador",
-    "intro": "Canta lo que quieras y verás qué nota cantas y qué tan cerca estás de ella.",
+    "intro": "Canta lo que quieras y verás qué nota cantas y a cuántos cents estás de ella. Un cent es la centésima parte de un semitono; la zona verde va de 25 cents por debajo a 25 cents por encima de la nota.",
     "listening": "Escuchando…",
     "singSomething": "Canta algo",
     "inTune": "afinada",
