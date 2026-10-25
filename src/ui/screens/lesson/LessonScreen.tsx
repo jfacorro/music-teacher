@@ -6,6 +6,7 @@ import { lessonNamespace, loadLesson, type Lesson } from '../../../content/lesso
 import { i18n } from '../../../i18n';
 import { LessonPlayer } from './LessonPlayer';
 import { LoadStatus } from '../../loadStatus';
+import { loadStepRuns } from '../../../storage/stepRuns';
 
 type LoadState =
   | { status: typeof LoadStatus.Loading }
@@ -34,8 +35,13 @@ function LessonLoader({ lessonId }: { lessonId: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    // The lesson's text is its own namespace; load it alongside the lesson.
-    Promise.all([loadLesson(lessonId), i18n.loadNamespaces(lessonNamespace(lessonId))]).then(
+    // The lesson's text is its own namespace; load it alongside the lesson, and the earlier
+    // tries of its steps so the lesson can open where it was left.
+    Promise.all([
+      loadLesson(lessonId),
+      i18n.loadNamespaces(lessonNamespace(lessonId)),
+      loadStepRuns(lessonId),
+    ]).then(
       ([lesson]) => !cancelled && setState({ status: LoadStatus.Ready, lesson }),
       (error: unknown) => {
         console.error(error);

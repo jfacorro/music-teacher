@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { type LessonStep, StepType } from './lesson';
-import { bestResults, earlierDone, earlierSteps, lessonResult } from './result';
+import { bestResults, earlierDone, earlierSteps, lessonResult, resumeAt } from './result';
 
 const step = (type: LessonStep['type']) => ({ type }) as LessonStep;
 
@@ -122,5 +122,18 @@ describe('earlierDone', () => {
 
   it('counts nothing on a first visit', () => {
     expect(earlierDone(steps, new Map(), false).size).toBe(0);
+  });
+});
+
+describe('resumeAt', () => {
+  const steps = [step(StepType.Explain), step(StepType.Find), step(StepType.Exercise)];
+
+  it('picks a lesson up at its first step not done', () => {
+    expect(resumeAt(steps, new Set([0, 2]))).toBe(1);
+  });
+
+  it('starts a lesson not started, or done throughout, at the beginning', () => {
+    expect(resumeAt(steps, new Set())).toBe(0);
+    expect(resumeAt(steps, new Set([0, 1, 2]))).toBe(0);
   });
 });

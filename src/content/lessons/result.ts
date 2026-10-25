@@ -95,3 +95,12 @@ export function earlierDone(
   });
   return done;
 }
+
+/**
+ * Where to pick a lesson up: its first step not done. A lesson not started, or done throughout,
+ * starts at the beginning.
+ */
+export function resumeAt(steps: readonly LessonStep[], done: ReadonlySet<number>): number {
+  const index = steps.findIndex((_, i) => !done.has(i));
+  return index === -1 ? 0 : index;
+}

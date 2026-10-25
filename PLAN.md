@@ -920,6 +920,10 @@ Still to decide: the app's name. "Piano Teacher" no longer fits once it teaches 
 **Skipping a step done before** — ✔ done
 - A lesson step passed on an earlier visit counts when skipped: its dot shows as done, it offers Continue rather than Skip, and its best try counts in the lesson's stars (before, a skipped step scored zero, so replaying a lesson and skipping one step ended with no stars and set its review sooner). Tries keep whether they passed the step, and finding the keys counts as a try too. For a lesson finished before tries were kept, its own best stands in for the steps not tried since (steps added to it later count as done as well).
 
+**Opening a lesson where it was left** — built
+- Explanations and warm-ups read on an earlier visit show as done in the step dots: a lesson finished before has read them all, and one left halfway has read those before a step that was tried. Moving on from one counts as reading it. (Before, only graded steps counted, so going back in Sirens left the explanation after the current step dark although every step was done.)
+- A lesson started before opens at its first step not done; a lesson not started, or done throughout, opens at the beginning. A voice lesson opens on its warm-up, and Continue there jumps to that step. Back still goes through every step. The lesson's earlier tries load with it, so it knows where to open (`content/lessons/result.ts › earlierDone`, `resumeAt`).
+
 **Metronome fixes** — ✔ done
 - The first click of a count-in sounds: a run now starts a quarter of a second before it, so it's scheduled ahead like the others (before, it was due the instant playback started, already late for the speakers, and skipped). Clicks only as late as the output delay still play; only truly late ones (a throttled background tab) are dropped.
 - "Wait for me" with the metronome on counts in a measure first, as when playing along, and clicks up to where the music waits: the click on the waiting note's beat says when it's due. Nothing clicks during the wait, and that beat isn't clicked again when the music goes on.
