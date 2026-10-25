@@ -76,3 +76,22 @@ export function earlierSteps(
   });
   return earlier;
 }
+
+/**
+ * The steps earlier visits got through: graded steps passed, and explanations and warm-ups that
+ * were read, which is known when the lesson was finished or a step after them was tried.
+ */
+export function earlierDone(
+  steps: readonly LessonStep[],
+  earlier: ReadonlyMap<number, EarlierStep>,
+  finished: boolean,
+): Set<number> {
+  const lastTried = Math.max(-1, ...earlier.keys());
+  const done = new Set<number>();
+  steps.forEach((step, index) => {
+    if (isGraded(step) ? earlier.get(index)?.passed : finished || index < lastTried) {
+      done.add(index);
+    }
+  });
+  return done;
+}

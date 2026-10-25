@@ -4,6 +4,7 @@ import { Course, COURSE_UNITS, findLesson } from '../../../content/courses';
 import { lessonNamespace, type Lesson } from '../../../content/lessons';
 import {
   bestResults,
+  earlierDone,
   earlierSteps,
   lessonResult,
   type StepResult,
@@ -70,8 +71,8 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
     [results, earlier],
   );
   const passed = useMemo(
-    () => new Set([...done, ...[...earlier].filter(([, step]) => step.passed).map(([i]) => i)]),
-    [done, earlier],
+    () => new Set([...done, ...earlierDone(lesson.steps, earlier, saved !== undefined)]),
+    [done, earlier, lesson.steps, saved],
   );
   const result = lessonResult(lesson.steps, allResults);
 
@@ -111,7 +112,11 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
       });
     });
   const markDone = (stepIndex: number) => setDone((prev) => new Set(prev).add(stepIndex));
-  const next = () => setIndex((i) => i + 1);
+  const next = () => {
+    // Moving on from an explanation or warm-up counts as reading it.
+    if (step && !isGraded(step)) markDone(index);
+    setIndex((i) => i + 1);
+  };
   const canContinue = (step !== undefined && !isGraded(step)) || passed.has(index);
   const title = courseText(`lessons.${lesson.id}`, courseLesson.titleVars);
   useTopBarDetail(
