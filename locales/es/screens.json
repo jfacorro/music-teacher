@@ -277,7 +277,9 @@
       "micDenied": "El micrófono no está permitido. Permítelo en el navegador y vuelve a intentarlo.",
       "micUnavailable": "La prueba de extensión necesita un micrófono, y no se pudo iniciar ninguno.",
       "speakers": {
-        "heading": "Cantar con altavoces",
+        "heading": "Auriculares o altavoces",
+        "headphones": "Canto con auriculares",
+        "headphonesHelp": "Con auriculares el micrófono no escucha la aplicación: cuando la música espera en cada nota, la aplicación la toca mientras la cantas, y cantar con la melodía guía funciona.",
         "echoCancellation": "Quitar el sonido de la aplicación del micrófono",
         "help": "Si cantas con la melodía guía por los altavoces, el micrófono también escucha la aplicación. Esto le pide al navegador que la cancele, como en las videollamadas. Puede alterar la altura que escucha, así que pruébalo: si al cantar con la guía te califica mal, apágalo y usa auriculares."
       }
@@ -889,18 +891,19 @@
     "noRange": "Primero encuentra tu extensión, así la melodía se ajusta a tu voz.",
     "guide": "Melodía guía",
     "guideTip": {
-      "wait": "La aplicación toca cada nota antes de que la cantes",
+      "wait": "La aplicación toca la melodía una vez, rápido, antes de que la cantes. Con auriculares (Configuración → Voz), también toca cada nota mientras la cantas.",
       "along": "La aplicación toca la melodía contigo (usa auriculares)"
     },
     "strict": "Aquí, afinada quiere decir a menos de 25 cents.",
     "beyondRange": "Esta melodía se sale un poco de tu extensión. Canta las notas que te resulten fáciles y salta las que te cuesten.",
     "hint": {
-      "wait": "Pulsa ▶. La música espera en cada nota hasta que la cantes afinada un momento.",
+      "wait": "Pulsa ▶. Con la melodía guía, primero escuchas la melodía. Después la música espera en cada nota hasta que la cantes afinada un momento.",
       "along": "Pulsa ▶. Después de un compás de entrada, canta cada nota cuando llega a la línea.",
       "listenFirst": "Pulsa ▶. Primero la aplicación toca la melodía; después de un compás de entrada, la cantas tú."
     },
     "listening": "Escucha la melodía…",
     "waiting": "Canta {note} y sostenla",
+    "nextNote": "Ahí viene la siguiente nota…",
     "singing": "Canta: verde es afinada, ámbar es desafinada.",
     "notHeard": "No te escucho",
     "cents": "{cents, plural, one {# cent} other {# cents}}",

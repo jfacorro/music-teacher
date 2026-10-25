@@ -277,7 +277,9 @@
       "micDenied": "The microphone isn’t allowed. Allow it in the browser, then try again.",
       "micUnavailable": "The range test needs a microphone, and none could be started.",
       "speakers": {
-        "heading": "Singing through speakers",
+        "heading": "Headphones or speakers",
+        "headphones": "I sing with headphones",
+        "headphonesHelp": "With headphones the microphone doesn’t hear the app, so when the music waits at each note the app plays it while you sing, and singing along with the guide melody works.",
         "echoCancellation": "Take the app’s sound out of the microphone",
         "help": "Singing along with the guide melody through speakers, the microphone hears the app too. This asks the browser to cancel it, as in video calls. It may bend the pitch it hears, so try it: if singing along grades you wrongly, turn it off and use headphones."
       }
@@ -889,18 +891,19 @@
     "noRange": "Find your range first, so the melody fits your voice.",
     "guide": "Guide melody",
     "guideTip": {
-      "wait": "The app plays each note before you sing it",
+      "wait": "The app plays the melody once, quickly, before you sing it. With headphones (Settings → Voice), it also plays each note as you sing it.",
       "along": "The app plays the melody along with you (use headphones)"
     },
     "strict": "In tune means within 25 cents here.",
     "beyondRange": "This melody goes a little beyond your range. Sing the notes that are easy, and skip any that strain.",
     "hint": {
-      "wait": "Press ▶. The music waits at each note until you sing it in tune for a moment.",
+      "wait": "Press ▶. With the guide melody, you hear the melody first. Then the music waits at each note until you sing it in tune for a moment.",
       "along": "Press ▶. After a bar counted in, sing each note as it reaches the line.",
       "listenFirst": "Press ▶. The app plays the melody first; then, after a bar counted in, you sing it."
     },
     "listening": "Listen to the melody…",
     "waiting": "Sing {note} and hold it",
+    "nextNote": "Here comes the next note…",
     "singing": "Sing along: green is in tune, amber is off.",
     "notHeard": "Not hearing you",
     "cents": "{cents, plural, one {# cent} other {# cents}}",

@@ -2,8 +2,8 @@
  * A run of a melody sung to the microphone (PLAN.md milestone 6.3): drives the transport for the
  * mode, follows the pitch readings and produces the summary. The voice's `PracticeSession`.
  *
- * - Wait for me: the music stops at each note until it's held in tune (`WaitSinger`); the app can
- *   play each note first (the guide), and listens once it has stopped ringing.
+ * - Wait for me: the music stops at each note until it's held in tune (`WaitSinger`). With the
+ *   guide, the app first plays the whole melody, quickly (`PREVIEW_SPEED`), then it's sung.
  * - Sing along: after a measure counted in, the music keeps going (`SungTake`), the guide melody
  *   playing along if chosen.
  * - Listen first: the app plays the melody, then counts in and it's sung without the guide.
@@ -82,6 +82,9 @@ export interface SingSessionOptions extends SingOptions {
   leadInSeconds: number;
 }
 
+/** Wait for me: the guide plays the melody first this many times faster. */
+export const PREVIEW_SPEED = 1.5;
+
 /** Singing within this many semitones of the note to sing, the voice is drawn in its octave. */
 const NEAR_SEMITONES = 3;
 
@@ -105,8 +108,10 @@ export class SingSession {
   private waiter!: WaitSinger;
   /** Graded notes so far, for their colors. */
   private graded = new Map<ScoreNote, SungNote>();
-  /** Listen first: the app has played the melody, and now it's sung. */
+  /** The app has played the melody first (or won't), and now it's sung. */
   private singing = false;
+  /** Wait for me: the app plays the melody first. */
+  private preview = false;
   private trailPoints: TrailPoint[] = [];
   private state: SingState = INITIAL_STATE;
   private readonly listeners = new Set<() => void>();
@@ -152,7 +157,7 @@ export class SingSession {
     return this.state.status === SingStatus.Waiting ? this.waiter.current : undefined;
   }
 
-  /** The app plays the melody now: listening first, or singing along with the guide. */
+  /** The app plays the melody now, before it's sung (Listen first, or Wait for me with the guide). */
   get appPlays(): boolean {
     return this.state.status === SingStatus.Listening;
   }
@@ -174,9 +179,14 @@ export class SingSession {
     const { status } = this.state;
     if (status === SingStatus.Playing || status === SingStatus.Waiting) return;
     if (status === SingStatus.Listening) return;
+    const previews =
+      this.mode === SingMode.ListenFirst || (this.mode === SingMode.Wait && this.preview);
+    if (status === SingStatus.Ready && !previews) this.singing = true;
+    if (status === SingStatus.Ready && previews && this.mode === SingMode.Wait) {
+      this.transport.setTempo(this.score.tempo * PREVIEW_SPEED);
+    }
     this.transport.play();
-    const listening = this.mode === SingMode.ListenFirst && !this.singing;
-    this.setState({ status: listening ? SingStatus.Listening : SingStatus.Playing });
+    this.setState({ status: this.singing ? SingStatus.Playing : SingStatus.Listening });
   }
 
   pause(): void {
@@ -189,6 +199,11 @@ export class SingSession {
 
   restart(): void {
     this.reset();
+  }
+
+  /** Wait for me: whether the app plays the melody first (the guide), from the next start. */
+  setPreview(on: boolean): void {
+    this.preview = on;
   }
 
   /** Wait for me: the current note is due from `time` (ms), e.g. once the app has played it. */
@@ -243,7 +258,7 @@ export class SingSession {
     if (status !== SingStatus.Playing && status !== SingStatus.Listening) return;
     const position = this.transport.position();
 
-    if (this.mode === SingMode.Wait) {
+    if (this.mode === SingMode.Wait && status === SingStatus.Playing) {
       const note = this.waiter.current;
       if (note && position >= note.start) {
         this.transport.pause();
@@ -264,8 +279,9 @@ export class SingSession {
 
     if (status === SingStatus.Listening) {
       if (position >= this.musicEnd) {
-        // Now it's sung: a measure counted in, then the melody without the guide.
+        // Now it's sung: a measure counted in (or the lead-in, waiting), without the guide.
         this.singing = true;
+        this.transport.setTempo(this.score.tempo);
         this.transport.seek(this.startBeat);
         this.setState({ status: SingStatus.Playing });
       }
@@ -348,12 +364,13 @@ export class SingSession {
   }
 
   private reset(): void {
+    this.transport.pause();
+    this.transport.setTempo(this.score.tempo);
     this.take = new SungTake(this.score.notes, this.transport.tempo, this.options);
     this.waiter = new WaitSinger(this.score.notes, this.options);
     this.graded = new Map();
     this.singing = false;
     this.trailPoints = [];
-    this.transport.pause();
     this.transport.seek(this.startBeat);
     this.state = { ...INITIAL_STATE };
     this.notify();

@@ -18,6 +18,7 @@ import { startMetronome } from '../../../audio/metronome';
 import { ScoreView, type SheetNotation } from '../../../content/lessons';
 import {
   beatsPerMeasure,
+  beatsToMs,
   countedBeat,
   Hand,
   type Score,
@@ -32,6 +33,7 @@ import { useNoteNames } from '../../../i18n/useNoteNames';
 import { subscribeMicReadings, useMic } from '../../../input/mic/micInput';
 import { startVoiceRecording } from '../../../input/mic/voiceRecording';
 import { activityTimer, recordPracticeTime } from '../../../storage/progress';
+import { useSettings } from '../../../storage/settings';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { Modal } from '../../components/Modal';
 import { useAnimationFrame } from '../../hooks';
@@ -47,9 +49,12 @@ import { SingResults } from './SingResults';
 const SECONDS_AHEAD = 4;
 /** Before starting, the first notes are already on their way. */
 const LEAD_IN_SECONDS = 1.5;
-/** Wait for me: how long the app plays each note (ms), and lets it ring before listening. */
+/**
+ * Wait for me: how long the app plays a note (ms), at least, and, through speakers, how long it
+ * lets it ring before listening.
+ */
 const GUIDE_NOTE_MS = 1000;
-const RING_MS = 500;
+const RING_MS = 400;
 /** A note starts this long after asking, so it's never cut (ms). */
 const START_DELAY_MS = 150;
 
@@ -60,7 +65,10 @@ interface SingRunProps {
   /** In tune within this many cents; only the written octave when `octave`. */
   cents: number;
   octave: boolean;
-  /** The app plays the melody along (or each note first, waiting). */
+  /**
+   * The app plays the melody along; waiting, it plays it first, quickly, and with headphones each
+   * note too, as it's sung.
+   */
   guide: boolean;
   /** The metronome clicks the beat (singing along). */
   metronome: boolean;
@@ -85,6 +93,7 @@ export function SingRun({
 }: SingRunProps) {
   const { t } = useTranslation('screens');
   const names = useNoteNames();
+  const headphones = useSettings((s) => s.headphones);
   const [transport] = useState(() => new Transport(score.tempo));
   const [session] = useState(
     () =>
@@ -140,7 +149,8 @@ export function SingRun({
   useEffect(() => {
     guideOn.current = guide;
     metronomeOn.current = metronome;
-  }, [guide, metronome]);
+    session.setPreview(guide);
+  }, [guide, metronome, session]);
   useEffect(
     () =>
       startMetronome(
@@ -178,29 +188,40 @@ export function SingRun({
     if (!running) audioIfReady()?.stopAccompaniment();
   }, [running]);
 
-  // Wait for me: the app plays each note first (with the guide on), then listens.
+  // Wait for me: the app plays a note when asked (Hear it again), and with headphones and the guide
+  // on, each one as it comes, while it's sung. Through speakers the microphone would hear it, so
+  // it listens once the note has stopped ringing.
+  const headphonesOn = useRef(headphones);
+  useEffect(() => {
+    headphonesOn.current = headphones;
+  }, [headphones]);
   const playNote = useCallback(
     async (note: ScoreNote) => {
-      const engine = guideOn.current
-        ? await startAudio().catch((error: unknown) => {
-            console.warn('No audio', error);
-            return null;
-          })
-        : null;
+      const engine = await startAudio().catch((error: unknown) => {
+        console.warn('No audio', error);
+        return null;
+      });
       if (!engine) {
         session.listenFrom(performance.now());
         return;
       }
       const start = performance.now() + START_DELAY_MS + soundLeadMs();
-      engine.accompany(note.pitch.midi, start, start + GUIDE_NOTE_MS);
-      session.listenFrom(start + GUIDE_NOTE_MS + engine.outputDelayMs() + RING_MS);
+      const length = Math.max(GUIDE_NOTE_MS, beatsToMs(note.duration, score.tempo));
+      engine.accompany(note.pitch.midi, start, start + length);
+      session.listenFrom(
+        headphonesOn.current
+          ? performance.now()
+          : start + length + engine.outputDelayMs() + RING_MS,
+      );
     },
-    [session],
+    [session, score],
   );
   const waitingFor = state.status === SingStatus.Waiting ? session.waitingFor : undefined;
   useEffect(() => {
-    if (waitingFor) void playNote(waitingFor);
-  }, [waitingFor, playNote]);
+    if (!waitingFor) return;
+    if (guideOn.current && headphonesOn.current) void playNote(waitingFor);
+    else session.listenFrom(performance.now());
+  }, [waitingFor, playNote, session]);
 
   // A run that ends keeps its audio, to listen to, and its line, to compare.
   const finished = useRef(onFinish);
@@ -305,7 +326,7 @@ export function SingRun({
               ? t('tuner.match.higher')
               : t('tuner.match.lower')
         : running
-          ? t('sing.singing')
+          ? t(mode === SingMode.Wait ? 'sing.nextNote' : 'sing.singing')
           : t(`sing.hint.${mode}`);
   const resultsOpen = state.summary !== null && dismissed !== state.summary;
   const tempo = mode !== SingMode.Wait;
@@ -381,7 +402,9 @@ export function SingRun({
           {message}
         </p>
       </div>
-      {mode === SingMode.Along && guide && <p className="notice">{t('sing.headphones')}</p>}
+      {mode === SingMode.Along && guide && !headphones && (
+        <p className="notice">{t('sing.headphones')}</p>
+      )}
 
       {state.summary && resultsOpen && (
         <Modal labelledBy="sing-results" onClose={() => setDismissed(state.summary)}>
