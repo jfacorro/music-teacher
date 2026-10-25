@@ -52,6 +52,7 @@ const COLORS = {
   played: '--note-played',
   missed: '--key-wrong',
   muted: '--muted',
+  partly: '--pending',
 };
 
 interface Rendered {
@@ -187,7 +188,9 @@ export function SheetMusic({
             ? sheet.colors.missed
             : style === NoteStyle.Muted
               ? sheet.colors.muted
-              : sheet.colors.music;
+              : style === NoteStyle.Partly
+                ? sheet.colors.partly
+                : sheet.colors.music;
       if (sheet.applied.get(note) === color) continue;
       sheet.applied.set(note, color);
       for (const graphical of graphicals) {

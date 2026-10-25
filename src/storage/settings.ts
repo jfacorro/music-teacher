@@ -46,6 +46,11 @@ export interface Settings {
   micSensitivityDb: number;
   /** Extra delay to subtract from microphone notes, from calibration, ms. */
   micLatencyMs: number;
+  /**
+   * The browser takes the app's own sound out of the microphone (echo cancellation), to try
+   * singing along through speakers; it may bend musical tones, so it's off unless chosen.
+   */
+  micEchoCancellation: boolean;
   /** Light, dark, or the computer's setting. */
   theme: Theme;
   /** How tall the on-screen keyboard's keys are. */
@@ -80,6 +85,7 @@ export const DEFAULT_SETTINGS: Settings = {
   micNoiseFloorDb: -65,
   micSensitivityDb: 12,
   micLatencyMs: 0,
+  micEchoCancellation: false,
   theme: Theme.System,
   keyHeight: KeyHeight.Normal,
   keysShown: KeysShown.Fit,

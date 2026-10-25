@@ -31,6 +31,42 @@
           "skills": ["pitch-matching"]
         }
       ]
+    },
+    {
+      "id": "v3",
+      "level": "beginner",
+      "lessons": [
+        {
+          "id": "v3-l1",
+          "skills": ["slides"]
+        },
+        {
+          "id": "v3-l2",
+          "skills": ["slides"]
+        },
+        {
+          "id": "v3-l3",
+          "skills": ["slides"]
+        }
+      ]
+    },
+    {
+      "id": "v4",
+      "level": "beginner",
+      "lessons": [
+        {
+          "id": "v4-l1",
+          "skills": ["stepwise"]
+        },
+        {
+          "id": "v4-l2",
+          "skills": ["stepwise"]
+        },
+        {
+          "id": "v4-l3",
+          "skills": ["stepwise"]
+        }
+      ]
     }
   ]
 }

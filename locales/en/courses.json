@@ -63,6 +63,14 @@
     "v2": {
       "title": "Matching one note",
       "description": "Warming up, then singing back the note you hear: your comfortable note first, then the notes around it."
+    },
+    "v3": {
+      "title": "Slides and sirens",
+      "description": "Gliding from note to note: sirens and slides, waiting for each note, then in time with the beat."
+    },
+    "v4": {
+      "title": "Steps: do, re, mi",
+      "description": "Melodies that move by steps, from do-re-mi up to sol, and two well-known tunes."
     }
   },
   "lessons": {
@@ -138,7 +146,13 @@
     "v1-l2": "Breathing for singing",
     "v2-l1": "Your note",
     "v2-l2": "Notes nearby",
-    "v2-l3": "Further out"
+    "v2-l3": "Further out",
+    "v3-l1": "Sirens",
+    "v3-l2": "Slides in time",
+    "v3-l3": "Singing along",
+    "v4-l1": "Do, re, mi",
+    "v4-l2": "Up to sol",
+    "v4-l3": "Step melodies"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -173,6 +187,8 @@
     "ear-training": "Ear training",
     "posture": "Posture",
     "breathing": "Breathing",
-    "pitch-matching": "Matching pitch"
+    "pitch-matching": "Matching pitch",
+    "slides": "Slides and sirens",
+    "stepwise": "Singing by steps"
   }
 }

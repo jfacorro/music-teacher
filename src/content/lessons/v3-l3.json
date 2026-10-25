@@ -1,0 +1,87 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "along"
+    },
+    {
+      "type": "sing",
+      "text": "guided",
+      "mode": "along",
+      "score": {
+        "tempo": 72,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 2
+          },
+          {
+            "note": "D4",
+            "start": 2,
+            "duration": 2
+          },
+          {
+            "note": "E4",
+            "start": 4,
+            "duration": 2
+          },
+          {
+            "note": "G4",
+            "start": 6,
+            "duration": 2
+          },
+          {
+            "note": "E4",
+            "start": 8,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 10,
+            "duration": 4
+          }
+        ]
+      }
+    },
+    {
+      "type": "sing",
+      "text": "steady",
+      "mode": "along",
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 4
+          },
+          {
+            "note": "G4",
+            "start": 4,
+            "duration": 4
+          },
+          {
+            "note": "E4",
+            "start": 8,
+            "duration": 4
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 4
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

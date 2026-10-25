@@ -5,13 +5,19 @@ import { initI18n } from './i18n';
 import { detectLanguage } from './i18n/languages';
 import { setDevInputEnabled } from './input/dev/devInput';
 import { startLiveTracking } from './input/liveStore';
-import { micPermission, setMicDelay, setMicGate, startMic } from './input/mic/micInput';
+import {
+  micPermission,
+  setMicDelay,
+  setMicEchoCancellation,
+  setMicGate,
+  startMic,
+} from './input/mic/micInput';
 import { configureMidi, enableMidi, midiPermission } from './input/midi/midiInput';
 import { startRouting } from './input/routing';
 import { followSoundOutput } from './preferences';
 import { loadMySongs } from './storage/mySongs';
 import { loadProgress } from './storage/progress';
-import { loadSettings, updateSettings } from './storage/settings';
+import { loadSettings, updateSettings, useSettings } from './storage/settings';
 import { loadEarTraining } from './storage/earTraining';
 import { loadSightReading } from './storage/sightReading';
 import { loadTodayPlan } from './storage/todayPlan';
@@ -48,6 +54,13 @@ export async function bootstrap(): Promise<void> {
   });
   setMicGate(settings.micNoiseFloorDb + settings.micSensitivityDb);
   setMicDelay(settings.micLatencyMs);
+  setMicEchoCancellation(settings.micEchoCancellation);
+  // Chosen in Settings → Voice; the microphone restarts with it.
+  useSettings.subscribe((now, before) => {
+    if (now.micEchoCancellation !== before.micEchoCancellation) {
+      setMicEchoCancellation(now.micEchoCancellation);
+    }
+  });
 
   // Reconnect devices right away only if they were allowed before; otherwise wait for the
   // user to ask, so permission prompts don't appear out of context.

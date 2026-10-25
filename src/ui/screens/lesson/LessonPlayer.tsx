@@ -20,12 +20,13 @@ import { MatchStepView } from './steps/MatchStepView';
 import { FindStepView } from './steps/FindStepView';
 import { QuizStepView } from './steps/QuizStepView';
 import { RhythmStepView } from './steps/RhythmStepView';
+import { SingStepView } from './steps/SingStepView';
 import { WarmUpStepView } from './steps/WarmUpStepView';
 import { isGraded, StepType } from '../../../content/lessons/lesson';
 
 /**
  * Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms, and
- * for the voice, warm-ups and matching notes.
+ * for the voice, warm-ups, matching notes and singing melodies.
  */
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('screens');
@@ -144,7 +145,8 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           {(step?.type === StepType.Exercise ||
             step?.type === StepType.Quiz ||
             step?.type === StepType.Rhythm ||
-            step?.type === StepType.Match) && <StepHistory runs={history} />}
+            step?.type === StepType.Match ||
+            step?.type === StepType.Sing) && <StepHistory runs={history} />}
           {step?.type === StepType.Explain && (
             <ExplainStepView
               key={index}
@@ -183,6 +185,15 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           {step?.type === StepType.WarmUp && <WarmUpStepView key={index} step={step} text={text} />}
           {step?.type === StepType.Match && (
             <MatchStepView
+              key={index}
+              step={step}
+              text={text}
+              onResult={(stepResult, passed) => tried(index, stepResult, passed)}
+              onContinue={next}
+            />
+          )}
+          {step?.type === StepType.Sing && (
+            <SingStepView
               key={index}
               step={step}
               text={text}

@@ -81,7 +81,7 @@ describe('courses', () => {
         level,
         units.map(({ number }) => number),
       ]),
-    ).toEqual([[CourseLevel.Beginner, [1, 2]]]);
+    ).toEqual([[CourseLevel.Beginner, [1, 2, 3, 4]]]);
   });
 
   it('tags every lesson with what it practices, and every skill is practiced', () => {
@@ -149,6 +149,16 @@ describe('lessons', () => {
     );
   });
 });
+
+/** A melody to sing: no hands. */
+const melody = {
+  tempo: 80,
+  timeSignature: [4, 4],
+  notes: [
+    { note: 'C4', start: 0, duration: 2 },
+    { note: 'D4', start: 2, duration: 2 },
+  ],
+};
 
 describe('parseLesson', () => {
   const exercise = {
@@ -224,6 +234,7 @@ describe('parseLesson', () => {
         { type: 'warmUp', text: 'w' },
         { type: 'match', text: 'm', within: 2, count: 5, pass: { minStars: 1 } },
         { type: 'match', text: 'all' },
+        { type: 'sing', text: 's', mode: 'listenFirst', score: melody, strict: true },
       ],
     });
     expect(lesson.steps.map((s) => s.type)).toEqual([
@@ -236,7 +247,17 @@ describe('parseLesson', () => {
       'warmUp',
       'match',
       'match',
+      'sing',
     ]);
+    expect(lesson.steps[9]).toMatchObject({
+      mode: 'listenFirst',
+      view: 'falling',
+      strict: true,
+      octave: false,
+      guide: true,
+      metronome: false,
+      pass: { minStars: 0 },
+    });
     expect(lesson.steps[7]).toMatchObject({ within: 2, count: 5, pass: { minStars: 1 } });
     // By default: the whole range, ten notes.
     expect(lesson.steps[8]).toMatchObject({ within: null, count: 10, pass: { minStars: 0 } });
@@ -248,6 +269,7 @@ describe('parseLesson', () => {
       true,
       true,
       false,
+      true,
       true,
       true,
     ]);
@@ -322,6 +344,32 @@ describe('parseLesson', () => {
     ['a match reaching too far', { type: 'match', text: 'x', within: 25 }, 'within'],
     ['a match within part of a step', { type: 'match', text: 'x', within: 1.5 }, 'within'],
     ['no notes to match', { type: 'match', text: 'x', count: 0 }, 'count'],
+    ['a sing step without a mode', { type: 'sing', text: 'x', score: melody }, 'mode'],
+    [
+      'two notes at once to sing',
+      {
+        type: 'sing',
+        text: 'x',
+        mode: 'wait',
+        score: { ...melody, notes: [...melody.notes, { note: 'E4', start: 0, duration: 1 }] },
+      },
+      'score › notes[1]',
+    ],
+    [
+      'a melody to sing with repeats',
+      {
+        type: 'sing',
+        text: 'x',
+        mode: 'along',
+        score: { ...melody, repeats: [{ from: 0, to: 4 }] },
+      },
+      'repeats',
+    ],
+    [
+      'a guide that is neither on nor off',
+      { type: 'sing', text: 'x', mode: 'along', score: melody, guide: 'yes' },
+      'guide',
+    ],
     [
       'a rhythm with a short bar',
       { type: 'rhythm', text: 'x', pattern: 'q q q', tempo: 60 },

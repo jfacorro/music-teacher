@@ -17,11 +17,16 @@ export interface VocalRange {
   testedAt: number;
 }
 
-/** Follows the note being sung: the same note for `HOLD_MS` is held. */
+/** Follows the note being sung: the same note for `HOLD_MS` (or `holdMs`) is held. */
 export class HeldNote {
   private note: number | null = null;
   private since = 0;
   private lastSeen = -Infinity;
+  private readonly holdMs: number;
+
+  constructor(holdMs = HOLD_MS) {
+    this.holdMs = holdMs;
+  }
 
   /**
    * A reading at `time` (ms): the nearest note, or null when nothing clear is heard. Returns the
@@ -39,7 +44,7 @@ export class HeldNote {
     }
     return {
       note: this.note,
-      held: this.note === null ? 0 : Math.min(1, (time - this.since) / HOLD_MS),
+      held: this.note === null ? 0 : Math.min(1, (time - this.since) / this.holdMs),
     };
   }
 }

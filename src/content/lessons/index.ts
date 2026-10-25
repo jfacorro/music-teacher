@@ -30,6 +30,7 @@ export type {
   RhythmStep,
   WarmUpStep,
   MatchStep,
+  SingStep,
 } from './lesson';
 export {
   isGraded,
