@@ -903,7 +903,7 @@
   },
   "tuner": {
     "title": "Tuner",
-    "intro": "Sing anything to see which note you’re singing and how close you are to it.",
+    "intro": "Sing anything to see which note you’re singing and how close you are to it, in cents. A cent is a hundredth of a semitone; the green zone runs from 25 cents below the note to 25 cents above it.",
     "listening": "Listening…",
     "singSomething": "Sing something",
     "inTune": "in tune",
