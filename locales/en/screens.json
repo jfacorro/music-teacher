@@ -946,6 +946,12 @@
       "notInTimeHigh": "not matched in time, sung too high",
       "save": "Save recording",
       "saveTip": "Saves this run as an audio file (.wav) with the notes asked inside it, to improve how singing is judged. Put it in the project’s fixtures/voice folder."
+    },
+    "lean": {
+      "sharp": "{count} of {total} notes were sharp, by {cents} cents on average.",
+      "flat": "{count} of {total} notes were flat, by {cents} cents on average.",
+      "sharpTip": "Singing sharp often comes from pushing: try it softer, with a loose jaw.",
+      "flatTip": "Singing flat often comes from too little energy: keep the breath flowing, and think of each note as a little higher."
     }
   },
   "sing": {

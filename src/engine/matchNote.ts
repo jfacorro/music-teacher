@@ -5,7 +5,7 @@
 import { pitchFromMidi } from '../theory/pitch';
 import { quizCards } from './quiz';
 import { accuracyOf, starsFor } from './scoring';
-import { IN_TUNE_CENTS } from './tuner';
+import { IN_TUNE_CENTS, type PitchLean, pitchLean } from './tuner';
 import { HeldNote } from './vocalRange';
 
 /** Notes in a run. */
@@ -144,6 +144,8 @@ export interface MatchSummary {
    * tuner's in-tune zone. Their offset says whether they went flat or sharp.
    */
   toWorkOn: NoteMatch[];
+  /** Which way most notes leaned, flat or sharp, if they did. */
+  lean: PitchLean | null;
 }
 
 export function matchSummary(notes: readonly NoteMatch[]): MatchSummary {
@@ -162,5 +164,12 @@ export function matchSummary(notes: readonly NoteMatch[]): MatchSummary {
     })
     .filter((note) => !note.inTime || Math.abs(note.offset ?? 0) > IN_TUNE_CENTS)
     .sort((a, b) => a.target - b.target);
-  return { matched, total: notes.length, accuracy, stars: starsFor(accuracy), toWorkOn };
+  return {
+    matched,
+    total: notes.length,
+    accuracy,
+    stars: starsFor(accuracy),
+    toWorkOn,
+    lean: pitchLean(notes.map((note) => note.offset)),
+  };
 }

@@ -946,6 +946,12 @@
       "notInTimeHigh": "no la alcanzaste a tiempo, cantaste demasiado agudo",
       "save": "Guardar la grabación",
       "saveTip": "Guarda esta ronda como un archivo de audio (.wav) que incluye las notas pedidas, para mejorar cómo se evalúa el canto. Ponlo en la carpeta fixtures/voice del proyecto."
+    },
+    "lean": {
+      "sharp": "{count} de {total} notas quedaron por encima, {cents} cents en promedio.",
+      "flat": "{count} de {total} notas quedaron por debajo, {cents} cents en promedio.",
+      "sharpTip": "Cantar por encima suele venir de empujar: prueba más suave, con la mandíbula suelta.",
+      "flatTip": "Cantar por debajo suele venir de la falta de energía: mantén el aire en movimiento y piensa cada nota un poco más arriba."
     }
   },
   "sing": {

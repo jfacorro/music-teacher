@@ -26,6 +26,7 @@ import { activityTimer, recordPracticeTime } from '../../storage/progress';
 import { type VocalRange } from '../../engine/vocalRange';
 import { useSettings } from '../../storage/settings';
 import { pitchFromMidi } from '../../theory/pitch';
+import { PitchLeanLine } from '../components/PitchLeanLine';
 import { Stars } from '../components/Stars';
 import { ICONS } from '../icons';
 import { Needle, Trace, type TracePoint } from './TunerParts';
@@ -248,6 +249,7 @@ export function MatchTheNote({
           <strong>{formatPercent(summary.accuracy, i18n.language)}</strong>
         </p>
         <p>{t('tuner.match.matchedCount', { count: summary.matched, total: summary.total })}</p>
+        <PitchLeanLine lean={summary.lean} />
         {summary.toWorkOn.length === 0 ? (
           <p>{t('tuner.match.allGood')}</p>
         ) : (

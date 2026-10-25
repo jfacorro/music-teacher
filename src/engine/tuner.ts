@@ -24,6 +24,42 @@ export function tunerNote(recent: readonly number[]): { midi: number; cents: num
 
 export const isInTune = (cents: number) => Math.abs(cents) <= IN_TUNE_CENTS;
 
+/** A note leans flat or sharp when it was off by at least this much on average, in cents. */
+const LEAN_CENTS = 10;
+/** A lean needs this share of the notes sung leaning the same way. */
+const LEAN_SHARE = 0.6;
+/** Fewer notes than this say nothing about a lean. */
+const LEAN_MIN_NOTES = 3;
+/** Further off than this (cents), a note wasn't aimed at: it says nothing about a lean. */
+const LEAN_AIMED_CENTS = 100;
+
+/** Which way most notes of a run leaned: how many of those sung, and by how much. */
+export interface PitchLean {
+  /** The leaning notes' average, in cents: negative flat, positive sharp. */
+  cents: number;
+  count: number;
+  total: number;
+}
+
+/**
+ * Whether most notes sung leaned the same way, flat or sharp, from each note's average offset
+ * (cents, null when not sung); null when they didn't, or too few were sung to tell.
+ */
+export function pitchLean(offsets: readonly (number | null)[]): PitchLean | null {
+  const sung = offsets.filter(
+    (offset): offset is number => offset !== null && Math.abs(offset) <= LEAN_AIMED_CENTS,
+  );
+  if (sung.length < LEAN_MIN_NOTES) return null;
+  for (const sign of [1, -1]) {
+    const leaning = sung.filter((offset) => offset * sign >= LEAN_CENTS);
+    if (leaning.length / sung.length >= LEAN_SHARE) {
+      const cents = leaning.reduce((sum, offset) => sum + offset, 0) / leaning.length;
+      return { cents: Math.round(cents), count: leaning.length, total: sung.length };
+    }
+  }
+  return null;
+}
+
 /** Steady notes sung beyond the saved range so far: the lowest below it, the highest above. */
 export interface Beyond {
   low: number | null;
