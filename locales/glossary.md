@@ -156,6 +156,7 @@ system setting (`src/i18n/naming.ts`).
 | Tuner (sing and see the note)                 | tuner                                                | afinador                                                |
 | Cents (hundredths of a semitone)              | cents                                                | cents                                                   |
 | Sharp / flat (sung above / below the note)    | sharp / flat                                         | por encima / por debajo                                 |
+| Singing sharp / flat (most notes of a run)    | sharp / flat                                         | desafinar hacia arriba / hacia abajo                    |
 | Course (what is practiced: piano or voice)    | piano / voice                                        | piano / voz                                             |
 | Singing (the voice course, its skills)        | singing                                              | canto                                                   |
 | Posture                                       | posture                                              | postura                                                 |
