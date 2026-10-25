@@ -83,6 +83,10 @@
     "v7": {
       "title": "Reading from the staff",
       "description": "Melodies read from the staff, with do, re, mi under the notes and then without, up to two well-known tunes."
+    },
+    "v8": {
+      "title": "Songs with words",
+      "description": "Whole songs sung with their words: a syllable on each note, phrases and breaths, and one syllable over two notes, with the piano playing along."
     }
   },
   "lessons": {
@@ -173,7 +177,10 @@
     "v6-l3": "Major or minor",
     "v7-l1": "Do on the staff",
     "v7-l2": "Skips on the staff",
-    "v7-l3": "Reading a melody"
+    "v7-l3": "Reading a melody",
+    "v8-l1": "Words on the notes",
+    "v8-l2": "Phrases and breaths",
+    "v8-l3": "One syllable, two notes"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -215,6 +222,7 @@
     "singing-scales": "Singing scales",
     "singing-by-ear": "Singing by ear",
     "reading-melodies": "Reading melodies",
-    "sight-singing": "Sight-singing"
+    "sight-singing": "Sight-singing",
+    "singing-songs": "Singing songs"
   }
 }

@@ -1,6 +1,11 @@
 {
   "tempo": 90,
   "timeSignature": [4, 4],
+  "lyricsHand": "L",
+  "lyrics": {
+    "en": "Hot cross buns! | Hot cross buns! / | One a pen-ny, two a pen-ny, / | hot cross buns!",
+    "es": "¡Pan con miel! | ¡Pan con miel! / | U-no, dos, tres, por un pe-so, / | ¡pan con miel!"
+  },
   "notes": [
     {
       "note": "E3",

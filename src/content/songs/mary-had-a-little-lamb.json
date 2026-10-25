@@ -1,6 +1,11 @@
 {
   "tempo": 100,
   "timeSignature": [4, 4],
+  "lyricsHand": "L",
+  "lyrics": {
+    "en": "Ma-ry had a | lit-tle lamb, | lit-tle lamb, | lit-tle lamb, / | Ma-ry had a | lit-tle lamb, its | fleece was white as | snow.",
+    "es": "Ma-rí-a~y su | cor-de-ro, | cor-de-ro, | cor-de-ro; / | Ma-rí-a~y su | cor-de-ri-to | blan-co co-mo~la | luz."
+  },
   "notes": [
     {
       "note": "E3",

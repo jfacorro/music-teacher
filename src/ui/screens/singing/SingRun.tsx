@@ -57,6 +57,8 @@ const GUIDE_NOTE_MS = 1000;
 const RING_MS = 400;
 /** A note starts this long after asking, so it's never cut (ms). */
 const START_DELAY_MS = 150;
+/** The piano's accompaniment plays softer than the melody, under the voice. */
+const ACCOMPANIMENT_VELOCITY = 0.45;
 
 interface SingRunProps {
   /** The melody, already in the singer's range. */
@@ -74,6 +76,12 @@ interface SingRunProps {
   metronome: boolean;
   view: ScoreView;
   notation: SheetNotation;
+  /** The language of the words to show under the notes that have them (a song's). */
+  lyrics?: string;
+  /** A song's piano part, moved with the melody: it plays along when singing along. */
+  accompaniment?: readonly ScoreNote[];
+  /** Whether the accompaniment plays. */
+  accompanied?: boolean;
   onFinish?: (summary: SingSummary, durationMs: number) => void;
   /** Extra buttons on the results (e.g. Continue in a lesson). */
   resultsActions?: (summary: SingSummary) => ReactNode;
@@ -88,6 +96,9 @@ export function SingRun({
   metronome,
   view,
   notation,
+  lyrics,
+  accompaniment,
+  accompanied = false,
   onFinish,
   resultsActions,
 }: SingRunProps) {
@@ -146,11 +157,13 @@ export function SingRun({
   // The guide and the metronome read the latest choices without restarting.
   const guideOn = useRef(guide);
   const metronomeOn = useRef(metronome);
+  const accompaniedOn = useRef(accompanied);
   useEffect(() => {
     guideOn.current = guide;
     metronomeOn.current = metronome;
+    accompaniedOn.current = accompanied;
     session.setPreview(guide);
-  }, [guide, metronome, session]);
+  }, [guide, metronome, accompanied, session]);
   useEffect(
     () =>
       startMetronome(
@@ -183,6 +196,23 @@ export function SingRun({
         soundLeadMs,
       ),
     [transport, session, score, mode],
+  );
+  // A song's piano part, singing along (milestone 6.6).
+  useEffect(
+    () =>
+      startAccompaniment(
+        transport,
+        () => ({
+          enabled: mode === SingMode.Along && accompaniedOn.current && !session.appPlays,
+          notes: accompaniment ?? [],
+          from: 0,
+          until: Infinity,
+        }),
+        (note, start, end) =>
+          audioIfReady()?.accompany(note.pitch.midi, start, end, ACCOMPANIMENT_VELOCITY),
+        soundLeadMs,
+      ),
+    [transport, session, accompaniment, mode],
   );
   useEffect(() => {
     if (!running) audioIfReady()?.stopAccompaniment();
@@ -403,8 +433,8 @@ export function SingRun({
           {message}
         </p>
       </div>
-      {mode === SingMode.Along && guide && !headphones && (
-        <p className="notice">{t('sing.headphones')}</p>
+      {mode === SingMode.Along && (guide || accompanied) && !headphones && (
+        <p className="notice">{t(accompanied ? 'sing.headphonesPiano' : 'sing.headphones')}</p>
       )}
 
       {state.summary && resultsOpen && (
@@ -470,6 +500,7 @@ export function SingRun({
               outcomesVersion={state}
               notation={notation}
               hands={score.notes[0]?.hand === Hand.Left ? HandFilter.Left : HandFilter.Right}
+              {...(lyrics && { lyrics })}
             />
           ) : (
             <SingLane
@@ -480,6 +511,7 @@ export function SingRun({
               levelOf={levelOf}
               trail={trail}
               voice={voice}
+              {...(lyrics && { lyrics })}
             />
           )}
           {state.countIn !== null && (

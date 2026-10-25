@@ -969,7 +969,11 @@
     },
     "keyNote": "Play {note}",
     "keyNoteTip": "Hear the key note, {note}, to find the first note before you sing",
-    "movableDo": "The whole melody is moved to fit your range, so do is its key note, wherever that lands: here, do is {note}."
+    "movableDo": "The whole melody is moved to fit your range, so do is its key note, wherever that lands: here, do is {note}.",
+    "headphonesPiano": "Singing along with the piano, the microphone hears it too: use headphones, or turn off the piano and the guide melody.",
+    "lyrics": "Words",
+    "lyricsTip": "The language to sing songs’ words in",
+    "words": "The words"
   },
   "sightSinging": {
     "title": "Sight-singing",
@@ -986,6 +990,12 @@
       "wait": "Wait for me",
       "along": "Sing along"
     }
+  },
+  "voiceSongs": {
+    "heading": "Songs with words",
+    "intro": "Sing whole songs, with their words, any time. Each one is moved to fit your voice, and the piano plays along. The words are in English and Spanish, and some in their original language too.",
+    "piano": "Piano",
+    "pianoTip": "The piano plays the rest of the song with you, moved along with the melody to fit your voice (use headphones)"
   },
   "solfa": {
     "do": "do",

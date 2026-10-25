@@ -68,6 +68,7 @@ export const SKILLS = [
   'singing-scales',
   'singing-by-ear',
   'reading-melodies',
+  'singing-songs',
   'sight-singing',
 ] as const;
 

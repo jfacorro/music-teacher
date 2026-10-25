@@ -969,7 +969,11 @@
     },
     "keyNote": "Tocar {note}",
     "keyNoteTip": "Escucha la tónica, {note}, para encontrar la primera nota antes de cantar",
-    "movableDo": "Toda la melodía se mueve para ajustarse a tu registro, así que do es su tónica, caiga donde caiga: aquí, do es {note}."
+    "movableDo": "Toda la melodía se mueve para ajustarse a tu registro, así que do es su tónica, caiga donde caiga: aquí, do es {note}.",
+    "headphonesPiano": "Si cantas con el piano, el micrófono también lo escucha: usa auriculares, o apaga el piano y la melodía guía.",
+    "lyrics": "Letra",
+    "lyricsTip": "El idioma en que se canta la letra de las canciones",
+    "words": "La letra"
   },
   "sightSinging": {
     "title": "Lectura cantada",
@@ -986,6 +990,12 @@
       "wait": "Espérame",
       "along": "Cantar a tiempo"
     }
+  },
+  "voiceSongs": {
+    "heading": "Canciones con letra",
+    "intro": "Canta canciones completas, con su letra, cuando quieras. Cada una se mueve para ajustarse a tu voz, y el piano te acompaña. La letra está en inglés y en español, y algunas también en su idioma original.",
+    "piano": "Piano",
+    "pianoTip": "El piano toca el resto de la canción contigo, movido junto con la melodía para ajustarse a tu voz (usa auriculares)"
   },
   "solfa": {
     "do": "do",

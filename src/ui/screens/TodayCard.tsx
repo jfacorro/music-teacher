@@ -33,6 +33,7 @@ function hrefOf(item: PlanItem): string {
   const { kind, id } = item.target;
   if (kind === ResultKind.Drill) return `/sight-reading?level=${id}`;
   if (kind === ResultKind.VoiceDrill) return `/sight-singing?level=${id}`;
+  if (kind === ResultKind.VoiceSong) return `/sing/${id}`;
   if (kind === ResultKind.Ear || kind === ResultKind.VoiceEar) return `/ear-training?level=${id}`;
   const path =
     kind === ResultKind.Lesson
@@ -65,7 +66,9 @@ export function TodayCard() {
   if (!plan || plan.items.length === 0) return null;
 
   const titleOf = ({ kind, id }: PracticeTarget) => {
-    if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
+    if (kind === ResultKind.Song || kind === ResultKind.VoiceSong) {
+      return isSongId(id) ? ts(`${id}.title`) : id;
+    }
     if (kind === ResultKind.Drill) {
       return isValueOf(DrillLevel, id) ? levelName(id) : t('sightReading.title');
     }

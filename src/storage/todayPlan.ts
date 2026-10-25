@@ -6,7 +6,7 @@
 import { create } from 'zustand';
 import { Course, COURSE_UNITS, UNITS } from '../content/courses';
 import { courseSkills, skillProgress } from '../content/skills';
-import { SONG_IDS, SONG_UNITS } from '../content/songs';
+import { SONG_IDS, SONG_UNITS, VOICE_SONG_IDS, VOICE_SONGS_UNIT } from '../content/songs';
 import { type Suggestion, suggestPractice, targetKey } from '../content/suggestions';
 import { openEarLevels } from '../content/earTraining';
 import { openVoiceEarLevels } from '../content/voiceEar';
@@ -74,13 +74,19 @@ function suggestNow(course: Course, now: number, exclude?: ReadonlySet<string>):
     (id) => lessonResult(id)?.bestAccuracy ?? null,
     exerciseAccuracies(log),
   );
-  // The voice has its lessons, sight-singing and ear training, for now: the songs are the piano's.
+  // The voice's songs are suggested once a lesson of the unit that starts singing them is done
+  // (every unit's first lesson is open from the start).
   if (course === Course.Voice) {
+    const songsBegun = units
+      .find((unit) => unit.id === VOICE_SONGS_UNIT)
+      ?.lessons.some((lesson) => (lessonResult(lesson.id)?.bestStars ?? 0) > 0);
     return suggestPractice({
       units,
       states,
       results,
-      songs: [],
+      songs: songsBegun
+        ? VOICE_SONG_IDS.map((id) => ({ target: { kind: ResultKind.VoiceSong, id }, unit: null }))
+        : [],
       skills,
       drillLevels: openSingDrillLevels(units, states),
       drillKind: ResultKind.VoiceDrill,

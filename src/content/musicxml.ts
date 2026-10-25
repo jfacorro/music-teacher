@@ -13,6 +13,7 @@ import {
   beatsPerMeasure,
   countedBeat,
   Hand,
+  type Lyric,
   type Score,
   type ScoreNote,
   slurNotes,
@@ -59,6 +60,11 @@ export interface MusicXmlOptions {
   hands?: readonly Hand[];
   /** Text written under each note, e.g. its name for beginners (once per tied note). */
   noteLabel?: (note: ScoreNote) => string;
+  /**
+   * The language of the words to write under the notes that have them (`<lyric>`), above any
+   * note labels; none by default.
+   */
+  lyrics?: string;
   /**
    * Rhythm only: one staff with a single line and a percussion clef, every note on the line
    * (written at its pitch, which positions it).
@@ -160,6 +166,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): Mu
           inBar,
           slurs,
           beamEvery,
+          options.lyrics,
         ),
       );
     });
@@ -233,6 +240,7 @@ function measureNotes(
   directions: readonly Direction[],
   slurs: ReadonlyMap<ScoreNote, readonly SlurMark[]> = new Map(),
   beamEvery: number | null = null,
+  language?: string,
 ): string[] {
   const out: string[] = [];
   /** Notes shorter than a quarter, to beam: where each is written (a chord's first note). */
@@ -296,8 +304,12 @@ function measureNotes(
             // One fermata per chord, over its first written part.
             fermata: (note.fermata ?? false) && !tieStop && n === 0,
             rhythm,
-            // Chord notes stack their labels on separate lines.
-            label: !tieStop && noteLabel ? { text: noteLabel(note), line: n + 1 } : null,
+            // The words on the first line, then the labels: a chord's stack on separate lines.
+            lyric: (!tieStop && language && note.lyrics?.[language]) || null,
+            label:
+              !tieStop && noteLabel
+                ? { text: noteLabel(note), line: n + (language ? 2 : 1) }
+                : null,
           }),
         );
       });
@@ -573,6 +585,7 @@ function noteXml(
     slurs = [],
     fermata = false,
     rhythm,
+    lyric = null,
     label,
   }: {
     chord: boolean;
@@ -582,6 +595,7 @@ function noteXml(
     slurs?: readonly SlurMark[];
     fermata?: boolean;
     rhythm: boolean;
+    lyric?: Lyric | null;
     label: { text: string; line: number } | null;
   },
 ): string {
@@ -614,6 +628,10 @@ function noteXml(
     (rhythm ? '<stem>up</stem>' : '') +
     `<staff>${staff.number}</staff>` +
     (notations ? `<notations>${notations}</notations>` : '') +
+    (lyric
+      ? `<lyric number="1"><syllabic>${lyric.syllabic}</syllabic>` +
+        `<text>${escapeXml(lyric.text)}</text>${lyric.extend ? '<extend/>' : ''}</lyric>`
+      : '') +
     (label
       ? `<lyric number="${label.line}"><syllabic>single</syllabic><text>${escapeXml(label.text)}</text></lyric>`
       : '') +

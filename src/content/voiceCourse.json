@@ -121,6 +121,24 @@
           "skills": ["reading-melodies"]
         }
       ]
+    },
+    {
+      "id": "v8",
+      "level": "elementary",
+      "lessons": [
+        {
+          "id": "v8-l1",
+          "skills": ["singing-songs"]
+        },
+        {
+          "id": "v8-l2",
+          "skills": ["singing-songs"]
+        },
+        {
+          "id": "v8-l3",
+          "skills": ["singing-songs"]
+        }
+      ]
     }
   ]
 }

@@ -91,7 +91,9 @@ export function ProgressScreen() {
   const recent = log.filter((entry) => courseOfResult(entry.kind, entry.refId) === course);
 
   const titleOf = (kind: ResultKind, id: string) => {
-    if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
+    if (kind === ResultKind.Song || kind === ResultKind.VoiceSong) {
+      return isSongId(id) ? ts(`${id}.title`) : id;
+    }
     if (kind === ResultKind.Drill) {
       return isValueOf(DrillLevel, id)
         ? t('sightReading.logTitle', { level: levelName(id) })

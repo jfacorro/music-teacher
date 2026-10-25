@@ -83,6 +83,10 @@
     "v7": {
       "title": "Leer en el pentagrama",
       "description": "Melodías leídas en el pentagrama, con los nombres bajo las notas y después sin ellos, hasta dos canciones conocidas."
+    },
+    "v8": {
+      "title": "Canciones con letra",
+      "description": "Canciones completas cantadas con su letra: una sílaba en cada nota, frases y respiraciones, y una sílaba sobre dos notas, con el piano acompañando."
     }
   },
   "lessons": {
@@ -173,7 +177,10 @@
     "v6-l3": "¿Mayor o menor?",
     "v7-l1": "Grados conjuntos en el pentagrama",
     "v7-l2": "Saltos en el pentagrama",
-    "v7-l3": "Leer una melodía"
+    "v7-l3": "Leer una melodía",
+    "v8-l1": "La letra sobre las notas",
+    "v8-l2": "Frases y respiraciones",
+    "v8-l3": "Una sílaba, dos notas"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -215,6 +222,7 @@
     "singing-scales": "Cantar escalas",
     "singing-by-ear": "Cantar de oído",
     "reading-melodies": "Leer melodías",
-    "sight-singing": "Lectura cantada a primera vista"
+    "sight-singing": "Lectura cantada a primera vista",
+    "singing-songs": "Cantar canciones"
   }
 }

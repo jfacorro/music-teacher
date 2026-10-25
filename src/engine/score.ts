@@ -37,6 +37,38 @@ export interface ScoreNote {
   crossed?: boolean;
   /** Held longer than written (a fermata): the music waits on it. */
   fermata?: boolean;
+  /**
+   * The syllable sung on it, by language (e.g. "en"); a note held from the syllable before (a
+   * melisma) has none. Lyrics read from a file are under `LYRICS_AS_WRITTEN`.
+   */
+  lyrics?: Readonly<Record<string, Lyric>>;
+}
+
+/** Where a syllable stands in its word (MusicXML `<syllabic>`). */
+export const Syllabic = {
+  Single: 'single',
+  Begin: 'begin',
+  Middle: 'middle',
+  End: 'end',
+} as const;
+export type Syllabic = (typeof Syllabic)[keyof typeof Syllabic];
+
+/** A syllable of the words, sung on a note (MusicXML `<lyric>`). */
+export interface Lyric {
+  text: string;
+  syllabic: Syllabic;
+  /** Held over the next notes too (a melisma): a line is drawn after it. */
+  extend?: boolean;
+}
+
+/** The language key of lyrics read from a file, whose language isn't known. */
+export const LYRICS_AS_WRITTEN = 'und';
+
+/** A song's words: the hand whose notes are sung, and the words as text, by language. */
+export interface ScoreLyrics {
+  hand: Hand;
+  /** The words in lines, as they're read (no hyphens), by language. */
+  lines: Readonly<Record<string, readonly string[]>>;
 }
 
 /** Notes played smoothly connected (legato): one hand's notes from `start` to `end` (beats). */
@@ -136,6 +168,8 @@ export interface Score {
   ritardandos?: Ritardando[];
   /** A score with repeats, as played: how it's written (see `unroll`, engine/form.ts). */
   form?: Form;
+  /** A song's words: their syllables are on the notes (`ScoreNote.lyrics`). */
+  lyrics?: ScoreLyrics;
 }
 
 /** The score marks where to use the sustain pedal. */

@@ -65,6 +65,25 @@ export const SONG_UNITS: Readonly<Record<SongId, string>> = {
   'minuet-in-g-minor': 'u14',
 };
 
+/**
+ * The songs with words, sung in the voice's Song practice (PLAN.md milestone 6.6), easiest
+ * first. A test checks that these, and only these, have words in English and Spanish.
+ */
+export const VOICE_SONG_IDS: readonly SongId[] = [
+  'hot-cross-buns',
+  'mary-had-a-little-lamb',
+  'twinkle-twinkle',
+  'au-clair-de-la-lune',
+  'when-the-saints',
+  'lightly-row',
+  'ode-to-joy',
+  'jingle-bells',
+  'amazing-grace',
+];
+
+/** The voice unit that starts singing songs with their words: Today suggests them from then. */
+export const VOICE_SONGS_UNIT = 'v8';
+
 export function isSongId(id: string | undefined): id is SongId {
   return id !== undefined && Object.hasOwn(loaders, id);
 }

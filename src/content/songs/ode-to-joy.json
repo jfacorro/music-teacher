@@ -2,6 +2,11 @@
   "tempo": 100,
   "timeSignature": [4, 4],
   "markings": ["moderato", "mf"],
+  "lyrics": {
+    "de": "Freu-de, schö-ner | Göt-ter-fun-ken, / | Toch-ter aus E-ly-si-um, / | wir be-tre-ten | feu-er-trun-ken, / | Himm-li-sche, dein | Hei-lig-tum!",
+    "en": "Joy, you spark of | light from hea-ven, / | daugh-ter of E-ly-si-um, / | bur-ning bright, we | now ap-proach your / | sanc-tu-ar-y, | heav'n-ly one!",
+    "es": "A-le-grí-a, | luz del cie-lo, / | hi-ja de la~e-ter-ni-dad; / | lle-nos de~un ar-dor di-vi-no, / | a tu tem-plo | va-mos ya."
+  },
   "notes": [
     {
       "note": "E4",

@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { unitsByLevel } from '../../content/courses';
+import { Course, unitsByLevel } from '../../content/courses';
 import { SONG_IDS, SONG_UNITS } from '../../content/songs';
 import { useContentText } from '../../i18n/useContentText';
 import { LessonStatus } from '../../content/unlock';
 import { matchesQuery } from '../../lib/text';
 import { useMySongs } from '../../storage/mySongs';
 import { resultKey, ResultKind, useProgress } from '../../storage/progress';
+import { useSettings } from '../../storage/settings';
 import { IndexedPage, type IndexGroup } from '../components/IndexedPage';
 import { PathItem } from '../components/PathItem';
+import { VoiceSongsScreen } from './singing/VoiceSongsScreen';
 
 /** The built-in songs by level, then by the unit that teaches them, in course order. */
 const SONGS_BY_LEVEL = unitsByLevel()
@@ -27,11 +29,17 @@ const SONGS_BY_LEVEL = unitsByLevel()
   }))
   .filter(({ units }) => units.length > 0);
 
-/**
- * Song practice: the built-in songs, by the unit they belong to, and the learner's own
- * (imported) songs, with their stars.
- */
+/** Song practice: played on the piano, or sung with the voice. */
 export function SongsScreen() {
+  const course = useSettings((s) => s.course);
+  return course === Course.Voice ? <VoiceSongsScreen /> : <PianoSongsScreen />;
+}
+
+/**
+ * The piano's Song practice: the built-in songs, by the unit they belong to, and the learner's
+ * own (imported) songs, with their stars.
+ */
+function PianoSongsScreen() {
   const { t } = useTranslation('screens');
   const { t: ts } = useTranslation('songs');
   const courseText = useContentText('courses');

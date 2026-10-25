@@ -184,6 +184,12 @@ system setting (`src/i18n/naming.ts`).
 | Key note (tonic)                              | key note                                             | tónica                                                  |
 | Sight-singing (section and skill)             | sight-singing                                        | lectura cantada (a primera vista)                       |
 | Reading melodies (skill)                      | reading melodies                                     | leer melodías                                           |
+| Words of a song (lyrics)                      | the words                                            | la letra                                                |
+| Syllable (sung on a note)                     | syllable                                             | sílaba                                                  |
+| A line of a song's words                      | line                                                 | verso                                                   |
+| Melisma (a syllable over several notes)       | melisma                                              | melisma                                                 |
+| Piano accompaniment (singing a song)          | the piano plays along                                | el piano acompaña                                       |
+| Singing songs (skill)                         | singing songs                                        | cantar canciones                                        |
 
 Italian score markings (_Moderato_, _mf_) are written the same in every language; only
 their explanations are translated (`theory.json` › `markings`).

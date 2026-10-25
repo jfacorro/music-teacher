@@ -3,7 +3,8 @@
  * one track per staff of each part, notes with their written spelling and fingering, tied
  * notes joined into one.
  *
- * Dynamics, articulations, slurs, pedal marks, fermatas, rit. / a tempo, and repeats with first
+ * Dynamics, articulations, slurs, pedal marks, fermatas, rit. / a tempo, the words (each note's
+ * first line of lyrics), and repeats with first
  * and second endings are kept. Grace notes, cue notes and unpitched (percussion) notes are left
  * out. Repeats it can't follow (da capo, segno, coda, more than two endings) are played once, as
  * written. A pickup bar is padded to a whole bar, so the bars line up with the time signature.
@@ -19,7 +20,9 @@ import {
   beatsPerMeasure,
   type Finger,
   Articulation,
+  type Lyric,
   type PedalMark,
+  Syllabic,
   type Repeat,
   type Ritardando,
 } from '../../engine/score';
@@ -281,10 +284,34 @@ function addNote(
   if (articulations.length > 0) note.articulations = articulations;
   if (childOf(childOf(item, 'notations'), 'fermata')) note.fermata = true;
   if (slurs.length > 0) note.slurs = slurs;
+  const lyric = lyricOf(item);
+  if (lyric) note.lyric = lyric;
   const notes = part.staves.get(staff) ?? [];
   notes.push(note);
   part.staves.set(staff, notes);
   if (ties.includes('start')) tied.set(key, note);
+}
+
+const SYLLABICS: readonly string[] = Object.values(Syllabic);
+
+/** A note's first line of words (`<lyric>`, the lowest number), if it has one. */
+function lyricOf(item: Element): Lyric | null {
+  const lines = childrenOf(item, 'lyric').sort(
+    (a, b) => Number(a.getAttribute('number') ?? 1) - Number(b.getAttribute('number') ?? 1),
+  );
+  const line = lines[0];
+  // A syllable split in parts (elision) is read as one.
+  const text = childrenOf(line, 'text')
+    .map((part) => part.textContent ?? '')
+    .join('‿')
+    .trim();
+  if (!line || text === '') return null;
+  const syllabic = textOf(childOf(line, 'syllabic')) ?? Syllabic.Single;
+  return {
+    text,
+    syllabic: SYLLABICS.includes(syllabic) ? (syllabic as Syllabic) : Syllabic.Single,
+    ...(childOf(line, 'extend') && { extend: true }),
+  };
 }
 
 /** MusicXML articulations as ours (staccatissimo is staccato; a strong accent, an accent). */

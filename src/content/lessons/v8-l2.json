@@ -1,0 +1,27 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "phrases"
+    },
+    {
+      "type": "sing",
+      "text": "twinkle",
+      "mode": "along",
+      "song": "twinkle-twinkle"
+    },
+    {
+      "type": "sing",
+      "text": "ode",
+      "mode": "along",
+      "song": "ode-to-joy",
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

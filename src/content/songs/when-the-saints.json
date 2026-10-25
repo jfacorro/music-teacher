@@ -2,6 +2,10 @@
   "tempo": 100,
   "timeSignature": [4, 4],
   "markings": ["moderato", "f"],
+  "lyrics": {
+    "en": "Oh, when the | saints / go march-ing | in, / oh, when the | saints go | march-ing | in.",
+    "es": "Oh, al lle-gar / los san-tos | ya, / oh, al lle-gar los | san-tos | ya."
+  },
   "notes": [
     {
       "note": "C4",

@@ -2,6 +2,10 @@
   "tempo": 96,
   "timeSignature": [4, 4],
   "markings": ["andante", "mf"],
+  "lyrics": {
+    "en": "Twin-kle, twin-kle, | lit-tle star, / | how I won-der | what you are! / | Up a-bove the | world so high, / | like a dia-mond | in the sky. / | Twin-kle, twin-kle, | lit-tle star, / | how I won-der | what you are!",
+    "es": "Bri-lla, bri-lla, | sin ce-sar, / | es-tre-lli-ta, | ¿qué se-rás? / | Tan a-rri-ba, | tan a-llá, / | co-mo jo-ya | ce-les-tial. / | Bri-lla, bri-lla, | sin ce-sar, / | es-tre-lli-ta, | ¿qué se-rás?"
+  },
   "notes": [
     {
       "note": "C4",

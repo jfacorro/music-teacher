@@ -3026,6 +3026,20 @@ button.bars__bar:focus-visible {
   background: var(--pending);
 }
 
+/* A song's words, a line at a time, under the music. */
+.song-words {
+  margin-block-start: 1rem;
+}
+
+.song-words p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.song-words__line {
+  display: block;
+}
+
 /* On a phone the tuner goes under the lane, in a row. */
 @media (max-width: 760px) {
   .sing__stage {

@@ -3,6 +3,10 @@
   "timeSignature": [3, 4],
   "markings": ["andante", "mp"],
   "keyFifths": 1,
+  "lyrics": {
+    "en": "A-ma-zing _ | grace! How | sweet the | sound that | saved a _ | wretch like | me! / I once was _ | lost, but | now am | found, was | blind, but _ | now I | see.",
+    "es": "Su-bli-me _ | gra-cia, | dul-ce | son, que~a | mí me _ | res-ca-tó; / per-di-do~es-_-ta-ba~y | él me~ha-lló; y~a-ho-ra _ | pue-do | ver."
+  },
   "notes": [
     {
       "note": "D4",

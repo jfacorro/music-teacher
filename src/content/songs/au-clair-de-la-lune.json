@@ -1,6 +1,11 @@
 {
   "tempo": 84,
   "timeSignature": [4, 4],
+  "lyrics": {
+    "fr": "Au clair de la | lu-ne, / | mon a-mi Pier-rot, / | prê-te\\-moi ta | plu-me / | pour é-cri-re~un | mot.",
+    "en": "In the shin-ing | moon-light, / | Pier-rot, friend of | mine, / | lend me, please, your | pen now, / | I must write a | line.",
+    "es": "A la luz de | lu-na, / | mi~a-mi-go Pie-rrot, / | prés-ta-me tu | plu-ma, / | que quie-ro~es-cri-bir."
+  },
   "notes": [
     {
       "note": "C4",
