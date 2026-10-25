@@ -58,7 +58,26 @@
         "singing": "Canto"
       },
       "detail": "{level} · {played}",
-      "starsTip": "La precisión necesaria para 1, 2 y 3 estrellas: {oneStar}, {twoStars} y {threeStars}."
+      "starsTip": "La precisión necesaria para 1, 2 y 3 estrellas: {oneStar}, {twoStars} y {threeStars}.",
+      "plan": {
+        "toReach": "Para llegar a “{level}”, consigue 3 estrellas en {count, plural, one {la primera lección de la lista} other {las primeras # lecciones de la lista}}.",
+        "addsUpTo": "Con 3 estrellas en estas lecciones, sumas hasta {gain}.",
+        "laterUnits": "Para llegar a “{level}”, también vas a necesitar lecciones de unidades más adelante.",
+        "mastered": "¡Dominada! Repite alguna lección de vez en cuando para no perder la práctica.",
+        "exercises": "Esta habilidad cuenta tus últimos {max} ejercicios: cuanto mejor te salgan, más sube.",
+        "practice": "Practicar",
+        "steps": {
+          "play": "Sin tocar",
+          "redo": "Por mejorar",
+          "done": "3 estrellas"
+        },
+        "unit": "Unidad {number}",
+        "gain": "hasta +{gain}",
+        "play": "Empezar",
+        "redo": "Repetir",
+        "locked": "{count, plural, one {# lección más} other {# lecciones más}} de esta habilidad en {units}.",
+        "units": "{count, plural, one {la unidad {list}} other {las unidades {list}}}"
+      }
     },
     "activity": {
       "heading": "Práctica en el último año",

@@ -58,7 +58,26 @@
         "singing": "Singing"
       },
       "detail": "{level} · {played}",
-      "starsTip": "The accuracy needed for 1, 2 and 3 stars: {oneStar}, {twoStars} and {threeStars}."
+      "starsTip": "The accuracy needed for 1, 2 and 3 stars: {oneStar}, {twoStars} and {threeStars}.",
+      "plan": {
+        "toReach": "To reach {level}, get 3 stars in {count, plural, one {the first lesson below} other {the first # lessons below}}.",
+        "addsUpTo": "3 stars in the lessons below add up to {gain}.",
+        "laterUnits": "To reach {level}, you’ll also need lessons from later units.",
+        "mastered": "Mastered! Replay a lesson now and then to keep it fresh.",
+        "exercises": "This skill counts your last {max} exercises: the better they go, the higher it climbs.",
+        "practice": "Practice",
+        "steps": {
+          "play": "Not played",
+          "redo": "To improve",
+          "done": "3 stars"
+        },
+        "unit": "Unit {number}",
+        "gain": "up to +{gain}",
+        "play": "Start",
+        "redo": "Redo",
+        "locked": "{count, plural, one {# more lesson} other {# more lessons}} for this skill in {units}.",
+        "units": "{count, plural, one {Unit {list}} other {Units {list}}}"
+      }
     },
     "activity": {
       "heading": "Practice in the last year",

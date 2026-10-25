@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CourseLevel, type Unit } from './courses';
-import { skillProgress } from './skills';
+import { skillPlan, skillProgress } from './skills';
 
 const unit: Unit = {
   id: 'u',
@@ -26,6 +26,7 @@ describe('skillProgress', () => {
       skill: 'keyboard',
       lessons: 2,
       played: 2,
+      exercises: 0,
       mastery: 0.95,
       level: 'mastered',
     });
@@ -48,6 +49,7 @@ describe('skillProgress', () => {
       skill: 'sight-reading',
       lessons: 0,
       played: 2,
+      exercises: 2,
       mastery: 0.8,
       level: 'good',
     });
@@ -58,6 +60,56 @@ describe('skillProgress', () => {
       lessons: 0,
       level: 'notStarted',
     });
+  });
+});
+
+describe('skillPlan', () => {
+  const units: Unit[] = [
+    {
+      ...unit,
+      id: 'u1',
+      lessons: [
+        { id: 'a', titleVars: {}, skills: ['treble-clef'] },
+        { id: 'b', titleVars: {}, skills: ['treble-clef'] },
+        { id: 'c', titleVars: {}, skills: ['treble-clef'] },
+      ],
+    },
+    { ...unit, id: 'u2', lessons: [{ id: 'd', titleVars: {}, skills: ['treble-clef'] }] },
+  ];
+  const planOf = (best: Record<string, number>, locked: readonly string[] = []) => {
+    const accuracyOf = (id: string) => best[id] ?? null;
+    const [progress] = skillProgress(['treble-clef'], units, accuracyOf);
+    return skillPlan(progress!, units, (id) => locked.includes(id), accuracyOf);
+  };
+
+  it('lists what to play or redo, most to gain first, then what is done, then what is locked', () => {
+    const plan = planOf({ a: 1, b: 0.75 }, ['d']);
+    expect(plan.lessons.map(({ id, step, unit }) => [id, step, unit])).toEqual([
+      ['c', 'play', 1],
+      ['b', 'redo', 1],
+      ['a', 'done', 1],
+      ['d', 'locked', 2],
+    ]);
+    // What each adds at three stars (95%), over the 4 lessons counted.
+    expect(plan.lessons[0]!.gain).toBeCloseTo(0.95 / 4);
+    expect(plan.lessons[1]!.gain).toBeCloseTo(0.2 / 4);
+    expect(plan.lessons[2]!.gain).toBe(0);
+    expect(plan.lessons[3]!.gain).toBe(0);
+    expect(plan.gain).toBeCloseTo(1.15 / 4);
+  });
+
+  it('counts how many lessons reach the next level', () => {
+    // 43.75% now: three stars in c (+23.75%) and d (+23.75%) make 91%, past Good.
+    const learning = planOf({ a: 1, b: 0.75 });
+    expect(learning).toMatchObject({ next: 'good', needed: 2 });
+    // Good (85%): mastered once b, c and d have three stars (+3.75% each).
+    expect(planOf({ a: 1, b: 0.8, c: 0.8, d: 0.8 })).toMatchObject({ next: 'mastered', needed: 3 });
+    expect(planOf({ a: 1, b: 1, c: 1, d: 1 })).toMatchObject({ next: null, needed: 0, gain: 0 });
+  });
+
+  it('needs none when the lessons open now cannot reach it', () => {
+    // With d locked, three stars in c only make 67.5%.
+    expect(planOf({ a: 1, b: 0.75 }, ['d'])).toMatchObject({ next: 'good', needed: 0 });
   });
 });
 

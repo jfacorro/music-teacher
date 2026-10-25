@@ -1,11 +1,13 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MAX_STARS, STAR_THRESHOLDS } from '../../engine/scoring';
 import { COURSE_UNITS, findLesson, lessonOrder } from '../../content/courses';
-import { lessonStates, nextLessonToPlay } from '../../content/unlock';
+import { LessonStatus, lessonStates, nextLessonToPlay } from '../../content/unlock';
 import {
   COURSE_SKILL_AREAS,
   courseSkills,
   SKILL_AREAS,
+  skillPlan,
   skillProgress,
   SkillLevel,
 } from '../../content/skills';
@@ -35,6 +37,7 @@ import { StarsSize } from '../components/starsSize';
 import { ActivityCalendar } from './ActivityCalendar';
 import { TodayCard } from './TodayCard';
 import { IndexedPage } from '../components/IndexedPage';
+import { SkillPlanPanel } from './SkillPlanPanel';
 
 const RECENT_LIMIT = 10;
 const DATE_AND_TIME: Intl.DateTimeFormatOptions = { dateStyle: 'medium', timeStyle: 'short' };
@@ -69,12 +72,16 @@ export function ProgressScreen() {
     next ? units.findIndex((unit) => unit.lessons.some((l) => l.id === next)) : units.length - 1,
   );
   const currentUnit = units[unitIndex]!;
+  const bestAccuracyOf = (id: string) =>
+    results[resultKey(ResultKind.Lesson, id)]?.bestAccuracy ?? null;
   const skills = skillProgress(
     courseSkills(course),
     units,
-    (id) => results[resultKey(ResultKind.Lesson, id)]?.bestAccuracy ?? null,
+    bestAccuracyOf,
     exerciseAccuracies(log),
   );
+  // The skill opened to show what raises it.
+  const [openSkill, setOpenSkill] = useState<string | null>(null);
   const [oneStar, twoStars, threeStars] = STAR_THRESHOLDS.map((threshold) =>
     formatPercent(threshold, i18n.language),
   );
@@ -194,13 +201,24 @@ export function ProgressScreen() {
                             })
                           : t('progress.skills.exercises', { count: skill.played }),
                     });
+                    const isOpen = openSkill === skill.skill;
+                    const panelId = `skill-plan-${skill.skill}`;
                     return (
                       <li
                         key={skill.skill}
-                        className={`skill skill--${skill.level}`}
+                        className={`skill skill--${skill.level}${isOpen ? ' is-open' : ''}`}
                         title={detail}
                       >
-                        <span className="skill__name">{courseText(`skills.${skill.skill}`)}</span>
+                        <button
+                          type="button"
+                          className="skill__name"
+                          aria-expanded={isOpen}
+                          aria-controls={isOpen ? panelId : undefined}
+                          onClick={() => setOpenSkill(isOpen ? null : skill.skill)}
+                        >
+                          <span className="skill__caret" aria-hidden="true" />
+                          {courseText(`skills.${skill.skill}`)}
+                        </button>
                         <span className="skill__bar" aria-hidden="true">
                           {started && (
                             <span
@@ -221,6 +239,18 @@ export function ProgressScreen() {
                           {started ? formatPercent(skill.mastery, i18n.language) : '—'}
                         </span>
                         <span className="visually-hidden">{detail}</span>
+                        {isOpen && (
+                          <SkillPlanPanel
+                            id={panelId}
+                            skill={skill.skill}
+                            plan={skillPlan(
+                              skill,
+                              units,
+                              (id) => states.get(id)?.status === LessonStatus.Locked,
+                              bestAccuracyOf,
+                            )}
+                          />
+                        )}
                       </li>
                     );
                   })}
