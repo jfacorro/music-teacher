@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Start with the warm-up, as in every singing lesson: a few easy minutes to wake up your voice.",
+    "majorScale": "Do, re, mi, fa, sol, la, ti, do: the major scale, eight notes from do up to the next do. Most of its steps are whole steps; two are half steps, mi to fa and ti to do. Keep those two small, so they don’t come out too wide.",
+    "scaleUp": "Up the scale, from do to do. The music waits at each note.",
+    "scaleUpDown": "Listen, then sing it in time: up the scale and back down.",
+    "scaleAlong": "The same, singing along with the guide melody."
+  }
+}

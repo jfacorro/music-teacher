@@ -81,7 +81,10 @@ describe('courses', () => {
         level,
         units.map(({ number }) => number),
       ]),
-    ).toEqual([[CourseLevel.Beginner, [1, 2, 3, 4]]]);
+    ).toEqual([
+      [CourseLevel.Beginner, [1, 2, 3, 4]],
+      [CourseLevel.Elementary, [5, 6]],
+    ]);
   });
 
   it('tags every lesson with what it practices, and every skill is practiced', () => {

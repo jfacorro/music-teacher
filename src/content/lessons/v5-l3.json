@@ -1,0 +1,230 @@
+{
+  "steps": [
+    {
+      "type": "warmUp",
+      "text": "warmUp"
+    },
+    {
+      "type": "explain",
+      "text": "octave"
+    },
+    {
+      "type": "sing",
+      "text": "arpeggio",
+      "mode": "wait",
+      "score": {
+        "tempo": 60,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 2
+          },
+          {
+            "note": "E4",
+            "start": 2,
+            "duration": 2
+          },
+          {
+            "note": "G4",
+            "start": 4,
+            "duration": 2
+          },
+          {
+            "note": "C5",
+            "start": 6,
+            "duration": 2
+          },
+          {
+            "note": "G4",
+            "start": 8,
+            "duration": 2
+          },
+          {
+            "note": "E4",
+            "start": 10,
+            "duration": 2
+          },
+          {
+            "note": "C4",
+            "start": 12,
+            "duration": 2
+          }
+        ]
+      }
+    },
+    {
+      "type": "explain",
+      "text": "twinkleIntro"
+    },
+    {
+      "type": "sing",
+      "text": "twinkle",
+      "mode": "listenFirst",
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1
+          },
+          {
+            "note": "C4",
+            "start": 1,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 2,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 3,
+            "duration": 1
+          },
+          {
+            "note": "A4",
+            "start": 4,
+            "duration": 1
+          },
+          {
+            "note": "A4",
+            "start": 5,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 6,
+            "duration": 2
+          },
+          {
+            "note": "F4",
+            "start": 8,
+            "duration": 1
+          },
+          {
+            "note": "F4",
+            "start": 9,
+            "duration": 1
+          },
+          {
+            "note": "E4",
+            "start": 10,
+            "duration": 1
+          },
+          {
+            "note": "E4",
+            "start": 11,
+            "duration": 1
+          },
+          {
+            "note": "D4",
+            "start": 12,
+            "duration": 1
+          },
+          {
+            "note": "D4",
+            "start": 13,
+            "duration": 1
+          },
+          {
+            "note": "C4",
+            "start": 14,
+            "duration": 2
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    },
+    {
+      "type": "sing",
+      "text": "twinkleAlong",
+      "mode": "along",
+      "score": {
+        "tempo": 80,
+        "timeSignature": [4, 4],
+        "notes": [
+          {
+            "note": "C4",
+            "start": 0,
+            "duration": 1
+          },
+          {
+            "note": "C4",
+            "start": 1,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 2,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 3,
+            "duration": 1
+          },
+          {
+            "note": "A4",
+            "start": 4,
+            "duration": 1
+          },
+          {
+            "note": "A4",
+            "start": 5,
+            "duration": 1
+          },
+          {
+            "note": "G4",
+            "start": 6,
+            "duration": 2
+          },
+          {
+            "note": "F4",
+            "start": 8,
+            "duration": 1
+          },
+          {
+            "note": "F4",
+            "start": 9,
+            "duration": 1
+          },
+          {
+            "note": "E4",
+            "start": 10,
+            "duration": 1
+          },
+          {
+            "note": "E4",
+            "start": 11,
+            "duration": 1
+          },
+          {
+            "note": "D4",
+            "start": 12,
+            "duration": 1
+          },
+          {
+            "note": "D4",
+            "start": 13,
+            "duration": 1
+          },
+          {
+            "note": "C4",
+            "start": 14,
+            "duration": 2
+          }
+        ]
+      },
+      "pass": {
+        "minStars": 1
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { preloadAudio } from '../../../audio/audio';
-import { UNITS } from '../../../content/courses';
+import { Course, UNITS } from '../../../content/courses';
 import {
   EAR_LEVELS,
   EAR_UNITS,
@@ -23,15 +23,23 @@ import {
   useEarTraining,
 } from '../../../storage/earTraining';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
+import { useSettings } from '../../../storage/settings';
 import { useTopBarDetail } from '../../topBar';
 import { EarExercise } from './EarExercise';
 import { useEarLevelName } from './useEarLevelName';
+import { VoiceEarTraining } from './VoiceEarTraining';
 
 /**
  * Ear training (PLAN.md milestone 4.4): the app plays something, the learner plays it back. The
- * level is in the address (`?level=intervals`), so the Today card can link to one.
+ * level is in the address (`?level=intervals`), so the Today card can link to one. The voice has
+ * its own (milestone 6.4), sung back.
  */
 export function EarTrainingScreen() {
+  const course = useSettings((s) => s.course);
+  return course === Course.Voice ? <VoiceEarTraining /> : <PianoEarTraining />;
+}
+
+function PianoEarTraining() {
   const results = useProgress((s) => s.results);
   const states = useMemo(
     () => lessonStates(UNITS, (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0),

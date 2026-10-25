@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Start with the warm-up, as in every singing lesson: a few easy minutes to wake up your voice.",
+    "leaps": "So far the notes moved by steps. A leap skips over notes: from do up to mi leaves out re. Before each leap, hear the next note in your head, then sing it straight away, without sliding through the notes in between.",
+    "doMi": "Do to mi and back, then up to sol. The music waits at each note.",
+    "doMiSol": "Listen, then sing it in time: do, mi, sol, and back down.",
+    "doMiSolAlong": "The same leaps, singing along with the guide melody."
+  }
+}

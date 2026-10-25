@@ -62,6 +62,7 @@ function suggest(
   exclude?: string[],
   drillLevels: DrillLevel[] = [],
   earLevels: EarLevel[] = [],
+  earKind?: ResultKind,
 ) {
   const results = Object.fromEntries(rows.map((row) => [row.key, row]));
   const starsOf = (id: string) => results[`lesson:${id}`]?.bestStars ?? 0;
@@ -75,6 +76,7 @@ function suggest(
     ),
     drillLevels,
     earLevels,
+    earKind,
     now: NOW,
     exclude: exclude && new Set(exclude),
   }).map((s) => [s.kind, `${s.target.kind}:${s.target.id}`, ...(s.bars ? [s.bars] : [])]);
@@ -166,5 +168,14 @@ describe('suggestPractice', () => {
       suggest(rows, undefined, [], levels).filter(([kind]) => kind === SuggestionKind.Ear);
     expect(ear([])).toEqual([[SuggestionKind.Ear, 'ear:intervals']]);
     expect(ear([result('ear:notes', 3, 1, 0)])).toEqual([]);
+  });
+
+  it('suggests the voice’s ear training as its own', () => {
+    const ear = (rows: ResultRow[]) =>
+      suggest(rows, undefined, [], [EarLevel.Notes], ResultKind.VoiceEar).filter(
+        ([kind]) => kind === SuggestionKind.Ear,
+      );
+    expect(ear([result('ear:notes', 3, 1, 0)])).toEqual([[SuggestionKind.Ear, 'voiceEar:notes']]);
+    expect(ear([result('voiceEar:notes', 3, 1, 0)])).toEqual([]);
   });
 });
