@@ -46,6 +46,7 @@ export function VoiceSettings() {
   const names = useNoteNames();
   const range = useSettings((s) => s.vocalRange);
   const echoCancellation = useSettings((s) => s.micEchoCancellation);
+  const headphones = useSettings((s) => s.headphones);
   const micStatus = useMic((s) => s.status);
   const [test, setTest] = useState<Test | null>(null);
   const [live, setLive] = useState<{ note: number | null; held: number }>({ note: null, held: 0 });
@@ -239,6 +240,15 @@ export function VoiceSettings() {
         )}
       </div>
       <h3>{t('settings.voice.speakers.heading')}</h3>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={headphones}
+          onChange={(e) => updateSettings({ headphones: e.target.checked })}
+        />
+        {t('settings.voice.speakers.headphones')}
+      </label>
+      <p className="muted">{t('settings.voice.speakers.headphonesHelp')}</p>
       <label className="checkbox">
         <input
           type="checkbox"

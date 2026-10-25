@@ -83,7 +83,7 @@ export function SingLane({
       drawLane(ctx, size.width, size.height, {
         score,
         position: transport.position(),
-        aheadBeats: (secondsAhead * transport.tempo) / 60,
+        aheadBeats: (secondsAhead * score.tempo) / 60,
         labelFor,
         levelOf,
         trail: trail(),

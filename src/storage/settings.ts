@@ -54,6 +54,11 @@ export interface Settings {
    * singing along through speakers; it may bend musical tones, so it's off unless chosen.
    */
   micEchoCancellation: boolean;
+  /**
+   * Singing with headphones, the microphone doesn't hear the app: waiting for each note, the app
+   * can play it while it's sung.
+   */
+  headphones: boolean;
   /** Light, dark, or the computer's setting. */
   theme: Theme;
   /** How tall the on-screen keyboard's keys are. */
@@ -90,6 +95,7 @@ export const DEFAULT_SETTINGS: Settings = {
   micSensitivityDb: 12,
   micLatencyMs: 0,
   micEchoCancellation: false,
+  headphones: false,
   theme: Theme.System,
   keyHeight: KeyHeight.Normal,
   keysShown: KeysShown.Fit,

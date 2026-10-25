@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SING_CENTS, SingMode } from './singing';
-import { SingSession, SingStatus, type SingSessionOptions } from './singSession';
+import { PREVIEW_SPEED, SingSession, SingStatus, type SingSessionOptions } from './singSession';
 import { scoreOf, type NoteSpec } from './testUtils';
 import { Transport } from './transport';
 
@@ -97,6 +97,33 @@ describe('SingSession', () => {
     const { summary } = run.session.getState();
     expect(summary?.notes.map((note) => note.credit)).toEqual([1, 0, 1]);
     expect(summary?.onTime).toBeNull();
+  });
+
+  it('waiting, plays the melody first, quickly, with the guide', () => {
+    const run = setup(melody, { mode: SingMode.Wait });
+    run.session.setPreview(true);
+    run.session.play();
+    expect(run.session.appPlays).toBe(true);
+    expect(run.transport.tempo).toBe(60 * PREVIEW_SPEED);
+    run.sing(60, 1000); // the app's sound doesn't find the note, nor stops the music
+    expect(run.session.getState().status).toBe(SingStatus.Listening);
+    run.session.pause();
+    run.session.play(); // resuming goes on listening
+    expect(run.session.appPlays).toBe(true);
+    run.sing(null, 2000); // a beat in and three notes, at 1.5 beats a second
+    expect(run.session.getState().status).toBe(SingStatus.Playing);
+    expect(run.transport.tempo).toBe(60);
+    expect(run.transport.position()).toBeLessThan(0);
+    run.at(0);
+    expect(run.session.waitingFor?.pitch.midi).toBe(60);
+    // Starting over plays it again; without the guide, it doesn't.
+    run.session.restart();
+    run.session.play();
+    expect(run.session.appPlays).toBe(true);
+    run.session.setPreview(false);
+    run.session.restart();
+    run.session.play();
+    expect(run.session.getState().status).toBe(SingStatus.Playing);
   });
 
   it('plays the melody first, then counts in to sing it', () => {
