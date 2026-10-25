@@ -33,4 +33,16 @@ describe('format', () => {
     expect(formatRelativeDays(-1, 'en')).toBe('yesterday');
     expect(formatRelativeDays(-1, 'es')).toBe('ayer');
   });
+
+  it('keeps a formatter per language and options, reused', () => {
+    const date = new Date(2026, 9, 12);
+    const short = { month: 'short' } as const;
+    expect(formatDate(date, 'en', short)).toBe('Oct');
+    expect(formatDate(date, 'es', short)).toBe('oct');
+    expect(formatDate(date, 'en')).toBe('Oct 12, 2026');
+    // The same again, from the kept formatters.
+    expect(formatDate(date, 'en', short)).toBe('Oct');
+    expect(formatPercent(0.955, 'en', 1)).toBe('95.5%');
+    expect(formatPercent(0.955, 'en')).toBe('96%');
+  });
 });

@@ -1810,6 +1810,32 @@ button.bars__bar:focus-visible {
   overflow-x: auto;
 }
 
+/* A day's date and practice time, over its square while it's hovered (placed from the left). */
+.activity {
+  position: relative;
+}
+
+.activity__tip {
+  position: absolute;
+  z-index: 1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 4px));
+}
+
+.activity__tip--start {
+  transform: translate(-0.75rem, calc(-100% - 4px));
+}
+
+.activity__tip--end {
+  transform: translate(calc(-100% + 0.75rem), calc(-100% - 4px));
+}
+
 .activity__chart {
   display: block;
   inline-size: 100%;
