@@ -13,7 +13,7 @@
 import { centsFrom, MATCH_CENTS, MATCH_WITHIN_MS } from './matchNote';
 import { beatsToMs, type ScoreNote } from './score';
 import { accuracyOf, starsFor } from './scoring';
-import { AVERAGE_OF, IN_TUNE_CENTS } from './tuner';
+import { AVERAGE_OF, IN_TUNE_CENTS, type PitchLean, pitchLean } from './tuner';
 import { HeldNote } from './vocalRange';
 
 export const SingMode = {
@@ -290,6 +290,8 @@ export interface SingSummary {
   notes: SungNote[];
   /** Each pitch once, low to high: often out of tune, or flat or sharp on average. */
   toWorkOn: NoteToWorkOn[];
+  /** Which way most notes leaned, flat or sharp, if they did. */
+  lean: PitchLean | null;
 }
 
 export function singSummary(notes: readonly SungNote[]): SingSummary {
@@ -324,6 +326,7 @@ export function singSummary(notes: readonly SungNote[]): SingSummary {
     steady: steady.length === 0 ? null : average(steady),
     notes: [...notes],
     toWorkOn,
+    lean: pitchLean(notes.map((note) => note.offset)),
   };
 }
 

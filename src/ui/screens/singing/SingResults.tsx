@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { NoteToWorkOn, SingSummary } from '../../../engine/singing';
 import { IN_TUNE_CENTS } from '../../../engine/tuner';
 import { formatPercent } from '../../../i18n/format';
+import { PitchLeanLine } from '../../components/PitchLeanLine';
 import { Stars } from '../../components/Stars';
 
 interface SingResultsProps {
@@ -54,6 +55,7 @@ export function SingResults({ summary, labelFor, onRetry, children }: SingResult
           </div>
         )}
       </dl>
+      <PitchLeanLine lean={summary.lean} />
       {summary.toWorkOn.length === 0 ? (
         <p>{t('tuner.match.allGood')}</p>
       ) : (

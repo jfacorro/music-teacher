@@ -56,6 +56,14 @@ describe('SungTake', () => {
     expect(summary.stars).toBe(3);
     expect(summary.onTime).toBe(1);
     expect(summary.toWorkOn).toEqual([]);
+    // Five cents off leans nowhere.
+    expect(summary.lean).toBeNull();
+  });
+
+  it('says when most notes were sharp, and by how much', () => {
+    const take = new SungTake(melody, TEMPO, options);
+    sing(take, 0, 3, (beat) => [60, 62, 64][Math.floor(beat)]! + 0.35);
+    expect(singSummary(take.results()).lean).toEqual({ cents: 35, count: 3, total: 3 });
   });
 
   it('counts an octave lower, unless the written octave is asked for', () => {

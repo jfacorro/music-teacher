@@ -1,5 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { exactPitch, furthestBeyond, isInTune, tunerNote } from './tuner';
+import { exactPitch, furthestBeyond, isInTune, pitchLean, tunerNote } from './tuner';
+
+describe('pitchLean', () => {
+  it('says most notes were sharp (or flat), and by how much on average', () => {
+    expect(pitchLean([30, 45, 52, 20, -5, 38, null])).toEqual({ cents: 37, count: 5, total: 6 });
+    expect(pitchLean([-20, -30, -25, 5])).toEqual({ cents: -25, count: 3, total: 4 });
+  });
+
+  it('says nothing when the notes went both ways, were close, or were too few', () => {
+    expect(pitchLean([30, -30, 25, -25])).toBeNull();
+    expect(pitchLean([5, 8, -3, 9])).toBeNull();
+    expect(pitchLean([40, 40])).toBeNull();
+  });
+
+  it('leaves out notes too far off to have been aimed at', () => {
+    expect(pitchLean([30, 35, -250, 40])).toEqual({ cents: 35, count: 3, total: 3 });
+  });
+});
 
 describe('tuner', () => {
   it('turns a reading into an exact pitch', () => {
