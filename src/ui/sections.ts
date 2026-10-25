@@ -20,8 +20,8 @@ export type Section = (typeof Section)[keyof typeof Section];
 export const SECTIONS: readonly Section[] = Object.values(Section);
 
 /**
- * The sections each course shows, in the sidebar's order. The voice gets ear training,
- * sight-singing and songs as they're built (PLAN.md 6.4–6.6).
+ * The sections each course shows, in the sidebar's order. The voice gets sight-singing and
+ * songs as they're built (PLAN.md 6.5–6.6).
  */
 export const COURSE_SECTIONS: Readonly<Record<Course, readonly Section[]>> = {
   [Course.Piano]: [
@@ -33,7 +33,13 @@ export const COURSE_SECTIONS: Readonly<Record<Course, readonly Section[]>> = {
     Section.FreePlay,
     Section.Settings,
   ],
-  [Course.Voice]: [Section.Home, Section.Learn, Section.Tuner, Section.Settings],
+  [Course.Voice]: [
+    Section.Home,
+    Section.Learn,
+    Section.EarTraining,
+    Section.Tuner,
+    Section.Settings,
+  ],
 };
 
 export const SECTION_PATHS: Readonly<Record<Section, string>> = {

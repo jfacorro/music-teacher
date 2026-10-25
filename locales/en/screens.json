@@ -823,7 +823,8 @@
       "melody": "Right, that’s the melody!",
       "chord": "Right: {chord}.",
       "rhythm": "That’s the rhythm!",
-      "scale": "Right: the {scale} scale."
+      "scale": "Right: the {scale} scale.",
+      "intervalDown": "Right: {from} down to {to}, a {interval}."
     },
     "quality": {
       "major": "Major",
@@ -838,7 +839,31 @@
     "results": "Results",
     "reference": "Play middle {c} first",
     "allNotes": "All 12 notes",
-    "allNotesTip": "Every key from middle {c} to the next {c}, black keys included, even ones the course hasn’t reached yet"
+    "allNotesTip": "Every key from middle {c} to the next {c}, black keys included, even ones the course hasn’t reached yet",
+    "sing": {
+      "intro": "Listen, then sing back what you heard.",
+      "noRange": "Find your range first, so the questions fit your voice.",
+      "answerBy": "Answer by",
+      "bySinging": "Singing",
+      "byKeyboard": "Playing the keyboard",
+      "start": {
+        "notes": "You’ll hear a note: sing it back and hold it, in any octave.",
+        "intervals": "You’ll hear two notes, one after the other: sing them back, starting on the one shown.",
+        "melodies": "You’ll hear a short melody: sing it back, starting on the note shown."
+      },
+      "ask": {
+        "notes": "Sing the note back and hold it.",
+        "intervals": "Sing both notes, starting on the one shown.",
+        "melodies": "Sing the melody back, starting on the note shown."
+      },
+      "next": "Good. Now the next note.",
+      "wrong": "Not that one: you sang {note}.",
+      "hint": "The note to sing is lit: listen again if you like.",
+      "skipped": "The answer: {notes}.",
+      "skip": "Skip",
+      "skipTip": "Go on to the next question without answering this one",
+      "notesLabel": "The notes to sing back"
+    }
   },
   "course": {
     "levels": {

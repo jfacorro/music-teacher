@@ -823,7 +823,8 @@
       "melody": "¡Bien, esa es la melodía!",
       "chord": "Bien: {chord}.",
       "rhythm": "¡Ese es el ritmo!",
-      "scale": "Bien: la escala de {scale}."
+      "scale": "Bien: la escala de {scale}.",
+      "intervalDown": "Bien: de {from} bajando a {to}, una {interval}."
     },
     "quality": {
       "major": "Mayor",
@@ -838,7 +839,31 @@
     "results": "Resultados",
     "reference": "Tocar primero el {c} central",
     "allNotes": "Las 12 notas",
-    "allNotesTip": "Todas las teclas del {c} central al {c} siguiente, negras incluidas, aunque el curso todavía no haya llegado a ellas"
+    "allNotesTip": "Todas las teclas del {c} central al {c} siguiente, negras incluidas, aunque el curso todavía no haya llegado a ellas",
+    "sing": {
+      "intro": "Escucha y luego canta lo que oíste.",
+      "noRange": "Primero encuentra tu extensión, para que las preguntas se ajusten a tu voz.",
+      "answerBy": "Responder",
+      "bySinging": "Cantando",
+      "byKeyboard": "Tocando el teclado",
+      "start": {
+        "notes": "Oirás una nota: cántala y sostenla, en cualquier octava.",
+        "intervals": "Oirás dos notas, una tras otra: cántalas empezando por la que se muestra.",
+        "melodies": "Oirás una melodía corta: cántala empezando por la nota que se muestra."
+      },
+      "ask": {
+        "notes": "Canta la nota y sostenla.",
+        "intervals": "Canta las dos notas, empezando por la que se muestra.",
+        "melodies": "Canta la melodía, empezando por la nota que se muestra."
+      },
+      "next": "Bien. Ahora la nota siguiente.",
+      "wrong": "Esa no: cantaste {note}.",
+      "hint": "La nota que hay que cantar está iluminada: vuelve a escuchar si quieres.",
+      "skipped": "La respuesta: {notes}.",
+      "skip": "Saltar",
+      "skipTip": "Pasa a la pregunta siguiente sin responder esta",
+      "notesLabel": "Las notas que hay que cantar"
+    }
   },
   "course": {
     "levels": {

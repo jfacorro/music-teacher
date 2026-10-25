@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Empieza con el calentamiento, como en cada lección de canto: unos minutos tranquilos para despertar la voz.",
+    "leaps": "Hasta ahora las notas se movían por grados conjuntos. Un salto pasa por encima de notas: de do a mi se salta el re. Antes de cada salto, escucha la nota siguiente en tu cabeza y después cántala directamente, sin deslizarte por las notas intermedias.",
+    "doMi": "De do a mi y de vuelta, después hasta sol. La música espera en cada nota.",
+    "doMiSol": "Escucha y después cántalo a tiempo: do, mi, sol y de vuelta hacia abajo.",
+    "doMiSolAlong": "Los mismos saltos, cantando con la melodía guía."
+  }
+}

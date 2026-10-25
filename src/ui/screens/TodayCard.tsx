@@ -31,7 +31,7 @@ import { useEarLevelName } from './earTraining/useEarLevelName';
 function hrefOf(item: PlanItem): string {
   const { kind, id } = item.target;
   if (kind === ResultKind.Drill) return `/sight-reading?level=${id}`;
-  if (kind === ResultKind.Ear) return `/ear-training?level=${id}`;
+  if (kind === ResultKind.Ear || kind === ResultKind.VoiceEar) return `/ear-training?level=${id}`;
   const path =
     kind === ResultKind.Lesson
       ? `/lesson/${id}`
@@ -67,7 +67,7 @@ export function TodayCard() {
     if (kind === ResultKind.Drill) {
       return isValueOf(DrillLevel, id) ? levelName(id) : t('sightReading.title');
     }
-    if (kind === ResultKind.Ear) {
+    if (kind === ResultKind.Ear || kind === ResultKind.VoiceEar) {
       return isValueOf(EarLevel, id) ? earLevelName(id) : t('earTraining.title');
     }
     if (kind === ResultKind.MySong) {

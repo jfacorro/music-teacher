@@ -64,15 +64,24 @@ interface EarExerciseProps {
   reference: boolean;
   /** Called when the last question is answered, with how long it took (ms). */
   onFinish?: (result: QuizResult, durationMs: number) => void;
+  /** A new exercise's questions, when not from `range` (e.g. in the singer's range). */
+  makeQuestions?: () => EarQuestion[];
 }
 
-export function EarExercise({ level, range, reference, onFinish }: EarExerciseProps) {
+export function EarExercise({
+  level,
+  range,
+  reference,
+  onFinish,
+  makeQuestions,
+}: EarExerciseProps) {
   const { t, i18n } = useTranslation('screens');
   const { t: tt } = useTranslation('theory');
   const names = useNoteNames();
   const usingMic = useInstrument((s) => s.instrument) === Instrument.Mic;
 
-  const [questions, setQuestions] = useState(() => earQuestions(level, range));
+  const newQuestions = () => (makeQuestions ? makeQuestions() : earQuestions(level, range));
+  const [questions, setQuestions] = useState(newQuestions);
   const [started, setStarted] = useState(false);
   const [index, setIndex] = useState(0);
   /** Notes played back right so far. */
@@ -297,7 +306,7 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
             type="button"
             className="button button--primary"
             title={t('earTraining.againTip')}
-            onClick={() => begin(earQuestions(level, range))}
+            onClick={() => begin(newQuestions())}
           >
             {t('practice.results.retry')}
           </button>
@@ -316,7 +325,8 @@ export function EarExercise({ level, range, reference, onFinish }: EarExercisePr
     }
     if (level === EarLevel.Intervals) {
       const interval = identifyInterval([...question.notes]);
-      return t('earTraining.right.interval', {
+      const down = question.notes[1]! < question.notes[0]!;
+      return t(down ? 'earTraining.right.intervalDown' : 'earTraining.right.interval', {
         from: name(question.notes[0]!),
         to: name(question.notes[1]!),
         interval: interval ? tt(`intervals.${interval}`) : '',
