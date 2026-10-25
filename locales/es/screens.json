@@ -416,8 +416,7 @@
       "label": "Notación",
       "names": "Con nombres",
       "plain": "Sin nombres",
-      "grand": "Dos pentagramas",
-      "syllables": "Do, re, mi desde la tónica"
+      "grand": "Dos pentagramas"
     },
     "speed": "Velocidad",
     "speedValue": "{percent} · {bpm} BPM",
@@ -967,24 +966,14 @@
       "notSung": "no se escuchó",
       "inTuneShare": "afinada el {share} del tiempo"
     },
-    "keyNote": "Tocar do",
-    "keyNoteTip": "Escucha do, la tónica, para encontrar la primera nota antes de cantar",
-    "movableDo": "Toda la melodía se mueve para ajustarse a tu registro, así que do es su tónica, caiga donde caiga: aquí, do es {note}."
-  },
-  "solfa": {
-    "do": "do",
-    "re": "re",
-    "mi": "mi",
-    "fa": "fa",
-    "sol": "sol",
-    "la": "la",
-    "ti": "si"
+    "keyNote": "Tocar {note}",
+    "keyNoteTip": "Escucha la tónica, {note}, para encontrar la primera nota antes de cantar"
   },
   "sightSinging": {
     "title": "Lectura cantada",
     "intro": "Música nueva cada vez: léela en el pentagrama y cántala, sin escucharla antes.",
     "levels": {
-      "steps": "Grados conjuntos, de do a sol",
+      "steps": "Grados conjuntos en cinco notas",
       "leaps": "Saltos de hasta una quinta",
       "rhythms": "Saltos, con silencios y corcheas"
     },

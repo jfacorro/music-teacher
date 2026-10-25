@@ -3,10 +3,10 @@
  * made up on the spot, for the voice to read from the staff. A drill comes from a seed, as for
  * the piano, and is moved into the singer's range when it's sung (`fitToRange`).
  *
- * Levels go from steps to leaps, as the voice course does: steps from do up to sol; then leaps
- * (up to a fifth) over the scale from do to do, or from sol below to sol; then the same with
- * rests and eighth notes. They're in major keys (C, G, F and D), read in movable do, and open
- * once Voice Unit 7 (reading from the staff) is finished.
+ * Levels go from steps to leaps, as the voice course does: steps over the first five notes of
+ * the scale; then leaps (up to a fifth) over an octave, from the key note or from the fifth
+ * below; then the same with rests and eighth notes. They're in major keys (C, G, F and D), and
+ * open once Voice Unit 7 (reading from the staff) is finished.
  */
 import { Hand, type Score, type ScoreNote, wholeMeasures } from '../engine/score';
 import { newSeed, pick, type Random, seededRandom } from '../lib/random';
@@ -16,7 +16,7 @@ import { barRhythms, melody, MOVES, type Position, position, RhythmKind } from '
 import { isUnitFinished, type LessonState } from './unlock';
 
 export const SingDrillLevel = {
-  /** Steps, do to sol: quarter, half and whole notes. */
+  /** Steps over five notes from the key note: quarter, half and whole notes. */
   Steps: 'steps',
   /** Leaps up to a fifth, over an octave. */
   Leaps: 'leaps',
@@ -50,13 +50,13 @@ export function openSingDrillLevels(
 const scale = (keyFifths: number, ...notes: NoteString[]): Position =>
   position(Hand.Right, keyFifths, ...notes);
 
-/** Do to sol. */
+/** The key note and the four above it. */
 const FIVE: readonly Position[] = [
   scale(0, 'C4', 'D4', 'E4', 'F4', 'G4'),
   scale(1, 'G3', 'A3', 'B3', 'C4', 'D4'),
   scale(-1, 'F4', 'G4', 'A4', 'Bb4', 'C5'),
 ];
-/** Do to do, and sol below to sol. */
+/** An octave from the key note, or from the fifth below. */
 const OCTAVE: readonly Position[] = [
   scale(0, 'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'),
   scale(0, 'G3', 'A3', 'B3', 'C4', 'D4', 'E4', 'F4', 'G4'),

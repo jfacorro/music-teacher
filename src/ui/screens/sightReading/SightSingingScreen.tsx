@@ -2,7 +2,7 @@
  * Sight-singing (PLAN.md milestone 6.5): fresh melodies at a level the singer has reached, read
  * from the staff and sung, moved into the saved range. As for sight-reading, the drill is in the
  * address (`?level=leaps&seed=123`), and "New drill" makes another. The app doesn't play the
- * melody first: Play do gives the key note, and Hear it again (waiting) the note being sung.
+ * melody first: a button plays the key note, and Hear it again (waiting) the note being sung.
  */
 import { useEffect, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ import { useMicWhileShown } from '../../hooks';
 import { ICONS } from '../../icons';
 import { useTopBarDetail } from '../../topBar';
 import { NotationSelect } from '../practice/ViewToggle';
-import { KeyNoteButton, MovableDoNote } from '../singing/KeyNoteButton';
+import { KeyNoteButton } from '../singing/KeyNoteButton';
 import { SingRun } from '../singing/SingRun';
 
 type DrillMode = typeof SingMode.Wait | typeof SingMode.Along;
@@ -115,7 +115,7 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
   const inAddress = seed !== null && asked === level;
 
   const [mode, setMode] = useState<DrillMode>(SingMode.Wait);
-  const [notation, setNotation] = useState<SheetNotation>(SheetNotation.Syllables);
+  const [notation, setNotation] = useState<SheetNotation>(SheetNotation.Names);
   // Reading at sight: the app doesn't play the melody unless asked to.
   const [guide, setGuide] = useState(false);
   const [metronome, setMetronome] = useState(true);
@@ -210,7 +210,6 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
         <KeyNoteButton score={fit.score} />
         <VolumeButton />
       </div>
-      {notation === SheetNotation.Syllables && <MovableDoNote score={fit.score} />}
       {!fit.fits && <p className="notice">{t('sing.beyondRange')}</p>}
 
       <SingRun

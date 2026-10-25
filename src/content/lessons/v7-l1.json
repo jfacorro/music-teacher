@@ -14,7 +14,7 @@
     },
     {
       "type": "sing",
-      "text": "withSyllables",
+      "text": "withNames",
       "mode": "wait",
       "score": {
         "tempo": 60,
@@ -68,7 +68,7 @@
         ]
       },
       "view": "sheet",
-      "notation": "syllables"
+      "notation": "names"
     },
     {
       "type": "sing",
@@ -116,12 +116,12 @@
         ]
       },
       "view": "sheet",
-      "notation": "syllables",
+      "notation": "names",
       "guide": false
     },
     {
       "type": "sing",
-      "text": "noSyllables",
+      "text": "noNames",
       "mode": "wait",
       "score": {
         "tempo": 60,

@@ -7,7 +7,7 @@ const VIEWS: readonly ScoreView[] = [ScoreView.Falling, ScoreView.Sheet];
 /** Singing, the falling notes' place is taken by the notes in a lane. */
 const LANE = { name: 'lane' } as const;
 
-/** Sheet music level: note names, no names, both staves (or for singing, `SING_NOTATIONS`). */
+/** Sheet music level: note names, no names, both staves (singing leaves out both staves). */
 export function NotationSelect({
   notation,
   onChange,

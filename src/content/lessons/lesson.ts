@@ -99,14 +99,12 @@ export type ScoreView = (typeof ScoreView)[keyof typeof ScoreView];
 /**
  * Sheet music levels (PLAN.md §2.2): note names under the notes; no names; both staves
  * (the full grand staff even when practicing one hand). The first two show only the staff of
- * the hand being practiced. Singing (milestone 6.5) also has the syllables in movable do under
- * the notes (do being the key note).
+ * the hand being practiced.
  */
 export const SheetNotation = {
   Names: 'names',
   Plain: 'plain',
   Grand: 'grand',
-  Syllables: 'syllables',
 } as const;
 export type SheetNotation = (typeof SheetNotation)[keyof typeof SheetNotation];
 
@@ -117,12 +115,8 @@ export const SHEET_NOTATIONS: readonly SheetNotation[] = [
   SheetNotation.Grand,
 ];
 
-/** Singing's: one staff, with syllables, note names or nothing under the notes. */
-export const SING_NOTATIONS: readonly SheetNotation[] = [
-  SheetNotation.Syllables,
-  SheetNotation.Names,
-  SheetNotation.Plain,
-];
+/** Singing's (milestone 6.5): one staff, with note names or nothing under the notes. */
+export const SING_NOTATIONS: readonly SheetNotation[] = [SheetNotation.Names, SheetNotation.Plain];
 
 export interface ExerciseStep extends StepBase {
   type: typeof StepType.Exercise;

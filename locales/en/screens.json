@@ -416,8 +416,7 @@
       "label": "Notation",
       "names": "Note names",
       "plain": "No names",
-      "grand": "Both staves",
-      "syllables": "Do, re, mi from the key note"
+      "grand": "Both staves"
     },
     "speed": "Speed",
     "speedValue": "{percent} · {bpm} BPM",
@@ -967,24 +966,14 @@
       "notSung": "not heard",
       "inTuneShare": "in tune {share} of the time"
     },
-    "keyNote": "Play do",
-    "keyNoteTip": "Hear do, the key note, to find the first note before you sing",
-    "movableDo": "The whole melody is moved to fit your range, so do is its key note, wherever that lands: here, do is {note}."
-  },
-  "solfa": {
-    "do": "do",
-    "re": "re",
-    "mi": "mi",
-    "fa": "fa",
-    "sol": "sol",
-    "la": "la",
-    "ti": "ti"
+    "keyNote": "Play {note}",
+    "keyNoteTip": "Hear the key note, {note}, to find the first note before you sing"
   },
   "sightSinging": {
     "title": "Sight-singing",
     "intro": "Fresh music every time: read it from the staff and sing it, without hearing it first.",
     "levels": {
-      "steps": "Steps, do to sol",
+      "steps": "Steps over five notes",
       "leaps": "Leaps up to a fifth",
       "rhythms": "Leaps, with rests and eighth notes"
     },

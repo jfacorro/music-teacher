@@ -1,9 +1,9 @@
 {
   "steps": {
     "warmUp": "Empieza con el calentamiento, como en cada lección de canto: unos minutos tranquilos para despertar la voz.",
-    "staff": "Quienes cantan también leen música en el pentagrama. Cada línea y cada espacio es una nota: de una línea al espacio de arriba, o de un espacio a la línea de arriba, hay un grado conjunto, como de do a re. Do es la tónica. La aplicación mueve cada melodía para que se ajuste a tu voz, así que para ti do puede quedar en otra línea, o en la clave de fa si tu voz es grave. Para ayudarte al principio, do, re, mi aparecen escritos bajo las notas.",
-    "withSyllables": "Lee mientras cantas, con do, re, mi bajo cada nota. Con la melodía guía activada, la aplicación toca la melodía una vez primero; después la música espera en cada nota.",
-    "readSteps": "Ahora la aplicación no toca la melodía antes. Pulsa Tocar do para escuchar la tónica, y después lee cada nota y cántala. Si te pierdes, Escuchar otra vez toca la nota en la que estás.",
-    "noSyllables": "Otra vez grados conjuntos, esta vez sin do, re, mi bajo las notas. Encuentra do y sigue las notas hacia arriba y hacia abajo en el pentagrama."
+    "staff": "Quienes cantan también leen música en el pentagrama. Cada línea y cada espacio es una nota: de una línea al espacio de arriba, o de un espacio a la línea de arriba, hay un grado conjunto. La aplicación mueve cada melodía para que se ajuste a tu voz, así que puede quedar escrita más arriba o más abajo que aquí, en otra tonalidad, o en la clave de fa si tu voz es grave. Para ayudarte al principio, el nombre de cada nota aparece escrito debajo.",
+    "withNames": "Lee mientras cantas, con los nombres bajo las notas. Con la melodía guía activada, la aplicación toca la melodía una vez primero; después la música espera en cada nota.",
+    "readSteps": "Ahora la aplicación no toca la melodía antes. Pulsa el botón para escuchar la tónica, la nota a la que vuelve la melodía, y después lee cada nota y cántala. Si te pierdes, Escuchar otra vez toca la nota en la que estás.",
+    "noNames": "Otra vez grados conjuntos, esta vez sin los nombres bajo las notas. Escucha la tónica y sigue las notas hacia arriba y hacia abajo en el pentagrama."
   }
 }

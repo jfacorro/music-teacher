@@ -14,7 +14,7 @@
     },
     {
       "type": "sing",
-      "text": "doMiSol",
+      "text": "triad",
       "mode": "wait",
       "score": {
         "tempo": 60,
@@ -58,7 +58,7 @@
         ]
       },
       "view": "sheet",
-      "notation": "syllables",
+      "notation": "names",
       "guide": false
     },
     {

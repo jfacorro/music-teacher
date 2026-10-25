@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { beatsPerMeasure } from '../engine/score';
-import { keyAlterOf, solfaOf } from '../theory/solfa';
+import { keyAlterOf, keyStepOf } from '../theory/keys';
 import { VOICE_UNITS } from './courses';
 import {
   freshSingDrillSeed,
@@ -21,14 +21,14 @@ describe('sight-singing drills', () => {
     expect(openSingDrillLevels(VOICE_UNITS, all)).toEqual(SING_DRILL_LEVELS);
   });
 
-  it.each(SING_DRILL_LEVELS)('%s: four bars in a major key, ending on do', (level) => {
+  it.each(SING_DRILL_LEVELS)('%s: four bars in a major key, ending on the key note', (level) => {
     for (const seed of SEEDS) {
       const { score } = makeSingDrill(level, seed);
       const keyFifths = score.keyFifths ?? 0;
       expect(score.measures).toHaveLength(4);
       const end = score.notes.at(-1)!;
       expect(end.start + end.duration).toBe(4 * beatsPerMeasure(score.timeSignature));
-      expect(solfaOf(end.pitch, keyFifths).degree).toBe('do');
+      expect(end.pitch.step).toBe(keyStepOf(keyFifths));
       for (const note of score.notes) {
         expect(note.pitch.alter).toBe(keyAlterOf(note.pitch.step, keyFifths));
       }

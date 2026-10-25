@@ -9,7 +9,7 @@ import { fitToRange } from '../../../../engine/transpose';
 import { useSettings } from '../../../../storage/settings';
 import { useMicWhileShown } from '../../../hooks';
 import { NotationSelect, ViewToggle } from '../../practice/ViewToggle';
-import { KeyNoteButton, MovableDoNote } from '../../singing/KeyNoteButton';
+import { KeyNoteButton } from '../../singing/KeyNoteButton';
 import { SingRun } from '../../singing/SingRun';
 
 interface SingStepViewProps {
@@ -76,9 +76,6 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
         )}
         {step.strict && <span className="muted">{t('sing.strict')}</span>}
       </div>
-      {view === ScoreView.Sheet && notation === SheetNotation.Syllables && (
-        <MovableDoNote score={fit.score} />
-      )}
       {!fit.fits && <p className="notice">{t('sing.beyondRange')}</p>}
       <SingRun
         // A new range or mode starts over.

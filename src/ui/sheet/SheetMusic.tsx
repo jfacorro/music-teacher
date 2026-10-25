@@ -16,7 +16,6 @@ import { playedMeasureOf, writtenBeat, writtenMeasureOf } from '../../engine/for
 import { Hand, type Score, type ScoreNote } from '../../engine/score';
 import { HandFilter, type LoopRange } from '../../engine/session';
 import { useNoteNames } from '../../i18n/useNoteNames';
-import { useSolfa } from '../../i18n/useSolfa';
 import type { Transport } from '../../engine/transport';
 import { useBarSelection } from '../barSelection';
 import { readCssColors, useColorScheme } from '../canvas';
@@ -90,7 +89,6 @@ export function SheetMusic({
   const [bars, setBars] = useState<BarBox[]>([]);
   const scheme = useColorScheme();
   const names = useNoteNames();
-  const solfa = useSolfa();
 
   const { form } = score;
   // Drawn as written: repeats once, with their signs.
@@ -108,12 +106,10 @@ export function SheetMusic({
       noteLabel:
         notation === SheetNotation.Names
           ? (note) => names.name(note.pitch, { octave: false })
-          : notation === SheetNotation.Syllables
-            ? (note) => solfa(note.pitch, written.keyFifths)
-            : undefined,
+          : undefined,
       handLabel: (hand) => t(`practice.crossedHand.${hand}`),
     });
-  }, [written, notation, hands, names, solfa, rhythm, t]);
+  }, [written, notation, hands, names, rhythm, t]);
 
   // Render (again when the music or the color scheme changes).
   useEffect(() => {

@@ -82,7 +82,7 @@
     },
     "v7": {
       "title": "Leer en el pentagrama",
-      "description": "Melodías leídas en el pentagrama, con do, re, mi bajo las notas y después sin ellos, hasta dos canciones conocidas."
+      "description": "Melodías leídas en el pentagrama, con los nombres bajo las notas y después sin ellos, hasta dos canciones conocidas."
     }
   },
   "lessons": {
@@ -171,7 +171,7 @@
     "v6-l1": "La escala mayor",
     "v6-l2": "La escala menor",
     "v6-l3": "¿Mayor o menor?",
-    "v7-l1": "Do en el pentagrama",
+    "v7-l1": "Grados conjuntos en el pentagrama",
     "v7-l2": "Saltos en el pentagrama",
     "v7-l3": "Leer una melodía"
   },
