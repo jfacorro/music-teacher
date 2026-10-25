@@ -14,6 +14,7 @@ import type { Skill, Unit } from './courses';
 import { DAY_MS, reviewOf } from './review';
 import type { EarLevel } from './earTraining';
 import type { DrillLevel } from './sightReading';
+import type { SingDrillLevel } from './sightSinging';
 import { type SkillProgress, SkillLevel } from './skills';
 import { STAR_THRESHOLDS } from '../engine/scoring';
 import { isUnitOpen, type LessonState, LessonStatus, nextLessonToPlay } from './unlock';
@@ -58,8 +59,10 @@ export interface PracticeInput {
   results: Readonly<Record<string, ResultRow>>;
   songs: readonly SongChoice[];
   skills: readonly SkillProgress[];
-  /** Sight-reading levels open, easiest first. */
-  drillLevels: readonly DrillLevel[];
+  /** Sight-reading (or sight-singing) levels open, easiest first. */
+  drillLevels: readonly (DrillLevel | SingDrillLevel)[];
+  /** How drills are saved: the piano's sight-reading (by default) or the voice's sight-singing. */
+  drillKind?: ResultKind;
   /** Ear-training levels open, easiest first. */
   earLevels: readonly EarLevel[];
   /** How ear training is saved: the piano's (by default) or the voice's. */
@@ -155,7 +158,7 @@ export function suggestPractice(input: PracticeInput): Suggestion[] {
     if (now - last < DRILL_REST_DAYS * DAY_MS) return;
     add({ kind, target: { kind: resultKind, id: level }, ...(last > 0 && { lastPlayedAt: last }) });
   };
-  exercise(SuggestionKind.Drill, ResultKind.Drill, input.drillLevels);
+  exercise(SuggestionKind.Drill, input.drillKind ?? ResultKind.Drill, input.drillLevels);
   exercise(SuggestionKind.Ear, input.earKind ?? ResultKind.Ear, input.earLevels);
 
   // The weakest skill started: its lesson played least well (short of three stars), or else an

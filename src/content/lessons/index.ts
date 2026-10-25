@@ -35,6 +35,7 @@ export type {
 export {
   isGraded,
   SHEET_NOTATIONS,
+  SING_NOTATIONS,
   QuizClef,
   ScoreView,
   SheetNotation,

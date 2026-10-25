@@ -30,6 +30,7 @@ describe('courseOfResult', () => {
     expect(courseOfResult(ResultKind.Song, 'can-can')).toBe(Course.Piano);
     expect(courseOfResult(ResultKind.Ear, 'notes')).toBe(Course.Piano);
     expect(courseOfResult(ResultKind.VoiceEar, 'notes')).toBe(Course.Voice);
+    expect(courseOfResult(ResultKind.VoiceDrill, 'steps')).toBe(Course.Voice);
   });
 });
 

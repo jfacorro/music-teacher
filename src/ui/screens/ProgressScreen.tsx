@@ -15,6 +15,7 @@ import { formatDate, formatPercent, formatPracticeTime } from '../../i18n/format
 import { useContentText } from '../../i18n/useContentText';
 import { isValueOf } from '../../lib/values';
 import { DrillLevel } from '../../content/sightReading';
+import { SingDrillLevel } from '../../content/sightSinging';
 import { useDrillLevelName } from './sightReading/useDrillLevelName';
 import { EarLevel } from '../../content/earTraining';
 import { useEarLevelName } from './earTraining/useEarLevelName';
@@ -95,6 +96,11 @@ export function ProgressScreen() {
       return isValueOf(DrillLevel, id)
         ? t('sightReading.logTitle', { level: levelName(id) })
         : t('sightReading.title');
+    }
+    if (kind === ResultKind.VoiceDrill) {
+      return isValueOf(SingDrillLevel, id)
+        ? t('sightSinging.logTitle', { level: t(`sightSinging.levels.${id}`) })
+        : t('sightSinging.title');
     }
     if (kind === ResultKind.Ear || kind === ResultKind.VoiceEar) {
       return isValueOf(EarLevel, id)

@@ -1,8 +1,8 @@
 {
   "steps": {
     "warmUp": "Empieza con el calentamiento, como en cada lección de canto: unos minutos tranquilos para despertar la voz.",
-    "majorScale": "Do, re, mi, fa, sol, la, si, do: la escala mayor, ocho notas desde do hasta el do siguiente. La mayoría de sus pasos son tonos; dos son semitonos, de mi a fa y de si a do. Haz esos dos pasos pequeños, para que no te queden demasiado grandes.",
-    "scaleUp": "Sube la escala, de do a do. La música espera en cada nota.",
+    "majorScale": "La escala mayor: ocho notas, del 1 hasta la tónica siguiente. La mayoría de sus pasos son tonos; dos son semitonos, del 3 al 4 y del 7 al 8. Haz esos dos pasos pequeños, para que no te queden demasiado grandes.",
+    "scaleUp": "Sube la escala, de la tónica a la tónica. La música espera en cada nota.",
     "scaleUpDown": "Escucha y después cántala a tiempo: sube la escala y vuelve a bajar.",
     "scaleAlong": "Lo mismo, cantando con la melodía guía."
   }

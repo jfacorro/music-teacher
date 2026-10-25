@@ -79,8 +79,8 @@ export function openDrillLevels(
   return DRILL_LEVELS.filter((level) => finished.has(DRILL_UNITS[level]));
 }
 
-/** Five keys under the five fingers. */
-interface Position {
+/** Five keys under the five fingers (for the voice, the notes of the scale a drill uses). */
+export interface Position {
   hand: Hand;
   /** Lowest first: fingers 1–5 for the right hand, 5–1 for the left. */
   notes: readonly NoteString[];
@@ -90,7 +90,7 @@ interface Position {
   minor: boolean;
 }
 
-const position = (hand: Hand, keyFifths: number, ...notes: NoteString[]): Position => ({
+export const position = (hand: Hand, keyFifths: number, ...notes: NoteString[]): Position => ({
   hand,
   notes,
   keyFifths,
@@ -131,7 +131,7 @@ const D_MINOR_RIGHT = minorPosition(Hand.Right, -1, 'D4', 'E4', 'F4', 'G4', 'A4'
 const D_MINOR_LEFT = minorPosition(Hand.Left, -1, 'D3', 'E3', 'F3', 'G3', 'A3');
 
 /** A bar's rhythm, in beats (quarter notes); negative: a rest. */
-type BarRhythm = readonly number[];
+export type BarRhythm = readonly number[];
 
 const QUARTERS_AND_HALVES: readonly BarRhythm[] = [
   [1, 1, 1, 1],
@@ -176,7 +176,7 @@ const COMPOUND_SIXTEENTHS: readonly BarRhythm[] = [
 ];
 const COMPOUND_ENDINGS: readonly BarRhythm[] = [[3], [1.5, 1.5], [1, 0.5, 1.5]];
 
-const RhythmKind = {
+export const RhythmKind = {
   /** Quarter, half and whole notes. */
   Plain: 'plain',
   /** Plus rests and eighth notes: each drill has some of both. */
@@ -184,7 +184,7 @@ const RhythmKind = {
   /** 6/8, with some sixteenth notes in each drill. */
   Compound: 'compound',
 } as const;
-type RhythmKind = (typeof RhythmKind)[keyof typeof RhythmKind];
+export type RhythmKind = (typeof RhythmKind)[keyof typeof RhythmKind];
 
 interface LevelPlan {
   positions: readonly Position[];
@@ -348,7 +348,7 @@ function fingerOf(at: Position, index: number): Finger {
   return (at.hand === Hand.Right ? index + 1 : 5 - index) as Finger;
 }
 
-function barRhythms(random: Random, kind: RhythmKind): BarRhythm[] {
+export function barRhythms(random: Random, kind: RhythmKind): BarRhythm[] {
   if (kind === RhythmKind.Compound) {
     // Some sixteenths in every drill, the third bar anything.
     const sets = shuffled(random, [
@@ -379,7 +379,7 @@ const tonicOf = (keyFifths: number) => (((keyFifths * 7) % 12) + 12) % 12;
 const keyNoteOf = (at: Position) => (tonicOf(at.keyFifths) + (at.minor ? 9 : 0)) % 12;
 
 /** Moves from one finger to the next, by how many keys, with how often they come. */
-const MOVES: readonly (readonly [number, number])[] = [
+export const MOVES: readonly (readonly [number, number])[] = [
   [1, 30],
   [-1, 30],
   [0, 10],
@@ -404,18 +404,27 @@ export function hasLeapAfterLeap(tune: readonly number[]): boolean {
 
 /**
  * Which of the position's keys to play (indexes), `count` of them: starting on a note of the
- * key chord and ending on the key note, approached by step.
+ * key chord and ending on the key note, approached by step. `moves`: how far each note may go
+ * from the one before (in keys), with how often.
  */
-function melody(random: Random, at: Position, count: number): number[] {
+export function melody(
+  random: Random,
+  at: Position,
+  count: number,
+  moves: readonly (readonly [number, number])[] = MOVES,
+): number[] {
   const midis = at.notes.map((note) => pitchOf(note).midi);
   const pitchClasses = midis.map(pitchClass);
   /** An augmented fourth (C to F#, Bb to E) is hard to hear and sing: never leap one. */
   const tritone = (from: number, to: number) => Math.abs(midis[to]! - midis[from]!) === TRITONE;
   const tonicClass = keyNoteOf(at);
-  const tonic = pitchClasses.indexOf(tonicClass);
+  /** The key note's keys (two when the position spans an octave). */
+  const tonics = pitchClasses.flatMap((pc, index) => (pc === tonicClass ? [index] : []));
   const chord = [0, at.minor ? 3 : 4, 7].map((interval) => (tonicClass + interval) % 12);
   const chordTones = pitchClasses.flatMap((pc, index) => (chord.includes(pc) ? [index] : []));
   const fits = (index: number) => index >= 0 && index < at.notes.length;
+  /** The approach to the key note moves no further than the moves do. */
+  const reach = Math.max(...moves.map(([move]) => Math.abs(move)));
 
   // The ending could follow a leap with another, or leap a tritone: try again (a few times at
   // most).
@@ -424,7 +433,8 @@ function melody(random: Random, at: Position, count: number): number[] {
     while (tune.length < count - 2) {
       const last = tune.at(-1)!;
       const before = tune.length > 1 ? last - tune.at(-2)! : 0;
-      const moves = MOVES.filter(([move]) => fits(last + move) && !tritone(last, last + move))
+      const next = moves
+        .filter(([move]) => fits(last + move) && !tritone(last, last + move))
         // No key three times in a row, and no two leaps in a row.
         .filter(([move]) => !(move === 0 && before === 0 && tune.length > 1))
         .filter(([move]) => !(isLeap(before) && isLeap(move)))
@@ -433,15 +443,18 @@ function melody(random: Random, at: Position, count: number): number[] {
           move,
           isLeap(before) && Math.sign(move) === -Math.sign(before) ? weight * 4 : weight,
         ]);
-      tune.push(last + pickWeighted(random, moves));
+      tune.push(last + pickWeighted(random, next));
     }
-    // Then a step onto the key note (in five keys, the step before it is at most a fourth away).
+    // Then a step onto the key note, the nearer one (in five keys, the step before it is at most a
+    // fourth away).
     const last = tune.at(-1)!;
+    const tonic = tonics.reduce((a, b) => (Math.abs(b - last) < Math.abs(a - last) ? b : a));
     const approach = [tonic - 1, tonic + 1]
       .filter(fits)
       .sort((a, b) => Math.abs(a - last) - Math.abs(b - last))[0]!;
     const whole = [...tune, approach, tonic];
-    const awkward = hasLeapAfterLeap(whole) || tritone(last, approach);
+    const awkward =
+      hasLeapAfterLeap(whole) || tritone(last, approach) || Math.abs(approach - last) > reach;
     if (attempt >= MELODY_TRIES || !awkward) return whole;
   }
 }

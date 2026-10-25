@@ -20,6 +20,7 @@ import {
 import { barsParam } from '../barSelection';
 import { isValueOf } from '../../lib/values';
 import { DrillLevel } from '../../content/sightReading';
+import { SingDrillLevel } from '../../content/sightSinging';
 import { useDrillLevelName } from './sightReading/useDrillLevelName';
 import { EarLevel } from '../../content/earTraining';
 import { useEarLevelName } from './earTraining/useEarLevelName';
@@ -31,6 +32,7 @@ import { useEarLevelName } from './earTraining/useEarLevelName';
 function hrefOf(item: PlanItem): string {
   const { kind, id } = item.target;
   if (kind === ResultKind.Drill) return `/sight-reading?level=${id}`;
+  if (kind === ResultKind.VoiceDrill) return `/sight-singing?level=${id}`;
   if (kind === ResultKind.Ear || kind === ResultKind.VoiceEar) return `/ear-training?level=${id}`;
   const path =
     kind === ResultKind.Lesson
@@ -66,6 +68,11 @@ export function TodayCard() {
     if (kind === ResultKind.Song) return isSongId(id) ? ts(`${id}.title`) : id;
     if (kind === ResultKind.Drill) {
       return isValueOf(DrillLevel, id) ? levelName(id) : t('sightReading.title');
+    }
+    if (kind === ResultKind.VoiceDrill) {
+      return isValueOf(SingDrillLevel, id)
+        ? t(`sightSinging.levels.${id}`)
+        : t('sightSinging.title');
     }
     if (kind === ResultKind.Ear || kind === ResultKind.VoiceEar) {
       return isValueOf(EarLevel, id) ? earLevelName(id) : t('earTraining.title');
@@ -125,7 +132,11 @@ export function TodayCard() {
                 <span className="today__mark" aria-hidden="true">
                   {finished && <IconCheck size={12} stroke={3} />}
                 </span>
-                <span className="today__kind">{t(`today.kinds.${item.kind}`)}</span>
+                <span className="today__kind">
+                  {item.target.kind === ResultKind.VoiceDrill
+                    ? t('today.kinds.voiceDrill')
+                    : t(`today.kinds.${item.kind}`)}
+                </span>
                 <span className="today__title">{titleOf(item.target)}</span>
                 <span className="today__detail">{detailOf(item)}</span>
                 {finished && <span className="visually-hidden">{t('today.done')}</span>}

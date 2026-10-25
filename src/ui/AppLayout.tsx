@@ -41,6 +41,7 @@ const SECTION_ICONS: Readonly<Record<Section, Icon>> = {
   [Section.Learn]: IconSchool,
   [Section.Songs]: IconMusic,
   [Section.SightReading]: IconEye,
+  [Section.SightSinging]: IconEye,
   [Section.EarTraining]: IconEar,
   [Section.FreePlay]: IconPiano,
   [Section.Tuner]: IconWaveSine,

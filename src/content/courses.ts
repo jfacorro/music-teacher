@@ -67,6 +67,8 @@ export const SKILLS = [
   'leaps',
   'singing-scales',
   'singing-by-ear',
+  'reading-melodies',
+  'sight-singing',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];
@@ -76,6 +78,7 @@ export const EXERCISE_SKILLS: readonly Skill[] = [
   'sight-reading',
   'ear-training',
   'singing-by-ear',
+  'sight-singing',
 ];
 
 export interface CourseLesson {

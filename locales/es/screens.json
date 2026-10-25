@@ -416,7 +416,8 @@
       "label": "Notación",
       "names": "Con nombres",
       "plain": "Sin nombres",
-      "grand": "Dos pentagramas"
+      "grand": "Dos pentagramas",
+      "syllables": "Do, re, mi desde la tónica"
     },
     "speed": "Velocidad",
     "speedValue": "{percent} · {bpm} BPM",
@@ -733,7 +734,8 @@
       "song": "Canción",
       "skill": "Reforzar una habilidad",
       "drill": "Lectura a primera vista",
-      "ear": "Oído musical"
+      "ear": "Oído musical",
+      "voiceDrill": "Lectura cantada"
     },
     "details": {
       "next": "Sigue donde lo dejaste.",
@@ -964,6 +966,34 @@
       "steady": "Estable",
       "notSung": "no se escuchó",
       "inTuneShare": "afinada el {share} del tiempo"
+    },
+    "keyNote": "Tocar {note}",
+    "keyNoteTip": "Escucha la tónica, {note}, para encontrar la primera nota antes de cantar",
+    "movableDo": "Toda la melodía se mueve para ajustarse a tu registro, así que do es su tónica, caiga donde caiga: aquí, do es {note}."
+  },
+  "sightSinging": {
+    "title": "Lectura cantada",
+    "intro": "Música nueva cada vez: léela en el pentagrama y cántala, sin escucharla antes.",
+    "levels": {
+      "steps": "Grados conjuntos en cinco notas",
+      "leaps": "Saltos de hasta una quinta",
+      "rhythms": "Saltos, con silencios y corcheas"
+    },
+    "locked": "La lectura cantada se abre cuando terminas la unidad “{unit}”.",
+    "noRange": "Primero encuentra tu registro, para que la música se ajuste a tu voz.",
+    "logTitle": "Lectura cantada: {level}",
+    "modes": {
+      "wait": "Espérame",
+      "along": "Cantar a tiempo"
     }
+  },
+  "solfa": {
+    "do": "do",
+    "re": "re",
+    "mi": "mi",
+    "fa": "fa",
+    "sol": "sol",
+    "la": "la",
+    "ti": "si"
   }
 }

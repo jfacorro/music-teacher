@@ -1,9 +1,9 @@
 {
   "steps": {
     "warmUp": "Empieza con el calentamiento, como en cada lección de canto: unos minutos tranquilos para despertar la voz.",
-    "faSol": "Dos grados más: fa y sol. Do, re, mi, fa y sol son las primeras cinco notas de la escala. Haz cada paso pequeño y parejo: la misma distancia fácil de una nota a la siguiente.",
-    "fiveSteps": "Hasta sol y de vuelta hasta do, esperando en cada nota.",
-    "upToSol": "Escucha y después cántalo a tiempo: sube hasta sol, sostenla y vuelve a bajar.",
+    "faSol": "Dos grados más: el 4 y el 5. Del 1 al 5 son las primeras cinco notas de la escala. Haz cada paso pequeño y parejo: la misma distancia fácil de una nota a la siguiente.",
+    "fiveSteps": "Hasta el grado 5 y de vuelta hasta la tónica, esperando en cada nota.",
+    "upToSol": "Escucha y después cántalo a tiempo: sube hasta el 5, sostenlo y vuelve a bajar.",
     "alongToSol": "Lo mismo, cantando con la melodía guía."
   }
 }

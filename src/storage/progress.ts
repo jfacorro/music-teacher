@@ -24,6 +24,8 @@ export const ResultKind = {
   Voice: 'voice',
   /** The voice's ear-training exercise: saved by level (its id). */
   VoiceEar: 'voiceEar',
+  /** A sight-singing drill: saved by level (its id), each drill being new. */
+  VoiceDrill: 'voiceDrill',
 } as const;
 export type ResultKind = (typeof ResultKind)[keyof typeof ResultKind];
 
@@ -49,7 +51,8 @@ export const resultKey = (kind: ResultKind, id: string) => `${kind}:${id}`;
 
 /** The course a result belongs to: a lesson's own, the voice's exercises, the rest the piano's. */
 export function courseOfResult(kind: ResultKind, id: string): Course {
-  if (kind === ResultKind.Voice || kind === ResultKind.VoiceEar) return Course.Voice;
+  if (kind === ResultKind.Voice || kind === ResultKind.VoiceEar || kind === ResultKind.VoiceDrill)
+    return Course.Voice;
   if (kind === ResultKind.Lesson) return findLesson(id)?.course ?? Course.Piano;
   return Course.Piano;
 }
@@ -59,6 +62,7 @@ const EXERCISE_RESULTS: Partial<Readonly<Record<Skill, ResultKind>>> = {
   'sight-reading': ResultKind.Drill,
   'ear-training': ResultKind.Ear,
   'singing-by-ear': ResultKind.VoiceEar,
+  'sight-singing': ResultKind.VoiceDrill,
 };
 /** How many of the latest exercises count for a skill's mastery. */
 export const EXERCISE_RUNS = 10;

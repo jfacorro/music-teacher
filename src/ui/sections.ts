@@ -10,6 +10,7 @@ export const Section = {
   Learn: 'learn',
   Songs: 'songs',
   SightReading: 'sightReading',
+  SightSinging: 'sightSinging',
   EarTraining: 'earTraining',
   FreePlay: 'freePlay',
   Tuner: 'tuner',
@@ -20,8 +21,8 @@ export type Section = (typeof Section)[keyof typeof Section];
 export const SECTIONS: readonly Section[] = Object.values(Section);
 
 /**
- * The sections each course shows, in the sidebar's order. The voice gets sight-singing and
- * songs as they're built (PLAN.md 6.5–6.6).
+ * The sections each course shows, in the sidebar's order. The voice gets songs once they're
+ * built (PLAN.md 6.6).
  */
 export const COURSE_SECTIONS: Readonly<Record<Course, readonly Section[]>> = {
   [Course.Piano]: [
@@ -36,6 +37,7 @@ export const COURSE_SECTIONS: Readonly<Record<Course, readonly Section[]>> = {
   [Course.Voice]: [
     Section.Home,
     Section.Learn,
+    Section.SightSinging,
     Section.EarTraining,
     Section.Tuner,
     Section.Settings,
@@ -47,6 +49,7 @@ export const SECTION_PATHS: Readonly<Record<Section, string>> = {
   [Section.Learn]: '/learn',
   [Section.Songs]: '/songs',
   [Section.SightReading]: '/sight-reading',
+  [Section.SightSinging]: '/sight-singing',
   [Section.EarTraining]: '/ear-training',
   [Section.FreePlay]: '/free-play',
   [Section.Tuner]: '/tuner',
@@ -59,6 +62,7 @@ const SECTION_PAGES: Readonly<Record<Section, readonly string[]>> = {
   [Section.Learn]: ['/learn', '/lesson'],
   [Section.Songs]: ['/songs', '/practice', '/my-songs'],
   [Section.SightReading]: ['/sight-reading'],
+  [Section.SightSinging]: ['/sight-singing'],
   [Section.EarTraining]: ['/ear-training'],
   [Section.FreePlay]: ['/free-play'],
   [Section.Tuner]: ['/tuner'],

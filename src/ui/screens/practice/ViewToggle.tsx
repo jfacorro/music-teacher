@@ -7,13 +7,15 @@ const VIEWS: readonly ScoreView[] = [ScoreView.Falling, ScoreView.Sheet];
 /** Singing, the falling notes' place is taken by the notes in a lane. */
 const LANE = { name: 'lane' } as const;
 
-/** Sheet music level: note names, no names, both staves. */
+/** Sheet music level: note names, no names, both staves (singing leaves out both staves). */
 export function NotationSelect({
   notation,
   onChange,
+  options = SHEET_NOTATIONS,
 }: {
   notation: SheetNotation;
   onChange: (notation: SheetNotation) => void;
+  options?: readonly SheetNotation[];
 }) {
   const { t } = useTranslation('screens');
   const id = useId();
@@ -21,7 +23,7 @@ export function NotationSelect({
     <label className="inline-field" htmlFor={id}>
       {t('practice.notation.label')}
       <select id={id} value={notation} onChange={(e) => onChange(e.target.value as SheetNotation)}>
-        {SHEET_NOTATIONS.map((value) => (
+        {options.map((value) => (
           <option key={value} value={value}>
             {t(`practice.notation.${value}`)}
           </option>

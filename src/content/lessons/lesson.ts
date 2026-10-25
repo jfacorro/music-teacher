@@ -105,13 +105,26 @@ export const SheetNotation = {
   Names: 'names',
   Plain: 'plain',
   Grand: 'grand',
+  /** Singing with letter note names: do, re, mi from the key note (movable do). */
+  Syllables: 'syllables',
 } as const;
 export type SheetNotation = (typeof SheetNotation)[keyof typeof SheetNotation];
 
+/** The piano's (and the Settings default's) levels. */
 export const SHEET_NOTATIONS: readonly SheetNotation[] = [
   SheetNotation.Names,
   SheetNotation.Plain,
   SheetNotation.Grand,
+];
+
+/**
+ * Singing's (milestone 6.5): one staff, with do, re, mi from the key note, note names or nothing
+ * under the notes. Do, re, mi only with letter note names (`singNotations`).
+ */
+export const SING_NOTATIONS: readonly SheetNotation[] = [
+  SheetNotation.Syllables,
+  SheetNotation.Names,
+  SheetNotation.Plain,
 ];
 
 export interface ExerciseStep extends StepBase {
@@ -188,6 +201,8 @@ export interface SingStep extends StepBase {
   score: Score;
   /** The view it starts in: the notes in a lane (`falling`) or sheet music. */
   view: ScoreView;
+  /** The sheet music level it starts with (one of `SING_NOTATIONS`); null = from Settings. */
+  notation: SheetNotation | null;
   /** In tune within ±25 cents instead of ±50. */
   strict: boolean;
   /** Only the written octave counts (after moving into the range). */
@@ -366,12 +381,24 @@ function sing(
     mode: data.mode,
     score,
     view,
+    notation: singNotation(data, location),
     strict: flag('strict', false),
     octave: flag('octave', false),
     guide: flag('guide', true),
     metronome: flag('metronome', false),
     pass: passRule(data, location),
   };
+}
+
+function singNotation(data: Record<string, unknown>, location: string): SheetNotation | null {
+  const notation = data.notation ?? null;
+  if (notation !== null && !SING_NOTATIONS.includes(notation as SheetNotation)) {
+    throw new LessonError(
+      at(location, 'notation'),
+      `expected ${SING_NOTATIONS.map((value) => `"${value}"`).join(', ')}`,
+    );
+  }
+  return notation as SheetNotation | null;
 }
 
 /** How many quiz cards or notes to match: 1–50, ten by default. */

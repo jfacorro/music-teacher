@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "warmUp": "Start with the warm-up, as in every singing lesson: a few easy minutes to wake up your voice.",
+    "skips": "When a note goes from a line to the next line up or down, or from a space to the next space, it skips the note in between: that’s a third, like do to mi. The further apart two notes are on the staff, the bigger the leap: with do on a line, sol is two lines up. You sang these leaps in Unit 5; now read them. Before each skip, hear the next note in your head.",
+    "triad": "Do, mi, sol: from line to line (or space to space). Hear do first, then read and sing. The music waits at each note.",
+    "stepsAndSkips": "Steps and skips mixed, without do, re, mi under the notes. Look at each move first: the next line or space is a step, one further is a skip.",
+    "inTime": "Now in time, with the metronome: hear do, and after a bar counted in, keep going and read ahead. The music doesn’t wait."
+  }
+}
