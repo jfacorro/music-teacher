@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { type LessonStep, StepType } from './lesson';
-import { bestResults, earlierSteps, lessonResult } from './result';
+import { bestResults, earlierDone, earlierSteps, lessonResult, resumeAt } from './result';
 
 const step = (type: LessonStep['type']) => ({ type }) as LessonStep;
 
@@ -95,5 +95,45 @@ describe('earlierSteps', () => {
     const merged = bestResults(now, before);
     expect(merged.get(2)).toEqual({ stars: 3, accuracy: 0.97 });
     expect(lessonResult(steps, merged).stars).toBe(3);
+  });
+});
+
+describe('earlierDone', () => {
+  const steps = [
+    step(StepType.WarmUp),
+    step(StepType.Explain),
+    step(StepType.Explain),
+    step(StepType.Sing),
+    step(StepType.Sing),
+  ];
+  const tried = (passed: boolean) => ({ result: { stars: 1, accuracy: 0.5 }, passed });
+
+  it('counts the passed steps, and what was read before a step that was tried', () => {
+    const earlier = new Map([
+      [3, tried(true)],
+      [4, tried(false)],
+    ]);
+    expect([...earlierDone(steps, earlier, false)]).toEqual([0, 1, 2, 3]);
+  });
+
+  it('counts every reading step of a lesson finished before', () => {
+    expect([...earlierDone(steps, new Map([[4, tried(true)]]), true)]).toEqual([0, 1, 2, 4]);
+  });
+
+  it('counts nothing on a first visit', () => {
+    expect(earlierDone(steps, new Map(), false).size).toBe(0);
+  });
+});
+
+describe('resumeAt', () => {
+  const steps = [step(StepType.Explain), step(StepType.Find), step(StepType.Exercise)];
+
+  it('picks a lesson up at its first step not done', () => {
+    expect(resumeAt(steps, new Set([0, 2]))).toBe(1);
+  });
+
+  it('starts a lesson not started, or done throughout, at the beginning', () => {
+    expect(resumeAt(steps, new Set())).toBe(0);
+    expect(resumeAt(steps, new Set([0, 1, 2]))).toBe(0);
   });
 });

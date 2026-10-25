@@ -4,13 +4,15 @@ import { Course, COURSE_UNITS, findLesson } from '../../../content/courses';
 import { lessonNamespace, type Lesson } from '../../../content/lessons';
 import {
   bestResults,
+  earlierDone,
   earlierSteps,
   lessonResult,
+  resumeAt,
   type StepResult,
 } from '../../../content/lessons/result';
 import { useContentText } from '../../../i18n/useContentText';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
-import { loadStepRuns, recordStepRun, stepKey, useStepRuns } from '../../../storage/stepRuns';
+import { recordStepRun, stepKey, useStepRuns } from '../../../storage/stepRuns';
 import { useTopBarDetail } from '../../topBar';
 import { StepHistory } from './StepHistory';
 import { LessonComplete } from './LessonComplete';
@@ -34,18 +36,11 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const stepText = useContentText(lessonNamespace(lesson.id));
   const { course, unit, lesson: courseLesson } = findLesson(lesson.id)!;
 
-  const [index, setIndex] = useState(0);
   /** Results per graded step (by index): best run for exercises, full marks for find steps. */
   const [results, setResults] = useState<ReadonlyMap<number, StepResult>>(new Map());
   /** Steps whose goal was reached (found all keys, passed the exercise). */
   const [done, setDone] = useState<ReadonlySet<number>>(new Set());
   const [startedAt, setStartedAt] = useState(() => performance.now());
-
-  // Every try of the graded steps, kept to show how each went before.
-  useEffect(() => {
-    void loadStepRuns(lesson.id);
-  }, [lesson.id]);
-  const history = useStepRuns((s) => s.byKey[stepKey(lesson.id, index)]);
 
   // Steps done on earlier visits count too, so one can be skipped without losing its stars.
   const tries = useStepRuns((s) => s.byKey);
@@ -61,6 +56,18 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
       ),
     [lesson, tries, saved],
   );
+  const doneBefore = useMemo(
+    () => earlierDone(lesson.steps, earlier, saved !== undefined),
+    [lesson.steps, earlier, saved],
+  );
+
+  // A lesson started before opens at its first step not done. One that opens with a warm-up
+  // (the voice) warms up first, and continuing from there jumps to that step.
+  const [resume] = useState(() => resumeAt(lesson.steps, doneBefore));
+  const warmUpFirst = lesson.steps[0]?.type === StepType.WarmUp;
+  const [index, setIndex] = useState(warmUpFirst ? 0 : resume);
+  const jumpFromWarmUp = useRef(warmUpFirst && resume > 1 ? resume : null);
+  const history = useStepRuns((s) => s.byKey[stepKey(lesson.id, index)]);
 
   const finished = index >= lesson.steps.length;
   const step = lesson.steps[index];
@@ -69,10 +76,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
     () => bestResults(results, new Map([...earlier].map(([i, step]) => [i, step.result]))),
     [results, earlier],
   );
-  const passed = useMemo(
-    () => new Set([...done, ...[...earlier].filter(([, step]) => step.passed).map(([i]) => i)]),
-    [done, earlier],
-  );
+  const passed = useMemo(() => new Set([...done, ...doneBefore]), [done, doneBefore]);
   const result = lessonResult(lesson.steps, allResults);
 
   // Save the lesson once each time it's completed.
@@ -91,6 +95,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
     setResults(new Map());
     setDone(new Set());
     setStartedAt(performance.now());
+    jumpFromWarmUp.current = null;
     setIndex(0);
   };
   /** A finished try of a graded step: kept in its history, and the best counts for the lesson. */
@@ -111,7 +116,13 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
       });
     });
   const markDone = (stepIndex: number) => setDone((prev) => new Set(prev).add(stepIndex));
-  const next = () => setIndex((i) => i + 1);
+  const next = () => {
+    // Moving on from an explanation or warm-up counts as reading it.
+    if (step && !isGraded(step)) markDone(index);
+    const jump = jumpFromWarmUp.current;
+    jumpFromWarmUp.current = null;
+    setIndex(index === 0 && jump !== null ? jump : index + 1);
+  };
   const canContinue = (step !== undefined && !isGraded(step)) || passed.has(index);
   const title = courseText(`lessons.${lesson.id}`, courseLesson.titleVars);
   useTopBarDetail(
@@ -218,7 +229,10 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               className="button"
               disabled={index === 0}
               title={t('lesson.tips.back')}
-              onClick={() => setIndex((i) => i - 1)}
+              onClick={() => {
+                jumpFromWarmUp.current = null;
+                setIndex((i) => i - 1);
+              }}
             >
               {t('lesson.back')}
             </button>
