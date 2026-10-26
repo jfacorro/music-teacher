@@ -890,6 +890,10 @@
       "skip": "Saltar",
       "skipTip": "Pasa a la pregunta siguiente sin responder esta",
       "notesLabel": "Las notas que hay que cantar"
+    },
+    "tally": {
+      "right": "{count, plural, one {# correcta} other {# correctas}}",
+      "wrong": "{count, plural, one {# incorrecta} other {# incorrectas}}"
     }
   },
   "course": {

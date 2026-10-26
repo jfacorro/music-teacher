@@ -27,6 +27,7 @@ import { useSettings } from '../../../storage/settings';
 import { identifyInterval } from '../../../theory/chords';
 import { pitchFromMidi } from '../../../theory/pitch';
 import { Stars } from '../../components/Stars';
+import { QuizTally } from '../../quiz/QuizTally';
 import { ICONS } from '../../icons';
 import { keyboardLayout, keyboardRange } from '../../keyboard/layout';
 import { type ExpectedKey, PianoKeyboard } from '../../keyboard/PianoKeyboard';
@@ -68,7 +69,9 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
   const [wrongNote, setWrongNote] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const [skipped, setSkipped] = useState(false);
-  const [firstTry, setFirstTry] = useState(0);
+  /** Each question answered: right the first time, or not (a skipped one isn't). */
+  const [answers, setAnswers] = useState<boolean[]>([]);
+  const firstTry = answers.filter(Boolean).length;
   /** The question is being played: the microphone waits. */
   const [sounding, setSounding] = useState(false);
   const startedAt = useRef(0);
@@ -154,7 +157,8 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
         setWrongNote(null);
         if (current.finished) {
           setAnswered(true);
-          if (missesRef.current === 0) setFirstTry((n) => n + 1);
+          const firstTime = missesRef.current === 0;
+          setAnswers((previous) => [...previous, firstTime]);
         }
       }
     });
@@ -192,7 +196,7 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
     startedAt.current = performance.now();
     setQuestions(fresh);
     setIndex(0);
-    setFirstTry(0);
+    setAnswers([]);
     setStarted(true);
     if (fresh[0]) ask(fresh[0]);
   };
@@ -201,6 +205,7 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
     back.current = null;
     setSkipped(true);
     setAnswered(true);
+    setAnswers((previous) => [...previous, false]);
   };
 
   const keysShown = useSettings((s) => s.keysShown);
@@ -241,6 +246,7 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
     return (
       <section className="results quiz__results" aria-labelledby="ear-results">
         <h2 id="ear-results">{t('earTraining.results')}</h2>
+        <QuizTally marks={answers} total={questions.length} current={null} />
         <Stars stars={result.stars} />
         <p className="results__accuracy">
           <span className="muted">{t('practice.results.accuracy')}</span>
@@ -301,9 +307,8 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
 
   return (
     <div className="quiz ear">
-      <p className="muted quiz__progress">
-        {t('earTraining.progress', { current: index + 1, total: questions.length })}
-      </p>
+      {/* How it's going, once it's started. */}
+      {started && <QuizTally marks={answers} total={questions.length} current={index} />}
       <div className="ear__controls">
         {started ? (
           <>

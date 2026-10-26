@@ -2260,6 +2260,54 @@ button.bars__bar:focus-visible {
   margin: 0;
 }
 
+/* A quiz's tally: a box per question, a check or a cross once answered, the current one outlined. */
+.tally__boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.4rem 0 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.results .tally__boxes {
+  justify-content: center;
+}
+
+.tally__box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.6rem;
+  block-size: 1.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.tally__box--current {
+  border: 2px solid var(--accent);
+}
+
+.tally__box--right {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.tally__box--wrong {
+  border-color: var(--problem);
+  background: var(--problem-bg);
+  color: var(--problem);
+}
+
+.tally__right {
+  color: var(--ok);
+}
+
+.tally__wrong {
+  color: var(--problem);
+}
+
 .quiz__message {
   margin: 0;
   min-block-size: 1.5em;
