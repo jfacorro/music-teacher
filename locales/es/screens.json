@@ -455,7 +455,9 @@
     "otherHandMic": "Con el micrófono, usa auriculares para que solo te oiga a ti.",
     "keys": {
       "space": "Espacio",
-      "escape": "Esc"
+      "escape": "Esc",
+      "enter": "Enter",
+      "backspace": "Borrar"
     },
     "tap": "Toca aquí o cualquier tecla",
     "hintRhythm": "Toca cualquier tecla con cada nota: solo cuenta el ritmo. El metrónomo marca la entrada.",

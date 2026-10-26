@@ -9,6 +9,8 @@ import { metronomeAtStart } from '../../../metronomeChoice';
 import { Markings } from '../../../components/Markings';
 import { ScoreView } from '../../../../content/lessons/lesson';
 import type { Summary } from '../../../../engine/scoring';
+import { ShortcutButton } from '../../../components/ShortcutButton';
+import { ShortcutKey } from '../../../shortcuts';
 
 interface ExerciseStepViewProps {
   step: ExerciseStep;
@@ -80,14 +82,14 @@ export function ExerciseStepView({
         }
         resultsActions={(summary) =>
           passes(summary) ? (
-            <button
-              type="button"
+            <ShortcutButton
+              shortcut={ShortcutKey.Enter}
               className="button button--primary"
               title={t('lesson.tips.continue')}
               onClick={onContinue}
             >
               {t('lesson.continue')}
-            </button>
+            </ShortcutButton>
           ) : null
         }
       />

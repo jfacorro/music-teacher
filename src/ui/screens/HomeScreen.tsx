@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Course, COURSE_UNITS, lessonOrder, unitsByLevel } from '../../content/courses';
 import {
   isUnitFinished,
@@ -15,6 +15,8 @@ import { resultKey, useProgress, ResultKind } from '../../storage/progress';
 import { useSettings } from '../../storage/settings';
 import { IndexedPage, type IndexGroup } from '../components/IndexedPage';
 import { PathItem } from '../components/PathItem';
+import { KeyHint } from '../components/ShortcutButton';
+import { ShortcutKey, useShortcut } from '../shortcuts';
 
 const CHECK = '✓';
 const STAR = '★';
@@ -38,6 +40,9 @@ export function HomeScreen() {
   );
   const nextId = nextLessonToPlay(units, states);
   const nextLesson = nextId ? units.flatMap((u) => u.lessons).find((l) => l.id === nextId) : null;
+  // Enter opens the next lesson.
+  const navigate = useNavigate();
+  useShortcut(ShortcutKey.Enter, () => void navigate(`/lesson/${nextId ?? ''}`), nextId !== null);
   const started = lessonOrder(course).some((id) => results[resultKey(ResultKind.Lesson, id)]);
   const groups: IndexGroup[] = [
     { items: [{ id: 'next', label: started ? t('home.continueLabel') : t('home.startLabel') }] },
@@ -63,8 +68,13 @@ export function HomeScreen() {
               <p className="muted">{started ? t('home.continueLabel') : t('home.startLabel')}</p>
               <h2>{courseText(`lessons.${nextLesson.id}`, nextLesson.titleVars)}</h2>
               <div className="button-row">
-                <Link className="button button--primary" to={`/lesson/${nextLesson.id}`}>
+                <Link
+                  className="button button--primary"
+                  to={`/lesson/${nextLesson.id}`}
+                  aria-keyshortcuts={ShortcutKey.Enter}
+                >
                   {started ? t('home.continue') : t('home.start')}
+                  <KeyHint shortcut={ShortcutKey.Enter} />
                 </Link>
                 {course === Course.Voice ? (
                   <Link className="button" to="/settings#voice">

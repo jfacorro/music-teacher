@@ -13,6 +13,8 @@ import { DynamicsBreakdown } from './DynamicsBreakdown';
 import { PedalBreakdown } from './PedalBreakdown';
 import { TouchBreakdown } from './TouchBreakdown';
 import { TimingBreakdown } from './TimingBreakdown';
+import { ShortcutButton } from '../../components/ShortcutButton';
+import { ShortcutKey } from '../../shortcuts';
 
 interface ResultsCardProps {
   summary: Summary;
@@ -111,14 +113,14 @@ export function ResultsCard({
         <BarHeatmap measures={summary.measures} onSelect={onSelectBar} />
       )}
       <div className="button-row results__actions">
-        <button
-          type="button"
+        <ShortcutButton
+          shortcut={ShortcutKey.Space}
           className={children ? 'button' : 'button button--primary'}
           title={t('practice.tips.retry')}
           onClick={onRetry}
         >
           {t('practice.results.retry')}
-        </button>
+        </ShortcutButton>
         {children}
       </div>
     </section>

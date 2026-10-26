@@ -26,6 +26,8 @@ import { NoteCard } from '../sheet/NoteCard';
 import { Hand } from '../../engine/score';
 import { NoteEventType } from '../../input/types';
 import { Clef } from '../../content/musicxml';
+import { ShortcutButton } from '../components/ShortcutButton';
+import { ShortcutKey } from '../shortcuts';
 
 /** Pause on a right answer before the next card. */
 const NEXT_CARD_MS = 900;
@@ -164,14 +166,14 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
         </p>
         <p>{t('quiz.firstTry', { count: result.firstTry, total: result.total })}</p>
         <div className="button-row results__actions">
-          <button
-            type="button"
+          <ShortcutButton
+            shortcut={ShortcutKey.Space}
             className={actions ? 'button' : 'button button--primary'}
             title={t('quiz.newCards')}
             onClick={restart}
           >
             {t('practice.results.retry')}
-          </button>
+          </ShortcutButton>
           {actions?.(result)}
         </div>
       </section>

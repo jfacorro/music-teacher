@@ -25,6 +25,8 @@ import { RhythmStepView } from './steps/RhythmStepView';
 import { SingStepView } from './steps/SingStepView';
 import { WarmUpStepView } from './steps/WarmUpStepView';
 import { isGraded, StepType } from '../../../content/lessons/lesson';
+import { ShortcutButton } from '../../components/ShortcutButton';
+import { ShortcutKey } from '../../shortcuts';
 
 /**
  * Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms, and
@@ -224,8 +226,8 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           )}
 
           <nav className="lesson__nav">
-            <button
-              type="button"
+            <ShortcutButton
+              shortcut={ShortcutKey.Backspace}
               className="button"
               disabled={index === 0}
               title={t('lesson.tips.back')}
@@ -235,16 +237,16 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               }}
             >
               {t('lesson.back')}
-            </button>
+            </ShortcutButton>
             {canContinue ? (
-              <button
-                type="button"
+              <ShortcutButton
+                shortcut={ShortcutKey.Enter}
                 className="button button--primary"
                 title={t('lesson.tips.continue')}
                 onClick={next}
               >
                 {t('lesson.continue')}
-              </button>
+              </ShortcutButton>
             ) : (
               <button
                 type="button"

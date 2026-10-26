@@ -30,6 +30,8 @@ import { PitchLeanLine } from '../components/PitchLeanLine';
 import { Stars } from '../components/Stars';
 import { ICONS } from '../icons';
 import { Needle, Trace, type TracePoint } from './TunerParts';
+import { ShortcutButton } from '../components/ShortcutButton';
+import { ShortcutKey } from '../shortcuts';
 
 /** The exercise's id in saved results. */
 export const MATCH_ID = 'matchNote';
@@ -265,9 +267,13 @@ export function MatchTheNote({
           </>
         )}
         <div className="button-row">
-          <button type="button" className="button button--primary" onClick={begin}>
+          <ShortcutButton
+            shortcut={ShortcutKey.Space}
+            className="button button--primary"
+            onClick={begin}
+          >
             {t('practice.results.retry')}
-          </button>
+          </ShortcutButton>
           <button
             type="button"
             className="button"
@@ -292,12 +298,16 @@ export function MatchTheNote({
         <h2>{t('tuner.match.title')}</h2>
         <p className="muted">{intro ?? t('tuner.match.intro')}</p>
         <div className="button-row">
-          <button type="button" className="button button--primary" onClick={begin}>
+          <ShortcutButton
+            shortcut={ShortcutKey.Enter}
+            className="button button--primary"
+            onClick={begin}
+          >
             <span className="button__icon" aria-hidden="true">
               {ICONS.listen}
             </span>
             {t('tuner.match.begin')}
-          </button>
+          </ShortcutButton>
         </div>
       </div>
     );
@@ -356,8 +366,8 @@ export function MatchTheNote({
         </div>
       )}
       <div className="button-row">
-        <button
-          type="button"
+        <ShortcutButton
+          shortcut={ShortcutKey.Space}
           className="button"
           disabled={sounding || matched}
           onClick={() => void play(target)}
@@ -366,7 +376,7 @@ export function MatchTheNote({
             {ICONS.volume}
           </span>
           {t('tuner.match.hearAgain')}
-        </button>
+        </ShortcutButton>
         <button type="button" className="button" disabled={sounding || matched} onClick={next}>
           {t('tuner.match.skip')}
         </button>

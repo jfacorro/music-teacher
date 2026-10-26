@@ -5,6 +5,8 @@ import { IN_TUNE_CENTS } from '../../../engine/tuner';
 import { formatPercent } from '../../../i18n/format';
 import { PitchLeanLine } from '../../components/PitchLeanLine';
 import { Stars } from '../../components/Stars';
+import { ShortcutButton } from '../../components/ShortcutButton';
+import { ShortcutKey } from '../../shortcuts';
 
 interface SingResultsProps {
   summary: SingSummary;
@@ -71,14 +73,14 @@ export function SingResults({ summary, labelFor, onRetry, children }: SingResult
         </>
       )}
       <div className="button-row results__actions">
-        <button
-          type="button"
+        <ShortcutButton
+          shortcut={ShortcutKey.Space}
           className={children ? 'button' : 'button button--primary'}
           title={t('sing.retryTip')}
           onClick={onRetry}
         >
           {t('practice.results.retry')}
-        </button>
+        </ShortcutButton>
         {children}
       </div>
     </section>
