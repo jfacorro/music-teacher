@@ -37,6 +37,7 @@ import { activityTimer, recordPracticeTime } from '../../../storage/progress';
 import { ChordQuality, identifyInterval } from '../../../theory/chords';
 import { MIDDLE_C, pitchClass, pitchFromMidi } from '../../../theory/pitch';
 import { Stars } from '../../components/Stars';
+import { QuizTally } from '../../quiz/QuizTally';
 import { usePressedKeys } from '../../hooks';
 import { ICONS } from '../../icons';
 import { keyboardLayout, keyboardRange } from '../../keyboard/layout';
@@ -91,7 +92,9 @@ export function EarExercise({
   const [misses, setMisses] = useState(0);
   const [wrongKey, setWrongKey] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
-  const [firstTry, setFirstTry] = useState(0);
+  /** Each question answered: right the first time, or not. */
+  const [answers, setAnswers] = useState<boolean[]>([]);
+  const firstTry = answers.filter(Boolean).length;
   /** The question is being played: keys wait. */
   const [sounding, setSounding] = useState(false);
   const startedAt = useRef(0);
@@ -149,7 +152,7 @@ export function EarExercise({
   const right = (missed: number) => {
     setAnswered(true);
     setWrongKey(null);
-    if (missed === 0) setFirstTry((n) => n + 1);
+    setAnswers((previous) => [...previous, missed === 0]);
   };
   const latestMisses = useRef(misses);
   useEffect(() => {
@@ -250,7 +253,7 @@ export function EarExercise({
     setMisses(0);
     setWrongKey(null);
     setAnswered(false);
-    setFirstTry(0);
+    setAnswers([]);
     setStarted(true);
     if (fresh[0]) void play(fresh[0]);
   };
@@ -297,6 +300,7 @@ export function EarExercise({
     return (
       <section className="results quiz__results" aria-labelledby="ear-results">
         <h2 id="ear-results">{t('earTraining.results')}</h2>
+        <QuizTally marks={answers} total={questions.length} current={null} />
         <Stars stars={result.stars} />
         <p className="results__accuracy">
           <span className="muted">{t('practice.results.accuracy')}</span>
@@ -372,9 +376,7 @@ export function EarExercise({
 
   return (
     <div className="quiz ear">
-      <p className="muted quiz__progress">
-        {t('earTraining.progress', { current: index + 1, total: questions.length })}
-      </p>
+      <QuizTally marks={answers} total={questions.length} current={index} />
       <div className="ear__controls">
         {started ? (
           <ShortcutButton
