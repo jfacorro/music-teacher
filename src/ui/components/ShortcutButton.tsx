@@ -40,7 +40,7 @@ export function ShortcutButton({
   disabled,
   ...rest
 }: ShortcutButtonProps) {
-  useShortcut(shortcut, onClick, !disabled);
+  useShortcut(shortcut, onClick, !disabled && !rest.inert);
   return (
     <button
       type="button"

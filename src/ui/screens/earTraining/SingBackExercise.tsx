@@ -330,8 +330,8 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
             </button>
           </>
         ) : (
-          <button
-            type="button"
+          <ShortcutButton
+            shortcut={ShortcutKey.Enter}
             className="button button--primary button--big"
             onClick={() => begin(questions)}
           >
@@ -339,7 +339,7 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
               {ICONS.listen}
             </span>
             {t('earTraining.begin')}
-          </button>
+          </ShortcutButton>
         )}
       </div>
       {started && (

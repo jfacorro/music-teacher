@@ -26,6 +26,8 @@ import { ICONS } from '../../icons';
 import { useTopBarDetail } from '../../topBar';
 import { PracticeRun } from '../practice/PracticeRun';
 import { useDrillLevelName } from './useDrillLevelName';
+import { ShortcutButton } from '../../components/ShortcutButton';
+import { ShortcutKey } from '../../shortcuts';
 
 const MODES: readonly PracticeMode[] = [PracticeMode.Wait, PracticeMode.Tempo];
 const RECORDING_PREFIX = 'drill:';
@@ -147,8 +149,8 @@ function Drills({ open }: { open: readonly DrillLevel[] }) {
           <h1>{t('sightReading.title')}</h1>
           <p className="muted">{t('sightReading.intro')}</p>
         </div>
-        <button
-          type="button"
+        <ShortcutButton
+          shortcut={ShortcutKey.Enter}
           className={setAside('button button--primary')}
           inert={listening}
           title={t('sightReading.newDrillTip')}
@@ -158,7 +160,7 @@ function Drills({ open }: { open: readonly DrillLevel[] }) {
             {ICONS.newDrill}
           </span>
           {t('sightReading.newDrill')}
-        </button>
+        </ShortcutButton>
       </header>
 
       <div className="practice__options">
@@ -239,14 +241,14 @@ function Drills({ open }: { open: readonly DrillLevel[] }) {
           })
         }
         resultsActions={() => (
-          <button
-            type="button"
+          <ShortcutButton
+            shortcut={ShortcutKey.Enter}
             className="button button--primary"
             title={t('sightReading.newDrillTip')}
             onClick={() => newDrill()}
           >
             {t('sightReading.nextDrill')}
-          </button>
+          </ShortcutButton>
         )}
       />
     </section>

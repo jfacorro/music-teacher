@@ -36,6 +36,8 @@ import { NotationSelect } from '../practice/ViewToggle';
 import { KeyNoteButton, MovableDoNote } from '../singing/KeyNoteButton';
 import { singNotations, startNotation } from '../singing/singNotation';
 import { SingRun } from '../singing/SingRun';
+import { ShortcutButton } from '../../components/ShortcutButton';
+import { ShortcutKey } from '../../shortcuts';
 
 type DrillMode = typeof SingMode.Wait | typeof SingMode.Along;
 const MODES: readonly DrillMode[] = [SingMode.Wait, SingMode.Along];
@@ -148,8 +150,8 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
           <h1>{t('sightSinging.title')}</h1>
           <p className="muted">{t('sightSinging.intro')}</p>
         </div>
-        <button
-          type="button"
+        <ShortcutButton
+          shortcut={ShortcutKey.Enter}
           className="button button--primary"
           title={t('sightReading.newDrillTip')}
           onClick={() => newDrill()}
@@ -158,7 +160,7 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
             {ICONS.newDrill}
           </span>
           {t('sightReading.newDrill')}
-        </button>
+        </ShortcutButton>
       </header>
 
       <div className="practice__options">
@@ -238,14 +240,14 @@ function Drills({ open, range, unitTitle }: DrillsProps) {
           })
         }
         resultsActions={() => (
-          <button
-            type="button"
+          <ShortcutButton
+            shortcut={ShortcutKey.Enter}
             className="button button--primary"
             title={t('sightReading.newDrillTip')}
             onClick={() => newDrill()}
           >
             {t('sightReading.nextDrill')}
-          </button>
+          </ShortcutButton>
         )}
       />
     </section>

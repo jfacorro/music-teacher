@@ -390,8 +390,8 @@ export function EarExercise({
             {t('earTraining.hearAgain')}
           </button>
         ) : (
-          <button
-            type="button"
+          <ShortcutButton
+            shortcut={ShortcutKey.Enter}
             className="button button--primary button--big"
             onClick={() => begin(questions)}
           >
@@ -399,7 +399,7 @@ export function EarExercise({
               {ICONS.listen}
             </span>
             {t('earTraining.begin')}
-          </button>
+          </ShortcutButton>
         )}
         {started && question.quality !== null && (
           <div className="button-row" role="group" aria-label={t('earTraining.chooseLabel')}>
