@@ -457,7 +457,7 @@
       "space": "Espacio",
       "escape": "Esc",
       "enter": "Enter",
-      "backspace": "Retroceso"
+      "backspace": "Borrar"
     },
     "tap": "Toca aquí o cualquier tecla",
     "hintRhythm": "Toca cualquier tecla con cada nota: solo cuenta el ritmo. El metrónomo marca la entrada.",
