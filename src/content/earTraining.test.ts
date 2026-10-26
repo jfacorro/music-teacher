@@ -171,7 +171,7 @@ describe('earQuestions', () => {
 
   it('grows melodies from three notes to five, moving along a scale by step or third', () => {
     const questions = earQuestions(EarLevel.Melodies, EVERYTHING, seededRandom(4));
-    expect(questions.map((q) => q.notes.length)).toEqual([3, 3, 4, 4, 5, 5]);
+    expect(questions.map((q) => q.notes.length)).toEqual([3, 3, 3, 4, 4, 4, 5, 5, 5, 5]);
     for (const question of questions) {
       // All in one of the scales taught.
       expect(
