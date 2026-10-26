@@ -298,12 +298,16 @@ export function MatchTheNote({
         <h2>{t('tuner.match.title')}</h2>
         <p className="muted">{intro ?? t('tuner.match.intro')}</p>
         <div className="button-row">
-          <button type="button" className="button button--primary" onClick={begin}>
+          <ShortcutButton
+            shortcut={ShortcutKey.Enter}
+            className="button button--primary"
+            onClick={begin}
+          >
             <span className="button__icon" aria-hidden="true">
               {ICONS.listen}
             </span>
             {t('tuner.match.begin')}
-          </button>
+          </ShortcutButton>
         </div>
       </div>
     );
