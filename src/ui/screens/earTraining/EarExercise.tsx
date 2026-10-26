@@ -43,6 +43,8 @@ import { keyboardLayout, keyboardRange } from '../../keyboard/layout';
 import { useSettings } from '../../../storage/settings';
 import { type ExpectedKey, PianoKeyboard } from '../../keyboard/PianoKeyboard';
 import { KeyLabels } from '../../keyboard/styles';
+import { ShortcutButton } from '../../components/ShortcutButton';
+import { ShortcutKey } from '../../shortcuts';
 
 /** Pause on a right answer before the next question. */
 const NEXT_QUESTION_MS = 1400;
@@ -302,14 +304,14 @@ export function EarExercise({
         </p>
         <p>{t('earTraining.firstTry', { count: result.firstTry, total: result.total })}</p>
         <div className="button-row results__actions">
-          <button
-            type="button"
+          <ShortcutButton
+            shortcut={ShortcutKey.Space}
             className="button button--primary"
             title={t('earTraining.againTip')}
             onClick={() => begin(newQuestions())}
           >
             {t('practice.results.retry')}
-          </button>
+          </ShortcutButton>
         </div>
       </section>
     );

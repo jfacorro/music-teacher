@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next';
 import type { QuizStep } from '../../../../content/lessons';
 import type { StepResult } from '../../../../content/lessons/result';
 import { NoteQuiz } from '../../../quiz/NoteQuiz';
+import { ShortcutButton } from '../../../components/ShortcutButton';
+import { ShortcutKey } from '../../../shortcuts';
 
 interface QuizStepViewProps {
   step: QuizStep;
@@ -30,14 +32,14 @@ export function QuizStepView({ step, text, onResult, onContinue }: QuizStepViewP
         }
         actions={(result) =>
           passes(result.stars) ? (
-            <button
-              type="button"
+            <ShortcutButton
+              shortcut={ShortcutKey.Enter}
               className="button button--primary"
               title={t('lesson.tips.continue')}
               onClick={onContinue}
             >
               {t('lesson.continue')}
-            </button>
+            </ShortcutButton>
           ) : null
         }
       />

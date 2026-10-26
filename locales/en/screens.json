@@ -455,7 +455,9 @@
     "otherHandMic": "With the microphone, use headphones so it only hears you.",
     "keys": {
       "space": "Space",
-      "escape": "Esc"
+      "escape": "Esc",
+      "enter": "Enter",
+      "backspace": "Backspace"
     },
     "tap": "Tap here, or any key",
     "hintRhythm": "Tap any key with each note: only the timing counts. The metronome counts you in.",

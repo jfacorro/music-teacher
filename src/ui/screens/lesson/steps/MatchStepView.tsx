@@ -6,6 +6,8 @@ import { matchTargets, matchTargetsNear } from '../../../../engine/matchNote';
 import type { VocalRange } from '../../../../engine/vocalRange';
 import { useMicWhileShown } from '../../../hooks';
 import { MatchTheNote } from '../../MatchTheNote';
+import { ShortcutButton } from '../../../components/ShortcutButton';
+import { ShortcutKey } from '../../../shortcuts';
 
 interface MatchStepViewProps {
   step: MatchStep;
@@ -40,14 +42,14 @@ export function MatchStepView({ step, text, onResult, onContinue }: MatchStepVie
         onFinish={({ stars, accuracy }) => onResult({ stars, accuracy }, passes(stars))}
         actions={(summary) =>
           passes(summary.stars) ? (
-            <button
-              type="button"
+            <ShortcutButton
+              shortcut={ShortcutKey.Enter}
               className="button button--primary"
               title={t('lesson.tips.continue')}
               onClick={onContinue}
             >
               {t('lesson.continue')}
-            </button>
+            </ShortcutButton>
           ) : null
         }
       />

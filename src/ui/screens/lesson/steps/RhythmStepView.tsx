@@ -8,6 +8,8 @@ import { PracticeRun } from '../../practice/PracticeRun';
 import { ViewToggle } from '../../practice/ViewToggle';
 import { SheetNotation } from '../../../../content/lessons/lesson';
 import { PracticeMode, HandFilter } from '../../../../engine/session';
+import { ShortcutButton } from '../../../components/ShortcutButton';
+import { ShortcutKey } from '../../../shortcuts';
 
 interface RhythmStepViewProps {
   step: RhythmStep;
@@ -55,14 +57,14 @@ export function RhythmStepView({ step, text, onResult, onContinue }: RhythmStepV
         }
         resultsActions={(summary) =>
           passes(summary.stars) ? (
-            <button
-              type="button"
+            <ShortcutButton
+              shortcut={ShortcutKey.Enter}
               className="button button--primary"
               title={t('lesson.tips.continue')}
               onClick={onContinue}
             >
               {t('lesson.continue')}
-            </button>
+            </ShortcutButton>
           ) : null
         }
       />

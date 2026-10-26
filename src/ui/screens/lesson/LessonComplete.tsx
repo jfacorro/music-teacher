@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { COURSE_UNITS, findLesson, nextLessonId } from '../../../content/courses';
 import { lessonStates, LessonStatus } from '../../../content/unlock';
 import { resultKey, useProgress, ResultKind } from '../../../storage/progress';
 import { Stars } from '../../components/Stars';
+import { KeyHint, ShortcutButton } from '../../components/ShortcutButton';
+import { ShortcutKey, useShortcut } from '../../shortcuts';
 
 interface LessonCompleteProps {
   lessonId: string;
@@ -22,6 +24,10 @@ export function LessonComplete({ lessonId, stars, onRestart }: LessonCompletePro
     (id) => results[resultKey(ResultKind.Lesson, id)]?.bestStars ?? 0,
   );
   const nextOpen = next !== null && states.get(next)?.status !== LessonStatus.Locked;
+  // Enter goes on: to the next lesson, or back to Learn when it's locked or there's none.
+  const onward = nextOpen ? `/lesson/${next}` : '/learn';
+  const navigate = useNavigate();
+  useShortcut(ShortcutKey.Enter, () => void navigate(onward));
 
   return (
     <section className="results lesson__complete" aria-labelledby="lesson-complete">
@@ -30,18 +36,13 @@ export function LessonComplete({ lessonId, stars, onRestart }: LessonCompletePro
       {best > stars && <p className="muted">{t('lesson.bestStars', { stars: best })}</p>}
       {stars === 0 && <p className="muted">{t('lesson.noStars')}</p>}
       <div className="button-row results__actions">
-        <button type="button" className="button" onClick={onRestart}>
+        <ShortcutButton shortcut={ShortcutKey.Space} className="button" onClick={onRestart}>
           {t('lesson.restart')}
-        </button>
-        {nextOpen ? (
-          <Link className="button button--primary" to={`/lesson/${next}`}>
-            {t('lesson.next')}
-          </Link>
-        ) : (
-          <Link className="button button--primary" to="/learn">
-            {t('lesson.backHome')}
-          </Link>
-        )}
+        </ShortcutButton>
+        <Link className="button button--primary" to={onward} aria-keyshortcuts={ShortcutKey.Enter}>
+          {nextOpen ? t('lesson.next') : t('lesson.backHome')}
+          <KeyHint shortcut={ShortcutKey.Enter} />
+        </Link>
       </div>
     </section>
   );

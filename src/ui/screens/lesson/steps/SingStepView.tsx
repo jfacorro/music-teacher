@@ -16,6 +16,8 @@ import { LyricsSelect } from '../../singing/lyrics';
 import { useLyricsLanguage } from '../../singing/useLyricsLanguage';
 import { singNotations, startNotation } from '../../singing/singNotation';
 import { SingRun } from '../../singing/SingRun';
+import { ShortcutButton } from '../../../components/ShortcutButton';
+import { ShortcutKey } from '../../../shortcuts';
 
 interface SingStepViewProps {
   step: SingStep;
@@ -121,14 +123,14 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
         onFinish={({ stars, accuracy }) => onResult({ stars, accuracy }, passes(stars))}
         resultsActions={(summary) =>
           passes(summary.stars) ? (
-            <button
-              type="button"
+            <ShortcutButton
+              shortcut={ShortcutKey.Enter}
               className="button button--primary"
               title={t('lesson.tips.continue')}
               onClick={onContinue}
             >
               {t('lesson.continue')}
-            </button>
+            </ShortcutButton>
           ) : null
         }
       />

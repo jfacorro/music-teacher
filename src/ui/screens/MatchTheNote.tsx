@@ -30,6 +30,8 @@ import { PitchLeanLine } from '../components/PitchLeanLine';
 import { Stars } from '../components/Stars';
 import { ICONS } from '../icons';
 import { Needle, Trace, type TracePoint } from './TunerParts';
+import { ShortcutButton } from '../components/ShortcutButton';
+import { ShortcutKey } from '../shortcuts';
 
 /** The exercise's id in saved results. */
 export const MATCH_ID = 'matchNote';
@@ -265,9 +267,13 @@ export function MatchTheNote({
           </>
         )}
         <div className="button-row">
-          <button type="button" className="button button--primary" onClick={begin}>
+          <ShortcutButton
+            shortcut={ShortcutKey.Space}
+            className="button button--primary"
+            onClick={begin}
+          >
             {t('practice.results.retry')}
-          </button>
+          </ShortcutButton>
           <button
             type="button"
             className="button"

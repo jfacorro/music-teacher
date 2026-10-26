@@ -645,6 +645,21 @@ input[aria-invalid='true'] {
   font-weight: 600;
 }
 
+/* A button's key shortcut (Space, Enter), in a small chip after its label. */
+.key-hint {
+  display: inline-block;
+  margin-inline-start: 0.5rem;
+  padding: 0.1rem 0.35rem;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 400;
+  line-height: 1.2;
+  opacity: 0.75;
+  vertical-align: 0.1em;
+}
+
 .muted {
   color: var(--muted);
 }
