@@ -78,7 +78,7 @@ export interface EarQuestion {
 export const QUESTIONS: Readonly<Record<EarLevel, number>> = {
   [EarLevel.Notes]: 10,
   [EarLevel.Intervals]: 10,
-  [EarLevel.Melodies]: 6,
+  [EarLevel.Melodies]: 10,
   [EarLevel.Chords]: 10,
   [EarLevel.Rhythms]: 8,
   [EarLevel.Scales]: 10,
@@ -166,8 +166,8 @@ const SCALES: readonly (readonly [number, readonly number[], ChordKind])[] = [
   [62, HARMONIC_MINOR, ChordQuality.Minor],
 ];
 
-/** Melodies grow from three notes to five over an exercise. */
-const MELODY_LENGTHS = [3, 3, 4, 4, 5, 5];
+/** Melodies grow from three notes to five over an exercise (in both courses). */
+export const MELODY_LENGTHS = [3, 3, 3, 4, 4, 4, 5, 5, 5, 5];
 
 const question = (
   level: EarLevel,

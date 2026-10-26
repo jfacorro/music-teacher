@@ -74,6 +74,10 @@ describe('voiceEarQuestions', () => {
       Array.from({ length: 30 }, () =>
         voiceEarQuestions(EarLevel.Melodies, range, finished, random),
       ).flat();
+    // Ten a run, growing from three notes to five, as with keys.
+    expect(
+      voiceEarQuestions(EarLevel.Melodies, range, new Set(), random).map((q) => q.notes.length),
+    ).toEqual([3, 3, 3, 4, 4, 4, 5, 5, 5, 5]);
     for (const { notes, given } of melodies(new Set())) {
       expect(given).toBe(notes[0]);
       expect(notes.length).toBeGreaterThanOrEqual(3);

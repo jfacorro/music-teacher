@@ -8,7 +8,7 @@
 import type { VocalRange } from '../engine/vocalRange';
 import { dealEvenly, pick, type Random } from '../lib/random';
 import type { Unit } from './courses';
-import { EarLevel, type EarQuestion, melody, QUESTIONS } from './earTraining';
+import { EarLevel, type EarQuestion, melody, MELODY_LENGTHS, QUESTIONS } from './earTraining';
 import { isUnitFinished, type LessonState } from './unlock';
 
 /** The levels the voice has. */
@@ -51,8 +51,6 @@ const START_WITHIN = 7;
 const INTERVALS = [1, 2, 3, 4, 5, 7, 12];
 const MAJOR = [0, 2, 4, 5, 7, 9, 11, 12];
 const NATURAL_MINOR = [0, 2, 3, 5, 7, 8, 10, 12];
-/** Melodies grow from three notes to five over an exercise. */
-const MELODY_LENGTHS = [3, 3, 4, 4, 5, 5];
 
 /** The range questions use: short of its ends when it's wide enough. */
 function innerRange(range: VocalRange): { low: number; high: number } {
