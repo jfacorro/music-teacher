@@ -6,6 +6,7 @@ import { lessonNamespace, loadLesson, type Lesson } from '../../../content/lesso
 import { i18n } from '../../../i18n';
 import { LessonPlayer } from './LessonPlayer';
 import { LoadStatus } from '../../loadStatus';
+import { updateSettings, useSettings } from '../../../storage/settings';
 import { loadStepRuns } from '../../../storage/stepRuns';
 
 type LoadState =
@@ -32,6 +33,13 @@ export function LessonScreen() {
 function LessonLoader({ lessonId }: { lessonId: string }) {
   const { t } = useTranslation('screens');
   const [state, setState] = useState<LoadState>({ status: LoadStatus.Loading });
+
+  // A lesson belongs to its course: opening one switches to it (from a link, or Today's other
+  // course), so the top bar, the sidebar and Learn follow.
+  useEffect(() => {
+    const course = findLesson(lessonId)?.course;
+    if (course && course !== useSettings.getState().course) updateSettings({ course });
+  }, [lessonId]);
 
   useEffect(() => {
     let cancelled = false;
