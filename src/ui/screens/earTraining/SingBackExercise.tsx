@@ -307,7 +307,8 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
 
   return (
     <div className="quiz ear">
-      <QuizTally marks={answers} total={questions.length} current={index} />
+      {/* How it's going, once it's started. */}
+      {started && <QuizTally marks={answers} total={questions.length} current={index} />}
       <div className="ear__controls">
         {started ? (
           <>
