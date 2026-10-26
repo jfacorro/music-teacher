@@ -377,8 +377,8 @@ export function EarExercise({
       </p>
       <div className="ear__controls">
         {started ? (
-          <button
-            type="button"
+          <ShortcutButton
+            shortcut={ShortcutKey.Space}
             className="button"
             disabled={sounding}
             title={t('earTraining.againTip')}
@@ -388,7 +388,7 @@ export function EarExercise({
               {ICONS.volume}
             </span>
             {t('earTraining.hearAgain')}
-          </button>
+          </ShortcutButton>
         ) : (
           <ShortcutButton
             shortcut={ShortcutKey.Enter}

@@ -307,8 +307,8 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
       <div className="ear__controls">
         {started ? (
           <>
-            <button
-              type="button"
+            <ShortcutButton
+              shortcut={ShortcutKey.Space}
               className="button"
               disabled={sounding || answered}
               title={t('earTraining.againTip')}
@@ -318,7 +318,7 @@ export function SingBackExercise({ level, makeQuestions, onFinish }: SingBackExe
                 {ICONS.volume}
               </span>
               {t('earTraining.hearAgain')}
-            </button>
+            </ShortcutButton>
             <button
               type="button"
               className="button"
