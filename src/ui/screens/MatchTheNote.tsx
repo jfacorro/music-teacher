@@ -362,8 +362,8 @@ export function MatchTheNote({
         </div>
       )}
       <div className="button-row">
-        <button
-          type="button"
+        <ShortcutButton
+          shortcut={ShortcutKey.Space}
           className="button"
           disabled={sounding || matched}
           onClick={() => void play(target)}
@@ -372,7 +372,7 @@ export function MatchTheNote({
             {ICONS.volume}
           </span>
           {t('tuner.match.hearAgain')}
-        </button>
+        </ShortcutButton>
         <button type="button" className="button" disabled={sounding || matched} onClick={next}>
           {t('tuner.match.skip')}
         </button>
