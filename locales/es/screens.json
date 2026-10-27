@@ -376,6 +376,12 @@
     "play": "Tocar",
     "pause": "Pausa",
     "restart": "Volver a empezar",
+    "bars": {
+      "back": "Un compás atrás",
+      "forward": "Un compás adelante",
+      "now": "Compás {bar} de {count}",
+      "unscored": "Solo práctica: como cambiaste de compás, esta vez no se califica. Pulsa Esc para empezar de nuevo y que cuente."
+    },
     "notFound": "Esta canción no existe.",
     "loadError": "No se pudo cargar esta canción.",
     "backHome": "Volver a Práctica de canciones",
@@ -457,7 +463,9 @@
       "space": "Espacio",
       "escape": "Esc",
       "enter": "Enter",
-      "backspace": "Borrar"
+      "backspace": "Borrar",
+      "left": "←",
+      "right": "→"
     },
     "tap": "Toca aquí o cualquier tecla",
     "hintRhythm": "Toca cualquier tecla con cada nota: solo cuenta el ritmo. El metrónomo marca la entrada.",

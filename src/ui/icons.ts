@@ -9,6 +9,8 @@ export const ICONS = {
   play: textStyle(0x25b6), // ▶
   pause: textStyle(0x23f8), // ⏸
   restart: textStyle(0x21bb), // ↻
+  barBack: textStyle(0x23ee), // ⏮
+  barForward: textStyle(0x23ed), // ⏭
   falling: String.fromCodePoint(0x1f3b9), // 🎹 notes falling onto the keyboard
   sheet: String.fromCodePoint(0x1f3bc), // 🎼 musical score
   lane: String.fromCodePoint(0x1f3a4), // 🎤 the notes to sing, in a lane

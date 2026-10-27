@@ -74,6 +74,8 @@ system setting (`src/i18n/naming.ts`).
 | Listen to (input choice)                      | listen to                                            | escuchar                                                |
 | Beat                                          | beat                                                 | pulso                                                   |
 | Bar / measure                                 | bar                                                  | compás                                                  |
+| Back / forward a bar (song practice)          | back a bar, forward a bar                            | un compás atrás, un compás adelante                     |
+| A run that isn't scored                       | practice only, won't be scored                       | solo práctica, no se califica                           |
 | Quarter note                                  | quarter note                                         | negra                                                   |
 | Half note                                     | half note                                            | blanca                                                  |
 | Whole note                                    | whole note                                           | redonda                                                 |

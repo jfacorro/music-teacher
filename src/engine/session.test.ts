@@ -532,6 +532,120 @@ describe('PracticeSession: loop and tempo', () => {
   });
 });
 
+describe('PracticeSession: back and forward a bar', () => {
+  /** Two notes a measure: C4 and D4, then E4 and G4, then C4. */
+  const music: NoteSpec[] = [
+    ['C4', 0],
+    ['D4', 2],
+    ['E4', 4],
+    ['G4', 6],
+    ['C4', 8],
+  ];
+
+  /** Plays `pitch` now: down and up. */
+  const play = (t: ReturnType<typeof setup>, pitch: number) => {
+    t.press(pitch);
+    t.release(pitch);
+  };
+
+  it('tells the bar at a beat, among the practiced ones', () => {
+    const t = setup(music);
+    expect(t.session.barAt(-2)).toBe(0); // the lead-in
+    expect(t.session.barAt(4)).toBe(1);
+    expect(t.session.barAt(7.9)).toBe(1);
+    expect(t.session.barAt(8)).toBe(2);
+    expect(setup(music, { loop: { first: 1, last: 1 } }).session.barAt(9)).toBe(1);
+  });
+
+  it('goes back to the start of this bar when past its first notes, else to the one before', () => {
+    const t = setup(music, { mode: PracticeMode.Wait });
+    t.session.play();
+    for (const [beat, pitch] of [
+      [0, C4],
+      [2, D4],
+      [4, E4],
+    ] as const) {
+      t.at(beat);
+      play(t, pitch);
+    }
+    t.at(6); // waiting for G4
+    t.session.back();
+    expect(t.transport.position()).toBe(4);
+    t.at(4);
+    expect(t.session.getState().status).toBe('waiting'); // for E4 again
+    t.session.back();
+    expect(t.transport.position()).toBe(0);
+  });
+
+  it('plays the notes again from there, as practice: the run isn’t scored', () => {
+    const t = setup(music, { mode: PracticeMode.Wait });
+    const [c4, d4] = t.score.notes;
+    t.session.play();
+    t.at(0);
+    play(t, C4);
+    t.at(2);
+    play(t, D4);
+    t.at(4);
+    t.session.back();
+    expect(t.session.getState()).toMatchObject({ status: 'playing', scored: false });
+    expect(t.session.outcomeOf(c4!)).toBeUndefined();
+    expect(t.session.outcomeOf(d4!)).toBeUndefined();
+    t.at(0);
+    expect(t.session.getState().status).toBe('waiting');
+
+    t.session.forward();
+    for (const [beat, pitch] of [
+      [4, E4],
+      [6, G4],
+      [8, C4],
+    ] as const) {
+      t.at(beat);
+      play(t, pitch);
+    }
+    t.at(9);
+    expect(t.session.getState()).toMatchObject({ status: 'finished', summary: null });
+  });
+
+  it('stays paused there when paused, and doesn’t go past the last bar', () => {
+    const t = setup(music);
+    t.session.forward(); // before starting too
+    expect(t.transport.position()).toBe(4);
+    expect(t.session.getState()).toMatchObject({ status: 'paused', scored: false });
+    t.session.forward();
+    t.session.forward();
+    expect(t.transport.position()).toBe(8);
+  });
+
+  it('doesn’t go back before starting, and starting over is scored again', () => {
+    const t = setup(music);
+    t.session.back();
+    expect(t.session.getState()).toMatchObject({ status: 'ready', scored: true });
+    t.session.forward();
+    t.session.restart();
+    expect(t.session.getState()).toMatchObject({ status: 'ready', scored: true });
+  });
+
+  it('stays in the loop, and doesn’t count a time through that moved', () => {
+    const t = setup(music, { mode: PracticeMode.Wait, loop: { first: 1, last: 2 } });
+    t.session.play();
+    t.at(4);
+    play(t, E4);
+    t.session.back();
+    t.session.back();
+    expect(t.transport.position()).toBe(4); // not before the loop
+    for (const [beat, pitch] of [
+      [4, E4],
+      [6, G4],
+      [8, C4],
+    ] as const) {
+      t.at(beat);
+      play(t, pitch);
+    }
+    t.at(12);
+    expect(t.session.getState()).toMatchObject({ lastPass: null, scored: true });
+  });
+});
+
 describe('PracticeSession: autoplay', () => {
   it('plays through without counting in, grading or results', () => {
     const t = setup(melody, { mode: PracticeMode.Autoplay });
