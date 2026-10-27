@@ -603,7 +603,11 @@
       "last": "Last",
       "trend": "Your last {count} tries, oldest first: {scores}",
       "tries": "{count, plural, one {# try} other {# tries}}",
-      "allTip": "Every try, with its date"
+      "allTip": "Every try on a chart: point at one for its date and score",
+      "chartLabel": "Accuracy on each of your {count} tries, from {first} to {last}",
+      "tryNumber": "Try {number}",
+      "point": "Try {number} · {date}: {score}",
+      "songLabel": "Your tries at this song"
     },
     "passTouch": "Play the staccato and slurred notes as written too (with a MIDI keyboard).",
     "passPedal": "Use the pedal as marked too (with a MIDI keyboard).",

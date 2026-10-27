@@ -603,7 +603,11 @@
       "last": "Último",
       "trend": "Tus últimos {count} intentos, del más antiguo al más reciente: {scores}",
       "tries": "{count, plural, one {# intento} other {# intentos}}",
-      "allTip": "Todos los intentos, con su fecha"
+      "allTip": "Todos los intentos en un gráfico: señala uno para ver su fecha y su resultado",
+      "chartLabel": "Precisión en cada uno de tus {count} intentos, de {first} a {last}",
+      "tryNumber": "Intento {number}",
+      "point": "Intento {number} · {date}: {score}",
+      "songLabel": "Tus intentos con esta canción"
     },
     "passTouch": "Toca también las notas staccato y ligadas como están escritas (con un teclado MIDI).",
     "passPedal": "Usa también el pedal como está marcado (con un teclado MIDI).",

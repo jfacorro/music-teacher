@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { formatDate, formatPercent } from '../../../i18n/format';
-import { dayOf } from '../../../storage/db';
-import { bestRun, type StepRun } from '../../../storage/stepRuns';
-import { Stars } from '../../components/Stars';
-import { StarsSize } from '../../components/starsSize';
+import { formatDate, formatPercent } from '../../i18n/format';
+import { dayOf } from '../../storage/db';
+import { bestRun, type StepRun } from '../../storage/stepRuns';
+import { ProgressChart } from './ProgressChart';
+import { Stars } from './Stars';
+import { StarsSize } from './starsSize';
 
 /** Tries shown as a trend. */
 const TREND = 5;
@@ -17,10 +18,17 @@ const isToday = (at: number) => dayOf(at) === dayOf(Date.now());
 const barClass = (run: StepRun) => `step-history__bar step-history__bar--${run.stars}`;
 
 /**
- * How a lesson step went before: the best try and the last one, the last few as a little
- * trend (oldest first), and every try, with dates, on request. Nothing before the first try.
+ * How a lesson step or a song went before: the best try and the last one, the last few as a
+ * little trend (oldest first), and every try as a chart on request (a list for screen readers).
+ * Nothing before the first try.
  */
-export function StepHistory({ runs }: { runs: readonly StepRun[] | undefined }) {
+export function RunHistory({
+  runs,
+  label,
+}: {
+  runs: readonly StepRun[] | undefined;
+  label: string;
+}) {
   const { t, i18n } = useTranslation('screens');
   const best = runs ? bestRun(runs) : null;
   const last = runs?.at(-1);
@@ -32,7 +40,7 @@ export function StepHistory({ runs }: { runs: readonly StepRun[] | undefined }) 
   const lastWasToday = isToday(last.at);
 
   return (
-    <div className="step-history" aria-label={t('lesson.history.label')}>
+    <div className="step-history" aria-label={label}>
       <span className="step-history__item">
         <span className="muted">{t('lesson.history.best')}</span>
         <Stars stars={best.stars} size={StarsSize.Small} />
@@ -69,12 +77,11 @@ export function StepHistory({ runs }: { runs: readonly StepRun[] | undefined }) 
         <summary title={t('lesson.history.allTip')}>
           {t('lesson.history.tries', { count: runs.length })}
         </summary>
-        <ol className="step-history__list">
+        <ProgressChart runs={runs} />
+        <ol className="visually-hidden">
           {[...runs].reverse().map((run) => (
             <li key={run.at}>
-              <span className="muted">{when(run)}</span>
-              <Stars stars={run.stars} size={StarsSize.Small} />
-              <span>{percent(run)}</span>
+              {when(run)}: {percent(run)}, {t('stars', { ns: 'common', stars: run.stars })}
             </li>
           ))}
         </ol>
