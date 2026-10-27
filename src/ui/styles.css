@@ -3173,6 +3173,66 @@ button.bars__bar:focus-visible {
   background: var(--problem);
 }
 
+/* Every try's accuracy as a line over the star levels (dashed), a try's date and score on hover. */
+.progress-chart {
+  position: relative;
+  margin-block-start: 0.5rem;
+}
+
+.progress-chart svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.progress-chart__label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.progress-chart__level {
+  stroke: var(--border);
+  stroke-dasharray: 3 4;
+}
+
+.progress-chart__axis {
+  stroke: var(--border);
+}
+
+.progress-chart__line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.progress-chart__point {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.progress-chart__tip {
+  position: absolute;
+  z-index: 1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 8px));
+}
+
+.progress-chart__tip--start {
+  transform: translate(-0.75rem, calc(-100% - 8px));
+}
+
+.progress-chart__tip--end {
+  transform: translate(calc(-100% + 0.75rem), calc(-100% - 8px));
+}
+
 /* Opened, the list of tries takes a line of its own below. */
 .step-history__all[open] {
   flex-basis: 100%;

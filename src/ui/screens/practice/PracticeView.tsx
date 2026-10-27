@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { metronomeAtStart } from '../../metronomeChoice';
@@ -7,6 +7,7 @@ import type { Score } from '../../../engine/score';
 import { HandFilter, type LoopRange, PracticeMode } from '../../../engine/session';
 import { weakSpot } from '../../../engine/weakSpots';
 import { recordResult, resultKey, type ResultKind, useProgress } from '../../../storage/progress';
+import { RunHistory } from '../../components/RunHistory';
 import {
   isDone,
   markPracticed,
@@ -71,6 +72,12 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
   const key = resultKey(result.kind, result.id);
   const weak = useTodayPlan((s) => todaysWeakSpot(s.plans, key));
   const weakDone = useProgress((s) => (weak ? isDone(weak, s.results) : false));
+  // Every finished run of this song, oldest first.
+  const log = useProgress((s) => s.log);
+  const runs = useMemo(
+    () => log.filter((entry) => entry.kind === result.kind && entry.refId === result.id),
+    [log, result.kind, result.id],
+  );
   /** Times through the weak spot's bars, across modes and hands. */
   const [weakPasses, setWeakPasses] = useState(0);
   const onWeakSpot =
@@ -117,6 +124,7 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
         </div>
         {actions}
       </header>
+      <RunHistory runs={runs} label={t('lesson.history.songLabel')} />
 
       <div className="practice__options">
         <ViewToggle view={view} onChange={setView} />

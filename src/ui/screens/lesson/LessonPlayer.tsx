@@ -14,7 +14,7 @@ import { useContentText } from '../../../i18n/useContentText';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
 import { recordStepRun, stepKey, useStepRuns } from '../../../storage/stepRuns';
 import { useTopBarDetail } from '../../topBar';
-import { StepHistory } from './StepHistory';
+import { RunHistory } from '../../components/RunHistory';
 import { LessonComplete } from './LessonComplete';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
@@ -159,7 +159,9 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
             step?.type === StepType.Quiz ||
             step?.type === StepType.Rhythm ||
             step?.type === StepType.Match ||
-            step?.type === StepType.Sing) && <StepHistory runs={history} />}
+            step?.type === StepType.Sing) && (
+            <RunHistory runs={history} label={t('lesson.history.label')} />
+          )}
           {step?.type === StepType.Explain && (
             <ExplainStepView
               key={index}
