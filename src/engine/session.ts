@@ -15,6 +15,7 @@
  *   pedal, are kept, and the summary says whether they were used as written.
  * - Loop: only a range of measures is practiced, over and over; each time through ends with
  *   a quick score instead of the results.
+ * - Back and forward a bar: the run goes on from there, as practice: it isn't scored.
  *
  * The UI calls `tick()` every animation frame and forwards every `NoteEvent` to `handleNote`
  * (and every `PedalEvent` to `handlePedal`).
@@ -114,6 +115,8 @@ export interface SessionState {
   summary: Summary | null;
   /** While looping: how many times through so far, and the accuracy of the latest one. */
   lastPass: { count: number; accuracy: number } | null;
+  /** False once the run moved to another bar: it's practice then, with no results. */
+  scored: boolean;
 }
 
 /** Measures to repeat, by index (0 = first measure), both included. */
@@ -150,6 +153,7 @@ const INITIAL_STATE: SessionState = {
   marks: new Map(),
   summary: null,
   lastPass: null,
+  scored: true,
 };
 
 export class PracticeSession {
@@ -167,6 +171,8 @@ export class PracticeSession {
   private countInWaiting: boolean;
   /** The loop in beats, or null to play the whole score. */
   private loop: { start: number; end: number } | null = null;
+  /** The loop's measures, or null to play the whole score. */
+  private loopBars: LoopRange | null = null;
   /** The notes being graded: the selected hands, within the loop. */
   private practicedNotes: ScoreNote[] = [];
   private practicedSet: ReadonlySet<ScoreNote> = new Set();
@@ -223,6 +229,20 @@ export class PracticeSession {
 
   get looping(): boolean {
     return this.loop !== null;
+  }
+
+  /** The practiced bars, by index: the loop's, or all of them. */
+  get bars(): LoopRange {
+    return this.loopBars ?? { first: 0, last: this.score.measures.length - 1 };
+  }
+
+  /** The bar at `beat` (an index into the score's measures), among the practiced ones. */
+  barAt(beat: number): number {
+    let bar = 0;
+    this.score.measures.forEach((measure, index) => {
+      if (measure.start <= beat + 1e-6) bar = index;
+    });
+    return Math.min(Math.max(bar, this.bars.first), this.bars.last);
   }
 
   /** First count-in beat (tempo mode: one measure before the music), or null. */
@@ -282,6 +302,32 @@ export class PracticeSession {
     this.reset();
   }
 
+  /**
+   * Back a bar: to the start of this one when past its first notes, otherwise to the one
+   * before. Not before starting.
+   */
+  back(): void {
+    if (this.state.status === SessionStatus.Ready) return;
+    const position = this.transport.position();
+    const bar = this.barAt(position);
+    const measure = this.score.measures[bar];
+    if (!measure) return;
+    const starts = this.practicedNotes
+      .filter(
+        (note) =>
+          note.start >= measure.start - 1e-6 && note.start < measure.start + measure.length - 1e-6,
+      )
+      .map((note) => note.start);
+    const firstNotes = starts.length > 0 ? Math.min(...starts) : measure.start;
+    this.goToBar(position > firstNotes + 1e-6 ? bar : Math.max(bar - 1, this.bars.first));
+  }
+
+  /** Forward a bar, up to the last one practiced. */
+  forward(): void {
+    const bar = this.barAt(this.transport.position());
+    if (bar < this.bars.last) this.goToBar(bar + 1);
+  }
+
   /** Practices only these measures, over and over (null: the whole score). Starts over. */
   setLoop(range: LoopRange | null): void {
     const { measures } = this.score;
@@ -290,6 +336,10 @@ export class PracticeSession {
     this.loop =
       first && last && first.start <= last.start
         ? { start: first.start, end: last.start + last.length }
+        : null;
+    this.loopBars =
+      range && this.loop
+        ? { first: Math.max(0, range.first), last: Math.min(measures.length - 1, range.last) }
         : null;
     const inLoop = (note: ScoreNote) =>
       !this.loop || (note.start >= this.loop.start && note.start < this.loop.end);
@@ -385,7 +435,8 @@ export class PracticeSession {
     // When looping in tempo mode, time doesn't wait for notes still in their window.
     if (this.loop && (matched || this.mode === PracticeMode.Tempo))
       this.nextPass(this.loop, position);
-    else if (matched) this.finish();
+    else if (matched && this.state.scored) this.finish();
+    else if (matched) this.stop();
   }
 
   // Queries
@@ -594,7 +645,7 @@ export class PracticeSession {
     this.setState({ status: SessionStatus.Finished, countIn: null, summary });
   }
 
-  /** The end of autoplay: finished, without results. */
+  /** The end of autoplay, or of a run that moved to another bar: finished, without results. */
   private stop(): void {
     this.transport.pause();
     this.setState({ status: SessionStatus.Finished, countIn: null });
@@ -602,12 +653,46 @@ export class PracticeSession {
 
   /** The end of the loop: scores this time through and jumps back, keeping the beat. */
   private nextPass(loop: { start: number; end: number }, position: number): void {
+    // A time through that moved to another bar was practice: it isn't counted.
+    if (!this.state.scored) {
+      this.resetMatching();
+      this.transport.seek(loop.start + (position - loop.end));
+      this.setState({ scored: true });
+      return;
+    }
     const notes = this.practicedNotes;
     const weights = notes.reduce((sum, note) => sum + weightOf(this.outcomes.get(note)), 0);
     const accuracy = accuracyOf(weights, this.wrongBeats.length, notes.length);
     this.resetMatching();
     this.transport.seek(loop.start + (position - loop.end));
     this.setState({ lastPass: { count: (this.state.lastPass?.count ?? 0) + 1, accuracy } });
+  }
+
+  /**
+   * Moves to the start of a practiced bar, to play from there: its notes and the ones after it
+   * again. The run is practice from then on, with no results. While the music waits for notes,
+   * it goes on to wait at the bar's first ones; otherwise it stays paused there.
+   */
+  private goToBar(bar: number): void {
+    const { status } = this.state;
+    const measure = this.score.measures[bar];
+    if (status === SessionStatus.Finished || !measure) return;
+    const ahead = this.practicedNotes.filter((note) => note.start >= measure.start - 1e-6);
+    this.tempoMatcher = new TempoMatcher(ahead);
+    this.waitMatcher = new WaitMatcher(ahead);
+    for (const note of ahead) this.outcomes.delete(note);
+    const goingOn =
+      this.mode === PracticeMode.Wait &&
+      (status === SessionStatus.Playing || status === SessionStatus.Waiting);
+    this.transport.pause();
+    this.transport.seek(measure.start);
+    if (goingOn) this.transport.play();
+    this.setState({
+      status: goingOn ? SessionStatus.Playing : SessionStatus.Paused,
+      countIn: null,
+      marks: new Map(),
+      scored: false,
+    });
   }
 
   private resetMatching(): void {

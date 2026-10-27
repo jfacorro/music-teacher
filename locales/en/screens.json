@@ -376,6 +376,12 @@
     "play": "Play",
     "pause": "Pause",
     "restart": "Start over",
+    "bars": {
+      "back": "Back a bar",
+      "forward": "Forward a bar",
+      "now": "Bar {bar} of {count}",
+      "unscored": "Practice only: since you moved to another bar, this run won’t be scored. Press Esc to start over for a score."
+    },
     "notFound": "This song doesn’t exist.",
     "loadError": "Couldn’t load this song.",
     "backHome": "Back to Song practice",
@@ -457,7 +463,9 @@
       "space": "Space",
       "escape": "Esc",
       "enter": "Enter",
-      "backspace": "Backspace"
+      "backspace": "Backspace",
+      "left": "←",
+      "right": "→"
     },
     "tap": "Tap here, or any key",
     "hintRhythm": "Tap any key with each note: only the timing counts. The metronome counts you in.",

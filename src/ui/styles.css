@@ -917,6 +917,19 @@ input[aria-invalid='true'] {
   margin: 0;
 }
 
+/* Back and forward a bar, around the bar playing now. */
+.bar-steps {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bar-steps__now {
+  min-inline-size: 7.5em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
 .practice__notice {
   margin-block: 0 0.75rem;
 }

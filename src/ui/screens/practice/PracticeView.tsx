@@ -227,6 +227,7 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
         }
         recordingKey={key}
         onListeningChange={setListening}
+        barSteps
         loopGoal={weakGoal}
         onLoopPass={() => {
           if (onWeakSpot) setWeakPasses((passes) => passes + 1);

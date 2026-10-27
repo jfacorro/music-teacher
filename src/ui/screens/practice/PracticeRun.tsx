@@ -56,6 +56,7 @@ import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
 import { CompareChart } from './CompareChart';
 import { PlaybackBar } from './PlaybackBar';
+import { BarSteps } from './BarSteps';
 import { useRunRecording } from './useRunRecording';
 import { DynamicsNow } from './DynamicsNow';
 import { PedalIndicator } from '../../components/PedalIndicator';
@@ -112,6 +113,8 @@ interface PracticeRunProps {
   recordingKey?: string;
   /** Told when playing the last run back starts and stops (practice settings wait meanwhile). */
   onListeningChange?: (listening: boolean) => void;
+  /** Back and forward a bar (songs): a run that moves isn't scored. */
+  barSteps?: boolean;
 }
 
 /** One practice run: session, transport, input, metronome and the stage. */
@@ -135,6 +138,7 @@ export function PracticeRun({
   recordingKey,
   onListeningChange,
   sightReading = false,
+  barSteps = false,
 }: PracticeRunProps) {
   const { t, i18n } = useTranslation('screens');
   const names = useNoteNames();
@@ -369,20 +373,28 @@ export function PracticeRun({
     session.play();
   };
 
-  // Shortcuts: Space plays and pauses, Escape starts over (or, listening, stops the playback).
+  // Shortcuts: Space plays and pauses, Escape starts over (or, listening, stops the playback),
+  // and the arrows move a bar back and forward.
   const latestTogglePlay = useRef(togglePlay);
   // Escape starts over; while listening, it stops the playback.
   const startOver = () => (run.listening ? run.stop() : session.restart());
   const latestStartOver = useRef(startOver);
+  const movesBars = barSteps && !run.listening;
+  const latestMovesBars = useRef(movesBars);
   useEffect(() => {
     latestTogglePlay.current = togglePlay;
     latestStartOver.current = startOver;
+    latestMovesBars.current = movesBars;
   });
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.code !== 'Space' && event.code !== 'Escape') return;
+      const arrow = event.code === 'ArrowLeft' || event.code === 'ArrowRight';
+      if (event.code !== 'Space' && event.code !== 'Escape' && !(arrow && latestMovesBars.current))
+        return;
       if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
       if (isTypingTarget(event.target)) return;
+      // The arrows move a focused slider or choice instead.
+      if (arrow && event.target instanceof HTMLInputElement) return;
       // An open dialog (the results) or panel (volume) handles its own keys: Escape closes it.
       if (document.querySelector('dialog:modal, :popover-open')) return;
       event.preventDefault(); // no page scrolling
@@ -391,7 +403,9 @@ export function PracticeRun({
         event.target.blur();
       }
       if (event.code === 'Space') void latestTogglePlay.current();
-      else latestStartOver.current();
+      else if (event.code === 'Escape') latestStartOver.current();
+      else if (event.code === 'ArrowLeft') session.back();
+      else session.forward();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -475,6 +489,7 @@ export function PracticeRun({
             >
               <span aria-hidden="true">{ICONS.restart}</span>
             </button>
+            {barSteps && <BarSteps session={session} transport={transport} status={state.status} />}
             {between && run.recording && (
               <>
                 <button
@@ -512,7 +527,9 @@ export function PracticeRun({
               </button>
             )}
             <p className="muted" aria-live="polite">
-              {hint ?? (loopHint || modeHint)}
+              {!state.scored && !autoplay
+                ? t('practice.bars.unscored')
+                : (hint ?? (loopHint || modeHint))}
             </p>
           </>
         )}

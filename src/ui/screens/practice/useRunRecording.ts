@@ -99,7 +99,8 @@ export function useRunRecording({
   }, [enabled, key]);
 
   // A run starting from the beginning gets a fresh recorder; a finished run is kept, and so
-  // is each time through a loop (which goes on until stopped).
+  // is each time through a loop (which goes on until stopped). A run that moves to another bar
+  // is practice: it isn't kept (in a loop, until the next time through).
   useEffect(() => {
     if (!enabled || !key) return;
     const keep = (notes: RecordedNote[], pedal: PedalHeld[]) => {
@@ -117,12 +118,16 @@ export function useRunRecording({
       setRecording(kept);
       void saveRecording(key, kept);
     };
-    let { status, lastPass } = session.getState();
+    let { status, lastPass, scored } = session.getState();
     return session.subscribe(() => {
       const state = session.getState();
       if (state.status === SessionStatus.Playing && status === SessionStatus.Ready) {
         recorder.current = new Recorder();
       }
+      const going =
+        state.status === SessionStatus.Playing || state.status === SessionStatus.Waiting;
+      if (!state.scored) recorder.current = null;
+      else if (!scored && going) recorder.current = new Recorder();
       const done = recorder.current;
       if (state.status === SessionStatus.Finished && status !== SessionStatus.Finished) {
         const beat = transport.position();
@@ -135,6 +140,7 @@ export function useRunRecording({
       if (state.status === SessionStatus.Ready) recorder.current = null; // started over
       status = state.status;
       lastPass = state.lastPass;
+      scored = state.scored;
     });
   }, [enabled, key, session, transport, mode, hands]);
 
