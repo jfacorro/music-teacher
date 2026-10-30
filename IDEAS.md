@@ -21,7 +21,7 @@ Larger ideas, worked out enough to plan from later. None is scheduled: an idea b
 
 One switch decides what you're practicing, piano or voice, and every section follows it, so the app keeps the same shape for both.
 
-**The switch** sits in the top bar, as the first part of the path: "Piano Teacher / Voice / Learn / Unit 1 · Matching one note". It opens a short list, Piano and Voice, each saying where you are ("Unit 9 of 14", "Not started · find your range first"). It stays visible on every page, even with the sidebar collapsed or on a phone. The alternative, a toggle at the top of the sidebar, would be hidden whenever the sidebar is.
+**The switch** sits in the top bar, as the first part of the path: "Music Teacher / Voice / Learn / Unit 1 · Matching one note". It opens a short list, Piano and Voice, each saying where you are ("Unit 9 of 14", "Not started · find your range first"). It stays visible on every page, even with the sidebar collapsed or on a phone. The alternative, a toggle at the top of the sidebar, would be hidden whenever the sidebar is.
 
 **The sections:**
 
@@ -124,7 +124,7 @@ One switch decides what you're practicing, piano or voice, and every section fol
 ### Open questions
 
 - One app with a switch between piano and voice, as in How it fits in the app, or two separate apps? The suggestion is one app.
-- The name: "Piano Teacher" no longer fits once the app teaches singing. _Cantabile_ ("in a singing style") fits piano and voice; _Crescendo_ and _Da Capo_ are neutral; _Tecla_, _Pianova_ and _Ivories_ tie it to the piano.
+- The name: settled as Music Teacher (Cantabile is taken by another app).
 - Does the browser's echo cancellation let you sing along through speakers, or does it distort the pitch? Try it in S.1.
 
 ### Done when

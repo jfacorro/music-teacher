@@ -5,6 +5,7 @@
  */
 import { db } from './db';
 
+/** Named from when the app was Piano Teacher: the files exported then must still import. */
 export const BACKUP_FORMAT = 'piano-teacher-backup';
 export const BACKUP_VERSION = 1;
 
@@ -41,17 +42,17 @@ export async function exportBackup(now = new Date()): Promise<Backup> {
   };
 }
 
-/** A file name for the backup, e.g. "piano-teacher-2026-10-16.json". */
+/** A file name for the backup, e.g. "music-teacher-2026-10-16.json". */
 export function backupFileName(now = new Date()): string {
   const pad = (n: number) => String(n).padStart(2, '0');
-  return `piano-teacher-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
+  return `music-teacher-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
 }
 
 /** Checks a parsed file; throws `BackupError` if it isn't a backup this app can read. */
 export function parseBackup(input: unknown): Backup {
   const data = input as Partial<Backup> | null;
   if (data === null || typeof data !== 'object' || data.format !== BACKUP_FORMAT) {
-    throw new BackupError('not a Piano Teacher backup');
+    throw new BackupError('not a Music Teacher backup');
   }
   if (data.version !== BACKUP_VERSION) throw new BackupError(`version ${String(data.version)}`);
   const tables = data.tables as Partial<Backup['tables']> | undefined;

@@ -79,6 +79,7 @@ export interface StepRunRow {
   passed?: boolean;
 }
 
+/** Named from when the app was Piano Teacher: a new name would open an empty database. */
 export const db = new Dexie('piano-teacher') as Dexie & {
   settings: EntityTable<KeyValueRow, 'key'>;
   results: EntityTable<ResultRow, 'key'>;

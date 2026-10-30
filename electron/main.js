@@ -1,12 +1,12 @@
 /**
- * Piano Teacher as a desktop app (PLAN.md milestone 3.5): an Electron window around the built
+ * Music Teacher as a desktop app (PLAN.md milestone 3.5): an Electron window around the built
  * web app (dist/), served from app://piano-teacher/. That address is a secure origin with its
  * own storage, kept in the app's profile, so the app works offline and without a server.
  *
  * The web version is unchanged and still runs on its own (npm run dev, npm run preview).
  *
- * PIANO_TEACHER_URL loads another address instead (e.g. the dev server, http://localhost:5173);
- * PIANO_TEACHER_SMOKE=1 opens the app, prints what it found and quits (a quick check).
+ * MUSIC_TEACHER_URL loads another address instead (e.g. the dev server, http://localhost:5173);
+ * MUSIC_TEACHER_SMOKE=1 opens the app, prints what it found and quits (a quick check).
  */
 import {
   app,
@@ -24,18 +24,25 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 /** The app's name, never translated (src/appName.ts). */
-const APP_NAME = 'Piano Teacher';
+const APP_NAME = 'Music Teacher';
+/**
+ * Named from when the app was Piano Teacher. The address and the profile folder hold everything
+ * saved on this computer, so a new name here would open the app empty.
+ */
+const DATA_NAME = 'piano-teacher';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const DIST = path.join(ROOT, 'dist');
 const SCHEME = 'app';
-const START_URL = process.env.PIANO_TEACHER_URL ?? `${SCHEME}://piano-teacher/`;
-const SMOKE = process.env.PIANO_TEACHER_SMOKE === '1';
+const START_URL = process.env.MUSIC_TEACHER_URL ?? `${SCHEME}://${DATA_NAME}/`;
+const SMOKE = process.env.MUSIC_TEACHER_SMOKE === '1';
 
 /** What the app may use without asking: the MIDI keyboard, the microphone, the sound output. */
 const ALLOWED = new Set(['midi', 'midiSysex', 'media', 'speaker-selection']);
 
 /** Menu languages (locales/<language>/desktop.json); others fall back to English. */
 const MENU_LANGUAGES = ['en', 'es'];
+
+app.setPath('userData', path.join(app.getPath('appData'), DATA_NAME));
 
 protocol.registerSchemesAsPrivileged([
   {

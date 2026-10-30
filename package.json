@@ -1,5 +1,5 @@
 {
-  "name": "piano-teacher",
+  "name": "music-teacher",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -60,7 +60,7 @@
   "main": "electron/main.js",
   "build": {
     "appId": "com.jfacorro.pianoteacher",
-    "productName": "Piano Teacher",
+    "productName": "Music Teacher",
     "directories": {
       "output": "release"
     },
@@ -84,7 +84,7 @@
         "en_US",
         "es_ES"
       ],
-      "artifactName": "Piano-Teacher-Setup-${version}.${ext}"
+      "artifactName": "Music-Teacher-Setup-${version}.${ext}"
     },
     "npmRebuild": false,
     "electronDist": "node_modules/electron/dist"

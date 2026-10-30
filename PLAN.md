@@ -1,4 +1,4 @@
-# Piano Teacher — Project Plan
+# Music Teacher — Project Plan
 
 A local piano-learning app in the spirit of Simply Piano: guided lessons and exercises that **listen to what you play** (via MIDI or microphone) and give real-time feedback. Runs entirely on your machine, no accounts, no cloud.
 
@@ -644,11 +644,11 @@ Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5�
 
 **3.5 Desktop packaging (optional)** — ✔ done (verified 2026-10-16: installed with the installer, practiced with the Casio, and progress moved over from the browser)
 - Electron wrapper (`electron/main.js`): loads the built app (`dist/`) from `app://piano-teacher/`, a secure origin served by the app itself (pages such as `/learn` get `index.html`), so it works offline without a server. MIDI and the microphone are allowed without asking, sound plays without a first click, links to other sites open in the browser, and a second launch focuses the open window. Data (IndexedDB) lives in the app's profile.
-- Native menu (Piano Teacher: reload, full screen, quit; View: zoom, developer tools), hidden until Alt is pressed, in the app's language (`locales/<lang>/desktop.json`; the page tells the menu when the language changes). The window title is the page's. The installer offers English and Spanish.
-- Windows installer via electron-builder (`npm run desktop:dist` → `release/Piano-Teacher-Setup-<version>.exe`, unsigned); `npm run desktop` opens the app from a fresh build. The web version is unchanged (`npm run dev`).
+- Native menu (Music Teacher: reload, full screen, quit; View: zoom, developer tools), hidden until Alt is pressed, in the app's language (`locales/<lang>/desktop.json`; the page tells the menu when the language changes). The window title is the page's. The installer offers English and Spanish.
+- Windows installer via electron-builder (`npm run desktop:dist` → `release/Music-Teacher-Setup-<version>.exe`, unsigned); `npm run desktop` opens the app from a fresh build. The web version is unchanged (`npm run dev`).
 - The browser and the app keep separate data: **Settings → Your data** exports everything (settings, results, practice history, imported songs) to a file and imports it back, replacing what's there (`storage/backup.ts`).
-- CI (`.github/workflows/ci.yml`): every pull request and merge runs `npm run check` on Linux; after a merge into `main`, a Windows job builds the installer (version `0.1.<run number>`) and publishes it as the **Latest build** release (`latest-build` tag, `Piano-Teacher-Setup.exe`), replacing the previous one.
-- `PIANO_TEACHER_SMOKE=1 npx electron .` opens the app hidden and reports what works (secure page, MIDI inputs, microphone permission, storage), then quits.
+- CI (`.github/workflows/ci.yml`): every pull request and merge runs `npm run check` on Linux; after a merge into `main`, a Windows job builds the installer (version `0.1.<run number>`) and publishes it as the **Latest build** release (`latest-build` tag, `Music-Teacher-Setup.exe`), replacing the previous one.
+- `MUSIC_TEACHER_SMOKE=1 npx electron .` opens the app hidden and reports what works (secure page, MIDI inputs, microphone permission, storage), then quits.
 
 #### Phase 3 done when
 - [x] Two-handed lessons grade both hands independently. (verified 2026-10-16 on the Casio: each hand's score includes its own misses and wrong keys)
@@ -843,7 +843,7 @@ What singing can be graded on: pitch, timing, steadiness and loudness. The app c
 - Recordings: the results can save the run as a WAV file that plays anywhere, with the notes asked and when the app listened for each in a `json` chunk after the audio (`input/mic/voiceRecording.ts`), into `fixtures/voice/` (kept local, like the piano's). `input/mic/voiceFixtures.test.ts` replays them through the detector and the matcher and prints how many notes match in time; a `<name>.min.json` beside one (`{ "minMatched": 8 }`) makes that a check.
 
 **6.2 Piano or voice: Voice Units 1–2** — in two parts: the switch and Voice Unit 1, then Voice Unit 2 (both built)
-- An `instrument` setting, and the switch in the top bar as the first part of the path ("Piano Teacher / Voice / Learn / Unit 1 · Matching one note"), on every page, even with the sidebar collapsed or on a phone. Its list says where you are in each ("Unit 9 of 14", "Not started · find your range first").
+- An `instrument` setting, and the switch in the top bar as the first part of the path ("Music Teacher / Voice / Learn / Unit 1 · Matching one note"), on every page, even with the sidebar collapsed or on a phone. Its list says where you are in each ("Unit 9 of 14", "Not started · find your range first").
 - The sections follow it: Sight-reading becomes Sight-singing, Free play becomes the Tuner, and Home, Learn and Song practice show that instrument's course and practice. Separate for each instrument: the course, progress, stars, skills, reviews and the Today plan (results, skills and the plan tagged with their instrument). Shared: the practice calendar and streak, settings, the song library and the note names.
 - The input follows the instrument: MIDI (or the microphone) for the piano, the microphone for the voice.
 - The welcome screen asks Piano, Voice or Both. Adding the other one later is a click on the switch, and starts with the range test.
@@ -901,7 +901,9 @@ What singing can be graded on: pitch, timing, steadiness and loudness. The app c
 - Sing steps can take a song (`"song": "amazing-grace"`, and a `tempo`): its melody with its words, and the piano part playing along (a **Piano** checkbox).
 - Voice Unit 8 (elementary), songs with words, each lesson with the warm-up: Words on the notes (one syllable per note, a hyphen going on to the next; “Hot Cross Buns” waiting, then along with the piano, and “Au clair de la lune” from Unit 7), Phrases and breaths (a line of the words is a phrase on one breath, breathing where it ends; “Twinkle, Twinkle” and “Ode to Joy”) and One syllable, two notes (melismas; “Amazing Grace” waiting, on the staff, then along). The last steps need a star to pass. New skill: singing songs.
 
-Still to decide: the app's name. "Piano Teacher" no longer fits once it teaches singing; Cantabile is taken by another app (IDEAS.md › Open questions lists others).
+The app's name is **Music Teacher**, now that it teaches singing too. Its data keeps the old name, `piano-teacher`: the database, the desktop app's profile folder and `app://` address, and the backup format, since a new name would leave everything saved behind. The installer's app id stays too, so it updates the app already installed.
+
+- [ ] TODO (user): install the next build over the old desktop app: it should be called Music Teacher, with one copy installed and your progress still there.
 
 #### Phase 6 done when
 - [x] Singing a note shows which note it is and how far off, reliably, with your microphone (the Tuner, verified 2026-10-22).
@@ -945,9 +947,9 @@ Still to decide: the app's name. "Piano Teacher" no longer fits once it teaches 
 
 **Top bar and sidebar** — ✔ done (verified 2026-10-18 in the browser)
 - The app’s icon sits before its name in the top bar and in the browser tab: the desktop app’s icon redrawn as an SVG (`public/icon.svg`).
-- The sections moved from the top bar to a sidebar on the left: Home, Learn, Song practice, Sight-reading, Ear training and Free play, with Settings at the bottom, each with a line icon (Tabler Icons, `@tabler/icons-react`, MIT). The top bar keeps ☰, the icon and name, where you are ("Piano Teacher / Song practice": a lesson is part of Learn, a song’s practice and imported songs part of Song practice; `ui/sections.ts`), and the input picker. It stays at the top while the page scrolls.
+- The sections moved from the top bar to a sidebar on the left: Home, Learn, Song practice, Sight-reading, Ear training and Free play, with Settings at the bottom, each with a line icon (Tabler Icons, `@tabler/icons-react`, MIT). The top bar keeps ☰, the icon and name, where you are ("Music Teacher / Song practice": a lesson is part of Learn, a song’s practice and imported songs part of Song practice; `ui/sections.ts`), and the input picker. It stays at the top while the page scrolls.
 - ☰ shrinks the sidebar to its icons (names on hover) and back, remembered (`sidebarCollapsed` setting). Below 760 px wide there’s no sidebar: ☰ slides it over the page, and choosing a section, Esc or a click outside closes it; the top bar shows just where you are, and the input picker only its dot (the same choices open from it).
-- After the section, the page adds what’s on it: the lesson ("Learn / Unit 9 · Staccato"), the song or imported song ("Song practice / Can-Can"), "Import a song", the sight-reading or ear-training level. The section then leads back to its page. Pages set it with `useTopBarDetail` (`ui/topBar.ts`), and the browser tab’s title follows ("Staccato · Piano Teacher"); a narrow window shows only the detail.
+- After the section, the page adds what’s on it: the lesson ("Learn / Unit 9 · Staccato"), the song or imported song ("Song practice / Can-Can"), "Import a song", the sight-reading or ear-training level. The section then leads back to its page. Pages set it with `useTopBarDetail` (`ui/topBar.ts`), and the browser tab’s title follows ("Staccato · Music Teacher"); a narrow window shows only the detail.
 
 **Late clicks with Bluetooth** — ✔ done (verified 2026-10-18 on the Casio with Bluetooth headphones)
 - Bluetooth headphones and speakers play sound 150–250 ms late, and browsers can’t tell, so the clicks come after the beat and notes played with them look late (or, past the window, wrong). After a run with the metronome on, when most notes came in late by a similar amount (the middle one at least 60 ms late, two in three at least 30 ms; `engine/timing.ts › steadyLatenessMs`), the results say so, with a link to measure the timing.

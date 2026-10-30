@@ -60,6 +60,6 @@ describe('backups', () => {
   });
 
   it('names the file after the day', () => {
-    expect(backupFileName(new Date(2026, 9, 16))).toBe('piano-teacher-2026-10-16.json');
+    expect(backupFileName(new Date(2026, 9, 16))).toBe('music-teacher-2026-10-16.json');
   });
 });
