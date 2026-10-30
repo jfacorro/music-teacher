@@ -5,8 +5,9 @@
  */
 import { db } from './db';
 
-/** Named from when the app was Piano Teacher: the files exported then must still import. */
-export const BACKUP_FORMAT = 'piano-teacher-backup';
+export const BACKUP_FORMAT = 'music-teacher-backup';
+/** Files exported when the app was called Piano Teacher say so, and must still import. */
+const FORMATS: readonly unknown[] = [BACKUP_FORMAT, 'piano-teacher-backup'];
 export const BACKUP_VERSION = 1;
 
 const TABLES = [
@@ -51,7 +52,7 @@ export function backupFileName(now = new Date()): string {
 /** Checks a parsed file; throws `BackupError` if it isn't a backup this app can read. */
 export function parseBackup(input: unknown): Backup {
   const data = input as Partial<Backup> | null;
-  if (data === null || typeof data !== 'object' || data.format !== BACKUP_FORMAT) {
+  if (data === null || typeof data !== 'object' || !FORMATS.includes(data.format)) {
     throw new BackupError('not a Music Teacher backup');
   }
   if (data.version !== BACKUP_VERSION) throw new BackupError(`version ${String(data.version)}`);
@@ -66,6 +67,7 @@ export function parseBackup(input: unknown): Backup {
   }
   return {
     ...(data as Backup),
+    format: BACKUP_FORMAT,
     tables: Object.fromEntries(
       TABLES.map((name) => [name, tables[name] ?? []]),
     ) as Backup['tables'],

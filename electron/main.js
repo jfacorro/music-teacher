@@ -1,6 +1,6 @@
 /**
  * Music Teacher as a desktop app (PLAN.md milestone 3.5): an Electron window around the built
- * web app (dist/), served from app://piano-teacher/. That address is a secure origin with its
+ * web app (dist/), served from app://music-teacher/. That address is a secure origin with its
  * own storage, kept in the app's profile, so the app works offline and without a server.
  *
  * The web version is unchanged and still runs on its own (npm run dev, npm run preview).
@@ -25,15 +25,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 /** The app's name, never translated (src/appName.ts). */
 const APP_NAME = 'Music Teacher';
-/**
- * Named from when the app was Piano Teacher. The address and the profile folder hold everything
- * saved on this computer, so a new name here would open the app empty.
- */
-const DATA_NAME = 'piano-teacher';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const DIST = path.join(ROOT, 'dist');
 const SCHEME = 'app';
-const START_URL = process.env.MUSIC_TEACHER_URL ?? `${SCHEME}://${DATA_NAME}/`;
+const START_URL = process.env.MUSIC_TEACHER_URL ?? `${SCHEME}://music-teacher/`;
 const SMOKE = process.env.MUSIC_TEACHER_SMOKE === '1';
 
 /** What the app may use without asking: the MIDI keyboard, the microphone, the sound output. */
@@ -41,8 +36,6 @@ const ALLOWED = new Set(['midi', 'midiSysex', 'media', 'speaker-selection']);
 
 /** Menu languages (locales/<language>/desktop.json); others fall back to English. */
 const MENU_LANGUAGES = ['en', 'es'];
-
-app.setPath('userData', path.join(app.getPath('appData'), DATA_NAME));
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -134,7 +127,7 @@ async function smokeTest(window) {
       (error) => 'refused: ' + error.name,
     );
     const storage = await new Promise((resolve) => {
-      const request = indexedDB.open('piano-teacher');
+      const request = indexedDB.open('music-teacher');
       request.onsuccess = () => resolve('ok, ' + request.result.objectStoreNames.length + ' tables');
       request.onerror = () => resolve('failed');
     });

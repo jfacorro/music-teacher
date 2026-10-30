@@ -81,7 +81,7 @@ src/
   i18n/       i18next setup, note-naming systems, Intl formatting, pseudo-locale
   storage/    IndexedDB (Dexie) and settings
   ui/         Layout, components and screens
-electron/     The desktop app: a window around the built app, served from app://piano-teacher
+electron/     The desktop app: a window around the built app, served from app://music-teacher
 locales/      Translations, one folder per language
 ```
 

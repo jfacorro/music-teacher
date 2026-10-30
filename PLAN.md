@@ -643,7 +643,7 @@ Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5�
 - All new text in English and Spanish; scale names in `theory.json` (`scales`), new skills (hands together, chords, accompaniment, scales, thumb under), glossary terms.
 
 **3.5 Desktop packaging (optional)** — ✔ done (verified 2026-10-16: installed with the installer, practiced with the Casio, and progress moved over from the browser)
-- Electron wrapper (`electron/main.js`): loads the built app (`dist/`) from `app://piano-teacher/`, a secure origin served by the app itself (pages such as `/learn` get `index.html`), so it works offline without a server. MIDI and the microphone are allowed without asking, sound plays without a first click, links to other sites open in the browser, and a second launch focuses the open window. Data (IndexedDB) lives in the app's profile.
+- Electron wrapper (`electron/main.js`): loads the built app (`dist/`) from `app://music-teacher/`, a secure origin served by the app itself (pages such as `/learn` get `index.html`), so it works offline without a server. MIDI and the microphone are allowed without asking, sound plays without a first click, links to other sites open in the browser, and a second launch focuses the open window. Data (IndexedDB) lives in the app's profile.
 - Native menu (Music Teacher: reload, full screen, quit; View: zoom, developer tools), hidden until Alt is pressed, in the app's language (`locales/<lang>/desktop.json`; the page tells the menu when the language changes). The window title is the page's. The installer offers English and Spanish.
 - Windows installer via electron-builder (`npm run desktop:dist` → `release/Music-Teacher-Setup-<version>.exe`, unsigned); `npm run desktop` opens the app from a fresh build. The web version is unchanged (`npm run dev`).
 - The browser and the app keep separate data: **Settings → Your data** exports everything (settings, results, practice history, imported songs) to a file and imports it back, replacing what's there (`storage/backup.ts`).
@@ -901,9 +901,9 @@ What singing can be graded on: pitch, timing, steadiness and loudness. The app c
 - Sing steps can take a song (`"song": "amazing-grace"`, and a `tempo`): its melody with its words, and the piano part playing along (a **Piano** checkbox).
 - Voice Unit 8 (elementary), songs with words, each lesson with the warm-up: Words on the notes (one syllable per note, a hyphen going on to the next; “Hot Cross Buns” waiting, then along with the piano, and “Au clair de la lune” from Unit 7), Phrases and breaths (a line of the words is a phrase on one breath, breathing where it ends; “Twinkle, Twinkle” and “Ode to Joy”) and One syllable, two notes (melismas; “Amazing Grace” waiting, on the staff, then along). The last steps need a star to pass. New skill: singing songs.
 
-The app's name is **Music Teacher**, now that it teaches singing too. Its data keeps the old name, `piano-teacher`: the database, the desktop app's profile folder and `app://` address, and the backup format, since a new name would leave everything saved behind. The installer's app id stays too, so it updates the app already installed.
+The app's name is **Music Teacher**, now that it teaches singing too, in everything: the database, the desktop app's folder, `app://` address and app id, and the backup format. The renamed database starts empty, so progress moves over with an exported file (Settings → Import / Export); files exported as Piano Teacher still import.
 
-- [ ] TODO (user): install the next build over the old desktop app: it should be called Music Teacher, with one copy installed and your progress still there.
+- [ ] TODO (user): uninstall the old Piano Teacher desktop app, install the next build and import your exported file: there should be one app, called Music Teacher, with your progress.
 
 #### Phase 6 done when
 - [x] Singing a note shows which note it is and how far off, reliably, with your microphone (the Tuner, verified 2026-10-22).

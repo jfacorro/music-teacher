@@ -59,7 +59,7 @@
   "author": "Juan Facorro",
   "main": "electron/main.js",
   "build": {
-    "appId": "com.jfacorro.pianoteacher",
+    "appId": "com.jfacorro.musicteacher",
     "productName": "Music Teacher",
     "directories": {
       "output": "release"

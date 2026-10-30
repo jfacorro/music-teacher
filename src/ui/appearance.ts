@@ -40,7 +40,7 @@ export const KEY_ASPECTS: Readonly<Record<KeyHeight, number>> = {
  * A copy of the theme in this browser's storage, so index.html can set it before the app has
  * loaded its settings (no flash of the wrong colors).
  */
-const FIRST_PAINT_KEY = 'piano-teacher:theme';
+const FIRST_PAINT_KEY = 'music-teacher:theme';
 
 let stopFollowingSystem: (() => void) | null = null;
 

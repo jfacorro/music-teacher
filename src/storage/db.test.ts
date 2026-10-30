@@ -7,7 +7,7 @@ describe('database upgrade', () => {
   it('carries the practice time of finished runs over into practice days', async () => {
     const at = (date: string, time: string) => new Date(`${date}T${time}:00`).getTime();
     // The database as it was before practice days.
-    const old = new Dexie('piano-teacher');
+    const old = new Dexie('music-teacher');
     old.version(1).stores({ settings: 'key' });
     old.version(2).stores({ results: 'key', practiceLog: '++id, at' });
     await old.table('practiceLog').bulkAdd([
