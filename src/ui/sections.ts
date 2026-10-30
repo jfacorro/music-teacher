@@ -40,6 +40,7 @@ export const COURSE_SECTIONS: Readonly<Record<Course, readonly Section[]>> = {
     Section.Tuner,
     Section.Settings,
   ],
+  [Course.Theory]: [Section.Home, Section.Learn, Section.Settings],
 };
 
 export const SECTION_PATHS: Readonly<Record<Section, string>> = {

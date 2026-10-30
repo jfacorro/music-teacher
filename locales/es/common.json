@@ -78,10 +78,11 @@
   },
   "courseSwitch": {
     "label": "Qué estás practicando",
-    "tip": "Qué estás practicando: el piano o tu voz. Cada uno tiene su propio curso y su progreso.",
+    "tip": "Qué estás practicando: el piano, tu voz o teoría musical. Cada uno tiene su propio curso y su progreso.",
     "courses": {
       "piano": "Piano",
-      "voice": "Voz"
+      "voice": "Voz",
+      "theory": "Teoría"
     },
     "notStarted": "Sin empezar",
     "findRangeFirst": "Sin empezar · primero encuentra tu extensión",

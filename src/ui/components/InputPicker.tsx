@@ -1,11 +1,10 @@
 import { IconChevronDown } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { Course } from '../../content/courses';
 import { useMic, MicStatus } from '../../input/mic/micInput';
 import { enableMidi, useMidi, MidiAccessState, MidiConnection } from '../../input/midi/midiInput';
 import { INPUT_MODES, useInstrument, InputMode, Instrument } from '../../input/routing';
 import { enableMic, setInputMode } from '../../preferences';
-import { useSettings } from '../../storage/settings';
+import { sings, useSettings } from '../../storage/settings';
 
 const DotState = {
   Ok: 'ok',
@@ -61,7 +60,7 @@ export function InputPicker() {
   const connection = useMidi((s) => s.connection);
   const deviceName = useMidi((s) => s.selectedName);
   const micStatus = useMic((s) => s.status);
-  const course = useSettings((s) => s.course);
+  const singing = useSettings(sings);
 
   const midi: Badge =
     access !== MidiAccessState.Granted
@@ -101,7 +100,7 @@ export function InputPicker() {
   };
 
   // Singing is heard through the microphone only: the picker shows it, and turns it on.
-  if (course === Course.Voice) {
+  if (singing) {
     const listening = micStatus === MicStatus.On || micStatus === MicStatus.Starting;
     return (
       <button

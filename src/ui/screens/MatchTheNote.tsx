@@ -44,6 +44,16 @@ const RING_MS = 600;
 /** Pause on a matched note before the next one. */
 const NEXT_NOTE_MS = 1200;
 
+/** A note to work out instead of copy: what's played and said for it. */
+export interface MatchClue {
+  /** The note played. */
+  play: number;
+  /** What to sing. */
+  prompt: string;
+  /** The button that plays it again. */
+  again: string;
+}
+
 interface MatchTheNoteProps {
   /** The note to sing, while there is one (to show on the range's keyboard). */
   onTarget?: (midi: number | null) => void;
@@ -53,8 +63,15 @@ interface MatchTheNoteProps {
   onFinish?: (summary: MatchSummary, durationMs: number) => void;
   /** More buttons beside Retry on the results (e.g. Continue in a lesson). */
   actions?: (summary: MatchSummary) => ReactNode;
+  /** The card's title (Match the note by default). */
+  title?: string;
   /** What to do, before starting (the Tuner's explanation by default). */
   intro?: string;
+  /**
+   * Each note's clue, by its place in the run: the note isn't played or named, and the tuner shows
+   * only how far off the singing is.
+   */
+  clue?: (index: number) => MatchClue;
   /**
    * Show the tuner's needle and line against the note to sing (in lessons; the Tuner page has its
    * own above the card).
@@ -67,7 +84,9 @@ export function MatchTheNote({
   pick,
   onFinish,
   actions,
+  title,
   intro,
+  clue,
   tuner = false,
 }: MatchTheNoteProps) {
   const { t, i18n } = useTranslation('screens');
@@ -135,13 +154,13 @@ export function MatchTheNote({
     [],
   );
 
-  const ask = (midi: number) => {
+  const ask = (midi: number, at: number) => {
     matcher.current = new NoteMatcher(midi);
     setTrace([]);
     setHeld(0);
     setMatched(false);
     setLate(false);
-    void play(midi);
+    void play(clue?.(at).play ?? midi);
   };
 
   const begin = () => {
@@ -153,7 +172,7 @@ export function MatchTheNote({
     setTargets(fresh);
     setIndex(0);
     setDone([]);
-    ask(fresh[0]!);
+    ask(fresh[0]!, 0);
   };
 
   const next = () => {
@@ -172,7 +191,7 @@ export function MatchTheNote({
     setIndex((i) => i + 1);
     const following = targets[index + 1];
     if (following !== undefined) {
-      ask(following);
+      ask(following, index + 1);
       return;
     }
     recorder.current?.stop();
@@ -295,7 +314,7 @@ export function MatchTheNote({
   if (!running) {
     return (
       <div className="card match">
-        <h2>{t('tuner.match.title')}</h2>
+        <h2>{title ?? t('tuner.match.title')}</h2>
         <p className="muted">{intro ?? t('tuner.match.intro')}</p>
         <div className="button-row">
           <ShortcutButton
@@ -313,6 +332,7 @@ export function MatchTheNote({
     );
   }
 
+  const asked = clue?.(index);
   const message = sounding
     ? t('tuner.match.listen')
     : matched
@@ -322,7 +342,9 @@ export function MatchTheNote({
       : late
         ? t('tuner.match.late')
         : off === null
-          ? t('tuner.match.sing')
+          ? asked
+            ? t('lesson.build.sing')
+            : t('tuner.match.sing')
           : Math.abs(off) <= MATCH_CENTS
             ? t('tuner.match.hold')
             : off < 0
@@ -331,13 +353,13 @@ export function MatchTheNote({
 
   return (
     <div className="card match">
-      <h2>{t('tuner.match.title')}</h2>
+      <h2>{asked?.prompt ?? title ?? t('tuner.match.title')}</h2>
       <p className="muted">
         {t('tuner.match.progress', { current: index + 1, total: targets.length })}
       </p>
       <div className="match__live">
         <div className="match__note">
-          <strong>{noteName(target)}</strong>
+          {!asked && <strong>{noteName(target)}</strong>}
           <span className="hold-bar">
             <span style={{ inlineSize: `${Math.round(held * 100)}%` }} />
           </span>
@@ -358,11 +380,13 @@ export function MatchTheNote({
       {tuner && (
         <div className="match__tuner">
           {off !== null && <Needle cents={off} zone={MATCH_CENTS} span={2 * MATCH_CENTS} />}
-          <Trace
-            points={trace}
-            around={target}
-            labelFor={(midi) => names.name(pitchFromMidi(midi), { octave: false })}
-          />
+          {!asked && (
+            <Trace
+              points={trace}
+              around={target}
+              labelFor={(midi) => names.name(pitchFromMidi(midi), { octave: false })}
+            />
+          )}
         </div>
       )}
       <div className="button-row">
@@ -370,12 +394,12 @@ export function MatchTheNote({
           shortcut={ShortcutKey.Space}
           className="button"
           disabled={sounding || matched}
-          onClick={() => void play(target)}
+          onClick={() => void play(asked?.play ?? target)}
         >
           <span className="button__icon" aria-hidden="true">
             {ICONS.volume}
           </span>
-          {t('tuner.match.hearAgain')}
+          {asked?.again ?? t('tuner.match.hearAgain')}
         </ShortcutButton>
         <button type="button" className="button" disabled={sounding || matched} onClick={next}>
           {t('tuner.match.skip')}

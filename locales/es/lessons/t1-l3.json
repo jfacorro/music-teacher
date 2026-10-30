@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "sameNumber": "El número no lo dice todo. De {c} a {e} y de {d} a {f} hay terceras, pero la primera es más amplia. Cuenta los semitonos: cuatro forman una tercera mayor; tres, una tercera menor.",
+    "perfect": "Las cuartas, las quintas y las octavas tienen un solo tamaño habitual, y por eso se llaman justas: cinco semitonos la cuarta justa, siete la quinta justa y doce la octava. Desde {c}, son {f}, {g} y otra vez {c}.",
+    "nameThem": "Cuenta los semitonos entre las dos notas y di qué intervalo es.",
+    "build": "Ahora constrúyelos: sube los semitonos desde la nota que te damos.",
+    "others": "Las segundas, las sextas y las séptimas también pueden ser mayores o menores. La segunda menor tiene un semitono y la mayor, dos; la sexta menor, ocho y la mayor, nueve; la séptima menor, diez y la mayor, once.",
+    "allOfThem": "Todos juntos. Tómate tu tiempo: solo cuenta tu primera respuesta."
+  }
+}

@@ -39,6 +39,7 @@ export interface TodayPlan {
 const KEYS: Readonly<Record<Course, string>> = {
   [Course.Piano]: 'today',
   [Course.Voice]: 'today:voice',
+  [Course.Theory]: 'today:theory',
 };
 
 export const useTodayPlan = create<{ plans: Partial<Record<Course, TodayPlan>> }>(() => ({
@@ -79,6 +80,20 @@ function suggestNow(course: Course, now: number, exclude?: ReadonlySet<string>):
     (id) => lessonResult(id)?.bestAccuracy ?? null,
     exerciseAccuracies(log),
   );
+  // Theory has lessons and reviews, without songs or exercises of its own.
+  if (course === Course.Theory) {
+    return suggestPractice({
+      units,
+      states,
+      results,
+      songs: [],
+      skills,
+      drillLevels: [],
+      earLevels: [],
+      now,
+      exclude,
+    });
+  }
   // The voice's songs are suggested once a lesson of the unit that starts singing them is done
   // (every unit's first lesson is open from the start).
   if (course === Course.Voice) {

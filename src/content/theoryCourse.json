@@ -1,0 +1,26 @@
+{
+  "units": [
+    {
+      "id": "t1",
+      "level": "beginner",
+      "lessons": [
+        {
+          "id": "t1-l1",
+          "skills": ["half-and-whole-steps"]
+        },
+        {
+          "id": "t1-l2",
+          "skills": ["interval-numbers"]
+        },
+        {
+          "id": "t1-l3",
+          "skills": ["interval-qualities"]
+        },
+        {
+          "id": "t1-l4",
+          "skills": ["hearing-intervals"]
+        }
+      ]
+    }
+  ]
+}

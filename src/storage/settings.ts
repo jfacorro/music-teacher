@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Course } from '../content/courses';
+import { Course, TheoryAnswer } from '../content/courses';
 import { SheetNotation } from '../content/lessons';
 import type { NamingSystem } from '../i18n/naming';
 import { DEFAULT_VOLUMES } from '../audio/volume';
@@ -12,8 +12,10 @@ import { db } from './db';
 export interface Settings {
   /** The first-launch setup was finished or skipped. */
   firstLaunchDone: boolean;
-  /** What's being practiced, the piano or the voice: the app's sections follow it. */
+  /** What's being practiced, the piano, the voice or theory: the app's sections follow it. */
   course: Course;
+  /** How Theory's questions are answered; null until Theory is opened (see `chooseCourse`). */
+  theoryAnswer: TheoryAnswer | null;
   /** null = follow the browser's language. */
   language: string | null;
   /** null = the default for the current language. */
@@ -76,6 +78,7 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   firstLaunchDone: false,
   course: Course.Piano,
+  theoryAnswer: null,
   language: null,
   namingSystem: null,
   showOctave: false,
@@ -110,6 +113,10 @@ const SETTINGS_KEY = 'app';
 
 export const useSettings = create<Settings>(() => DEFAULT_SETTINGS);
 
+/** The app listens to the voice: in its course, or in Theory when answering by singing. */
+export const sings = ({ course, theoryAnswer }: Pick<Settings, 'course' | 'theoryAnswer'>) =>
+  course === Course.Voice || (course === Course.Theory && theoryAnswer === TheoryAnswer.Sing);
+
 export async function loadSettings(): Promise<Settings> {
   try {
     const row = await db.settings.get(SETTINGS_KEY);
@@ -126,4 +133,12 @@ export function updateSettings(patch: Partial<Settings>): void {
   db.settings.put({ key: SETTINGS_KEY, value: useSettings.getState() }).catch((error: unknown) => {
     console.error('Could not save settings', error);
   });
+}
+
+/** Moves to a course. Theory's answers start as the course it was opened from. */
+export function chooseCourse(next: Course): void {
+  const { course, theoryAnswer } = useSettings.getState();
+  const firstTheory = next === Course.Theory && theoryAnswer === null;
+  const answer = course === Course.Voice ? TheoryAnswer.Sing : TheoryAnswer.Play;
+  updateSettings({ course: next, ...(firstTheory ? { theoryAnswer: answer } : {}) });
 }

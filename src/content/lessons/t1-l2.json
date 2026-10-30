@@ -1,0 +1,50 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "counting",
+      "textVars": { "c": "C4", "d": "D4", "e": "E4", "g": "G4" },
+      "keys": [{ "note": "C4" }, { "note": "D4" }, { "note": "E4" }, { "note": "G4" }],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "explain",
+      "text": "staff",
+      "staff": { "clef": "treble", "notes": ["E4", "G4", "B4"] }
+    },
+    {
+      "type": "question",
+      "text": "readStaff",
+      "kind": "intervalNumber",
+      "answers": ["second", "third", "fourth", "fifth"],
+      "roots": ["C4", "D4", "E4", "F4", "G4"],
+      "show": "staff",
+      "count": 8
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "intervalNumber",
+      "answers": ["second", "third", "fourth", "fifth"],
+      "roots": ["C4", "D4", "E4", "F4", "G4"],
+      "count": 6
+    },
+    {
+      "type": "explain",
+      "text": "wider",
+      "textVars": { "c": "C4" },
+      "keys": [{ "note": "C4" }, { "note": "C5" }],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "question",
+      "text": "allOfThem",
+      "kind": "intervalNumber",
+      "answers": ["second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"],
+      "roots": ["C4", "D4", "E4", "F4", "G4"],
+      "show": "staff",
+      "count": 8,
+      "pass": { "minStars": 1 }
+    }
+  ]
+}

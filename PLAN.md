@@ -954,7 +954,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 | 7 | **Form** — phrases, repeats, sections, verse and chorus | Unit 13, Voice Unit 8 |
 | 8 | **Reading a song** — the key, chords, cadences and form of songs you know | Song practice (7.4) |
 
-**7.1 The Theory course: Unit 1, Intervals**
+**7.1 The Theory course: Unit 1, Intervals** — built (the check with your piano and voice is still to do)
 - `Course.Theory`, its units in `content/theoryCourse.json`, its lessons `t1-l1` and so on. The switch lists all three ("Music Teacher / Theory / Learn / Unit 1 · Intervals"). Separate, as for the voice: units, progress, stars, skills, reviews and the Today plan (`today:theory`). Shared: the calendar and streak, settings and note names. Its skills are a new Theory area of their own, so piano and voice mastery don't change.
 - Its sections are Home, Learn and Settings. Ear training stays with Piano and Voice, and lessons link there (7.2). The welcome screen doesn't change: Theory is added from the switch.
 - **Play or sing:** a setting with those two choices, on the course's Learn page and in a lesson. It starts as the course you came from, the piano if you've used both. Playing works with MIDI, the microphone or the on-screen keyboard, so the course needs no instrument. Singing uses the microphone and needs a saved range, as in the voice course.
@@ -963,6 +963,10 @@ Eight units of about three lessons each, in the same levels as the other courses
   - `build`: "Find a major third above D". Playing: the keys in any octave, together or in turn as the step says. Singing: one note at a time, matched as in 6.1 (±50 cents, any octave). One step, written once, for both.
 - Intervals spelled properly in `theory/` (a major third above D is F♯, above E♭ it's G), since quiz answers are written notes. Grading stays by MIDI number.
 - Unit 1 in English and Spanish, with new terms in `locales/glossary.md` and `theory.json`.
+- Built as: `theory/intervals.ts` (`intervalAbove`, spelled from the letters an interval spans, and `numberAbove`, the note a number lands on without sharps or flats) and `engine/theoryQuestions.ts`, three kinds of question (a half or whole step, an interval's number, its full name). A step lists its answers and the notes it starts from (`answers`, `roots`), and the parser checks every pairing can be spelled. Half and whole steps use the default spelling, so C to C♯ reads as in Unit 8. `quizCards` became `deal`, for dealing anything evenly. A question offers up to four answers, smallest first; `keysFor` keeps the keyboard in place between cards.
+- `theoryAnswer` is null until Theory is first opened, when `chooseCourse` sets it from the course you came from; `sings(settings)` then decides what the app listens to (the voice course, or Theory by singing). `ui/components/AnswerChoice.tsx` is the choice, on Learn and in a lesson. `ui/quiz/QuestionQuiz.tsx` and `BuildQuiz.tsx` are the two steps, and `QuizResults.tsx` is shared with the note quiz. Singing reuses `MatchTheNote` with a `clue` for each note: what's played and said instead of the note and its name, with the tuner's needle but not its line, which would name the note.
+- `build` asks for single notes for now: keys together or in turn come with the chords (7.3). When singing, an octave isn't asked: any octave counts, so the note given would match it. Theory's Today plan has its lessons and reviews.
+- Unit 1 (beginner): Half and whole steps, Counting intervals, Major, minor and perfect, and Hearing intervals, which recalls intervals from the openings of “Amazing Grace”, “When the Saints Go Marching In” and “Twinkle, Twinkle, Little Star” (checked against the song files). New skills: half and whole steps, counting intervals, major, minor and perfect intervals, hearing intervals.
 
 **7.2 Links between the courses**
 - Theory lessons list the lessons they build on (`builds` in `theoryCourse.json`), so the piano and voice course files don't change. The links back are worked out from that, and a test checks that every lesson named exists.
@@ -985,14 +989,14 @@ Eight units of about three lessons each, in the same levels as the other courses
 - Once Theory is started, the Piano and Voice Today plans add one short theory item: a review that's due, or the next lesson. It's the one place the courses mix, and it counts in the day's total.
 
 #### Phase 7 done when
-- [ ] Theory is a third course behind the switch, with its own progress, and nothing in Piano or Voice depends on it (7.1).
-- [ ] Theory lessons can be answered by playing or singing, from one set of steps (7.1).
+- [x] Theory is a third course behind the switch, with its own progress, and nothing in Piano or Voice depends on it (7.1).
+- [x] Theory lessons can be answered by playing or singing, from one set of steps (7.1).
 - [ ] Theory and the other courses link both ways, and what you've played shortens what's explained (7.2).
 - [ ] A theory course from intervals to reading a song (Theory Units 1–8), in English and Spanish (7.1, 7.3, 7.5).
 - [ ] Songs can show their chords, cadences and sections on the sheet music (7.4).
 - [ ] Today can offer a theory item alongside Piano or Voice (7.5).
 - [ ] Verified with your piano and voice.
-  - [ ] TODO (user): go through Theory Unit 1 playing, then singing: are the questions clear, and are answers graded fairly either way?
+  - [ ] TODO (user): go through Theory Unit 1 playing, then singing: are the questions clear, are answers graded fairly either way, and is six seconds enough to work out a note before singing it?
   - [ ] TODO (user): read the Spanish of the theory units: do the terms sound the way a teacher would say them?
 
 ---

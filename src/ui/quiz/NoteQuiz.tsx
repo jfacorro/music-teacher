@@ -9,14 +9,12 @@ import { QuizClef } from '../../content/lessons';
 import { resolvePlayed } from '../../engine/micAliases';
 import { quizCards, quizResult, type QuizResult } from '../../engine/quiz';
 import { KeyMark } from '../../engine/session';
-import { formatPercent } from '../../i18n/format';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { subscribeNotes } from '../../input/bus';
 import { screenKeyDown, screenKeyUp } from '../../input/dev/screenInput';
 import { useLiveInput } from '../../input/liveStore';
 import { activityTimer, recordPracticeTime } from '../../storage/progress';
 import { MIDDLE_C, pitchFromMidi, type Pitch } from '../../theory/pitch';
-import { Stars } from '../components/Stars';
 import { usePressedKeys } from '../hooks';
 import { keyboardLayout, keyboardRange } from '../keyboard/layout';
 import { useSettings } from '../../storage/settings';
@@ -26,8 +24,7 @@ import { NoteCard } from '../sheet/NoteCard';
 import { Hand } from '../../engine/score';
 import { NoteEventType } from '../../input/types';
 import { Clef } from '../../content/musicxml';
-import { ShortcutButton } from '../components/ShortcutButton';
-import { ShortcutKey } from '../shortcuts';
+import { QuizResults } from './QuizResults';
 
 /** Pause on a right answer before the next card. */
 const NEXT_CARD_MS = 900;
@@ -48,7 +45,7 @@ interface NoteQuizProps {
 }
 
 export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProps) {
-  const { t, i18n } = useTranslation('screens');
+  const { t } = useTranslation('screens');
   const names = useNoteNames();
   // Dealt once; Try again deals new ones. (A new set of notes needs a new key.)
   const [cards, setCards] = useState(() => quizCards(notes, count));
@@ -155,30 +152,7 @@ export function NoteQuiz({ notes, count, clef, onFinish, actions }: NoteQuizProp
     [showKey, card],
   );
 
-  if (finished) {
-    return (
-      <section className="results quiz__results" aria-labelledby="quiz-results">
-        <h2 id="quiz-results">{t('quiz.results')}</h2>
-        <Stars stars={result.stars} />
-        <p className="results__accuracy">
-          <span className="muted">{t('practice.results.accuracy')}</span>
-          <strong>{formatPercent(result.accuracy, i18n.language)}</strong>
-        </p>
-        <p>{t('quiz.firstTry', { count: result.firstTry, total: result.total })}</p>
-        <div className="button-row results__actions">
-          <ShortcutButton
-            shortcut={ShortcutKey.Space}
-            className={actions ? 'button' : 'button button--primary'}
-            title={t('quiz.newCards')}
-            onClick={restart}
-          >
-            {t('practice.results.retry')}
-          </ShortcutButton>
-          {actions?.(result)}
-        </div>
-      </section>
-    );
-  }
+  if (finished) return <QuizResults result={result} onRetry={restart} actions={actions} />;
 
   // With the octave: here F4 and F5 are different answers.
   const name = (pitch: Pitch) => names.name(pitch, { octave: true });

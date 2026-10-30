@@ -1,0 +1,39 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "songs"
+    },
+    {
+      "type": "question",
+      "text": "listen",
+      "kind": "intervalName",
+      "answers": ["majorThird", "perfectFourth", "perfectFifth"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "show": "ear",
+      "count": 8
+    },
+    {
+      "type": "explain",
+      "text": "character"
+    },
+    {
+      "type": "question",
+      "text": "differences",
+      "kind": "intervalName",
+      "answers": ["minorThird", "majorThird", "perfectFifth", "octave"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "show": "ear",
+      "count": 8
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "intervalName",
+      "answers": ["majorThird", "perfectFourth", "perfectFifth"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "count": 6,
+      "pass": { "minStars": 1 }
+    }
+  ]
+}

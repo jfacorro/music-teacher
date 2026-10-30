@@ -206,6 +206,59 @@ describe('parseLesson', () => {
     ]);
   });
 
+  it('parses theory questions and notes to find', async () => {
+    const lesson = await parseLesson('test', {
+      steps: [
+        {
+          type: 'question',
+          text: 'a',
+          kind: 'intervalName',
+          answers: ['majorThird', 'perfectFifth'],
+          roots: ['D4'],
+          show: 'staff',
+          count: 4,
+        },
+        {
+          type: 'build',
+          text: 'b',
+          kind: 'stepSize',
+          answers: ['half'],
+          roots: ['C4'],
+          pass: { minStars: 2 },
+        },
+      ],
+    });
+    expect(lesson.steps[0]).toMatchObject({
+      type: 'question',
+      show: 'staff',
+      count: 4,
+      questions: { kind: 'intervalName', answers: ['majorThird', 'perfectFifth'] },
+    });
+    expect(lesson.steps[1]).toMatchObject({ type: 'build', count: 10, pass: { minStars: 2 } });
+    expect(lesson.steps.every(isGraded)).toBe(true);
+  });
+
+  it('rejects theory questions it couldn’t deal', async () => {
+    const question = {
+      type: 'question',
+      text: 'a',
+      kind: 'intervalName',
+      answers: ['majorThird'],
+      roots: ['C4'],
+      show: 'staff',
+    };
+    const parse = (changes: object) =>
+      parseLesson('test', { steps: [{ ...question, ...changes }] });
+    await expect(parse({ show: 'nowhere' })).rejects.toThrow('show');
+    await expect(parse({ kind: 'nothing' })).rejects.toThrow('kind');
+    await expect(parse({ answers: [] })).rejects.toThrow('answers');
+    await expect(parse({ answers: ['half'] })).rejects.toThrow('not an answer');
+    await expect(parse({ roots: [] })).rejects.toThrow('roots');
+    await expect(parse({ roots: ['E##4'], answers: ['majorSecond'] })).rejects.toThrow(
+      'no "majorSecond" above',
+    );
+  });
+
   it('parses every step type', async () => {
     const lesson = await parseLesson('x', {
       steps: [

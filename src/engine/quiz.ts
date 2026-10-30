@@ -6,25 +6,37 @@ import type { Pitch } from '../theory/pitch';
 import { accuracyOf, starsFor } from './scoring';
 
 /**
- * `count` cards drawn from `notes`, never the same note twice in a row (when there's a choice)
- * and each note as evenly as possible.
+ * `count` items drawn from `items`, never the same one twice in a row (when there's a choice)
+ * and each as evenly as possible.
  */
+export function deal<T>(
+  items: readonly T[],
+  count: number,
+  random: () => number = Math.random,
+  same: (a: T, b: T) => boolean = Object.is,
+): T[] {
+  const dealt: T[] = [];
+  let bag: T[] = [];
+  while (dealt.length < count && items.length > 0) {
+    if (bag.length === 0) bag = [...items];
+    const previous = dealt.at(-1);
+    const choices = bag.filter(
+      (item) => bag.length === 1 || previous === undefined || !same(item, previous),
+    );
+    const pick = choices[Math.floor(random() * choices.length)] ?? bag[0]!;
+    bag.splice(bag.indexOf(pick), 1);
+    dealt.push(pick);
+  }
+  return dealt;
+}
+
+/** `count` note cards drawn from `notes` (see `deal`). */
 export function quizCards(
   notes: readonly Pitch[],
   count: number,
   random: () => number = Math.random,
 ): Pitch[] {
-  const cards: Pitch[] = [];
-  let bag: Pitch[] = [];
-  while (cards.length < count && notes.length > 0) {
-    if (bag.length === 0) bag = [...notes];
-    const previous = cards.at(-1);
-    const choices = bag.filter((note) => bag.length === 1 || note.midi !== previous?.midi);
-    const pick = choices[Math.floor(random() * choices.length)] ?? bag[0]!;
-    bag.splice(bag.indexOf(pick), 1);
-    cards.push(pick);
-  }
-  return cards;
+  return deal(notes, count, random, (a, b) => a.midi === b.midi);
 }
 
 export interface QuizResult {

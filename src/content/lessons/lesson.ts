@@ -15,6 +15,8 @@
  * - sing:     sing a melody (one note at a time), moved into the singer's range: waiting for
  *             each note, along with it, or after listening first (see engine/singing.ts); an
  *             inline score, or a song with words (its melody, the piano playing the rest)
+ * - question: theory: two notes, and a choice of answers (see engine/theoryQuestions.ts)
+ * - build:    theory: find the note an interval leads to, by playing or singing
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
 import { songParts } from '../../engine/lyrics';
@@ -28,6 +30,14 @@ import {
 } from '../../engine/score';
 import { GradedMode, HandFilter } from '../../engine/session';
 import { SingMode } from '../../engine/singing';
+import {
+  answersOf,
+  type IntervalSet,
+  noteAbove,
+  QuestionKind,
+  type QuestionAnswer,
+  QuestionShow,
+} from '../../engine/theoryQuestions';
 import { describeValues, isValueOf } from '../../lib/values';
 import { ChordQuality } from '../../theory/chords';
 import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
@@ -44,6 +54,8 @@ export const StepType = {
   WarmUp: 'warmUp',
   Match: 'match',
   Sing: 'sing',
+  Question: 'question',
+  Build: 'build',
 } as const;
 export type StepType = (typeof StepType)[keyof typeof StepType];
 
@@ -227,10 +239,40 @@ export interface SingStep extends StepBase {
   pass: { minStars: number };
 }
 
+/** Theory: two notes, shown and played or only played, and a choice of answers. */
+export interface QuestionStep extends StepBase {
+  type: typeof StepType.Question;
+  /** What's asked, and the notes the questions start from. */
+  questions: IntervalSet;
+  show: QuestionShow;
+  /** How many questions. */
+  count: number;
+  pass: { minStars: number };
+}
+
+/** Theory: find the note an interval leads to, on the keyboard or sung, as the learner chose. */
+export interface BuildStep extends StepBase {
+  type: typeof StepType.Build;
+  /** What's asked, and the notes given. */
+  questions: IntervalSet;
+  /** How many notes. */
+  count: number;
+  pass: { minStars: number };
+}
+
 export const QUIZ_CARDS_DEFAULT = 10;
 
 export type LessonStep =
-  ExplainStep | FindStep | ExerciseStep | QuizStep | RhythmStep | WarmUpStep | MatchStep | SingStep;
+  | ExplainStep
+  | FindStep
+  | ExerciseStep
+  | QuizStep
+  | RhythmStep
+  | WarmUpStep
+  | MatchStep
+  | SingStep
+  | QuestionStep
+  | BuildStep;
 
 /** The steps graded toward the lesson's stars: all but explanations and warm-ups. */
 export type GradedStep = Exclude<LessonStep, ExplainStep | WarmUpStep>;
@@ -347,9 +389,61 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
     }
     case StepType.Sing:
       return { ...base, type: StepType.Sing, ...(await sing(data, location)) };
+    case StepType.Question: {
+      if (!isValueOf(QuestionShow, data.show)) {
+        throw new LessonError(at(location, 'show'), `expected ${describeValues(QuestionShow)}`);
+      }
+      return {
+        ...base,
+        type: StepType.Question,
+        questions: intervalSet(data, location),
+        show: data.show,
+        count: cardCount(data, location),
+        pass: passRule(data, location),
+      };
+    }
+    case StepType.Build:
+      return {
+        ...base,
+        type: StepType.Build,
+        questions: intervalSet(data, location),
+        count: cardCount(data, location),
+        pass: passRule(data, location),
+      };
     default:
       throw new LessonError(at(location, 'type'), `expected ${describeValues(StepType)}`);
   }
+}
+
+function intervalSet(data: Record<string, unknown>, location: string): IntervalSet {
+  const { kind } = data;
+  if (!isValueOf(QuestionKind, kind)) {
+    throw new LessonError(at(location, 'kind'), `expected ${describeValues(QuestionKind)}`);
+  }
+  if (!Array.isArray(data.answers) || data.answers.length === 0) {
+    throw new LessonError(at(location, 'answers'), 'expected a non-empty array');
+  }
+  if (!Array.isArray(data.roots) || data.roots.length === 0) {
+    throw new LessonError(at(location, 'roots'), 'expected a non-empty array of notes');
+  }
+  const answers = data.answers.map((answer: unknown, i): QuestionAnswer => {
+    if (!answersOf(kind).includes(answer as QuestionAnswer)) {
+      throw new LessonError(at(location, `answers[${i}]`), `not an answer to "${kind}"`);
+    }
+    return answer as QuestionAnswer;
+  });
+  const roots = data.roots.map((note, i) => pitch(note, at(location, `roots[${i}]`)));
+  // Every answer has to lead to a note from every root, or a question couldn't be dealt.
+  for (const [i, root] of roots.entries()) {
+    for (const answer of answers) {
+      try {
+        noteAbove(kind, answer, root);
+      } catch {
+        throw new LessonError(at(location, `roots[${i}]`), `no "${answer}" above this note`);
+      }
+    }
+  }
+  return { kind, answers, roots };
 }
 
 async function sing(

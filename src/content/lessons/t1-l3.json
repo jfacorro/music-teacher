@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "sameNumber",
+      "textVars": { "c": "C4", "d": "D4", "e": "E4", "f": "F4" },
+      "keys": [{ "note": "C4" }, { "note": "E4" }, { "note": "D4" }, { "note": "F4" }],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "explain",
+      "text": "perfect",
+      "textVars": { "c": "C4", "f": "F4", "g": "G4" },
+      "keys": [{ "note": "C4" }, { "note": "F4" }, { "note": "G4" }, { "note": "C5" }],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "question",
+      "text": "nameThem",
+      "kind": "intervalName",
+      "answers": ["minorThird", "majorThird", "perfectFourth", "perfectFifth"],
+      "roots": ["C4", "D4", "F4", "G4", "A4"],
+      "show": "staff",
+      "count": 8
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "intervalName",
+      "answers": ["minorThird", "majorThird", "perfectFourth", "perfectFifth"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "count": 6
+    },
+    {
+      "type": "explain",
+      "text": "others"
+    },
+    {
+      "type": "question",
+      "text": "allOfThem",
+      "kind": "intervalName",
+      "answers": [
+        "minorSecond",
+        "majorSecond",
+        "minorThird",
+        "majorThird",
+        "perfectFourth",
+        "perfectFifth",
+        "minorSixth",
+        "majorSixth",
+        "minorSeventh",
+        "majorSeventh",
+        "octave"
+      ],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "show": "staff",
+      "count": 10,
+      "pass": { "minStars": 1 }
+    }
+  ]
+}

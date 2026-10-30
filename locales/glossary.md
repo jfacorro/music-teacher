@@ -105,6 +105,11 @@ system setting (`src/i18n/naming.ts`).
 | Diminished / augmented                        | diminished / augmented                               | disminuido / aumentado                                  |
 | Interval                                      | interval                                             | intervalo                                               |
 | Third / fifth (intervals)                     | third / fifth                                        | tercera / quinta                                        |
+| Major / minor (interval)                      | major third / minor third                            | tercera mayor / tercera menor                           |
+| Perfect (interval)                            | perfect fourth / perfect fifth                       | cuarta justa / quinta justa                             |
+| Tritone                                       | tritone                                              | tritono                                                 |
+| Theory (the course)                           | Theory                                               | Teoría                                                  |
+| Answer by: Playing / Singing                  | Answer by: Playing / Singing                         | Responder: Tocando / Cantando                           |
 | Perfect (fourth, fifth)                       | perfect                                              | justa                                                   |
 | Tritone                                       | tritone                                              | tritono                                                 |
 | Streak                                        | streak                                               | racha                                                   |

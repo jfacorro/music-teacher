@@ -1,6 +1,6 @@
 /**
- * The course being practiced, piano or voice, as the first part of the top bar's path
- * ("Music Teacher / Voice / Learn"): a short list of both, each saying where you are. The
+ * The course being practiced, piano, voice or theory, as the first part of the top bar's path
+ * ("Music Teacher / Voice / Learn"): a short list of them, each saying where you are. The
  * sections, Learn, Home and Today follow it (PLAN.md milestone 6.2).
  */
 import { IconChevronDown } from '@tabler/icons-react';
@@ -12,7 +12,7 @@ import { lessonStates, nextLessonToPlay } from '../../content/unlock';
 import { MicStatus, useMic } from '../../input/mic/micInput';
 import { enableMic } from '../../preferences';
 import { resultKey, ResultKind, useProgress } from '../../storage/progress';
-import { updateSettings, useSettings } from '../../storage/settings';
+import { chooseCourse, useSettings } from '../../storage/settings';
 import { COURSE_SECTIONS, SECTION_PATHS, sectionOf } from '../sections';
 
 export function CourseSwitch({ onChoose }: { onChoose?: () => void }) {
@@ -62,7 +62,7 @@ export function CourseSwitch({ onChoose }: { onChoose?: () => void }) {
     setOpen(false);
     onChoose?.();
     if (next === course) return;
-    updateSettings({ course: next });
+    chooseCourse(next);
     if (next === Course.Voice) {
       const status = useMic.getState().status;
       if (status !== MicStatus.On && status !== MicStatus.Starting) void enableMic();

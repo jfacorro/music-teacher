@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "sameNumber": "The number doesn’t tell the whole story. {c} to {e} and {d} to {f} are both thirds, but the first is wider. Count the half steps: four make a major third, three a minor third.",
+    "perfect": "Fourths, fifths and octaves have one usual size, so they’re called perfect: five half steps for a perfect fourth, seven for a perfect fifth and twelve for an octave. From {c}, that’s {f}, {g} and {c} again.",
+    "nameThem": "Count the half steps between the two notes, and name the interval.",
+    "build": "Now build them: count up the half steps from the note given.",
+    "others": "Seconds, sixths and sevenths come in major and minor too. A minor second is one half step and a major second two; a minor sixth is eight and a major sixth nine; a minor seventh is ten and a major seventh eleven.",
+    "allOfThem": "All of them together. Take your time: only your first answer counts."
+  }
+}

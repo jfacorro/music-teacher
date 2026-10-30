@@ -55,7 +55,8 @@
         "rhythm": "Rhythm",
         "reading": "Reading",
         "musicianship": "Musicianship",
-        "singing": "Singing"
+        "singing": "Singing",
+        "theory": "Theory"
       },
       "detail": "{level} · {played}",
       "starsTip": "The accuracy needed for 1, 2 and 3 stars: {oneStar}, {twoStars} and {threeStars}.",
@@ -633,6 +634,25 @@
       "stop": "Stop",
       "listen": "Listen…",
       "singBack": "Your turn: sing it back"
+    },
+    "question": {
+      "prompts": {
+        "stepSize": "Half step or whole step?",
+        "intervalNumber": "What number is this interval?",
+        "intervalName": "What interval is this?"
+      },
+      "choices": "Answers",
+      "right": "That’s right!",
+      "wrong": "Not that one. Try again."
+    },
+    "build": {
+      "playPrompt": "Find {what} above {note}.",
+      "singPrompt": "Sing {what} above {note}.",
+      "anyOctave": "Any octave counts. A wrong key is marked red, and you can try again.",
+      "singTitle": "Sing it",
+      "singIntro": "The app plays a note, and you sing the one asked for and hold it in tune for half a second. Any octave counts, and each one counts if you sing it within six seconds.",
+      "sing": "Now sing it.",
+      "hearRoot": "Hear {note} again"
     }
   },
   "welcome": {
@@ -917,7 +937,12 @@
     },
     "levelHeading": "{level} · Units {first}–{last}",
     "unitShort": "{number} · {title}",
-    "levelHeadingOne": "{level} · Unit {number}"
+    "levelHeadingOne": "{level} · Unit {number}",
+    "answerBy": "Answer by",
+    "answer": {
+      "play": "Playing",
+      "sing": "Singing"
+    }
   },
   "tuner": {
     "title": "Tuner",
