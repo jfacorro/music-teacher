@@ -676,11 +676,15 @@ function passDynamics(data: Record<string, unknown>, score: Score, location: str
   return pass.dynamics;
 }
 
+/**
+ * Every scored step asks for a star at least: a lesson earns its weakest step's stars, so going
+ * on from a step with none would end in a lesson that's finished but not done.
+ */
 function passRule(data: Record<string, unknown>, location: string): { minStars: number } {
   const pass = object(data.pass ?? {}, at(location, 'pass'));
-  const minStars = pass.minStars ?? 0;
-  if (![0, 1, 2, 3].includes(minStars as number)) {
-    throw new LessonError(at(location, 'pass › minStars'), 'expected 0–3');
+  const minStars = pass.minStars ?? 1;
+  if (![1, 2, 3].includes(minStars as number)) {
+    throw new LessonError(at(location, 'pass › minStars'), 'expected 1–3');
   }
   return { minStars: minStars as number };
 }

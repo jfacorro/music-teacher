@@ -595,6 +595,7 @@
     "allFound": "Well done! You found them all.",
     "passRule": "{stars, plural, one {Earn # star to pass} other {Earn # stars to pass}}",
     "complete": "Lesson complete!",
+    "notComplete": "Lesson not complete yet",
     "noStars": "Finish every step without skipping to earn stars.",
     "restart": "Start the lesson again",
     "next": "Next lesson",

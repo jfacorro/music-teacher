@@ -31,7 +31,7 @@ export function LessonComplete({ lessonId, stars, onRestart }: LessonCompletePro
 
   return (
     <section className="results lesson__complete" aria-labelledby="lesson-complete">
-      <h2 id="lesson-complete">{t('lesson.complete')}</h2>
+      <h2 id="lesson-complete">{t(best >= 1 ? 'lesson.complete' : 'lesson.notComplete')}</h2>
       <Stars stars={stars} />
       {best > stars && <p className="muted">{t('lesson.bestStars', { stars: best })}</p>}
       {stars === 0 && <p className="muted">{t('lesson.noStars')}</p>}

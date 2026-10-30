@@ -312,11 +312,11 @@ describe('parseLesson', () => {
       octave: false,
       guide: true,
       metronome: false,
-      pass: { minStars: 0 },
+      pass: { minStars: 1 },
     });
     expect(lesson.steps[7]).toMatchObject({ within: 2, count: 5, pass: { minStars: 1 } });
     // By default: the whole range, ten notes.
-    expect(lesson.steps[8]).toMatchObject({ within: null, count: 10, pass: { minStars: 0 } });
+    expect(lesson.steps[8]).toMatchObject({ within: null, count: 10, pass: { minStars: 1 } });
     expect(lesson.steps.map(isGraded)).toEqual([
       false,
       true,
@@ -333,7 +333,7 @@ describe('parseLesson', () => {
       notes: [{ midi: 60 }, { midi: 67 }],
       count: 5,
       clef: 'treble',
-      pass: { minStars: 0 },
+      pass: { minStars: 1 },
     });
     const rhythm = lesson.steps[5];
     expect(rhythm).toMatchObject({ view: 'sheet', metronome: true, score: { tempo: 90 } });
@@ -384,6 +384,7 @@ describe('parseLesson', () => {
     ['a bad view', { ...exercise, view: 'tab' }, 'view'],
     ['a bad notation', { ...exercise, notation: 'big' }, 'notation'],
     ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
+    ['a step that asks for no stars', { ...exercise, pass: { minStars: 0 } }, 'minStars'],
     ['a quiz without notes', { type: 'quiz', text: 'x', notes: [] }, 'notes'],
     [
       'a staff picture with a bad clef',

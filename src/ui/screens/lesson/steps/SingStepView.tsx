@@ -97,9 +97,7 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
           </label>
         )}
         {!guide && step.mode !== SingMode.ListenFirst && <KeyNoteButton score={fit.score} />}
-        {step.pass.minStars > 0 && (
-          <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
-        )}
+        <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
         {step.strict && <span className="muted">{t('sing.strict')}</span>}
       </div>
       {view === ScoreView.Sheet && notation === SheetNotation.Syllables && (

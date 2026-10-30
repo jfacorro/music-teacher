@@ -52,8 +52,9 @@ export function bestResults(
 
 /**
  * Earlier visits' results for a lesson's graded steps, so a step done before can be skipped:
- * each step's best try, passed if any try passed it. A lesson finished before tries were kept
- * has only its own best: it stands in for the steps without any try.
+ * each step's best try, passed if any try passed it with the stars the step asks for now. A
+ * lesson finished before tries were kept has only its own best: it stands in for the steps
+ * without any try.
  */
 export function earlierSteps(
   steps: readonly LessonStep[],
@@ -71,7 +72,7 @@ export function earlierSteps(
     const minStars = step.type === StepType.Find ? 0 : step.pass.minStars;
     earlier.set(index, {
       result: tries.reduce<StepResult>(better, tries[0]!),
-      passed: tries.some((done) => done.passed ?? done.stars >= minStars),
+      passed: tries.some((done) => (done.passed ?? true) && done.stars >= minStars),
     });
   });
   return earlier;

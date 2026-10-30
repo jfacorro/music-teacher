@@ -595,6 +595,7 @@
     "allFound": "¡Muy bien! Las encontraste todas.",
     "passRule": "{stars, plural, one {Consigue # estrella para aprobar} other {Consigue # estrellas para aprobar}}",
     "complete": "¡Lección completada!",
+    "notComplete": "Lección sin completar",
     "noStars": "Completa todos los pasos sin saltarte ninguno para conseguir estrellas.",
     "restart": "Empezar la lección de nuevo",
     "next": "Siguiente lección",
