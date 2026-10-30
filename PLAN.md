@@ -13,6 +13,7 @@ A local piano-learning app in the spirit of Simply Piano: guided lessons and exe
 - Lesson content is **data**, not code, so new lessons and songs are easy to add.
 - **All user-facing text is localized** — UI, lesson content, feedback, song titles, music terminology (including note-naming systems like C D E vs Do Re Mi).
 - From Phase 6, teach singing too: a course of its own, listening through the microphone, in the same app.
+- From Phase 7, teach music theory too: a course of its own, answered by playing or singing, linked to the piano and voice lessons.
 
 ### Non-goals (for now)
 
@@ -925,6 +926,74 @@ The app's name is **Music Teacher**, now that it teaches singing too, in everyth
   - [ ] TODO (user): try **Ear training** with the voice, singing back single notes, intervals and melodies: are notes found when sung in tune, are wrong notes caught without counting slides or the note still held, and is 0.6 s right before a wrong note counts?
   - [ ] TODO (user): go through Voice Unit 8 with headphones, then a few songs in Song practice: do the words line up with the notes in the lane and on the staff, is the piano's part a help at a comfortable volume (and in a good register, after the melody moves to your voice), and are the held syllables of “Amazing Grace” clear? Then read the Spanish words of each song aloud and sung: do they sound natural and fall on the right beats (in particular “Oh, al llegar los santos ya” and “Sublime gracia”)? And try the piano through speakers: does the microphone mistake it for your voice?
   - [ ] TODO (user): sing along with the guide melody through speakers, with Settings → Voice › Take the app’s sound out of the microphone off, then on: does the app grade its own sound as your singing, and does echo cancellation fix that without bending your pitch? Then decide whether singing along asks for headphones.
+
+---
+
+### Phase 7 — Music theory
+
+**Goal:** understand why the music works: intervals, keys, chords, harmony, meter and form. A course of its own, answered by playing or singing, that connects with the piano and voice lessons and with your songs.
+
+#### Scope
+
+A third course beside Piano and Voice, behind the same switch. The lessons already teach the theory each piece needs: chords and I, IV and V in Unit 6, relative minors in Unit 12, 6/8 and repeats in Unit 13, do, re, mi and scales in Voice Units 4–6. What's missing is what ties it together (the tonic and the dominant as ideas, cadences, the circle of fifths, seventh chords, transposing) and one place to find and review it. It's one course rather than theory inside each, because pianists and singers need the same theory.
+
+- **It never blocks.** Nothing in the piano and voice courses depends on it, and anyone can start it. A lesson you've already played only shortens what theory explains.
+- **Mostly doing.** Answers are played or sung wherever they can be, with no more than two explanations in a row.
+- **As far as the app's music goes.** Up to seventh chords and the forms of the songs in the app: no part writing, counterpoint or jazz harmony.
+
+Eight units of about three lessons each, in the same levels as the other courses:
+
+| Unit | Topic | Builds on |
+|---|---|---|
+| 1 | **Intervals** — half and whole steps, naming intervals by number and quality, hearing them | Voice Units 4–5, Unit 8 |
+| 2 | **Scales and keys** — the major pattern, the tonic, scale degrees, why a melody feels at home, minor | Unit 7, Voice Units 4 and 6 |
+| 3 | **Key signatures** — the order of sharps and flats, the circle of fifths, relative minors, transposing | Units 8 and 12 |
+| 4 | **Chords** — triads and their qualities, inversions, seventh chords | Unit 6 |
+| 5 | **Harmony** — I, IV and V, Roman numerals, the dominant's pull, cadences | Unit 6 |
+| 6 | **Meter** — time signatures, strong and weak beats, simple and compound time, syncopation | Units 2 and 13 |
+| 7 | **Form** — phrases, repeats, sections, verse and chorus | Unit 13, Voice Unit 8 |
+| 8 | **Reading a song** — the key, chords, cadences and form of songs you know | Song practice (7.4) |
+
+**7.1 The Theory course: Unit 1, Intervals**
+- `Course.Theory`, its units in `content/theoryCourse.json`, its lessons `t1-l1` and so on. The switch lists all three ("Music Teacher / Theory / Learn / Unit 1 · Intervals"). Separate, as for the voice: units, progress, stars, skills, reviews and the Today plan (`today:theory`). Shared: the calendar and streak, settings and note names. Its skills are a new Theory area of their own, so piano and voice mastery don't change.
+- Its sections are Home, Learn and Settings. Ear training stays with Piano and Voice, and lessons link there (7.2). The welcome screen doesn't change: Theory is added from the switch.
+- **Play or sing:** a setting with those two choices, on the course's Learn page and in a lesson. It starts as the course you came from, the piano if you've used both. Playing works with MIDI, the microphone or the on-screen keyboard, so the course needs no instrument. Singing uses the microphone and needs a saved range, as in the voice course.
+- Two new lesson step types, both graded, counted in a lesson's stars and kept in its history:
+  - `question`: cards with a choice of answers, like a note quiz. They're generated by `engine/theoryQuestions.ts` (pure, tested) by kind and level, shown on the staff or the keyboard, or played. Stars come from those right the first time.
+  - `build`: "Find a major third above D". Playing: the keys in any octave, together or in turn as the step says. Singing: one note at a time, matched as in 6.1 (±50 cents, any octave). One step, written once, for both.
+- Intervals spelled properly in `theory/` (a major third above D is F♯, above E♭ it's G), since quiz answers are written notes. Grading stays by MIDI number.
+- Unit 1 in English and Spanish, with new terms in `locales/glossary.md` and `theory.json`.
+
+**7.2 Links between the courses**
+- Theory lessons list the lessons they build on (`builds` in `theoryCourse.json`), so the piano and voice course files don't change. The links back are worked out from that, and a test checks that every lesson named exists.
+- **Recap:** an explanation marked `recap` shrinks to one line ("You met this in Unit 6 · Major chords") once a lesson it builds on is finished, and opens to read in full. Graded steps stay.
+- **Why does this work?** A piano or voice lesson's finished screen links to its theory lesson. It's only a link: Enter still goes on to the next lesson.
+- **Try it:** a theory lesson's finished screen offers the lessons it builds on and a song or ear training level, only those already open in that course.
+- **The way back:** opening a lesson switches to its course, so a theory lesson reached from Piano or Voice ends with Back to that lesson or Today, on Enter.
+
+**7.3 Theory Units 2–5**
+- The units above, in English and Spanish, with the `question` kinds each needs: scale degrees, key signatures, the circle of fifths, chord qualities, inversions, Roman numerals and cadences.
+- `build` steps can ask for the same shape in a key chosen at random, so a review isn't the same as the first time.
+
+**7.4 Theory in your songs**
+- A song's analysis as data, in its file: the key, a chord for each bar or beat as a degree (`V7`, its name worked out from the key), cadences and sections. Written by hand, not computed: `identifyChord` can't be trusted with melodies, broken chords and passing notes, and a lesson mustn't teach a wrong answer. A test checks each chord against the notes in its bar.
+- A handful to start with (about six built-in songs used in lessons). Imported songs aren't part of this phase.
+- On the sheet music, a **Harmony** toggle shows them above the bars, placed like the loop's shading. Moved to a singer's range, the degrees stay and the chord names move with the key.
+
+**7.5 Theory Units 6–8, and Today**
+- The remaining units, in English and Spanish. Unit 8's lessons open songs with the analysis on, and ask about them.
+- Once Theory is started, the Piano and Voice Today plans add one short theory item: a review that's due, or the next lesson. It's the one place the courses mix, and it counts in the day's total.
+
+#### Phase 7 done when
+- [ ] Theory is a third course behind the switch, with its own progress, and nothing in Piano or Voice depends on it (7.1).
+- [ ] Theory lessons can be answered by playing or singing, from one set of steps (7.1).
+- [ ] Theory and the other courses link both ways, and what you've played shortens what's explained (7.2).
+- [ ] A theory course from intervals to reading a song (Theory Units 1–8), in English and Spanish (7.1, 7.3, 7.5).
+- [ ] Songs can show their chords, cadences and sections on the sheet music (7.4).
+- [ ] Today can offer a theory item alongside Piano or Voice (7.5).
+- [ ] Verified with your piano and voice.
+  - [ ] TODO (user): go through Theory Unit 1 playing, then singing: are the questions clear, and are answers graded fairly either way?
+  - [ ] TODO (user): read the Spanish of the theory units: do the terms sound the way a teacher would say them?
 
 ---
 
