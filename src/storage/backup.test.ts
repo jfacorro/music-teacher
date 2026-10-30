@@ -48,6 +48,28 @@ describe('backups', () => {
     );
   });
 
+  it('imports everything from a file exported when the app was called Piano Teacher', async () => {
+    const backup = parseBackup({
+      format: 'piano-teacher-backup',
+      version: 1,
+      exportedAt: '2026-10-30T13:01:00.276Z',
+      tables: {
+        settings: [{ key: 'app', value: { language: 'es' } }],
+        results: [{ key: 'lesson:u1-l1', bestStars: 3 }],
+        practiceLog: [{ id: 7, at: 1, kind: 'song', refId: 'ode-to-joy' }],
+        practiceDays: [{ day: '2026-10-27', ms: 60_000 }],
+        mySongs: [{ id: 2, title: 'Mine' }],
+        recordings: [{ key: 'song:ode-to-joy', recordedAt: 1 }],
+        stepRuns: [{ id: 3, key: 'lesson:u1-l1:0', at: 1 }],
+      },
+    });
+    await importBackup(backup);
+
+    const saved = await exportBackup();
+    expect(saved.format).toBe('music-teacher-backup');
+    expect(saved.tables).toEqual(backup.tables);
+  });
+
   it('reads backups made before recordings were kept', () => {
     const old = {
       format: 'piano-teacher-backup',
@@ -60,6 +82,6 @@ describe('backups', () => {
   });
 
   it('names the file after the day', () => {
-    expect(backupFileName(new Date(2026, 9, 16))).toBe('piano-teacher-2026-10-16.json');
+    expect(backupFileName(new Date(2026, 9, 16))).toBe('music-teacher-2026-10-16.json');
   });
 });

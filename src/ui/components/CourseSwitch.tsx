@@ -1,6 +1,6 @@
 /**
  * The course being practiced, piano or voice, as the first part of the top bar's path
- * ("Piano Teacher / Voice / Learn"): a short list of both, each saying where you are. The
+ * ("Music Teacher / Voice / Learn"): a short list of both, each saying where you are. The
  * sections, Learn, Home and Today follow it (PLAN.md milestone 6.2).
  */
 import { IconChevronDown } from '@tabler/icons-react';

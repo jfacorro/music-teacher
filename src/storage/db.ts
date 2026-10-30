@@ -79,7 +79,7 @@ export interface StepRunRow {
   passed?: boolean;
 }
 
-export const db = new Dexie('piano-teacher') as Dexie & {
+export const db = new Dexie('music-teacher') as Dexie & {
   settings: EntityTable<KeyValueRow, 'key'>;
   results: EntityTable<ResultRow, 'key'>;
   practiceLog: EntityTable<PracticeLogRow, 'id'>;

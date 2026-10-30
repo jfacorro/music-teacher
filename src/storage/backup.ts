@@ -5,7 +5,9 @@
  */
 import { db } from './db';
 
-export const BACKUP_FORMAT = 'piano-teacher-backup';
+export const BACKUP_FORMAT = 'music-teacher-backup';
+/** Files exported when the app was called Piano Teacher say so, and must still import. */
+const FORMATS: readonly unknown[] = [BACKUP_FORMAT, 'piano-teacher-backup'];
 export const BACKUP_VERSION = 1;
 
 const TABLES = [
@@ -41,17 +43,17 @@ export async function exportBackup(now = new Date()): Promise<Backup> {
   };
 }
 
-/** A file name for the backup, e.g. "piano-teacher-2026-10-16.json". */
+/** A file name for the backup, e.g. "music-teacher-2026-10-16.json". */
 export function backupFileName(now = new Date()): string {
   const pad = (n: number) => String(n).padStart(2, '0');
-  return `piano-teacher-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
+  return `music-teacher-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
 }
 
 /** Checks a parsed file; throws `BackupError` if it isn't a backup this app can read. */
 export function parseBackup(input: unknown): Backup {
   const data = input as Partial<Backup> | null;
-  if (data === null || typeof data !== 'object' || data.format !== BACKUP_FORMAT) {
-    throw new BackupError('not a Piano Teacher backup');
+  if (data === null || typeof data !== 'object' || !FORMATS.includes(data.format)) {
+    throw new BackupError('not a Music Teacher backup');
   }
   if (data.version !== BACKUP_VERSION) throw new BackupError(`version ${String(data.version)}`);
   const tables = data.tables as Partial<Backup['tables']> | undefined;
@@ -65,6 +67,7 @@ export function parseBackup(input: unknown): Backup {
   }
   return {
     ...(data as Backup),
+    format: BACKUP_FORMAT,
     tables: Object.fromEntries(
       TABLES.map((name) => [name, tables[name] ?? []]),
     ) as Backup['tables'],

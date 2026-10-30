@@ -62,7 +62,7 @@ export function AppLayout() {
   const sectionName = t(`nav.${section}`);
   const detail = useTopBar((s) => s.detail);
 
-  // The browser tab says where you are too: "Staccato · Piano Teacher".
+  // The browser tab says where you are too: "Staccato · Music Teacher".
   useEffect(() => {
     const where = detail ?? (section === Section.Home ? null : sectionName);
     document.title = where ? t('nav.pageTitle', { where, app: APP_NAME }) : APP_NAME;

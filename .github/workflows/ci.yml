@@ -50,7 +50,7 @@ jobs:
         run: >-
           npx electron-builder --win --publish never
           --config.extraMetadata.version=0.1.${{ github.run_number }}
-          --config.nsis.artifactName=Piano-Teacher-Setup.exe
+          --config.nsis.artifactName=Music-Teacher-Setup.exe
       - name: Publish it as the "Latest build" release
         if: github.ref == 'refs/heads/main'
         shell: bash
@@ -59,8 +59,8 @@ jobs:
         run: |
           subject=$(git log -1 --format=%s)
           gh release delete latest-build --cleanup-tag --yes || true
-          gh release create latest-build release/Piano-Teacher-Setup.exe \
+          gh release create latest-build release/Music-Teacher-Setup.exe \
             --target "$GITHUB_SHA" \
             --prerelease \
             --title "Latest build" \
-            --notes "Windows installer for version 0.1.${{ github.run_number }}, built from $GITHUB_SHA ($subject). Download Piano-Teacher-Setup.exe below and run it; Windows may warn that it's unsigned (More info → Run anyway)."
+            --notes "Windows installer for version 0.1.${{ github.run_number }}, built from $GITHUB_SHA ($subject). Download Music-Teacher-Setup.exe below and run it; Windows may warn that it's unsigned (More info → Run anyway)."
