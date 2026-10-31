@@ -16,6 +16,7 @@ import {
   keysFor,
   MAX_CHOICES,
   noteAbove,
+  notesLeft,
   ScaleDegree,
   QuestionKind,
   type QuestionSet,
@@ -387,6 +388,32 @@ describe('cards about harmony', () => {
       expect(Math.min(...upper)).toBeGreaterThanOrEqual(60);
       expect(Math.max(...upper)).toBeLessThan(72);
     }
+  });
+});
+
+describe('notesLeft', () => {
+  const names = (notes: readonly Pitch[]) => notes.map(formatNote);
+
+  it('asks again for a note a melody repeats', () => {
+    const melody = cardFor(
+      { kind: QuestionKind.TransposeMelody, mode: Mode.Major },
+      Ending.Away,
+      pitchOf('C4'),
+      () => 0,
+    );
+    expect(names(melody.targets)).toEqual(['C4', 'D4', 'E4', 'D4']);
+    const [, second, third] = melody.targets;
+    expect(names(notesLeft(melody, [melody.targets[0]!, second!, third!]))).toEqual(['D4']);
+    expect(notesLeft(melody, melody.targets)).toEqual([]);
+  });
+
+  it('takes a chord’s notes in any order', () => {
+    const chord = cardFor(
+      { kind: QuestionKind.ChordQuality, mode: Mode.Major },
+      ChordQuality.Major,
+      pitchOf('C4'),
+    );
+    expect(names(notesLeft(chord, [chord.targets[1]!]))).toEqual(['C4', 'G4']);
   });
 });
 

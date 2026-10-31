@@ -738,6 +738,16 @@ export function sungNotes(cards: readonly TheoryCard[]): SungNote[] {
   return notes;
 }
 
+/**
+ * The notes that can come next, after `found`: the next one, or any left when they have no order.
+ * In order they're counted, because a melody can ask for the same note twice.
+ */
+export function notesLeft(card: TheoryCard, found: readonly Pitch[]): readonly Pitch[] {
+  return card.ordered
+    ? card.targets.slice(found.length, found.length + 1)
+    : card.targets.filter((note) => !found.includes(note));
+}
+
 /** The keys that show all of `cards`, from a C to a C, so the keyboard stays put between them. */
 export function keysFor(cards: readonly TheoryCard[]): [number, number] {
   const midis = cards.flatMap((card) => allNotes(card).map((note) => note.midi));
