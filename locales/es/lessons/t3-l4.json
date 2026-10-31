@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "transposing": "Transportar es llevar la música a otra tonalidad. Cada nota conserva su grado, así que es la misma música, solo que más aguda o más grave. {e} es el grado 3 de {c} mayor; en {g} mayor, el grado 3 es {b}.",
+    "oneNote": "Averigua qué grado es la nota en {c} mayor y busca ese grado en la nueva tonalidad. La nueva tónica está marcada.",
+    "melody": "Una melodía se transporta igual, nota por nota. Piénsala en grados y no en nombres de notas, y podrás llevarla fácilmente a cualquier tonalidad.",
+    "aMelody": "Lleva cada melodía a la nueva tonalidad, nota por nota y en orden.",
+    "why": "Los cantantes lo hacen todo el tiempo, para que una canción les quede cómoda: es lo que hace la aplicación cuando cantas. Los pianistas lo hacen para acompañar a otros.",
+    "further": "Ahora más lejos de casa: el mismo trabajo, con más sostenidos y bemoles."
+  }
+}

@@ -2,18 +2,21 @@
 import { useTranslation } from 'react-i18next';
 import { audioIfReady, soundLeadMs, startAudio } from '../../audio/audio';
 import {
+  ANSWERS_ARE_ROOTS,
   type IntervalAnswer,
   QuestionKind,
   type QuestionAnswer,
   type QuestionSet,
   type Sound,
   type TheoryCard,
+  TRANSPOSE_FROM,
 } from '../../engine/theoryQuestions';
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { ignoreMicUntil } from '../../input/mic/micInput';
 import { isValueOf } from '../../lib/values';
 import { IntervalName } from '../../theory/chords';
-import type { Mode } from '../../theory/keys';
+import { type KeyName, Mode, parseKey } from '../../theory/keys';
+import type { Pitch } from '../../theory/pitch';
 
 /** How long each group of notes of a question sounds (ms). */
 const NOTE_MS = 700;
@@ -41,58 +44,96 @@ export async function playSound(sound: Sound): Promise<void> {
 
 export const stopNotes = () => audioIfReady()?.stopAccompaniment();
 
-/** An answer's name on a button. */
-export function useAnswerNames() {
-  const { t } = useTranslation('theory');
-  return {
-    label: (answer: QuestionAnswer) =>
-      isValueOf(IntervalName, answer) ? t(`intervals.${answer}`) : t(`answers.${answer}`),
-  };
+/** The kinds about the distance between two notes, which read "Find a third above D". */
+const DISTANCES: readonly QuestionKind[] = [
+  QuestionKind.StepSize,
+  QuestionKind.IntervalNumber,
+  QuestionKind.IntervalName,
+];
+
+/** The mode of the key a card is about: that of the key it starts from. */
+function modeOf(kind: QuestionKind, mode: Mode, card: TheoryCard): Mode {
+  if (kind === QuestionKind.ScaleType) return card.answer as Mode;
+  if (kind === QuestionKind.RelativeMajor) return Mode.Minor;
+  return ANSWERS_ARE_ROOTS.includes(kind) ? Mode.Major : mode;
 }
 
-/** What a card asks, in a sentence. */
+/** How a card's words are found: a next sharp and a next flat read differently. */
+function asking(kind: QuestionKind, card: TheoryCard) {
+  if (kind !== QuestionKind.NextAccidental) return kind;
+  return parseKey(card.answer as KeyName).tonic.alter > 0 ? 'nextSharp' : 'nextFlat';
+}
+
+/** A card's words: what it asks, and the names of its answers. */
 export function useCardWords({ kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>) {
   const { t } = useTranslation('screens');
   const { t: tt } = useTranslation('theory');
   const names = useNoteNames();
-  const keyOf = (card: TheoryCard) =>
-    tt(`chords.${kind === QuestionKind.ScaleType ? (card.answer as Mode) : mode}`, {
-      root: names.name(card.root, { octave: false }),
+  const name = (pitch: Pitch) => names.name(pitch, { octave: false });
+  const keyName = (tonic: Pitch, keyMode: Mode) => tt(`chords.${keyMode}`, { root: name(tonic) });
+  const found = (verb: 'play' | 'sing', card: TheoryCard, place: number) => {
+    const doing = verb === 'play' ? 'playing' : 'singing';
+    const note = name(card.root);
+    if (DISTANCES.includes(kind)) {
+      const what = tt(`find.${card.answer as IntervalAnswer}`);
+      return t(`lesson.build.${verb}Prompt`, { what, note });
+    }
+    return t(`lesson.build.${doing}.${asking(kind, card) as Found}`, {
+      key: keyName(card.root, modeOf(kind, mode, card)),
+      note,
+      degree: card.degree,
+      place: place + 1,
+      total: card.targets.length,
+      notes: card.shown.map(name).join(', '),
+      from: keyName(TRANSPOSE_FROM, Mode.Major),
     });
-  const note = (card: TheoryCard) => names.name(card.root, { octave: false });
-  const what = (card: TheoryCard) => tt(`find.${card.answer as IntervalAnswer}`);
+  };
 
   return {
+    /** An answer's name on a button. */
+    label: (answer: QuestionAnswer) => {
+      if (kind === QuestionKind.NextAccidental) return name(parseKey(answer as KeyName).tonic);
+      if (ANSWERS_ARE_ROOTS.includes(kind)) {
+        const { tonic, mode: keyMode } = parseKey(answer as KeyName);
+        return keyName(tonic, keyMode);
+      }
+      const plain = answer as Exclude<QuestionAnswer, KeyName>;
+      return isValueOf(IntervalName, plain) ? tt(`intervals.${plain}`) : tt(`answers.${plain}`);
+    },
     /** The question over its answers. */
     question: (card: TheoryCard) =>
-      t(`lesson.question.prompts.${kind}`, {
-        key: keyOf(card),
+      t(`lesson.question.prompts.${asking(kind, card) as Asked}`, {
+        key: keyName(card.root, modeOf(kind, mode, card)),
         from: card.degree,
         to: card.degree + 1,
       }),
     /** What to find on the keys. */
-    play: (card: TheoryCard) => {
-      if (kind === QuestionKind.ScaleDegree) {
-        return t('lesson.build.playDegree', { degree: card.degree, key: keyOf(card) });
-      }
-      if (kind === QuestionKind.ScaleType) {
-        return t('lesson.build.playScale', { key: keyOf(card) });
-      }
-      return t('lesson.build.playPrompt', { what: what(card), note: note(card) });
-    },
+    play: (card: TheoryCard) => found('play', card, 0),
     /** What to sing: `place` is the note's place in what the card asks for, from 0. */
-    sing: (card: TheoryCard, place: number) => {
-      if (kind === QuestionKind.ScaleDegree) {
-        return t('lesson.build.singDegree', { degree: card.degree, key: keyOf(card) });
-      }
-      if (kind === QuestionKind.ScaleType) {
-        return t('lesson.build.singScale', {
-          key: keyOf(card),
-          place: place + 1,
-          total: card.targets.length,
-        });
-      }
-      return t('lesson.build.singPrompt', { what: what(card), note: note(card) });
-    },
+    sing: (card: TheoryCard, place: number) => found('sing', card, place),
   };
 }
+
+type Accidental = 'nextSharp' | 'nextFlat';
+/** The kinds that have words of their own for what to find. */
+type Found =
+  | Accidental
+  | Exclude<
+      QuestionKind,
+      | typeof QuestionKind.NextAccidental
+      | typeof QuestionKind.StepSize
+      | typeof QuestionKind.IntervalNumber
+      | typeof QuestionKind.IntervalName
+      | typeof QuestionKind.ScaleStep
+      | typeof QuestionKind.HomeNote
+      | typeof QuestionKind.KeySignature
+    >;
+/** The kinds that are asked as questions. */
+type Asked =
+  | Accidental
+  | Exclude<
+      QuestionKind,
+      | typeof QuestionKind.NextAccidental
+      | typeof QuestionKind.TransposeNote
+      | typeof QuestionKind.TransposeMelody
+    >;

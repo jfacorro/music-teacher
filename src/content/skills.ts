@@ -234,6 +234,10 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'scale-degrees',
     'tonic-and-home',
     'minor-pattern',
+    'key-signature-order',
+    'circle-of-fifths',
+    'relative-keys',
+    'transposing',
   ],
 };
 

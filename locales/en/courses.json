@@ -95,6 +95,10 @@
     "t2": {
       "title": "Scales and keys",
       "description": "The major pattern, scale degrees, why a melody feels at home on the tonic, and the minor scale."
+    },
+    "t3": {
+      "title": "Key signatures",
+      "description": "The order of sharps and flats, the circle of fifths, relative minors, and transposing."
     }
   },
   "lessons": {
@@ -196,7 +200,11 @@
     "t2-l1": "The major pattern",
     "t2-l2": "Scale degrees",
     "t2-l3": "Feeling at home",
-    "t2-l4": "The minor scale"
+    "t2-l4": "The minor scale",
+    "t3-l1": "The order of sharps and flats",
+    "t3-l2": "The circle of fifths",
+    "t3-l3": "Relative minors",
+    "t3-l4": "Transposing"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -247,6 +255,10 @@
     "major-pattern": "The major pattern",
     "scale-degrees": "Scale degrees",
     "tonic-and-home": "The tonic and feeling at home",
-    "minor-pattern": "The minor scale"
+    "minor-pattern": "The minor scale",
+    "key-signature-order": "The order of sharps and flats",
+    "circle-of-fifths": "The circle of fifths",
+    "relative-keys": "Relative minors",
+    "transposing": "Transposing"
   }
 }

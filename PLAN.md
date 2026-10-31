@@ -947,7 +947,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 |---|---|---|
 | 1 | **Intervals** — half and whole steps, naming intervals by number and quality, hearing them | Units 2, 3, 6 and 8, Voice Units 5–6 |
 | 2 | **Scales and keys** — the major pattern, the tonic, scale degrees, why a melody feels at home, minor | Units 7 and 8, Voice Units 4 and 6 |
-| 3 | **Key signatures** — the order of sharps and flats, the circle of fifths, relative minors, transposing | Units 8 and 12 |
+| 3 | **Key signatures** — the order of sharps and flats, the circle of fifths, relative minors, transposing | Units 7 and 12 |
 | 4 | **Chords** — triads and their qualities, inversions, seventh chords | Unit 6 |
 | 5 | **Harmony** — I, IV and V, Roman numerals, the dominant's pull, cadences | Unit 6 |
 | 6 | **Meter** — time signatures, strong and weak beats, simple and compound time, syncopation | Units 2 and 13 |
@@ -987,6 +987,9 @@ Eight units of about three lessons each, in the same levels as the other courses
 - Built as: a theory card is no longer two notes. `engine/theoryQuestions.ts` deals `TheoryCard`s: what's shown (`shown`), heard (`sound`, groups of notes in turn), written with (`keyFifths`) and to find (`targets`, in order), from `cardFor`, one case per kind; the parser deals one card of every answer and root to reject what can't be spelled. New kinds: `scaleStep`, `scaleDegree`, `scaleType`, `homeNote`; `mode` on a step says which scale it's about. `theory/keys.ts` gives a key's signature and its scale, spelled from the signature, so a degree never needs naming by hand.
 - A `build` can ask for several notes: a scale's, in order, up from the one given. Finding them on the keys, one wrong key marks the whole card as missed, and a note found earlier played again doesn't count against you. Sung, they come one at a time, each after the one before (`sungNotes`), so a scale of seven notes counts as seven, and a sung step stops at nine notes: one scale instead of three.
 - Random keys come from `roots`, the key notes a step lists: each card picks one, and Try again deals new ones.
+- Unit 3, Key signatures — built: The order of sharps and flats, The circle of fifths, Relative minors, Transposing. New skills of the same names.
+- Built as: kinds `keySignature`, `nextAccidental`, `circleUp`, `circleDown`, `relativeMinor`, `relativeMajor`, `transposeNote` and `transposeMelody`. Their answers name keys or notes as lessons write them ("Bb", "F#m"), and for those about keys the answer is all a card needs, so a step lists no `roots`. `ui/sheet/CircleOfFifths.tsx` is the picture, in explanations (`circle`: `major`, or `both` with the minors) and in questions (`show: circle`); a staff picture can be only a key signature. Transposing starts from C major (`TRANSPOSE_FROM`), and is only found, never chosen from a list.
+- In a melody the note given can be one of the notes to play, so it's no longer ignored when there are several notes to find; trying it when it isn't next still isn't a miss.
 - The degree after hearing the key: every degree question plays the key's chord first, or a degree can't be heard. `homeNote` is only heard, with five melodies ending on the tonic and five ending elsewhere, written as places in the scale, so they work in any key.
 
 **7.4 Theory in your songs**

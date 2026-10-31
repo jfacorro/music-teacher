@@ -1,8 +1,9 @@
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ExplainStep } from '../../../../content/lessons';
+import { CircleRings, type ExplainStep } from '../../../../content/lessons';
 import type { ExpectedKey } from '../../../keyboard/PianoKeyboard';
+import { CircleOfFifths } from '../../../sheet/CircleOfFifths';
 import { MusicPicture, StaffPicture } from '../../../sheet/StaffPicture';
 import { StepKeyboard } from './StepKeyboard';
 
@@ -56,8 +57,10 @@ export function ExplainStepView({
               notes={step.staff.notes}
               names={step.staff.names}
               bar={step.staff.bar}
+              keyFifths={step.staff.keyFifths}
             />
           )}
+          {step.circle && <CircleOfFifths minors={step.circle === CircleRings.Both} />}
           {step.music && <MusicPicture score={step.music} />}
           {keyboard && <StepKeyboard range={step.range} highlight={highlight} />}
         </>

@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "circle": "Si pones las tonalidades en un anillo, cada una una quinta por encima de la anterior, tienes el círculo de quintas. Desde {c}, arriba, cada paso en sentido horario sube una quinta y agrega un sostenido.",
+    "clockwise": "Busca la tonalidad marcada y avanza un paso en sentido horario.",
+    "flats": "Cada paso en sentido antihorario desde {c} baja una quinta y agrega un bemol. Abajo, los dos lados se encuentran.",
+    "counterclockwise": "Ahora un paso hacia el otro lado.",
+    "build": "Ahora búscala en el teclado: la tónica de la tonalidad siguiente en sentido horario, una quinta por encima de la que te damos.",
+    "signatures": "El círculo y las armaduras cuentan lo mismo. Di cada tonalidad a partir de su armadura."
+  }
+}

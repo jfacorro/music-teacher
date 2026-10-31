@@ -1,0 +1,51 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "circle",
+      "textVars": {
+        "c": "C4"
+      },
+      "circle": "major"
+    },
+    {
+      "type": "question",
+      "text": "clockwise",
+      "kind": "circleUp",
+      "answers": ["C", "G", "D", "A", "E"],
+      "show": "circle",
+      "count": 6
+    },
+    {
+      "type": "explain",
+      "text": "flats",
+      "textVars": {
+        "c": "C4"
+      },
+      "circle": "major"
+    },
+    {
+      "type": "question",
+      "text": "counterclockwise",
+      "kind": "circleDown",
+      "answers": ["C", "F", "Bb", "Eb", "Ab"],
+      "show": "circle",
+      "count": 6
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "circleUp",
+      "answers": ["G", "D", "A", "E", "B"],
+      "count": 5
+    },
+    {
+      "type": "question",
+      "text": "signatures",
+      "kind": "keySignature",
+      "answers": ["F", "Bb", "Eb", "G", "D", "A"],
+      "show": "staff",
+      "count": 6
+    }
+  ]
+}

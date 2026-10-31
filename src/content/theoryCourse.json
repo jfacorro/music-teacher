@@ -77,6 +77,39 @@
           }
         }
       ]
+    },
+    {
+      "id": "t3",
+      "level": "elementary",
+      "lessons": [
+        {
+          "id": "t3-l1",
+          "skills": ["key-signature-order"],
+          "builds": ["u7-l3", "u7-l4", "u12-l1", "u12-l2"]
+        },
+        {
+          "id": "t3-l2",
+          "skills": ["circle-of-fifths"],
+          "builds": ["u12-l1", "u12-l2"]
+        },
+        {
+          "id": "t3-l3",
+          "skills": ["relative-keys"],
+          "builds": ["u12-l3", "u12-l5"],
+          "tryIt": {
+            "song": "greensleeves"
+          }
+        },
+        {
+          "id": "t3-l4",
+          "skills": ["transposing"],
+          "builds": ["u12-l1", "u12-l2"],
+          "tryIt": {
+            "song": "ode-to-joy",
+            "ear": "melodies"
+          }
+        }
+      ]
     }
   ]
 }

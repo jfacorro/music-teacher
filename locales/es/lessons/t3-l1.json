@@ -1,0 +1,11 @@
+{
+  "steps": {
+    "sharps": "Los sostenidos entran en la armadura en un orden fijo: {f}, {c}, {g}, {d}, {a}, {e}, {b}. Cada uno está una quinta por encima del anterior. Una armadura con dos sostenidos siempre lleva los dos primeros, nunca otros.",
+    "nextSharp": "Aquí tienes una armadura. ¿Qué sostenido vendría después?",
+    "flats": "Los bemoles van al revés: {b}, {e}, {a}, {d}, {g}, {c}, {f}. Cada uno está una cuarta por encima del anterior.",
+    "nextFlat": "Ahora con bemoles. ¿Cuál vendría después?",
+    "build": "Ahora búscalo en el teclado. Te damos el último sostenido o bemol: sube una quinta si es sostenido y una cuarta si es bemol.",
+    "reading": "La armadura te dice la tonalidad. Con sostenidos, la tónica está un semitono por encima del último: si el último es {cSharp}, la tonalidad es {d} mayor. Con bemoles, es el penúltimo bemol: si los dos últimos son {bFlat} y {eFlat}, la tonalidad es {bFlat} mayor. Un solo bemol es {f} mayor.",
+    "nameTheKey": "Lee cada armadura y di su tonalidad mayor."
+  }
+}

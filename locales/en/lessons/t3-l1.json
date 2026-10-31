@@ -1,0 +1,11 @@
+{
+  "steps": {
+    "sharps": "Sharps enter a key signature in a fixed order: {f}, {c}, {g}, {d}, {a}, {e}, {b}. Each one is a fifth above the one before. A signature with two sharps always has the first two, never any others.",
+    "nextSharp": "Here’s a signature. Which sharp would come next?",
+    "flats": "Flats go the opposite way: {b}, {e}, {a}, {d}, {g}, {c}, {f}. Each one is a fourth above the one before.",
+    "nextFlat": "Now with flats. Which one would come next?",
+    "build": "Now find it on the keys. The last sharp or flat is given: go up a fifth for a sharp, a fourth for a flat.",
+    "reading": "A signature names its key. With sharps, the tonic is a half step above the last sharp: the last is {cSharp}, so the key is {d} major. With flats, it’s the second-to-last flat: the last two are {bFlat} and {eFlat}, so the key is {bFlat} major. One flat alone is {f} major.",
+    "nameTheKey": "Read each signature and name its major key."
+  }
+}

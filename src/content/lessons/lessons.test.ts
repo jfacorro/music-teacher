@@ -266,6 +266,12 @@ describe('parseLesson', () => {
     await expect(parse({ ...melody, show: 'ear', type: 'build' })).rejects.toThrow(
       'nothing to find',
     );
+    await expect(
+      parse({ kind: 'transposeNote', answers: ['degree3'], show: 'ear' }),
+    ).rejects.toThrow('isn’t a question');
+    await expect(parse({ kind: 'keySignature', answers: ['H'] })).rejects.toThrow('not an answer');
+    await expect(parse({ kind: 'keySignature', answers: ['Bb'] })).resolves.toBeDefined();
+    await expect(parse({ type: 'explain', circle: 'square' })).rejects.toThrow('circle');
   });
 
   it('parses every step type', async () => {

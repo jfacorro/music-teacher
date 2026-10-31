@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "relative": "Cada tonalidad mayor comparte su armadura con una tonalidad menor, su relativo menor, cuya tónica es el grado 6 de la escala mayor, tres semitonos por debajo de la tónica mayor. {c} mayor y {a} menor no llevan sostenidos ni bemoles; {g} mayor y {e} menor llevan un sostenido. En el círculo, es el anillo interior.",
+    "nameIt": "Baja tres semitonos desde la tónica mayor para decir su relativo menor.",
+    "build": "Ahora busca su tónica en el teclado, desde la tónica mayor que te damos.",
+    "twoKeys": "Así que una armadura sirve para dos tonalidades. Para saber cuál es, fíjate dónde reposa la música: la última nota, que suele ser la tónica, lo decide.",
+    "backUp": "Ahora al revés: sube tres semitonos desde la tónica menor."
+  }
+}
