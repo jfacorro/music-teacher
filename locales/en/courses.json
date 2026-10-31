@@ -99,6 +99,10 @@
     "t3": {
       "title": "Key signatures",
       "description": "The order of sharps and flats, the circle of fifths, relative minors, and transposing."
+    },
+    "t4": {
+      "title": "Chords",
+      "description": "Triads and their qualities, inversions, and seventh chords."
     }
   },
   "lessons": {
@@ -204,7 +208,10 @@
     "t3-l1": "The order of sharps and flats",
     "t3-l2": "The circle of fifths",
     "t3-l3": "Relative minors",
-    "t3-l4": "Transposing"
+    "t3-l4": "Transposing",
+    "t4-l1": "Triads and their qualities",
+    "t4-l2": "Inversions",
+    "t4-l3": "Seventh chords"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -259,6 +266,9 @@
     "key-signature-order": "The order of sharps and flats",
     "circle-of-fifths": "The circle of fifths",
     "relative-keys": "Relative minors",
-    "transposing": "Transposing"
+    "transposing": "Transposing",
+    "triad-qualities": "Triads and their qualities",
+    "chord-inversions": "Chord inversions",
+    "seventh-chords": "Seventh chords"
   }
 }

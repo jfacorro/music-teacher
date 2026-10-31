@@ -677,7 +677,9 @@
         "circleUp": "¿Qué tonalidad hay un paso en sentido horario desde {key}?",
         "circleDown": "¿Qué tonalidad hay un paso en sentido antihorario desde {key}?",
         "relativeMinor": "¿Cuál es el relativo menor de {key}?",
-        "relativeMajor": "¿Cuál es el relativo mayor de {key}?"
+        "relativeMajor": "¿Cuál es el relativo mayor de {key}?",
+        "chordQuality": "¿Qué tipo de acorde es?",
+        "chordInversion": "¿Qué inversión es?"
       },
       "choices": "Respuestas",
       "right": "¡Correcto!",
@@ -702,7 +704,9 @@
         "relativeMinor": "Busca la tónica del relativo menor de {key}.",
         "relativeMajor": "Busca la tónica del relativo mayor de {key}.",
         "transposeNote": "En {from} esto es {notes}. Búscalo en {key}.",
-        "transposeMelody": "En {from} esto es {notes}. Tócalo en {key}."
+        "transposeMelody": "En {from} esto es {notes}. Tócalo en {key}.",
+        "chordQuality": "Toca el acorde de {chord}.",
+        "chordInversion": "Toca {chord} en {inversion}, de la nota más grave a la más aguda."
       },
       "singing": {
         "scaleDegree": "Canta el grado {degree} de {key}.",
@@ -714,8 +718,11 @@
         "relativeMinor": "Canta la tónica del relativo menor de {key}.",
         "relativeMajor": "Canta la tónica del relativo mayor de {key}.",
         "transposeNote": "En {from} esto es {notes}. Cántalo en {key}.",
-        "transposeMelody": "En {from} esto es {notes}. Cántalo en {key}: nota {place} de {total}."
-      }
+        "transposeMelody": "En {from} esto es {notes}. Cántalo en {key}: nota {place} de {total}.",
+        "chordQuality": "Canta las notas de {chord}: nota {place} de {total}.",
+        "chordInversion": "Canta {chord} en {inversion}: nota {place} de {total}."
+      },
+      "anyOrder": "Vale cualquier octava y cualquier orden. Las teclas que encuentres quedan iluminadas."
     },
     "circleOfFifths": "Círculo de quintas"
   },

@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "inversions": "An inversion puts another note of the chord at the bottom, and it’s still the same chord. With the root at the bottom it’s in root position; with the third, first inversion; with the fifth, second inversion. Here’s {cMajor} in first inversion.",
+    "onKeys": "Three keys of a chord are lit. Which of its notes is at the bottom?",
+    "gap": "On the staff, a stack of thirds is root position. Otherwise, look for the gap of a fourth: the root is the note just above it. At the top of the chord it’s first inversion; at the bottom, second inversion.",
+    "onStaff": "Find the gap, then name the inversion.",
+    "build": "Now build them, from the lowest note up. The name tells you which note goes at the bottom.",
+    "minor": "Minor chords invert the same way."
+  }
+}

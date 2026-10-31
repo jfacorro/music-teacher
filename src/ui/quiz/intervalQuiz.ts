@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { audioIfReady, soundLeadMs, startAudio } from '../../audio/audio';
 import {
   ANSWERS_ARE_ROOTS,
+  type ChordInversion,
   type IntervalAnswer,
   QuestionKind,
   type QuestionAnswer,
@@ -14,7 +15,7 @@ import {
 import { useNoteNames } from '../../i18n/useNoteNames';
 import { ignoreMicUntil } from '../../input/mic/micInput';
 import { isValueOf } from '../../lib/values';
-import { IntervalName } from '../../theory/chords';
+import { type ChordQuality, IntervalName } from '../../theory/chords';
 import { type KeyName, Mode, parseKey } from '../../theory/keys';
 import type { Pitch } from '../../theory/pitch';
 
@@ -64,6 +65,8 @@ function asking(kind: QuestionKind, card: TheoryCard) {
   return parseKey(card.answer as KeyName).tonic.alter > 0 ? 'nextSharp' : 'nextFlat';
 }
 
+const inversionOf = (card: TheoryCard) => card.answer as ChordInversion;
+
 /** A card's words: what it asks, and the names of its answers. */
 export function useCardWords({ kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>) {
   const { t } = useTranslation('screens');
@@ -71,6 +74,10 @@ export function useCardWords({ kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>)
   const names = useNoteNames();
   const name = (pitch: Pitch) => names.name(pitch, { octave: false });
   const keyName = (tonic: Pitch, keyMode: Mode) => tt(`chords.${keyMode}`, { root: name(tonic) });
+  const chordName = (card: TheoryCard) =>
+    tt(`chords.${kind === QuestionKind.ChordQuality ? (card.answer as ChordQuality) : mode}`, {
+      root: name(card.root),
+    });
   const found = (verb: 'play' | 'sing', card: TheoryCard, place: number) => {
     const doing = verb === 'play' ? 'playing' : 'singing';
     const note = name(card.root);
@@ -80,6 +87,8 @@ export function useCardWords({ kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>)
     }
     return t(`lesson.build.${doing}.${asking(kind, card) as Found}`, {
       key: keyName(card.root, modeOf(kind, mode, card)),
+      chord: chordName(card),
+      inversion: kind === QuestionKind.ChordInversion ? tt(`find.${inversionOf(card)}`) : '',
       note,
       degree: card.degree,
       place: place + 1,

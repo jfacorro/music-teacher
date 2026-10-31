@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "thirds": "A triad is three notes stacked in thirds: the root, the third and the fifth. Its color depends on the size of those thirds. A major triad has a major third, then a minor third: {c}, {e}, {g}. A minor triad has them the other way round: {c}, {eFlat}, {g}.",
+    "twoColors": "Count the half steps from the root to the middle note: four for major, three for minor.",
+    "others": "Two more stacks are possible. Two minor thirds make a diminished triad, narrow and tense: {b}, {d}, {f}. Two major thirds make an augmented triad, wide and unsettled: {c}, {e}, {gSharp}.",
+    "read": "On the staff the notes are stacked in thirds. Look at the accidentals, and count the half steps of each third.",
+    "build": "Now play them. The three notes can come in any order, together or one at a time.",
+    "ear": "Now with your ears. Each chord plays its notes one by one, then together."
+  }
+}

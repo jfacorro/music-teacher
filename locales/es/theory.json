@@ -47,7 +47,15 @@
     "major": "Mayor",
     "minor": "Menor",
     "home": "Sí",
-    "away": "No"
+    "away": "No",
+    "diminished": "Disminuido",
+    "augmented": "Aumentado",
+    "dominant7": "Séptima de dominante",
+    "major7": "Séptima mayor",
+    "minor7": "Séptima menor",
+    "rootPosition": "Estado fundamental",
+    "firstInversion": "Primera inversión",
+    "secondInversion": "Segunda inversión"
   },
   "find": {
     "half": "un semitono",
@@ -70,7 +78,10 @@
     "majorSixth": "una sexta mayor",
     "minorSeventh": "una séptima menor",
     "majorSeventh": "una séptima mayor",
-    "octave": "una octava"
+    "octave": "una octava",
+    "rootPosition": "estado fundamental",
+    "firstInversion": "primera inversión",
+    "secondInversion": "segunda inversión"
   },
   "markings": {
     "adagio": "Adagio: lento, con calma (unos 55–75 BPM).",

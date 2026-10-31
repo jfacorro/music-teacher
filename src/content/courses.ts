@@ -93,6 +93,9 @@ export const SKILLS = [
   'circle-of-fifths',
   'relative-keys',
   'transposing',
+  'triad-qualities',
+  'chord-inversions',
+  'seventh-chords',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];

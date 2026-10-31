@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "thirds": "Una tríada son tres notas apiladas por terceras: la fundamental, la tercera y la quinta. Su color depende del tamaño de esas terceras. Una tríada mayor tiene una tercera mayor y luego una menor: {c}, {e}, {g}. Una tríada menor las tiene al revés: {c}, {eFlat}, {g}.",
+    "twoColors": "Cuenta los semitonos de la fundamental a la nota del medio: cuatro si es mayor, tres si es menor.",
+    "others": "Hay otras dos combinaciones. Dos terceras menores forman una tríada disminuida, estrecha y tensa: {b}, {d}, {f}. Dos terceras mayores forman una tríada aumentada, amplia e inestable: {c}, {e}, {gSharp}.",
+    "read": "En el pentagrama, las notas están apiladas por terceras. Fíjate en las alteraciones y cuenta los semitonos de cada tercera.",
+    "build": "Ahora tócalos. Las tres notas pueden ir en cualquier orden, juntas o de una en una.",
+    "ear": "Ahora de oído. Cada acorde suena primero nota por nota y después junto."
+  }
+}

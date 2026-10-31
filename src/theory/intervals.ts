@@ -3,7 +3,7 @@
  * spans (a major third above D is F♯, and above E♭ it's G). Matching goes by MIDI number, but
  * theory questions name and show their notes (PLAN.md milestone 7.1).
  */
-import { IntervalName } from './chords';
+import { ChordQuality, IntervalName, TEMPLATES } from './chords';
 import { type Alter, makePitch, midiFor, type Pitch, type Step, STEPS } from './pitch';
 
 /** An interval's number: how many note names it spans, counting both ends. */
@@ -62,8 +62,36 @@ export function numberAbove(from: Pitch, number: IntervalNumber): Pitch {
  */
 export function intervalAbove(from: Pitch, interval: IntervalName): Pitch {
   const [number, halfSteps] = SIZES[interval];
+  return spelledAbove(from, number, halfSteps);
+}
+
+/**
+ * The note `halfSteps` above `from`, on the letter `number` lands on.
+ * @throws RangeError when that would take more than a double sharp or flat
+ */
+function spelledAbove(from: Pitch, number: IntervalNumber, halfSteps: number): Pitch {
   const { step, octave } = nameAbove(from, number);
   const alter = from.midi + halfSteps - midiFor(step, 0, octave);
-  if (Math.abs(alter) > 2) throw new RangeError(`No ${interval} above ${from.step}${from.alter}`);
+  if (Math.abs(alter) > 2) throw new RangeError(`No ${number} above ${from.step}${from.alter}`);
   return makePitch(step, alter as Alter, octave);
+}
+
+/** A chord's notes stacked in thirds. */
+const STACKED: readonly IntervalNumber[] = [
+  IntervalNumber.Third,
+  IntervalNumber.Fifth,
+  IntervalNumber.Seventh,
+];
+
+/**
+ * The notes of the chord on `root` in root position, spelled in thirds (a diminished fifth is
+ * G♭ above C, not F♯). Only chords stacked in thirds: not the suspended ones.
+ * @throws RangeError when it can't be spelled
+ */
+export function chordNotes(root: Pitch, quality: ChordQuality): Pitch[] {
+  const [, sizes] = TEMPLATES.find(([name]) => name === quality)!;
+  return [
+    root,
+    ...sizes.slice(1).map((halfSteps, i) => spelledAbove(root, STACKED[i]!, halfSteps)),
+  ];
 }

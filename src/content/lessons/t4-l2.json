@@ -1,0 +1,67 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "inversions",
+      "recap": ["u6-l3"],
+      "textVars": {
+        "cMajor": {
+          "chord": "C4",
+          "quality": "major"
+        }
+      },
+      "keys": [
+        {
+          "note": "E4"
+        },
+        {
+          "note": "G4"
+        },
+        {
+          "note": "C5"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "question",
+      "text": "onKeys",
+      "kind": "chordInversion",
+      "answers": ["rootPosition", "firstInversion", "secondInversion"],
+      "roots": ["C4", "F4", "G4"],
+      "show": "keyboard",
+      "count": 6
+    },
+    {
+      "type": "explain",
+      "text": "gap"
+    },
+    {
+      "type": "question",
+      "text": "onStaff",
+      "kind": "chordInversion",
+      "answers": ["rootPosition", "firstInversion", "secondInversion"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "show": "staff",
+      "count": 6
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "chordInversion",
+      "answers": ["firstInversion", "secondInversion"],
+      "roots": ["C4", "F4", "G4"],
+      "count": 4
+    },
+    {
+      "type": "question",
+      "text": "minor",
+      "kind": "chordInversion",
+      "mode": "minor",
+      "answers": ["rootPosition", "firstInversion", "secondInversion"],
+      "roots": ["D4", "E4", "A4"],
+      "show": "staff",
+      "count": 6
+    }
+  ]
+}

@@ -47,7 +47,15 @@
     "major": "Major",
     "minor": "Minor",
     "home": "Yes",
-    "away": "No"
+    "away": "No",
+    "diminished": "Diminished",
+    "augmented": "Augmented",
+    "dominant7": "Dominant seventh",
+    "major7": "Major seventh",
+    "minor7": "Minor seventh",
+    "rootPosition": "Root position",
+    "firstInversion": "First inversion",
+    "secondInversion": "Second inversion"
   },
   "find": {
     "half": "a half step",
@@ -70,7 +78,10 @@
     "majorSixth": "a major sixth",
     "minorSeventh": "a minor seventh",
     "majorSeventh": "a major seventh",
-    "octave": "an octave"
+    "octave": "an octave",
+    "rootPosition": "root position",
+    "firstInversion": "first inversion",
+    "secondInversion": "second inversion"
   },
   "markings": {
     "adagio": "Adagio: slowly, at ease (about 55–75 BPM).",

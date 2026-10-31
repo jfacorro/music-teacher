@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { IntervalName } from '../theory/chords';
+import { ChordQuality, IntervalName } from '../theory/chords';
 import { IntervalNumber } from '../theory/intervals';
 import { Mode } from '../theory/keys';
 import { formatNote, type Pitch, pitchesOf, pitchOf } from '../theory/pitch';
@@ -7,6 +7,7 @@ import {
   answersOf,
   buildCards,
   cardFor,
+  ChordInversion,
   Ending,
   type IntervalAnswer,
   type QuestionAnswer,
@@ -265,6 +266,58 @@ describe('cards about keys', () => {
     const shape = (notes: readonly Pitch[]) =>
       notes.map((note) => note.midi - notes[0]!.midi).map((gap) => Math.sign(gap));
     expect(shape(moved.targets)).toEqual(shape(moved.shown));
+  });
+});
+
+describe('cards about chords', () => {
+  const inKey = { mode: Mode.Major };
+  const names = (notes: readonly Pitch[]) => notes.map(formatNote);
+
+  it('spells a chord in thirds, and asks for its notes in any order with none given', () => {
+    const set = { ...inKey, kind: QuestionKind.ChordQuality };
+    const card = cardFor(set, ChordQuality.Diminished, pitchOf('C4'));
+    expect(names(card.shown)).toEqual(['C4', 'Eb4', 'Gb4']);
+    expect(card.ordered).toBe(false);
+    expect(card.given).toBeNull();
+    expect(card.together).toBe(true);
+  });
+
+  it('plays a chord broken, then together', () => {
+    const card = cardFor(
+      { ...inKey, kind: QuestionKind.ChordQuality },
+      ChordQuality.Minor,
+      pitchOf('D4'),
+    );
+    expect(card.sound.map((notes) => names(notes).join('+'))).toEqual([
+      'D4',
+      'F4',
+      'A4',
+      'D4+F4+A4',
+    ]);
+  });
+
+  it('moves the lowest notes up for an inversion, keeping the chord’s root', () => {
+    const set = { ...inKey, kind: QuestionKind.ChordInversion };
+    const first = cardFor(set, ChordInversion.First, pitchOf('C4'));
+    expect(names(first.shown)).toEqual(['E4', 'G4', 'C5']);
+    expect(formatNote(first.root)).toBe('C4');
+    expect(first.ordered).toBe(true);
+    expect(first.given).toBeNull();
+    const second = cardFor(set, ChordInversion.Second, pitchOf('C4'));
+    expect(names(second.shown)).toEqual(['G4', 'C5', 'E5']);
+    const minor = cardFor({ ...set, mode: Mode.Minor }, ChordInversion.Root, pitchOf('D4'));
+    expect(names(minor.shown)).toEqual(['D4', 'F4', 'A4']);
+  });
+
+  it('sings a chord from its root, which is played first', () => {
+    const card = cardFor(
+      { ...inKey, kind: QuestionKind.ChordQuality },
+      ChordQuality.Major,
+      pitchOf('C4'),
+    );
+    const notes = sungNotes([card]);
+    expect(notes.map(({ note }) => formatNote(note))).toEqual(['C4', 'E4', 'G4']);
+    expect(formatNote(notes[0]!.given)).toBe('C4');
   });
 });
 

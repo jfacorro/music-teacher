@@ -26,6 +26,8 @@ interface StaffPictureProps {
   bar?: boolean;
   /** The key signature at the start. */
   keyFifths?: number;
+  /** The notes sound together: a chord, in one bar. */
+  together?: boolean;
 }
 
 /** Notes in one bar: quarter notes, so up to four fit. */
@@ -33,7 +35,14 @@ const BAR_BEATS = 4;
 /** A bar's width for one note (see StaticStaff). */
 const NOTE_WIDTH = 3;
 
-export function StaffPicture({ clef, notes, names, bar = false, keyFifths }: StaffPictureProps) {
+export function StaffPicture({
+  clef,
+  notes,
+  names,
+  bar = false,
+  keyFifths,
+  together = false,
+}: StaffPictureProps) {
   const { t } = useTranslation('screens');
   const noteNames = useNoteNames();
 
@@ -52,12 +61,16 @@ export function StaffPicture({ clef, notes, names, bar = false, keyFifths }: Sta
       ...(keyFifths !== undefined && { keyFifths }),
       notes: notes.map((pitch, i) => ({
         pitch,
-        start: bar ? i : i * BAR_BEATS,
+        start: together ? 0 : bar ? i : i * BAR_BEATS,
         duration: bar ? 1 : BAR_BEATS,
         hand: hand(pitch),
       })),
       measures: Array.from(
-        { length: Math.max(1, bar ? Math.ceil(notes.length / BAR_BEATS) : notes.length) },
+        {
+          length: together
+            ? 1
+            : Math.max(1, bar ? Math.ceil(notes.length / BAR_BEATS) : notes.length),
+        },
         (_, i) => ({ start: i * BAR_BEATS, length: BAR_BEATS }),
       ),
     };
@@ -66,7 +79,7 @@ export function StaffPicture({ clef, notes, names, bar = false, keyFifths }: Sta
       illustration: true,
       noteLabel: names ? (note) => noteNames.name(note.pitch) : undefined,
     }).xml;
-  }, [clef, notes, names, noteNames, bar, keyFifths]);
+  }, [clef, notes, names, noteNames, bar, keyFifths, together]);
 
   return (
     <div className="staff-picture">

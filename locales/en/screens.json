@@ -677,7 +677,9 @@
         "circleUp": "One step clockwise from {key}?",
         "circleDown": "One step counterclockwise from {key}?",
         "relativeMinor": "What’s the relative minor of {key}?",
-        "relativeMajor": "What’s the relative major of {key}?"
+        "relativeMajor": "What’s the relative major of {key}?",
+        "chordQuality": "What kind of chord is this?",
+        "chordInversion": "Which inversion is this?"
       },
       "choices": "Answers",
       "right": "That’s right!",
@@ -702,7 +704,9 @@
         "relativeMinor": "Find the tonic of the relative minor of {key}.",
         "relativeMajor": "Find the tonic of the relative major of {key}.",
         "transposeNote": "In {from} this is {notes}. Find it in {key}.",
-        "transposeMelody": "In {from} this is {notes}. Play it in {key}."
+        "transposeMelody": "In {from} this is {notes}. Play it in {key}.",
+        "chordQuality": "Play the {chord} chord.",
+        "chordInversion": "Play {chord} in {inversion}, from the lowest note up."
       },
       "singing": {
         "scaleDegree": "Sing degree {degree} of {key}.",
@@ -714,8 +718,11 @@
         "relativeMinor": "Sing the tonic of the relative minor of {key}.",
         "relativeMajor": "Sing the tonic of the relative major of {key}.",
         "transposeNote": "In {from} this is {notes}. Sing it in {key}.",
-        "transposeMelody": "In {from} this is {notes}. Sing it in {key}: note {place} of {total}."
-      }
+        "transposeMelody": "In {from} this is {notes}. Sing it in {key}: note {place} of {total}.",
+        "chordQuality": "Sing the notes of {chord}: note {place} of {total}.",
+        "chordInversion": "Sing {chord} in {inversion}: note {place} of {total}."
+      },
+      "anyOrder": "Any octave and any order. Keys you’ve found stay lit."
     },
     "circleOfFifths": "Circle of fifths"
   },
