@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { metronomeAtStart } from '../../metronomeChoice';
+import { viewAtStart } from '../../viewChoice';
 import { preloadAudio } from '../../../audio/audio';
 import type { Score } from '../../../engine/score';
 import { HandFilter, type LoopRange, PracticeMode } from '../../../engine/session';
@@ -55,7 +56,9 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
   const [metronome, setMetronome] = useState(() =>
     metronomeAtStart(useSettings.getState().exerciseMetronome, false),
   );
-  const [view, setView] = useState<ScoreView>(ScoreView.Falling);
+  const [view, setView] = useState(() =>
+    viewAtStart(useSettings.getState().exerciseView, ScoreView.Falling),
+  );
   const [notation, setNotation] = useState(() => useSettings.getState().sheetNotation);
   const [speed, setSpeed] = useState(SPEED_MAX);
   const [params] = useSearchParams();

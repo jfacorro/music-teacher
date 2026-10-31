@@ -4,6 +4,7 @@ import type { RhythmStep } from '../../../../content/lessons';
 import type { StepResult } from '../../../../content/lessons/result';
 import { useSettings } from '../../../../storage/settings';
 import { metronomeAtStart } from '../../../metronomeChoice';
+import { viewAtStart } from '../../../viewChoice';
 import { PracticeRun } from '../../practice/PracticeRun';
 import { ViewToggle } from '../../practice/ViewToggle';
 import { SheetNotation } from '../../../../content/lessons/lesson';
@@ -24,7 +25,9 @@ export function RhythmStepView({ step, text, onResult, onContinue }: RhythmStepV
   const [metronome, setMetronome] = useState(() =>
     metronomeAtStart(useSettings.getState().exerciseMetronome, step.metronome),
   );
-  const [view, setView] = useState(step.view);
+  const [view, setView] = useState(() =>
+    viewAtStart(useSettings.getState().exerciseView, step.view),
+  );
   const passes = (stars: number) => stars >= step.pass.minStars;
 
   return (

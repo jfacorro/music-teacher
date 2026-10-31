@@ -3225,7 +3225,7 @@ button.bars__bar:focus-visible {
 /* Settings › Appearance: a label beside each choice, then a keyboard to see the result. */
 .appearance__row {
   display: grid;
-  grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+  grid-template-columns: minmax(8rem, 12rem) minmax(min-content, 1fr);
   gap: 0.5rem 1rem;
   align-items: start;
   margin-block-end: 1rem;

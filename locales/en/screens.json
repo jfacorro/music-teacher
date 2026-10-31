@@ -347,6 +347,17 @@
         "light": "Light, whatever your computer’s setting.",
         "dark": "Dark, whatever your computer’s setting."
       },
+      "exerciseView": "Exercises show",
+      "exerciseViews": {
+        "auto": "Automatic",
+        "falling": "Falling notes",
+        "sheet": "Sheet music"
+      },
+      "exerciseViewHints": {
+        "auto": "Songs start with falling notes, and lessons move on to sheet music as you learn to read.",
+        "falling": "Every exercise starts with falling notes, or notes in a lane when singing.",
+        "sheet": "Every exercise starts with sheet music."
+      },
       "keyHeight": "Key height",
       "keyHeights": {
         "short": "Short",

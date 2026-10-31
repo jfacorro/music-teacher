@@ -11,6 +11,7 @@ import { usePressedKeys } from '../../hooks';
 import { keyboardLayout, keyboardRange } from '../../keyboard/layout';
 import { type ExpectedKey, PianoKeyboard } from '../../keyboard/PianoKeyboard';
 import { KeyLabels } from '../../keyboard/styles';
+import { VIEW_CHOICES } from '../../viewChoice';
 import { screenKeyDown, screenKeyUp } from '../../../input/dev/screenInput';
 
 const THEMES: readonly Theme[] = [Theme.System, Theme.Light, Theme.Dark];
@@ -19,11 +20,15 @@ const KEYS_SHOWN: readonly KeysShown[] = [KeysShown.Fit, KeysShown.Wider, KeysSh
 /** The preview's music: the right hand's first position. */
 const PREVIEW_KEYS = [60, 62, 64, 65, 67];
 
-/** Theme and keyboard size (PLAN.md milestone 4.5), with a keyboard to see the result. */
+/**
+ * Theme, how exercises show the music, and keyboard size (PLAN.md milestone 4.5), with a keyboard
+ * to see the result.
+ */
 export function AppearanceSettings() {
   const { t } = useTranslation('screens');
   const names = useNoteNames();
   const theme = useSettings((s) => s.theme);
+  const exerciseView = useSettings((s) => s.exerciseView);
   const keyHeight = useSettings((s) => s.keyHeight);
   const keysShown = useSettings((s) => s.keysShown);
   const pressed = usePressedKeys();
@@ -50,6 +55,21 @@ export function AppearanceSettings() {
             onChange={setThemePreference}
           />
           <p className="muted appearance__hint">{t(`settings.appearance.themeHints.${theme}`)}</p>
+        </div>
+      </div>
+      <div className="appearance__row">
+        <span className="appearance__label">{t('settings.appearance.exerciseView')}</span>
+        <div>
+          <Choice
+            label={t('settings.appearance.exerciseView')}
+            options={VIEW_CHOICES}
+            value={exerciseView}
+            nameOf={(option) => t(`settings.appearance.exerciseViews.${option}`)}
+            onChange={(option) => updateSettings({ exerciseView: option })}
+          />
+          <p className="muted appearance__hint">
+            {t(`settings.appearance.exerciseViewHints.${exerciseView}`)}
+          </p>
         </div>
       </div>
       <div className="appearance__row">
