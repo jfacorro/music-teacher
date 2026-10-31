@@ -3,6 +3,7 @@
     {
       "type": "explain",
       "text": "smallest",
+      "recap": ["u8-l1", "v6-l1"],
       "textVars": { "c": "C4", "cSharp": "C#4", "e": "E4", "f": "F4" },
       "keys": [{ "note": "C4" }, { "note": "C#4" }, { "note": "E4" }, { "note": "F4" }],
       "range": ["C4", "C5"]
@@ -10,6 +11,7 @@
     {
       "type": "explain",
       "text": "whole",
+      "recap": ["v6-l1"],
       "textVars": { "c": "C4", "d": "D4", "e": "E4", "fSharp": "F#4" },
       "keys": [{ "note": "C4" }, { "note": "D4" }, { "note": "E4" }, { "note": "F#4" }],
       "range": ["C4", "C5"]

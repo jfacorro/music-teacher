@@ -384,6 +384,7 @@ describe('parseLesson', () => {
     ['a bad view', { ...exercise, view: 'tab' }, 'view'],
     ['a bad notation', { ...exercise, notation: 'big' }, 'notation'],
     ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
+    ['a recap that names no lessons', { type: 'explain', text: 'x', recap: 'u1-l1' }, 'recap'],
     ['a step that asks for no stars', { ...exercise, pass: { minStars: 0 } }, 'minStars'],
     ['a quiz without notes', { type: 'quiz', text: 'x', notes: [] }, 'notes'],
     [

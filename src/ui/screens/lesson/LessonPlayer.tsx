@@ -18,6 +18,7 @@ import { useTopBarDetail } from '../../topBar';
 import { AnswerChoice } from '../../components/AnswerChoice';
 import { RunHistory } from '../../components/RunHistory';
 import { LessonComplete } from './LessonComplete';
+import { useLessonVisit } from './lessonVisit';
 import { BuildStepView } from './steps/BuildStepView';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
@@ -39,8 +40,10 @@ import { ShortcutKey } from '../../shortcuts';
  */
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('screens');
+  const { t: tc } = useTranslation('common');
   const courseText = useContentText('courses');
   const stepText = useContentText(lessonNamespace(lesson.id));
+  const progress = useProgress((s) => s.results);
   const { course, unit, lesson: courseLesson } = findLesson(lesson.id)!;
 
   /** Results per graded step (by index): best run for exercises, full marks for find steps. */
@@ -70,9 +73,11 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
 
   // A lesson started before opens at its first step not done. One that opens with a warm-up
   // (the voice) warms up first, and continuing from there jumps to that step.
+  // Come back to from another course, it opens where it was left, on its finished screen.
+  const { finished: reopened = false } = useLessonVisit();
   const [resume] = useState(() => resumeAt(lesson.steps, doneBefore));
   const warmUpFirst = lesson.steps[0]?.type === StepType.WarmUp;
-  const [index, setIndex] = useState(warmUpFirst ? 0 : resume);
+  const [index, setIndex] = useState(reopened ? lesson.steps.length : warmUpFirst ? 0 : resume);
   const jumpFromWarmUp = useRef(warmUpFirst && resume > 1 ? resume : null);
   const history = useStepRuns((s) => s.byKey[stepKey(lesson.id, index)]);
   const answerBy = useSettings((s) => s.theoryAnswer);
@@ -88,7 +93,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const result = lessonResult(lesson.steps, allResults);
 
   // Save the lesson once each time it's completed.
-  const recorded = useRef(false);
+  const recorded = useRef(reopened);
   useEffect(() => {
     if (!finished || recorded.current) return;
     recorded.current = true;
@@ -133,6 +138,20 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   };
   const canContinue = (step !== undefined && !isGraded(step)) || passed.has(index);
   const title = courseText(`lessons.${lesson.id}`, courseLesson.titleVars);
+  /** Where an explanation was met already: the first lesson done that teaches it too. */
+  const metIn = (recap: readonly string[]) => {
+    const id = recap.find(
+      (lessonId) => (progress[resultKey(ResultKind.Lesson, lessonId)]?.bestStars ?? 0) >= 1,
+    );
+    const found = id === undefined ? null : findLesson(id);
+    return found
+      ? t('lesson.recap.met', {
+          course: tc(`courseSwitch.courses.${found.course}`),
+          number: COURSE_UNITS[found.course].indexOf(found.unit) + 1,
+          lesson: courseText(`lessons.${found.lesson.id}`, found.lesson.titleVars),
+        })
+      : null;
+  };
   useTopBarDetail(
     t('lesson.topBar', { number: COURSE_UNITS[course].indexOf(unit) + 1, lesson: title }),
   );
@@ -178,6 +197,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               text={text}
               // Singing is explained without a keyboard, unless it points at keys.
               keyboard={course === Course.Piano || step.keys.length > 0}
+              met={metIn(step.recap)}
             />
           )}
           {step?.type === StepType.Find && (

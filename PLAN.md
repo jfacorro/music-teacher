@@ -945,7 +945,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 
 | Unit | Topic | Builds on |
 |---|---|---|
-| 1 | **Intervals** — half and whole steps, naming intervals by number and quality, hearing them | Voice Units 4–5, Unit 8 |
+| 1 | **Intervals** — half and whole steps, naming intervals by number and quality, hearing them | Units 2, 3, 6 and 8, Voice Units 5–6 |
 | 2 | **Scales and keys** — the major pattern, the tonic, scale degrees, why a melody feels at home, minor | Unit 7, Voice Units 4 and 6 |
 | 3 | **Key signatures** — the order of sharps and flats, the circle of fifths, relative minors, transposing | Units 8 and 12 |
 | 4 | **Chords** — triads and their qualities, inversions, seventh chords | Unit 6 |
@@ -969,12 +969,16 @@ Eight units of about three lessons each, in the same levels as the other courses
 - Unit 1 (beginner): Half and whole steps, Counting intervals, Major, minor and perfect, and Hearing intervals, which recalls intervals from the openings of “Amazing Grace”, “When the Saints Go Marching In” and “Twinkle, Twinkle, Little Star” (checked against the song files). New skills: half and whole steps, counting intervals, major, minor and perfect intervals, hearing intervals.
 - **Every scored step asks for a star:** a lesson earns its weakest step's stars, but a step with no pass rule let you go on with none, so a lesson could say "Lesson complete!" and stay not done (found trying Unit 1: 8 Theory steps and 24 Voice steps had no rule, while every Piano step did). `pass.minStars` is now 1 to 3, and 1 by default. Earlier tries are judged by what the step asks for now, so a lesson left this way reopens at the step with no stars. The only way to end with none is to skip a step, and that screen now says "Lesson not complete yet".
 
-**7.2 Links between the courses**
+**7.2 Links between the courses** — built
 - Theory lessons list the lessons they build on (`builds` in `theoryCourse.json`), so the piano and voice course files don't change. The links back are worked out from that, and a test checks that every lesson named exists.
 - **Recap:** an explanation marked `recap` shrinks to one line ("You met this in Unit 6 · Major chords") once a lesson it builds on is finished, and opens to read in full. Graded steps stay.
 - **Why does this work?** A piano or voice lesson's finished screen links to its theory lesson. It's only a link: Enter still goes on to the next lesson.
 - **Try it:** a theory lesson's finished screen offers the lessons it builds on and a song or ear training level, only those already open in that course.
 - **The way back:** opening a lesson switches to its course, so a theory lesson reached from Piano or Voice ends with Back to that lesson or Today, on Enter.
+- Built as: `builds` and `tryIt` (a song, an ear training level) in `theoryCourse.json`, and `content/courseLinks.ts` (pure, tested): `whyLesson` works out the link back, the first open theory lesson not done yet, and `tryItems` what's offered. A test checks every lesson, song and level named. Unit 1's list comes from what those lessons actually say: half steps in Unit 8 · Sharps and flats, whole steps only in Voice's The major scale, so the table above changed.
+- Theory's lessons stay in order, so "Why does this work?" shows only when that theory lesson is open. Try it offers nothing from a course not started, because the voice's units are all open from the first day; its song and ear training level follow Play or sing, and opening one switches to that course.
+- `recap` lists the lessons that teach that explanation, rather than folding it for any lesson built on: Sharps and flats doesn't teach whole steps. Only Half and whole steps' two explanations are marked so far; the rest of Unit 1 is new. Folded, an explanation hides its keyboard too (`ExplainStepView`).
+- Back goes to the lesson's finished screen, not its first step, and Enter there still goes on to the next lesson (`lessonVisit.ts`, what's sent with the address). Coming back doesn't count as another attempt. Back to Today comes with 7.5, when Theory joins the other courses' Today plans.
 
 **7.3 Theory Units 2–5**
 - The units above, in English and Spanish, with the `question` kinds each needs: scale degrees, key signatures, the circle of fifths, chord qualities, inversions, Roman numerals and cadences.
@@ -992,7 +996,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 #### Phase 7 done when
 - [x] Theory is a third course behind the switch, with its own progress, and nothing in Piano or Voice depends on it (7.1).
 - [x] Theory lessons can be answered by playing or singing, from one set of steps (7.1).
-- [ ] Theory and the other courses link both ways, and what you've played shortens what's explained (7.2).
+- [x] Theory and the other courses link both ways, and what you've played shortens what's explained (7.2).
 - [ ] A theory course from intervals to reading a song (Theory Units 1–8), in English and Spanish (7.1, 7.3, 7.5).
 - [ ] Songs can show their chords, cadences and sections on the sheet music (7.4).
 - [ ] Today can offer a theory item alongside Piano or Voice (7.5).

@@ -6,19 +6,27 @@
       "lessons": [
         {
           "id": "t1-l1",
-          "skills": ["half-and-whole-steps"]
+          "skills": ["half-and-whole-steps"],
+          "builds": ["u8-l1", "v6-l1"],
+          "tryIt": { "song": "ode-to-joy" }
         },
         {
           "id": "t1-l2",
-          "skills": ["interval-numbers"]
+          "skills": ["interval-numbers"],
+          "builds": ["u3-l3", "u3-l4", "v5-l2"],
+          "tryIt": { "ear": "intervals" }
         },
         {
           "id": "t1-l3",
-          "skills": ["interval-qualities"]
+          "skills": ["interval-qualities"],
+          "builds": ["u6-l2", "v5-l2", "v6-l3"],
+          "tryIt": { "ear": "intervals" }
         },
         {
           "id": "t1-l4",
-          "skills": ["hearing-intervals"]
+          "skills": ["hearing-intervals"],
+          "builds": ["u2-l4", "v5-l3"],
+          "tryIt": { "song": "amazing-grace", "ear": "intervals" }
         }
       ]
     }
