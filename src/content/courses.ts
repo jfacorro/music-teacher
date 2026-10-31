@@ -1,7 +1,8 @@
 /**
- * Course structure (PLAN.md §7): units in order, each with its lessons in order. There are two
- * courses, the piano (`courses.json`) and the voice (`voiceCourse.json`, PLAN.md Phase 6), each
- * with its own units and progress; lesson ids are unique across both.
+ * Course structure (PLAN.md §7): units in order, each with its lessons in order. There are three
+ * courses, the piano (`courses.json`), the voice (`voiceCourse.json`, PLAN.md Phase 6) and theory
+ * (`theoryCourse.json`, Phase 7), each with its own units and progress; lesson ids are unique
+ * across them.
  * Titles live in `locales/<lang>/courses.json`; note names in them are variables.
  *
  * Units are grouped in levels (Beginner, Elementary, Late elementary, Early intermediate), each
@@ -15,16 +16,25 @@
 import { isValueOf } from '../lib/values';
 import { parseNote, type Pitch } from '../theory/pitch';
 import data from './courses.json';
+import theoryData from './theoryCourse.json';
 import voiceData from './voiceCourse.json';
 
 /** What's being learned: each course has its own units, progress and stars. */
 export const Course = {
   Piano: 'piano',
   Voice: 'voice',
+  Theory: 'theory',
 } as const;
 export type Course = (typeof Course)[keyof typeof Course];
 
 export const COURSES: readonly Course[] = Object.values(Course);
+
+/** How Theory's questions are answered. */
+export const TheoryAnswer = {
+  Play: 'play',
+  Sing: 'sing',
+} as const;
+export type TheoryAnswer = (typeof TheoryAnswer)[keyof typeof TheoryAnswer];
 
 /** What lessons practice (PLAN.md §2.4), in curriculum order. Names: courses.json › skills. */
 export const SKILLS = [
@@ -70,6 +80,11 @@ export const SKILLS = [
   'reading-melodies',
   'singing-songs',
   'sight-singing',
+  // The theory course.
+  'half-and-whole-steps',
+  'interval-numbers',
+  'interval-qualities',
+  'hearing-intervals',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];
@@ -155,10 +170,13 @@ const parseUnits = (units: readonly UnitData[]): Unit[] =>
 export const UNITS: readonly Unit[] = parseUnits(data.units as UnitData[]);
 /** The voice course's units. */
 export const VOICE_UNITS: readonly Unit[] = parseUnits(voiceData.units as UnitData[]);
+/** The theory course's units. */
+export const THEORY_UNITS: readonly Unit[] = parseUnits(theoryData.units as UnitData[]);
 
 export const COURSE_UNITS: Readonly<Record<Course, readonly Unit[]>> = {
   [Course.Piano]: UNITS,
   [Course.Voice]: VOICE_UNITS,
+  [Course.Theory]: THEORY_UNITS,
 };
 
 export interface LevelUnits {

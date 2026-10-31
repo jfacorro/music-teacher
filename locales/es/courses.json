@@ -87,6 +87,10 @@
     "v8": {
       "title": "Canciones con letra",
       "description": "Canciones completas cantadas con su letra: una sílaba en cada nota, frases y respiraciones, y una sílaba sobre dos notas, con el piano acompañando."
+    },
+    "t1": {
+      "title": "Intervalos",
+      "description": "Semitonos y tonos, cómo se nombran los intervalos y cómo reconocerlos de oído."
     }
   },
   "lessons": {
@@ -180,7 +184,11 @@
     "v7-l3": "Leer una melodía",
     "v8-l1": "La letra sobre las notas",
     "v8-l2": "Frases y respiraciones",
-    "v8-l3": "Una sílaba, dos notas"
+    "v8-l3": "Una sílaba, dos notas",
+    "t1-l1": "Semitonos y tonos",
+    "t1-l2": "Contar intervalos",
+    "t1-l3": "Mayores, menores y justos",
+    "t1-l4": "Intervalos de oído"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -223,6 +231,10 @@
     "singing-by-ear": "Cantar de oído",
     "reading-melodies": "Leer melodías",
     "sight-singing": "Lectura cantada a primera vista",
-    "singing-songs": "Cantar canciones"
+    "singing-songs": "Cantar canciones",
+    "half-and-whole-steps": "Semitonos y tonos",
+    "interval-numbers": "Contar intervalos",
+    "interval-qualities": "Intervalos mayores, menores y justos",
+    "hearing-intervals": "Intervalos de oído"
   }
 }

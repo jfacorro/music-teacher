@@ -6,7 +6,7 @@ import { lessonNamespace, loadLesson, type Lesson } from '../../../content/lesso
 import { i18n } from '../../../i18n';
 import { LessonPlayer } from './LessonPlayer';
 import { LoadStatus } from '../../loadStatus';
-import { updateSettings, useSettings } from '../../../storage/settings';
+import { chooseCourse, useSettings } from '../../../storage/settings';
 import { loadStepRuns } from '../../../storage/stepRuns';
 
 type LoadState =
@@ -38,7 +38,7 @@ function LessonLoader({ lessonId }: { lessonId: string }) {
   // course), so the top bar, the sidebar and Learn follow.
   useEffect(() => {
     const course = findLesson(lessonId)?.course;
-    if (course && course !== useSettings.getState().course) updateSettings({ course });
+    if (course && course !== useSettings.getState().course) chooseCourse(course);
   }, [lessonId]);
 
   useEffect(() => {

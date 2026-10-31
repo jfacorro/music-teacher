@@ -55,7 +55,8 @@
         "rhythm": "Ritmo",
         "reading": "Lectura",
         "musicianship": "Musicalidad",
-        "singing": "Canto"
+        "singing": "Canto",
+        "theory": "Teoría"
       },
       "detail": "{level} · {played}",
       "starsTip": "La precisión necesaria para 1, 2 y 3 estrellas: {oneStar}, {twoStars} y {threeStars}.",
@@ -594,6 +595,7 @@
     "allFound": "¡Muy bien! Las encontraste todas.",
     "passRule": "{stars, plural, one {Consigue # estrella para aprobar} other {Consigue # estrellas para aprobar}}",
     "complete": "¡Lección completada!",
+    "notComplete": "Lección sin completar",
     "noStars": "Completa todos los pasos sin saltarte ninguno para conseguir estrellas.",
     "restart": "Empezar la lección de nuevo",
     "next": "Siguiente lección",
@@ -633,6 +635,25 @@
       "stop": "Detener",
       "listen": "Escucha…",
       "singBack": "Ahora tú: cántalas"
+    },
+    "question": {
+      "prompts": {
+        "stepSize": "¿Semitono o tono?",
+        "intervalNumber": "¿Qué número tiene este intervalo?",
+        "intervalName": "¿Qué intervalo es?"
+      },
+      "choices": "Respuestas",
+      "right": "¡Correcto!",
+      "wrong": "Esa no es. Prueba otra vez."
+    },
+    "build": {
+      "playPrompt": "Busca {what} por encima de {note}.",
+      "singPrompt": "Canta {what} por encima de {note}.",
+      "anyOctave": "Vale cualquier octava. Una tecla equivocada se marca en rojo y puedes volver a intentarlo.",
+      "singTitle": "A cantar",
+      "singIntro": "La aplicación toca una nota, y tú cantas la que se pide y la mantienes afinada medio segundo. Vale cualquier octava, y cada una cuenta si la cantas en menos de seis segundos.",
+      "sing": "Ahora cántala.",
+      "hearRoot": "Escuchar {note} otra vez"
     }
   },
   "welcome": {
@@ -917,7 +938,12 @@
     },
     "levelHeading": "{level} · Unidades {first}–{last}",
     "unitShort": "{number} · {title}",
-    "levelHeadingOne": "{level} · Unidad {number}"
+    "levelHeadingOne": "{level} · Unidad {number}",
+    "answerBy": "Responder",
+    "answer": {
+      "play": "Tocando",
+      "sing": "Cantando"
+    }
   },
   "tuner": {
     "title": "Afinador",

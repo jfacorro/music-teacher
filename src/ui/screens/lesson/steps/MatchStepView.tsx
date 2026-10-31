@@ -32,9 +32,7 @@ export function MatchStepView({ step, text, onResult, onContinue }: MatchStepVie
   return (
     <div className="lesson__step">
       <p className="lesson__text">{text}</p>
-      {step.pass.minStars > 0 && (
-        <p className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</p>
-      )}
+      <p className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</p>
       <MatchTheNote
         pick={pick}
         tuner

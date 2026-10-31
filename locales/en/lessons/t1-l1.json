@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "smallest": "An interval is the distance between two notes. The smallest one is a half step: from one key to the very next, black or white. From {c} to {cSharp} is a half step, and so is {e} to {f}.",
+    "whole": "Two half steps make a whole step, with one key in between. From {c} to {d} is a whole step, and so is {e} to {fSharp}.",
+    "chooseKeys": "Look at the two lit keys, count what’s between them, and choose.",
+    "build": "Now find them yourself, starting from the note given.",
+    "ear": "Now with your ears: a half step sounds close and tense, a whole step more open."
+  }
+}

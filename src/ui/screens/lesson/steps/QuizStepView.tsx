@@ -20,9 +20,7 @@ export function QuizStepView({ step, text, onResult, onContinue }: QuizStepViewP
   return (
     <div className="lesson__step">
       <p className="lesson__text">{text}</p>
-      {step.pass.minStars > 0 && (
-        <p className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</p>
-      )}
+      <p className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</p>
       <NoteQuiz
         notes={step.notes}
         count={step.count}

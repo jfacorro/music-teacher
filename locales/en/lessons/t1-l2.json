@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "counting": "Intervals are numbered by counting note names, both ends included. From {c} to {e} you count {c}, {d}, {e}: three notes, so it’s a third. From {c} to {g} there are five: a fifth.",
+    "staff": "On the staff it’s quick to see: from a line to the next line, or from a space to the next space, is a third. From a line to the space beside it is a second.",
+    "readStaff": "Count up from the lower note, and choose.",
+    "build": "Count up from the note given, and find the note you land on, without sharps or flats.",
+    "wider": "Sixths, sevenths and the octave are counted the same way. An octave spans eight notes and lands on the same note name: {c} to {c}.",
+    "allOfThem": "All of them together. Only your first answer counts."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "smallest": "Un intervalo es la distancia entre dos notas. El más pequeño es el semitono: de una tecla a la siguiente, negra o blanca. De {c} a {cSharp} hay un semitono, y de {e} a {f} también.",
+    "whole": "Dos semitonos forman un tono, con una tecla en medio. De {c} a {d} hay un tono, y de {e} a {fSharp} también.",
+    "chooseKeys": "Mira las dos teclas iluminadas, fíjate en lo que hay entre ellas y elige.",
+    "build": "Ahora búscalos tú, a partir de la nota que te damos.",
+    "ear": "Ahora de oído: el semitono suena cercano y tenso; el tono, más abierto."
+  }
+}

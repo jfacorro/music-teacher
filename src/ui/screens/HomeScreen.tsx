@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
+import { AnswerChoice } from '../components/AnswerChoice';
 import { Course, COURSE_UNITS, lessonOrder, unitsByLevel } from '../../content/courses';
 import {
   isUnitFinished,
@@ -12,7 +13,7 @@ import {
 import { MAX_STARS } from '../../engine/scoring';
 import { useContentText } from '../../i18n/useContentText';
 import { resultKey, useProgress, ResultKind } from '../../storage/progress';
-import { useSettings } from '../../storage/settings';
+import { sings, useSettings } from '../../storage/settings';
 import { IndexedPage, type IndexGroup } from '../components/IndexedPage';
 import { PathItem } from '../components/PathItem';
 import { KeyHint } from '../components/ShortcutButton';
@@ -31,6 +32,7 @@ export function HomeScreen() {
   const courseText = useContentText('courses');
   const results = useProgress((s) => s.results);
   const course = useSettings((s) => s.course);
+  const singing = useSettings(sings);
   const units = COURSE_UNITS[course];
   const levels = useMemo(() => unitsByLevel(units), [units]);
 
@@ -60,7 +62,10 @@ export function HomeScreen() {
 
   return (
     <section className="screen">
-      <h1>{t('home.title')}</h1>
+      <div className="title-row">
+        <h1>{t('home.title')}</h1>
+        {course === Course.Theory && <AnswerChoice />}
+      </div>
       <IndexedPage groups={groups}>
         <section className="card continue" id="next">
           {nextLesson ? (
@@ -76,7 +81,7 @@ export function HomeScreen() {
                   {started ? t('home.continue') : t('home.start')}
                   <KeyHint shortcut={ShortcutKey.Enter} />
                 </Link>
-                {course === Course.Voice ? (
+                {singing ? (
                   <Link className="button" to="/settings#voice">
                     {t('home.checkRange')}
                   </Link>

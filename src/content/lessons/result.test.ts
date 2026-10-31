@@ -69,6 +69,15 @@ describe('earlierSteps', () => {
     ]);
   });
 
+  it('does not count a try passed with fewer stars than the step asks for now', () => {
+    const earlier = earlierSteps(
+      steps,
+      (i) => (i === 3 ? [{ stars: 0, accuracy: 0.5, passed: true }] : []),
+      null,
+    );
+    expect(earlier.get(3)?.passed).toBe(false);
+  });
+
   it('judges tries kept without a verdict by the step’s stars to pass', () => {
     const earlier = earlierSteps(
       steps,

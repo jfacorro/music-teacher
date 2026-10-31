@@ -31,6 +31,8 @@ export type {
   WarmUpStep,
   MatchStep,
   SingStep,
+  QuestionStep,
+  BuildStep,
 } from './lesson';
 export {
   isGraded,

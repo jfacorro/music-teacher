@@ -87,6 +87,10 @@
     "v8": {
       "title": "Songs with words",
       "description": "Whole songs sung with their words: a syllable on each note, phrases and breaths, and one syllable over two notes, with the piano playing along."
+    },
+    "t1": {
+      "title": "Intervals",
+      "description": "Half and whole steps, naming intervals, and hearing them."
     }
   },
   "lessons": {
@@ -180,7 +184,11 @@
     "v7-l3": "Reading a melody",
     "v8-l1": "Words on the notes",
     "v8-l2": "Phrases and breaths",
-    "v8-l3": "One syllable, two notes"
+    "v8-l3": "One syllable, two notes",
+    "t1-l1": "Half and whole steps",
+    "t1-l2": "Counting intervals",
+    "t1-l3": "Major, minor and perfect",
+    "t1-l4": "Hearing intervals"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -223,6 +231,10 @@
     "singing-by-ear": "Singing by ear",
     "reading-melodies": "Reading melodies",
     "sight-singing": "Sight-singing",
-    "singing-songs": "Singing songs"
+    "singing-songs": "Singing songs",
+    "half-and-whole-steps": "Half and whole steps",
+    "interval-numbers": "Counting intervals",
+    "interval-qualities": "Major, minor and perfect intervals",
+    "hearing-intervals": "Hearing intervals"
   }
 }

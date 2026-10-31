@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "counting": "Los intervalos se numeran contando las notas, incluidas la primera y la última. De {c} a {e} cuentas {c}, {d}, {e}: tres notas, así que es una tercera. De {c} a {g} son cinco: una quinta.",
+    "staff": "En el pentagrama se ve enseguida: de una línea a la siguiente, o de un espacio al siguiente, hay una tercera. De una línea al espacio de al lado hay una segunda.",
+    "readStaff": "Cuenta desde la nota de abajo y elige.",
+    "build": "Cuenta hacia arriba desde la nota que te damos y busca la nota a la que llegas, sin sostenidos ni bemoles.",
+    "wider": "Las sextas, las séptimas y la octava se cuentan igual. La octava abarca ocho notas y llega a una nota con el mismo nombre: de {c} a {c}.",
+    "allOfThem": "Todos juntos. Solo cuenta tu primera respuesta."
+  }
+}

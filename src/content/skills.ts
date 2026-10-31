@@ -174,6 +174,8 @@ export const SkillArea = {
   Musicianship: 'musicianship',
   /** The voice course. */
   Singing: 'singing',
+  /** The theory course. */
+  Theory: 'theory',
 } as const;
 export type SkillArea = (typeof SkillArea)[keyof typeof SkillArea];
 
@@ -223,6 +225,12 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'singing-songs',
     'sight-singing',
   ],
+  [SkillArea.Theory]: [
+    'half-and-whole-steps',
+    'interval-numbers',
+    'interval-qualities',
+    'hearing-intervals',
+  ],
 };
 
 /** The areas of each course's skills, in the order Home shows them. */
@@ -234,6 +242,7 @@ export const COURSE_SKILL_AREAS: Readonly<Record<Course, readonly SkillArea[]>> 
     SkillArea.Musicianship,
   ],
   [Course.Voice]: [SkillArea.Singing],
+  [Course.Theory]: [SkillArea.Theory],
 };
 
 /** A course's skills, in the course's order. */

@@ -61,9 +61,7 @@ export function ExerciseStepView({
           />
           {t('practice.metronome')}
         </label>
-        {step.pass.minStars > 0 && (
-          <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
-        )}
+        <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
         {step.pass.dynamics && <span className="muted">{t('lesson.passDynamics')}</span>}
         {step.pass.touch && <span className="muted">{t('lesson.passTouch')}</span>}
         {step.pass.pedal && <span className="muted">{t('lesson.passPedal')}</span>}

@@ -2273,6 +2273,71 @@ button.bars__bar:focus-visible {
   margin: 0;
 }
 
+/* Theory's questions, and how they're answered. */
+.title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.answer-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lesson__header .answer-choice {
+  margin-block-start: 0.5rem;
+}
+
+.question__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.question__prompt {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+.question__choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.5rem;
+  margin-block: 0.75rem;
+}
+
+.question__choice {
+  font: inherit;
+  padding: 0.6rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.question__choice:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.question__choice.is-right {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.question__choice.is-wrong {
+  border-color: var(--problem);
+  background: var(--problem-bg);
+  color: var(--problem);
+}
+
 /* A quiz's tally: a box per question, a check or a cross once answered, the current one outlined. */
 .tally__boxes {
   display: flex;

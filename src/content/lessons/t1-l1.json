@@ -1,0 +1,45 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "smallest",
+      "textVars": { "c": "C4", "cSharp": "C#4", "e": "E4", "f": "F4" },
+      "keys": [{ "note": "C4" }, { "note": "C#4" }, { "note": "E4" }, { "note": "F4" }],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "explain",
+      "text": "whole",
+      "textVars": { "c": "C4", "d": "D4", "e": "E4", "fSharp": "F#4" },
+      "keys": [{ "note": "C4" }, { "note": "D4" }, { "note": "E4" }, { "note": "F#4" }],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "question",
+      "text": "chooseKeys",
+      "kind": "stepSize",
+      "answers": ["half", "whole"],
+      "roots": ["C4", "D4", "E4", "F4", "G4", "A4", "B4"],
+      "show": "keyboard",
+      "count": 8
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "stepSize",
+      "answers": ["half", "whole"],
+      "roots": ["C4", "D4", "E4", "F4", "G4", "A4"],
+      "count": 6
+    },
+    {
+      "type": "question",
+      "text": "ear",
+      "kind": "stepSize",
+      "answers": ["half", "whole"],
+      "roots": ["C4", "D4", "E4", "F4", "G4", "A4", "B4"],
+      "show": "ear",
+      "count": 6,
+      "pass": { "minStars": 1 }
+    }
+  ]
+}

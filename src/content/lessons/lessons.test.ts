@@ -206,6 +206,59 @@ describe('parseLesson', () => {
     ]);
   });
 
+  it('parses theory questions and notes to find', async () => {
+    const lesson = await parseLesson('test', {
+      steps: [
+        {
+          type: 'question',
+          text: 'a',
+          kind: 'intervalName',
+          answers: ['majorThird', 'perfectFifth'],
+          roots: ['D4'],
+          show: 'staff',
+          count: 4,
+        },
+        {
+          type: 'build',
+          text: 'b',
+          kind: 'stepSize',
+          answers: ['half'],
+          roots: ['C4'],
+          pass: { minStars: 2 },
+        },
+      ],
+    });
+    expect(lesson.steps[0]).toMatchObject({
+      type: 'question',
+      show: 'staff',
+      count: 4,
+      questions: { kind: 'intervalName', answers: ['majorThird', 'perfectFifth'] },
+    });
+    expect(lesson.steps[1]).toMatchObject({ type: 'build', count: 10, pass: { minStars: 2 } });
+    expect(lesson.steps.every(isGraded)).toBe(true);
+  });
+
+  it('rejects theory questions it couldn’t deal', async () => {
+    const question = {
+      type: 'question',
+      text: 'a',
+      kind: 'intervalName',
+      answers: ['majorThird'],
+      roots: ['C4'],
+      show: 'staff',
+    };
+    const parse = (changes: object) =>
+      parseLesson('test', { steps: [{ ...question, ...changes }] });
+    await expect(parse({ show: 'nowhere' })).rejects.toThrow('show');
+    await expect(parse({ kind: 'nothing' })).rejects.toThrow('kind');
+    await expect(parse({ answers: [] })).rejects.toThrow('answers');
+    await expect(parse({ answers: ['half'] })).rejects.toThrow('not an answer');
+    await expect(parse({ roots: [] })).rejects.toThrow('roots');
+    await expect(parse({ roots: ['E##4'], answers: ['majorSecond'] })).rejects.toThrow(
+      'no "majorSecond" above',
+    );
+  });
+
   it('parses every step type', async () => {
     const lesson = await parseLesson('x', {
       steps: [
@@ -259,11 +312,11 @@ describe('parseLesson', () => {
       octave: false,
       guide: true,
       metronome: false,
-      pass: { minStars: 0 },
+      pass: { minStars: 1 },
     });
     expect(lesson.steps[7]).toMatchObject({ within: 2, count: 5, pass: { minStars: 1 } });
     // By default: the whole range, ten notes.
-    expect(lesson.steps[8]).toMatchObject({ within: null, count: 10, pass: { minStars: 0 } });
+    expect(lesson.steps[8]).toMatchObject({ within: null, count: 10, pass: { minStars: 1 } });
     expect(lesson.steps.map(isGraded)).toEqual([
       false,
       true,
@@ -280,7 +333,7 @@ describe('parseLesson', () => {
       notes: [{ midi: 60 }, { midi: 67 }],
       count: 5,
       clef: 'treble',
-      pass: { minStars: 0 },
+      pass: { minStars: 1 },
     });
     const rhythm = lesson.steps[5];
     expect(rhythm).toMatchObject({ view: 'sheet', metronome: true, score: { tempo: 90 } });
@@ -331,6 +384,7 @@ describe('parseLesson', () => {
     ['a bad view', { ...exercise, view: 'tab' }, 'view'],
     ['a bad notation', { ...exercise, notation: 'big' }, 'notation'],
     ['a bad pass rule', { ...exercise, pass: { minStars: 4 } }, 'minStars'],
+    ['a step that asks for no stars', { ...exercise, pass: { minStars: 0 } }, 'minStars'],
     ['a quiz without notes', { type: 'quiz', text: 'x', notes: [] }, 'notes'],
     [
       'a staff picture with a bad clef',

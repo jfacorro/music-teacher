@@ -78,10 +78,11 @@
   },
   "courseSwitch": {
     "label": "What you’re practicing",
-    "tip": "What you’re practicing: the piano or your voice. Each has its own course and progress.",
+    "tip": "What you’re practicing: the piano, your voice or music theory. Each has its own course and progress.",
     "courses": {
       "piano": "Piano",
-      "voice": "Voice"
+      "voice": "Voice",
+      "theory": "Theory"
     },
     "notStarted": "Not started",
     "findRangeFirst": "Not started · find your range first",

@@ -13,13 +13,17 @@ import {
 import { useContentText } from '../../../i18n/useContentText';
 import { recordResult, resultKey, ResultKind, useProgress } from '../../../storage/progress';
 import { recordStepRun, stepKey, useStepRuns } from '../../../storage/stepRuns';
+import { useSettings } from '../../../storage/settings';
 import { useTopBarDetail } from '../../topBar';
+import { AnswerChoice } from '../../components/AnswerChoice';
 import { RunHistory } from '../../components/RunHistory';
 import { LessonComplete } from './LessonComplete';
+import { BuildStepView } from './steps/BuildStepView';
 import { ExerciseStepView } from './steps/ExerciseStepView';
 import { ExplainStepView } from './steps/ExplainStepView';
 import { MatchStepView } from './steps/MatchStepView';
 import { FindStepView } from './steps/FindStepView';
+import { QuestionStepView } from './steps/QuestionStepView';
 import { QuizStepView } from './steps/QuizStepView';
 import { RhythmStepView } from './steps/RhythmStepView';
 import { SingStepView } from './steps/SingStepView';
@@ -29,8 +33,9 @@ import { ShortcutButton } from '../../components/ShortcutButton';
 import { ShortcutKey } from '../../shortcuts';
 
 /**
- * Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms, and
- * for the voice, warm-ups, matching notes and singing melodies.
+ * Steps through a lesson: explanations, key finding, graded exercises, quizzes and rhythms; for
+ * the voice, warm-ups, matching notes and singing melodies; and for theory, questions and notes
+ * to find.
  */
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('screens');
@@ -70,6 +75,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const [index, setIndex] = useState(warmUpFirst ? 0 : resume);
   const jumpFromWarmUp = useRef(warmUpFirst && resume > 1 ? resume : null);
   const history = useStepRuns((s) => s.byKey[stepKey(lesson.id, index)]);
+  const answerBy = useSettings((s) => s.theoryAnswer);
 
   const finished = index >= lesson.steps.length;
   const step = lesson.steps[index];
@@ -149,6 +155,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
             </li>
           ))}
         </ol>
+        {course === Course.Theory && !finished && <AnswerChoice />}
       </header>
 
       {finished ? (
@@ -159,7 +166,9 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
             step?.type === StepType.Quiz ||
             step?.type === StepType.Rhythm ||
             step?.type === StepType.Match ||
-            step?.type === StepType.Sing) && (
+            step?.type === StepType.Sing ||
+            step?.type === StepType.Question ||
+            step?.type === StepType.Build) && (
             <RunHistory runs={history} label={t('lesson.history.label')} />
           )}
           {step?.type === StepType.Explain && (
@@ -210,6 +219,24 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           {step?.type === StepType.Sing && (
             <SingStepView
               key={index}
+              step={step}
+              text={text}
+              onResult={(stepResult, passed) => tried(index, stepResult, passed)}
+              onContinue={next}
+            />
+          )}
+          {step?.type === StepType.Question && (
+            <QuestionStepView
+              key={index}
+              step={step}
+              text={text}
+              onResult={(stepResult, passed) => tried(index, stepResult, passed)}
+              onContinue={next}
+            />
+          )}
+          {step?.type === StepType.Build && (
+            <BuildStepView
+              key={`${index}-${answerBy}`}
               step={step}
               text={text}
               onResult={(stepResult, passed) => tried(index, stepResult, passed)}

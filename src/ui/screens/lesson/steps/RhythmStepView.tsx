@@ -40,9 +40,7 @@ export function RhythmStepView({ step, text, onResult, onContinue }: RhythmStepV
           />
           {t('practice.metronome')}
         </label>
-        {step.pass.minStars > 0 && (
-          <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
-        )}
+        <span className="muted">{t('lesson.passRule', { stars: step.pass.minStars })}</span>
       </div>
       <PracticeRun
         score={step.score}
