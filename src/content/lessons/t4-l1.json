@@ -1,0 +1,74 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "thirds",
+      "recap": ["u6-l2"],
+      "textVars": {
+        "c": "C4",
+        "e": "E4",
+        "eFlat": "Eb4",
+        "g": "G4"
+      },
+      "keys": [
+        {
+          "note": "C4"
+        },
+        {
+          "note": "E4"
+        },
+        {
+          "note": "G4"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "question",
+      "text": "twoColors",
+      "kind": "chordQuality",
+      "answers": ["major", "minor"],
+      "roots": ["C4", "D4", "E4", "F4", "G4", "A4"],
+      "show": "keyboard",
+      "count": 8
+    },
+    {
+      "type": "explain",
+      "text": "others",
+      "textVars": {
+        "b": "B4",
+        "d": "D5",
+        "f": "F5",
+        "c": "C4",
+        "e": "E4",
+        "gSharp": "G#4"
+      }
+    },
+    {
+      "type": "question",
+      "text": "read",
+      "kind": "chordQuality",
+      "answers": ["major", "minor", "diminished", "augmented"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "show": "staff",
+      "count": 8
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "chordQuality",
+      "answers": ["major", "minor", "diminished"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "count": 5
+    },
+    {
+      "type": "question",
+      "text": "ear",
+      "kind": "chordQuality",
+      "answers": ["major", "minor", "diminished", "augmented"],
+      "roots": ["C4", "D4", "F4", "G4"],
+      "show": "ear",
+      "count": 8
+    }
+  ]
+}

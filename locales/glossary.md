@@ -197,6 +197,10 @@ system setting (`src/i18n/naming.ts`).
 | Clockwise / counterclockwise                  | clockwise / counterclockwise                         | en sentido horario / antihorario                        |
 | Relative major                                | relative major                                       | relativo mayor                                          |
 | Transposing                                   | transposing                                          | transportar                                             |
+| Root of a chord                               | root                                                 | fundamental                                             |
+| Third, fifth of a chord                       | the third, the fifth                                 | la tercera, la quinta                                   |
+| Seventh chord                                 | seventh chord                                        | acorde de séptima                                       |
+| Dominant seventh                              | dominant seventh                                     | séptima de dominante                                    |
 | Sight-singing (section and skill)             | sight-singing                                        | lectura cantada (a primera vista)                       |
 | Reading melodies (skill)                      | reading melodies                                     | leer melodías                                           |
 | Words of a song (lyrics)                      | the words                                            | la letra                                                |

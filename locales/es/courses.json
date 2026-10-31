@@ -99,6 +99,10 @@
     "t3": {
       "title": "Armaduras",
       "description": "El orden de los sostenidos y los bemoles, el círculo de quintas, los relativos menores y cómo transportar."
+    },
+    "t4": {
+      "title": "Acordes",
+      "description": "Las tríadas y sus tipos, las inversiones y los acordes de séptima."
     }
   },
   "lessons": {
@@ -204,7 +208,10 @@
     "t3-l1": "El orden de sostenidos y bemoles",
     "t3-l2": "El círculo de quintas",
     "t3-l3": "Los relativos menores",
-    "t3-l4": "Transportar"
+    "t3-l4": "Transportar",
+    "t4-l1": "Las tríadas y sus tipos",
+    "t4-l2": "Las inversiones",
+    "t4-l3": "Los acordes de séptima"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -259,6 +266,9 @@
     "key-signature-order": "El orden de sostenidos y bemoles",
     "circle-of-fifths": "El círculo de quintas",
     "relative-keys": "Los relativos menores",
-    "transposing": "Transportar"
+    "transposing": "Transportar",
+    "triad-qualities": "Las tríadas y sus tipos",
+    "chord-inversions": "Las inversiones de los acordes",
+    "seventh-chords": "Los acordes de séptima"
   }
 }

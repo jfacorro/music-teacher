@@ -1,7 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { IntervalName } from './chords';
-import { intervalAbove, IntervalNumber, numberAbove } from './intervals';
+import { ChordQuality, IntervalName } from './chords';
+import { chordNotes, intervalAbove, IntervalNumber, numberAbove } from './intervals';
 import { formatNote, pitchOf } from './pitch';
+
+describe('chordNotes', () => {
+  const notes = (root: Parameters<typeof pitchOf>[0], quality: ChordQuality) =>
+    chordNotes(pitchOf(root), quality).map(formatNote);
+
+  it('spells each kind of chord in thirds', () => {
+    expect(notes('D4', ChordQuality.Major)).toEqual(['D4', 'F#4', 'A4']);
+    expect(notes('Eb4', ChordQuality.Minor)).toEqual(['Eb4', 'Gb4', 'Bb4']);
+    expect(notes('C4', ChordQuality.Diminished)).toEqual(['C4', 'Eb4', 'Gb4']);
+    expect(notes('C4', ChordQuality.Augmented)).toEqual(['C4', 'E4', 'G#4']);
+    expect(notes('G4', ChordQuality.Dominant7)).toEqual(['G4', 'B4', 'D5', 'F5']);
+    expect(notes('C4', ChordQuality.Major7)).toEqual(['C4', 'E4', 'G4', 'B4']);
+    expect(notes('D4', ChordQuality.Minor7)).toEqual(['D4', 'F4', 'A4', 'C5']);
+  });
+});
 
 describe('intervalAbove', () => {
   it('spells the note from the letters the interval spans', () => {

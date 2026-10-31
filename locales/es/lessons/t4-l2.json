@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "inversions": "Una inversión pone otra nota del acorde abajo, y sigue siendo el mismo acorde. Con la fundamental abajo está en estado fundamental; con la tercera, en primera inversión; con la quinta, en segunda inversión. Aquí tienes {cMajor} en primera inversión.",
+    "onKeys": "Hay tres teclas de un acorde iluminadas. ¿Cuál de sus notas está abajo?",
+    "gap": "En el pentagrama, una pila de terceras está en estado fundamental. Si no, busca el hueco de una cuarta: la fundamental es la nota justo encima de él. Si está arriba del acorde, es primera inversión; si está abajo, segunda inversión.",
+    "onStaff": "Busca el hueco y di qué inversión es.",
+    "build": "Ahora constrúyelas, de la nota más grave a la más aguda. El nombre te dice qué nota va abajo.",
+    "minor": "Los acordes menores se invierten igual."
+  }
+}

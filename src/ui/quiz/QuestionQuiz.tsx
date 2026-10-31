@@ -150,6 +150,7 @@ export function QuestionQuiz({ questions, show, count, onFinish, actions }: Ques
           notes={card.shown}
           names={false}
           keyFifths={card.keyFifths}
+          together={card.together}
         />
       )}
       {show === QuestionShow.Keyboard && <StepKeyboard range={keys} highlight={highlight} />}

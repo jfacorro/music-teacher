@@ -44,7 +44,7 @@ export interface Chord {
 }
 
 /** Semitones above the root, in ascending order. */
-const TEMPLATES: readonly [ChordQuality, readonly number[]][] = [
+export const TEMPLATES: readonly [ChordQuality, readonly number[]][] = [
   [ChordQuality.Major, [0, 4, 7]],
   [ChordQuality.Minor, [0, 3, 7]],
   [ChordQuality.Diminished, [0, 3, 6]],

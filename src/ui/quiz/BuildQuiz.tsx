@@ -33,22 +33,29 @@ const NEXT_CARD_MS = 900;
 const HINT_AFTER = 2;
 
 /**
- * The key is one of `notes`, in any octave. Asked for one note, the note given doesn't count as an
- * octave above it; in a melody, it can be one of the notes.
+ * Which of `notes` the key is, in any octave. Asked for one note, the note given doesn't count as
+ * an octave above it; in a melody, it can be one of the notes.
  */
-function isAmong(
+function matching(
   card: TheoryCard,
   notes: readonly Pitch[],
   pitch: number,
   source: InputSource,
-): boolean {
-  const midis = notes.map((note) => note.midi);
-  const played = resolvePlayed(pitch, source, midis);
-  return (
-    midis.some((midi) => pitchClass(midi) === pitchClass(played)) &&
-    (card.targets.length > 1 || played !== card.root.midi)
+): Pitch | undefined {
+  const played = resolvePlayed(
+    pitch,
+    source,
+    notes.map((note) => note.midi),
   );
+  if (card.targets.length === 1 && played === card.given?.midi) return undefined;
+  return notes.find((note) => pitchClass(note.midi) === pitchClass(played));
 }
+
+/** The notes still to find, of those not in `found`: the next one, or any if there's no order. */
+const wanted = (card: TheoryCard, found: readonly Pitch[]): readonly Pitch[] => {
+  const left = card.targets.filter((note) => !found.includes(note));
+  return card.ordered ? left.slice(0, 1) : left;
+};
 
 interface BuildQuizProps {
   questions: QuestionSet;
@@ -66,8 +73,8 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
   // Dealt once; Try again deals new ones.
   const [cards, setCards] = useState(() => buildCards(questions, count));
   const [index, setIndex] = useState(0);
-  /** How many of the card's notes have been found. */
-  const [found, setFound] = useState(0);
+  /** The card's notes found so far. */
+  const [found, setFound] = useState<readonly Pitch[]>([]);
   const [misses, setMisses] = useState(0);
   const [wrongKey, setWrongKey] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -78,7 +85,7 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
   const result = quizResult(marks.filter(Boolean).length, cards.length);
 
   useEffect(() => {
-    if (card) void playSound([[card.root]]);
+    if (card?.given) void playSound([[card.given]]);
   }, [card]);
   useEffect(() => stopNotes, []);
 
@@ -92,10 +99,10 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
       subscribeNotes((event) => {
         const { card: current, answered: done, misses: missed, found: got } = latest.current;
         if (event.type !== NoteEventType.On || !current || done) return;
-        const next = current.targets.slice(got, got + 1);
-        if (isAmong(current, next, event.pitch, event.source)) {
-          const now = got + 1;
-          const complete = now === current.targets.length;
+        const note = matching(current, wanted(current, got), event.pitch, event.source);
+        if (note) {
+          const now = [...got, note];
+          const complete = now.length === current.targets.length;
           latest.current = { ...latest.current, found: now, answered: complete };
           setFound(now);
           setWrongKey(null);
@@ -104,8 +111,8 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
             setMarks((previous) => [...previous, missed === 0]);
           }
         } else if (
-          event.pitch !== current.root.midi &&
-          !isAmong(current, current.targets.slice(0, got), event.pitch, event.source)
+          event.pitch !== current.given?.midi &&
+          !matching(current, got, event.pitch, event.source)
         ) {
           // Trying the note given, or playing again one already found, isn't a miss.
           latest.current = { ...latest.current, misses: missed + 1 };
@@ -123,7 +130,7 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
       setIndex((i) => i + 1);
       setAnswered(false);
       setMisses(0);
-      setFound(0);
+      setFound([]);
     }, NEXT_CARD_MS);
     return () => clearTimeout(timer);
   }, [answered]);
@@ -150,7 +157,7 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
     reported.current = false;
     setCards(buildCards(questions, count));
     setIndex(0);
-    setFound(0);
+    setFound([]);
     setMisses(0);
     setWrongKey(null);
     setAnswered(false);
@@ -159,14 +166,19 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
 
   const keys = useMemo(() => keysFor(cards), [cards]);
   const highlight = useMemo(
-    () => new Map<number, ExpectedKey>(card ? [[card.root.midi, { hand: Hand.Right }]] : []),
+    () =>
+      new Map<number, ExpectedKey>(card?.given ? [[card.given.midi, { hand: Hand.Right }]] : []),
     [card],
   );
   const showNext = misses >= HINT_AFTER;
   const completed = useMemo(
     () =>
       new Set<number>(
-        card ? card.targets.slice(0, found + (showNext ? 1 : 0)).map((note) => note.midi) : [],
+        card
+          ? [...found, ...(showNext ? wanted(card, found).slice(0, 1) : [])].map(
+              (note) => note.midi,
+            )
+          : [],
       ),
     [showNext, found, card],
   );
@@ -176,10 +188,10 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
       new Map<number, KeyMark>(
         card
           ? held
-              .filter((note) => note.pitch !== card.root.midi)
+              .filter((note) => note.pitch !== card.given?.midi)
               .map((note) => [
                 note.pitch,
-                isAmong(card, card.targets.slice(0, found + 1), note.pitch, note.source)
+                matching(card, [...found, ...wanted(card, found)], note.pitch, note.source)
                   ? KeyMark.Correct
                   : KeyMark.Wrong,
               ])
@@ -203,9 +215,9 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
         ]
           .filter(Boolean)
           .join(' ')
-      : found > 0
-        ? t('lesson.build.found', { found, total })
-        : t('lesson.build.anyOctave');
+      : found.length > 0
+        ? t('lesson.build.found', { found: found.length, total })
+        : t(card.ordered ? 'lesson.build.anyOctave' : 'lesson.build.anyOrder');
 
   return (
     <div className="question">

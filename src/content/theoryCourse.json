@@ -42,6 +42,9 @@
     {
       "id": "t2",
       "level": "beginner",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
       "lessons": [
         {
           "id": "t2-l1",
@@ -81,6 +84,9 @@
     {
       "id": "t3",
       "level": "elementary",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
       "lessons": [
         {
           "id": "t3-l1",
@@ -107,6 +113,39 @@
           "tryIt": {
             "song": "ode-to-joy",
             "ear": "melodies"
+          }
+        }
+      ]
+    },
+    {
+      "id": "t4",
+      "level": "elementary",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "t4-l1",
+          "skills": ["triad-qualities"],
+          "builds": ["u6-l1", "u6-l2"],
+          "tryIt": {
+            "ear": "chords"
+          }
+        },
+        {
+          "id": "t4-l2",
+          "skills": ["chord-inversions"],
+          "builds": ["u6-l3"],
+          "tryIt": {
+            "ear": "chords"
+          }
+        },
+        {
+          "id": "t4-l3",
+          "skills": ["seventh-chords"],
+          "builds": ["u6-l1", "u6-l2"],
+          "tryIt": {
+            "ear": "chords"
           }
         }
       ]

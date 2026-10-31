@@ -4,8 +4,8 @@
  * playing or singing. Cards are dealt so each answer and each starting note come up as evenly as
  * possible.
  */
-import { IntervalName } from '../theory/chords';
-import { intervalAbove, IntervalNumber, numberAbove } from '../theory/intervals';
+import { ChordQuality, IntervalName } from '../theory/chords';
+import { chordNotes, intervalAbove, IntervalNumber, numberAbove } from '../theory/intervals';
 import {
   FLATS,
   keyFifthsOf,
@@ -50,6 +50,10 @@ export const QuestionKind = {
   TransposeNote: 'transposeNote',
   /** A short melody in C major, in another key. */
   TransposeMelody: 'transposeMelody',
+  /** What kind of chord it is, or playing one. */
+  ChordQuality: 'chordQuality',
+  /** Which note of a chord is at the bottom. */
+  ChordInversion: 'chordInversion',
 } as const;
 export type QuestionKind = (typeof QuestionKind)[keyof typeof QuestionKind];
 
@@ -78,10 +82,32 @@ export const Ending = {
 } as const;
 export type Ending = (typeof Ending)[keyof typeof Ending];
 
+export const ChordInversion = {
+  Root: 'rootPosition',
+  First: 'firstInversion',
+  Second: 'secondInversion',
+} as const;
+export type ChordInversion = (typeof ChordInversion)[keyof typeof ChordInversion];
+
+const INVERSIONS: readonly ChordInversion[] = Object.values(ChordInversion);
+
+/** The chords theory asks about: all those stacked in thirds, up to the common sevenths. */
+const ASKED_CHORDS = [
+  ChordQuality.Major,
+  ChordQuality.Minor,
+  ChordQuality.Diminished,
+  ChordQuality.Augmented,
+  ChordQuality.Dominant7,
+  ChordQuality.Major7,
+  ChordQuality.Minor7,
+] as const;
+type AskedChord = (typeof ASKED_CHORDS)[number];
+
 /** The answers about the distance between two notes, which read "Find a third above D". */
 export type IntervalAnswer = StepSize | IntervalNumber | IntervalName;
 
-export type QuestionAnswer = IntervalAnswer | ScaleDegree | Mode | Ending | KeyName;
+export type QuestionAnswer =
+  IntervalAnswer | ScaleDegree | Mode | Ending | KeyName | AskedChord | ChordInversion;
 
 /** How a `question` step shows its notes (they're always played too). */
 export const QuestionShow = {
@@ -115,6 +141,8 @@ const ANSWERS: Readonly<Record<QuestionKind, readonly QuestionAnswer[]>> = {
   [QuestionKind.RelativeMajor]: MAJOR_KEYS,
   [QuestionKind.TransposeNote]: DEGREES,
   [QuestionKind.TransposeMelody]: Object.values(Ending),
+  [QuestionKind.ChordQuality]: ASKED_CHORDS,
+  [QuestionKind.ChordInversion]: INVERSIONS,
 };
 
 export const answersOf = (kind: QuestionKind): readonly QuestionAnswer[] => ANSWERS[kind];
@@ -184,11 +212,21 @@ export interface TheoryCard {
   sound: Sound;
   /** The key signature it's written with. */
   keyFifths: number;
-  /** What a `build` step asks to find, in this order, in any octave. */
+  /** What a `build` step asks to find, in any octave. */
   targets: readonly Pitch[];
+  /** Whether they have to come in this order: a chord's notes don't. */
+  ordered: boolean;
+  /** The note a `build` step gives to start from. */
+  given: Pitch | null;
+  /** The notes shown sound together: they're written as a chord. */
+  together: boolean;
   /** The scale degree it starts from or asks for, from 1; 0 when it isn't about one. */
   degree: number;
 }
+
+/** A card as a kind writes it: most start from their root, in order, one note at a time. */
+type WrittenCard = Omit<TheoryCard, 'ordered' | 'given' | 'together'> &
+  Partial<Pick<TheoryCard, 'ordered' | 'given' | 'together'>>;
 
 export interface TheoryQuestion extends TheoryCard {
   /** The answers offered, the right one among them, smallest first. */
@@ -231,16 +269,38 @@ const MELODIES: Readonly<Record<Ending, readonly (readonly number[])[]>> = {
 /** Transposing starts from here. */
 export const TRANSPOSE_FROM = makePitch('C', 0, 4);
 
+/** A chord with its lowest notes moved up an octave. */
+const inverted = (notes: readonly Pitch[], inversion: number): Pitch[] => [
+  ...notes.slice(inversion),
+  ...notes.slice(0, inversion).map((note) => moved(note, 1)),
+];
+
+/** A chord broken from the bottom, then together, so each note can be heard. */
+const brokenThenTogether = (notes: readonly Pitch[]): Pitch[][] => [
+  ...notes.map((note) => [note]),
+  [...notes],
+];
+
 /**
  * The card for an answer from a root.
  * @throws RangeError when it can't be spelled
  */
 export function cardFor(
-  { kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>,
+  set: Pick<QuestionSet, 'kind' | 'mode'>,
   answer: QuestionAnswer,
   root: Pitch,
   random: () => number = Math.random,
 ): TheoryCard {
+  const card = written(set, answer, root, random);
+  return { ordered: true, given: card.root, together: false, ...card };
+}
+
+function written(
+  { kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>,
+  answer: QuestionAnswer,
+  root: Pitch,
+  random: () => number,
+): WrittenCard {
   switch (kind) {
     case QuestionKind.ScaleStep: {
       const scale = scaleNotes(root, mode);
@@ -362,6 +422,36 @@ export function cardFor(
         degree: 0,
       };
     }
+    case QuestionKind.ChordQuality: {
+      const notes = chordNotes(root, answer as ChordQuality);
+      return {
+        answer,
+        root,
+        shown: notes,
+        sound: brokenThenTogether(notes),
+        keyFifths: 0,
+        targets: notes,
+        ordered: false,
+        given: null,
+        together: true,
+        degree: 0,
+      };
+    }
+    case QuestionKind.ChordInversion: {
+      const triad = chordNotes(root, mode);
+      const notes = inverted(triad, INVERSIONS.indexOf(answer as ChordInversion));
+      return {
+        answer,
+        root,
+        shown: notes,
+        sound: brokenThenTogether(notes),
+        keyFifths: 0,
+        targets: notes,
+        given: null,
+        together: true,
+        degree: 0,
+      };
+    }
     case QuestionKind.TransposeNote: {
       const place = DEGREES.indexOf(answer as ScaleDegree);
       return {
@@ -478,6 +568,7 @@ function inRange(
   return {
     ...card,
     root: moved(card.root, best),
+    given: card.given && moved(card.given, best),
     shown: move(card.shown),
     sound: card.sound.map(move),
     targets: move(card.targets),
@@ -519,7 +610,12 @@ export function sungNotes(cards: readonly TheoryCard[]): SungNote[] {
   for (const card of cards) {
     if (notes.length + card.targets.length > MOST_SUNG_NOTES) break;
     card.targets.forEach((note, place) => {
-      notes.push({ card, note, place, given: place === 0 ? card.root : card.targets[place - 1]! });
+      notes.push({
+        card,
+        note,
+        place,
+        given: place === 0 ? (card.given ?? card.root) : card.targets[place - 1]!,
+      });
     });
   }
   return notes;
