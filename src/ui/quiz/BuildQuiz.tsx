@@ -32,7 +32,10 @@ const NEXT_CARD_MS = 900;
 /** Misses before the answer is shown. */
 const HINT_AFTER = 2;
 
-/** The key is one of `notes`, in any octave (the note given doesn't count as an octave above it). */
+/**
+ * The key is one of `notes`, in any octave. Asked for one note, the note given doesn't count as an
+ * octave above it; in a melody, it can be one of the notes.
+ */
 function isAmong(
   card: TheoryCard,
   notes: readonly Pitch[],
@@ -41,7 +44,10 @@ function isAmong(
 ): boolean {
   const midis = notes.map((note) => note.midi);
   const played = resolvePlayed(pitch, source, midis);
-  return midis.some((midi) => pitchClass(midi) === pitchClass(played)) && played !== card.root.midi;
+  return (
+    midis.some((midi) => pitchClass(midi) === pitchClass(played)) &&
+    (card.targets.length > 1 || played !== card.root.midi)
+  );
 }
 
 interface BuildQuizProps {
@@ -86,7 +92,6 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
       subscribeNotes((event) => {
         const { card: current, answered: done, misses: missed, found: got } = latest.current;
         if (event.type !== NoteEventType.On || !current || done) return;
-        if (event.pitch === current.root.midi) return;
         const next = current.targets.slice(got, got + 1);
         if (isAmong(current, next, event.pitch, event.source)) {
           const now = got + 1;
@@ -98,8 +103,11 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
             setAnswered(true);
             setMarks((previous) => [...previous, missed === 0]);
           }
-        } else if (!isAmong(current, current.targets.slice(0, got), event.pitch, event.source)) {
-          // Playing a note again that's already found isn't a miss.
+        } else if (
+          event.pitch !== current.root.midi &&
+          !isAmong(current, current.targets.slice(0, got), event.pitch, event.source)
+        ) {
+          // Trying the note given, or playing again one already found, isn't a miss.
           latest.current = { ...latest.current, misses: missed + 1 };
           setMisses(missed + 1);
           setWrongKey(event.pitch);

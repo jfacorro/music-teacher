@@ -39,6 +39,7 @@ export {
   SHEET_NOTATIONS,
   SING_NOTATIONS,
   QuizClef,
+  CircleRings,
   ScoreView,
   SheetNotation,
   StaffClef,

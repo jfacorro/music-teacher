@@ -670,7 +670,14 @@
         "scaleStep": "En {key}, de la nota {from} a la {to}: ¿semitono o tono?",
         "scaleDegree": "En {key}, ¿qué grado es este?",
         "scaleType": "¿Mayor o menor?",
-        "homeNote": "¿La melodía termina en la tónica?"
+        "homeNote": "¿La melodía termina en la tónica?",
+        "keySignature": "¿Qué tonalidad mayor lleva esta armadura?",
+        "nextSharp": "¿Qué sostenido viene después?",
+        "nextFlat": "¿Qué bemol viene después?",
+        "circleUp": "¿Qué tonalidad hay un paso en sentido horario desde {key}?",
+        "circleDown": "¿Qué tonalidad hay un paso en sentido antihorario desde {key}?",
+        "relativeMinor": "¿Cuál es el relativo menor de {key}?",
+        "relativeMajor": "¿Cuál es el relativo mayor de {key}?"
       },
       "choices": "Respuestas",
       "right": "¡Correcto!",
@@ -684,12 +691,33 @@
       "singIntro": "La aplicación toca una nota, y tú cantas la que se pide y la mantienes afinada medio segundo. Vale cualquier octava, y cada una cuenta si la cantas en menos de seis segundos.",
       "sing": "Ahora cántala.",
       "hearRoot": "Escuchar {note} otra vez",
-      "playDegree": "Busca el grado {degree} de {key}.",
-      "singDegree": "Canta el grado {degree} de {key}.",
-      "playScale": "Toca la escala de {key} hacia arriba, desde la nota que te damos.",
-      "singScale": "Canta la escala de {key}: nota {place} de {total}.",
-      "found": "Llevas {found} de {total}."
-    }
+      "found": "Llevas {found} de {total}.",
+      "playing": {
+        "scaleDegree": "Busca el grado {degree} de {key}.",
+        "scaleType": "Toca la escala de {key} hacia arriba, desde la nota que te damos.",
+        "nextSharp": "El último sostenido es {note}. Busca el siguiente.",
+        "nextFlat": "El último bemol es {note}. Busca el siguiente.",
+        "circleUp": "Busca la tónica un paso en sentido horario desde {key}.",
+        "circleDown": "Busca la tónica un paso en sentido antihorario desde {key}.",
+        "relativeMinor": "Busca la tónica del relativo menor de {key}.",
+        "relativeMajor": "Busca la tónica del relativo mayor de {key}.",
+        "transposeNote": "En {from} esto es {notes}. Búscalo en {key}.",
+        "transposeMelody": "En {from} esto es {notes}. Tócalo en {key}."
+      },
+      "singing": {
+        "scaleDegree": "Canta el grado {degree} de {key}.",
+        "scaleType": "Canta la escala de {key}: nota {place} de {total}.",
+        "nextSharp": "El último sostenido es {note}. Canta el siguiente.",
+        "nextFlat": "El último bemol es {note}. Canta el siguiente.",
+        "circleUp": "Canta la tónica un paso en sentido horario desde {key}.",
+        "circleDown": "Canta la tónica un paso en sentido antihorario desde {key}.",
+        "relativeMinor": "Canta la tónica del relativo menor de {key}.",
+        "relativeMajor": "Canta la tónica del relativo mayor de {key}.",
+        "transposeNote": "En {from} esto es {notes}. Cántalo en {key}.",
+        "transposeMelody": "En {from} esto es {notes}. Cántalo en {key}: nota {place} de {total}."
+      }
+    },
+    "circleOfFifths": "Círculo de quintas"
   },
   "welcome": {
     "title": "Te damos la bienvenida a {app}",

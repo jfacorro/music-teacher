@@ -21,9 +21,10 @@ import { ShortcutButton } from '../components/ShortcutButton';
 import { ICONS } from '../icons';
 import type { ExpectedKey } from '../keyboard/PianoKeyboard';
 import { StepKeyboard } from '../screens/lesson/steps/StepKeyboard';
+import { CircleOfFifths } from '../sheet/CircleOfFifths';
 import { StaffPicture } from '../sheet/StaffPicture';
 import { ShortcutKey } from '../shortcuts';
-import { playSound, stopNotes, useAnswerNames, useCardWords } from './intervalQuiz';
+import { playSound, stopNotes, useCardWords } from './intervalQuiz';
 import { QuizResults } from './QuizResults';
 import { QuizTally } from './QuizTally';
 
@@ -42,7 +43,6 @@ interface QuestionQuizProps {
 
 export function QuestionQuiz({ questions, show, count, onFinish, actions }: QuestionQuizProps) {
   const { t } = useTranslation('screens');
-  const names = useAnswerNames();
   const words = useCardWords(questions);
   // Dealt once; Try again deals new ones.
   const [cards, setCards] = useState(() => theoryQuestions(questions, count));
@@ -146,13 +146,14 @@ export function QuestionQuiz({ questions, show, count, onFinish, actions }: Ques
       <p className="question__prompt">{words.question(card)}</p>
       {show === QuestionShow.Staff && (
         <StaffPicture
-          clef={card.shown[0]!.midi >= MIDDLE_C ? StaffClef.Treble : StaffClef.Bass}
+          clef={(card.shown[0]?.midi ?? MIDDLE_C) >= MIDDLE_C ? StaffClef.Treble : StaffClef.Bass}
           notes={card.shown}
           names={false}
           keyFifths={card.keyFifths}
         />
       )}
       {show === QuestionShow.Keyboard && <StepKeyboard range={keys} highlight={highlight} />}
+      {show === QuestionShow.Circle && <CircleOfFifths marked={card.keyFifths} />}
       <div className="question__choices" role="group" aria-label={t('lesson.question.choices')}>
         {card.choices.map((choice) => (
           <button
@@ -162,7 +163,7 @@ export function QuestionQuiz({ questions, show, count, onFinish, actions }: Ques
             disabled={answered || wrong.includes(choice)}
             onClick={() => choose(choice)}
           >
-            {names.label(choice)}
+            {words.label(choice)}
           </button>
         ))}
       </div>

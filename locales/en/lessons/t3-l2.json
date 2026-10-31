@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "circle": "Put the keys in a ring, each a fifth above the last, and you have the circle of fifths. From {c} at the top, each step clockwise goes up a fifth and adds a sharp.",
+    "clockwise": "Find the key that’s marked, then go one step clockwise.",
+    "flats": "Each step counterclockwise from {c} goes down a fifth and adds a flat. At the bottom the two sides meet.",
+    "counterclockwise": "Now one step the other way.",
+    "build": "Now find it on the keys: the tonic of the next key clockwise, a fifth above the one given.",
+    "signatures": "The circle and the signatures tell the same story. Name each key from its signature."
+  }
+}

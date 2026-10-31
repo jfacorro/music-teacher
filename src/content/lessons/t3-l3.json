@@ -1,0 +1,44 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "relative",
+      "recap": ["u12-l3"],
+      "textVars": {
+        "c": "C4",
+        "a": "A4",
+        "g": "G4",
+        "e": "E4"
+      },
+      "circle": "both"
+    },
+    {
+      "type": "question",
+      "text": "nameIt",
+      "kind": "relativeMinor",
+      "answers": ["Am", "Em", "Bm", "Dm", "Gm", "Cm"],
+      "show": "staff",
+      "count": 6
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "relativeMinor",
+      "answers": ["Am", "Em", "Bm", "Dm", "Gm"],
+      "count": 5
+    },
+    {
+      "type": "explain",
+      "text": "twoKeys",
+      "recap": ["u12-l5"]
+    },
+    {
+      "type": "question",
+      "text": "backUp",
+      "kind": "relativeMajor",
+      "answers": ["C", "G", "D", "F", "Bb", "Eb"],
+      "show": "staff",
+      "count": 6
+    }
+  ]
+}

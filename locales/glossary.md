@@ -189,7 +189,14 @@ system setting (`src/i18n/naming.ts`).
 | Sing it back (ear training)                   | sing back; answer by singing                         | cantar (lo que oíste); responder cantando               |
 | Singing by ear (skill)                        | singing by ear                                       | cantar de oído                                          |
 | Skip (a question)                             | skip                                                 | saltar                                                  |
-| Key note (tonic)                              | key note                                             | tónica                                                  |
+| Key note (tonic)                              | key note, tonic                                      | tónica                                                  |
+| Scale degree                                  | degree                                               | grado                                                   |
+| Dominant (degree 5)                           | dominant                                             | dominante                                               |
+| The major pattern (of steps)                  | the major pattern                                    | el patrón de la escala mayor                            |
+| Circle of fifths                              | circle of fifths                                     | círculo de quintas                                      |
+| Clockwise / counterclockwise                  | clockwise / counterclockwise                         | en sentido horario / antihorario                        |
+| Relative major                                | relative major                                       | relativo mayor                                          |
+| Transposing                                   | transposing                                          | transportar                                             |
 | Sight-singing (section and skill)             | sight-singing                                        | lectura cantada (a primera vista)                       |
 | Reading melodies (skill)                      | reading melodies                                     | leer melodías                                           |
 | Words of a song (lyrics)                      | the words                                            | la letra                                                |

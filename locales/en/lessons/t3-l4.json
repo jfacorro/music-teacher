@@ -1,0 +1,10 @@
+{
+  "steps": {
+    "transposing": "Transposing moves music to another key. Every note keeps its degree, so it’s the same music, only higher or lower. {e} is degree 3 of {c} major; in {g} major, degree 3 is {b}.",
+    "oneNote": "Work out the note’s degree in {c} major, then find that degree in the new key. The new tonic is marked.",
+    "melody": "A melody moves the same way, note by note. Think of it in degrees, not in note names, and it’s easy to carry to any key.",
+    "aMelody": "Move each melody to the new key, note by note, in order.",
+    "why": "Singers do this all the time, to bring a song into their range: it’s what the app does when you sing. Pianists do it to play along with others.",
+    "further": "Further from home now: the same work, with more sharps and flats."
+  }
+}

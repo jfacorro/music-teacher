@@ -670,7 +670,14 @@
         "scaleStep": "In {key}, from note {from} to note {to}: half step or whole step?",
         "scaleDegree": "In {key}, which degree is this?",
         "scaleType": "Major or minor?",
-        "homeNote": "Does the melody end on the tonic?"
+        "homeNote": "Does the melody end on the tonic?",
+        "keySignature": "Which major key has this signature?",
+        "nextSharp": "Which sharp comes next?",
+        "nextFlat": "Which flat comes next?",
+        "circleUp": "One step clockwise from {key}?",
+        "circleDown": "One step counterclockwise from {key}?",
+        "relativeMinor": "What’s the relative minor of {key}?",
+        "relativeMajor": "What’s the relative major of {key}?"
       },
       "choices": "Answers",
       "right": "That’s right!",
@@ -684,12 +691,33 @@
       "singIntro": "The app plays a note, and you sing the one asked for and hold it in tune for half a second. Any octave counts, and each one counts if you sing it within six seconds.",
       "sing": "Now sing it.",
       "hearRoot": "Hear {note} again",
-      "playDegree": "Find degree {degree} of {key}.",
-      "singDegree": "Sing degree {degree} of {key}.",
-      "playScale": "Play the {key} scale, up from the note given.",
-      "singScale": "Sing the {key} scale: note {place} of {total}.",
-      "found": "{found} of {total} so far."
-    }
+      "found": "{found} of {total} so far.",
+      "playing": {
+        "scaleDegree": "Find degree {degree} of {key}.",
+        "scaleType": "Play the {key} scale, up from the note given.",
+        "nextSharp": "The last sharp is {note}. Find the next one.",
+        "nextFlat": "The last flat is {note}. Find the next one.",
+        "circleUp": "Find the tonic one step clockwise from {key}.",
+        "circleDown": "Find the tonic one step counterclockwise from {key}.",
+        "relativeMinor": "Find the tonic of the relative minor of {key}.",
+        "relativeMajor": "Find the tonic of the relative major of {key}.",
+        "transposeNote": "In {from} this is {notes}. Find it in {key}.",
+        "transposeMelody": "In {from} this is {notes}. Play it in {key}."
+      },
+      "singing": {
+        "scaleDegree": "Sing degree {degree} of {key}.",
+        "scaleType": "Sing the {key} scale: note {place} of {total}.",
+        "nextSharp": "The last sharp is {note}. Sing the next one.",
+        "nextFlat": "The last flat is {note}. Sing the next one.",
+        "circleUp": "Sing the tonic one step clockwise from {key}.",
+        "circleDown": "Sing the tonic one step counterclockwise from {key}.",
+        "relativeMinor": "Sing the tonic of the relative minor of {key}.",
+        "relativeMajor": "Sing the tonic of the relative major of {key}.",
+        "transposeNote": "In {from} this is {notes}. Sing it in {key}.",
+        "transposeMelody": "In {from} this is {notes}. Sing it in {key}: note {place} of {total}."
+      }
+    },
+    "circleOfFifths": "Circle of fifths"
   },
   "welcome": {
     "title": "Welcome to {app}",

@@ -6,7 +6,17 @@
  */
 import { IntervalName } from '../theory/chords';
 import { intervalAbove, IntervalNumber, numberAbove } from '../theory/intervals';
-import { keyFifthsOf, Mode, scaleNotes } from '../theory/keys';
+import {
+  FLATS,
+  keyFifthsOf,
+  keyNames,
+  type KeyName,
+  keyTonic,
+  Mode,
+  parseKey,
+  scaleNotes,
+  SHARPS,
+} from '../theory/keys';
 import { makePitch, type Pitch, pitchFromMidi } from '../theory/pitch';
 import { deal } from './quiz';
 
@@ -26,6 +36,20 @@ export const QuestionKind = {
   ScaleType: 'scaleType',
   /** Whether a melody ends on the key note. */
   HomeNote: 'homeNote',
+  /** The major key of a key signature. */
+  KeySignature: 'keySignature',
+  /** The sharp or flat a key signature adds next. */
+  NextAccidental: 'nextAccidental',
+  /** The key one step clockwise on the circle of fifths: a fifth up. */
+  CircleUp: 'circleUp',
+  /** The key one step counterclockwise: a fifth down. */
+  CircleDown: 'circleDown',
+  RelativeMinor: 'relativeMinor',
+  RelativeMajor: 'relativeMajor',
+  /** The same degree of a note of C major, in another key. */
+  TransposeNote: 'transposeNote',
+  /** A short melody in C major, in another key. */
+  TransposeMelody: 'transposeMelody',
 } as const;
 export type QuestionKind = (typeof QuestionKind)[keyof typeof QuestionKind];
 
@@ -57,7 +81,7 @@ export type Ending = (typeof Ending)[keyof typeof Ending];
 /** The answers about the distance between two notes, which read "Find a third above D". */
 export type IntervalAnswer = StepSize | IntervalNumber | IntervalName;
 
-export type QuestionAnswer = IntervalAnswer | ScaleDegree | Mode | Ending;
+export type QuestionAnswer = IntervalAnswer | ScaleDegree | Mode | Ending | KeyName;
 
 /** How a `question` step shows its notes (they're always played too). */
 export const QuestionShow = {
@@ -65,8 +89,12 @@ export const QuestionShow = {
   Keyboard: 'keyboard',
   /** Only played. */
   Ear: 'ear',
+  /** On the circle of fifths, with the key it starts from marked. */
+  Circle: 'circle',
 } as const;
 export type QuestionShow = (typeof QuestionShow)[keyof typeof QuestionShow];
+
+const MAJOR_KEYS = keyNames(Mode.Major);
 
 const ANSWERS: Readonly<Record<QuestionKind, readonly QuestionAnswer[]>> = {
   [QuestionKind.StepSize]: Object.values(StepSize),
@@ -76,19 +104,49 @@ const ANSWERS: Readonly<Record<QuestionKind, readonly QuestionAnswer[]>> = {
   [QuestionKind.ScaleDegree]: DEGREES,
   [QuestionKind.ScaleType]: Object.values(Mode),
   [QuestionKind.HomeNote]: Object.values(Ending),
+  [QuestionKind.KeySignature]: MAJOR_KEYS,
+  [QuestionKind.NextAccidental]: [
+    ...SHARPS.slice(1).map((step): KeyName => `${step}#`),
+    ...FLATS.slice(1).map((step): KeyName => `${step}b`),
+  ],
+  [QuestionKind.CircleUp]: MAJOR_KEYS,
+  [QuestionKind.CircleDown]: MAJOR_KEYS,
+  [QuestionKind.RelativeMinor]: keyNames(Mode.Minor),
+  [QuestionKind.RelativeMajor]: MAJOR_KEYS,
+  [QuestionKind.TransposeNote]: DEGREES,
+  [QuestionKind.TransposeMelody]: Object.values(Ending),
 };
 
 export const answersOf = (kind: QuestionKind): readonly QuestionAnswer[] => ANSWERS[kind];
 
-/** The kinds a `build` step can't ask: there's nothing on the keys to find. */
-export const NOT_BUILT: readonly QuestionKind[] = [QuestionKind.ScaleStep, QuestionKind.HomeNote];
+/** The kinds a `build` step can't ask: there's nothing on the keys to find from a note given. */
+export const NOT_BUILT: readonly QuestionKind[] = [
+  QuestionKind.ScaleStep,
+  QuestionKind.HomeNote,
+  QuestionKind.KeySignature,
+];
 /** The kinds with nothing to show: they're only heard. */
 export const ONLY_HEARD: readonly QuestionKind[] = [QuestionKind.HomeNote];
+/** The kinds a `question` step can't ask: the answer is notes to find. */
+export const NOT_ASKED: readonly QuestionKind[] = [
+  QuestionKind.TransposeNote,
+  QuestionKind.TransposeMelody,
+];
+/** The kinds whose answers name a key or a note, so they need no roots: each answer has its own. */
+export const ANSWERS_ARE_ROOTS: readonly QuestionKind[] = [
+  QuestionKind.KeySignature,
+  QuestionKind.NextAccidental,
+  QuestionKind.CircleUp,
+  QuestionKind.CircleDown,
+  QuestionKind.RelativeMinor,
+  QuestionKind.RelativeMajor,
+];
 
 /** What a step can ask: the answers, and the notes or key notes its questions start from. */
 export interface QuestionSet {
   kind: QuestionKind;
   answers: readonly QuestionAnswer[];
+  /** Filled in from the answers for `ANSWERS_ARE_ROOTS`. */
   roots: readonly Pitch[];
   /** The scale asked about, for the kinds that ask about one. */
   mode: Mode;
@@ -170,6 +228,9 @@ const MELODIES: Readonly<Record<Ending, readonly (readonly number[])[]>> = {
   ],
 };
 
+/** Transposing starts from here. */
+export const TRANSPOSE_FROM = makePitch('C', 0, 4);
+
 /**
  * The card for an answer from a root.
  * @throws RangeError when it can't be spelled
@@ -237,6 +298,95 @@ export function cardFor(
         sound: [tonicChord(scale), ...melody.map((place) => [scaleNote(scale, place)])],
         keyFifths: keyFifthsOf(root, mode),
         targets: [],
+        degree: 0,
+      };
+    }
+    case QuestionKind.KeySignature: {
+      const { tonic, mode: keyMode } = parseKey(answer as KeyName);
+      return {
+        answer,
+        root: tonic,
+        shown: [],
+        sound: [tonicChord(scaleNotes(tonic, keyMode))],
+        keyFifths: keyFifthsOf(tonic, keyMode),
+        targets: [tonic],
+        degree: 0,
+      };
+    }
+    case QuestionKind.NextAccidental: {
+      const { tonic: next } = parseKey(answer as KeyName);
+      const sharp = next.alter > 0;
+      const order = sharp ? SHARPS : FLATS;
+      const place = order.indexOf(next.step);
+      const last = makePitch(order[place - 1]!, next.alter, next.octave);
+      return {
+        answer,
+        root: last,
+        shown: [],
+        sound: [[last]],
+        keyFifths: sharp ? place : -place,
+        targets: [
+          intervalAbove(last, sharp ? IntervalName.PerfectFifth : IntervalName.PerfectFourth),
+        ],
+        degree: 0,
+      };
+    }
+    case QuestionKind.CircleUp:
+    case QuestionKind.CircleDown: {
+      const { tonic: target } = parseKey(answer as KeyName);
+      const fifths = keyFifthsOf(target, Mode.Major) + (kind === QuestionKind.CircleUp ? -1 : 1);
+      const from = keyTonic(fifths, Mode.Major);
+      return {
+        answer,
+        root: from,
+        shown: [],
+        sound: [[from]],
+        keyFifths: fifths,
+        targets: [target],
+        degree: 0,
+      };
+    }
+    case QuestionKind.RelativeMinor:
+    case QuestionKind.RelativeMajor: {
+      const { tonic: target, mode: targetMode } = parseKey(answer as KeyName);
+      const fifths = keyFifthsOf(target, targetMode);
+      const fromMode = targetMode === Mode.Major ? Mode.Minor : Mode.Major;
+      const from = keyTonic(fifths, fromMode);
+      return {
+        answer,
+        root: from,
+        shown: [],
+        sound: [tonicChord(scaleNotes(from, fromMode))],
+        keyFifths: fifths,
+        targets: [target],
+        degree: 0,
+      };
+    }
+    case QuestionKind.TransposeNote: {
+      const place = DEGREES.indexOf(answer as ScaleDegree);
+      return {
+        answer,
+        root,
+        shown: [scaleNotes(TRANSPOSE_FROM, Mode.Major)[place]!],
+        sound: [[root]],
+        keyFifths: keyFifthsOf(root, Mode.Major),
+        targets: [scaleNotes(root, Mode.Major)[place]!],
+        degree: place + 1,
+      };
+    }
+    case QuestionKind.TransposeMelody: {
+      const melody = pick(MELODIES[answer as Ending], random);
+      const inKey = (tonic: Pitch) => {
+        const scale = scaleNotes(tonic, Mode.Major);
+        return melody.map((place) => scaleNote(scale, place));
+      };
+      return {
+        answer,
+        root,
+        shown: inKey(TRANSPOSE_FROM),
+        sound: [[root]],
+        keyFifths: keyFifthsOf(root, Mode.Major),
+        targets: inKey(root),
         degree: 0,
       };
     }

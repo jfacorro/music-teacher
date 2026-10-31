@@ -32,7 +32,9 @@ import { GradedMode, HandFilter } from '../../engine/session';
 import { SingMode } from '../../engine/singing';
 import {
   answersOf,
+  ANSWERS_ARE_ROOTS,
   cardFor,
+  NOT_ASKED,
   NOT_BUILT,
   ONLY_HEARD,
   QuestionKind,
@@ -43,7 +45,7 @@ import {
 import { describeValues, isValueOf } from '../../lib/values';
 import { ChordQuality } from '../../theory/chords';
 import { Mode } from '../../theory/keys';
-import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
+import { InvalidNoteError, parseNote, type Pitch, pitchOf } from '../../theory/pitch';
 import { ScaleQuality, type TextVar } from '../textVars';
 import { ScoreError, parseInlineScore } from '../loaders/inlineScore';
 import { isSongId, loadSong, type SongId } from '../songs';
@@ -84,8 +86,17 @@ export const StaffClef = {
 } as const;
 export type StaffClef = (typeof StaffClef)[keyof typeof StaffClef];
 
+/** Which keys the circle of fifths shows. */
+export const CircleRings = {
+  Major: 'major',
+  /** With the relative minors in an inner ring. */
+  Both: 'both',
+} as const;
+export type CircleRings = (typeof CircleRings)[keyof typeof CircleRings];
+
 export interface StaffNotes {
   clef: StaffClef;
+  /** May be empty, with a key signature to show. */
   notes: Pitch[];
   /** Write each note's name under it. */
   names: boolean;
@@ -94,6 +105,7 @@ export interface StaffNotes {
    * after it as in music; otherwise each note stands alone.
    */
   bar: boolean;
+  keyFifths: number;
 }
 
 export interface ExplainStep extends StepBase {
@@ -105,6 +117,8 @@ export interface ExplainStep extends StepBase {
   staff: StaffNotes | null;
   /** A few bars of music shown above the keyboard, e.g. to show a mark (an inline score). */
   music: Score | null;
+  /** The circle of fifths, shown above the keyboard. */
+  circle: CircleRings | null;
   /** The lessons that teach this too: it folds to one line once one of them is done. */
   recap: string[];
 }
@@ -267,6 +281,9 @@ export interface BuildStep extends StepBase {
 
 export const QUIZ_CARDS_DEFAULT = 10;
 
+/** The root of a kind that takes it from its answer: it's only there to deal the same number. */
+const MIDDLE_C_PITCH = pitchOf('C4');
+
 export type LessonStep =
   | ExplainStep
   | FindStep
@@ -334,6 +351,7 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
         range: range(data.range, at(location, 'range')),
         staff: data.staff === undefined ? null : staffNotes(data.staff, at(location, 'staff')),
         music: data.music === undefined ? null : inlineScore(data.music, at(location, 'music')),
+        circle: circleRings(data.circle, at(location, 'circle')),
         recap: lessonIds(data.recap, at(location, 'recap')),
       };
     case StepType.Find: {
@@ -400,6 +418,9 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
         throw new LessonError(at(location, 'show'), `expected ${describeValues(QuestionShow)}`);
       }
       const questions = questionSet(data, location);
+      if (NOT_ASKED.includes(questions.kind)) {
+        throw new LessonError(at(location, 'kind'), `"${questions.kind}" isn’t a question`);
+      }
       if (ONLY_HEARD.includes(questions.kind) && data.show !== QuestionShow.Ear) {
         throw new LessonError(at(location, 'show'), `"${questions.kind}" is only heard`);
       }
@@ -430,6 +451,19 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
   }
 }
 
+function questionRoots(
+  data: Record<string, unknown>,
+  kind: QuestionKind,
+  answers: readonly QuestionAnswer[],
+  location: string,
+): Pitch[] {
+  if (ANSWERS_ARE_ROOTS.includes(kind)) return answers.map(() => MIDDLE_C_PITCH);
+  if (!Array.isArray(data.roots) || data.roots.length === 0) {
+    throw new LessonError(at(location, 'roots'), 'expected a non-empty array of notes');
+  }
+  return data.roots.map((note, i) => pitch(note, at(location, `roots[${i}]`)));
+}
+
 function questionSet(data: Record<string, unknown>, location: string): QuestionSet {
   const { kind } = data;
   if (!isValueOf(QuestionKind, kind)) {
@@ -438,16 +472,13 @@ function questionSet(data: Record<string, unknown>, location: string): QuestionS
   if (!Array.isArray(data.answers) || data.answers.length === 0) {
     throw new LessonError(at(location, 'answers'), 'expected a non-empty array');
   }
-  if (!Array.isArray(data.roots) || data.roots.length === 0) {
-    throw new LessonError(at(location, 'roots'), 'expected a non-empty array of notes');
-  }
   const answers = data.answers.map((answer: unknown, i): QuestionAnswer => {
     if (!answersOf(kind).includes(answer as QuestionAnswer)) {
       throw new LessonError(at(location, `answers[${i}]`), `not an answer to "${kind}"`);
     }
     return answer as QuestionAnswer;
   });
-  const roots = data.roots.map((note, i) => pitch(note, at(location, `roots[${i}]`)));
+  const roots = questionRoots(data, kind, answers, location);
   const mode = data.mode ?? Mode.Major;
   if (!isValueOf(Mode, mode)) {
     throw new LessonError(at(location, 'mode'), `expected ${describeValues(Mode)}`);
@@ -463,6 +494,14 @@ function questionSet(data: Record<string, unknown>, location: string): QuestionS
     }
   }
   return { kind, answers, roots, mode };
+}
+
+function circleRings(input: unknown, location: string): CircleRings | null {
+  if (input === undefined) return null;
+  if (!isValueOf(CircleRings, input)) {
+    throw new LessonError(location, `expected ${describeValues(CircleRings)}`);
+  }
+  return input;
 }
 
 async function sing(
@@ -730,7 +769,8 @@ function staffNotes(input: unknown, location: string): StaffNotes {
   if (!isValueOf(StaffClef, data.clef)) {
     throw new LessonError(at(location, 'clef'), `expected ${describeValues(StaffClef)}`);
   }
-  if (!Array.isArray(data.notes) || data.notes.length === 0) {
+  const signature = typeof data.keyFifths === 'number';
+  if (!Array.isArray(data.notes) || (data.notes.length === 0 && !signature)) {
     throw new LessonError(at(location, 'notes'), 'expected a non-empty array of notes');
   }
   return {
@@ -738,6 +778,7 @@ function staffNotes(input: unknown, location: string): StaffNotes {
     notes: data.notes.map((note, i) => pitch(note, at(location, `notes[${i}]`))),
     names: data.names === true,
     bar: data.bar === true,
+    keyFifths: signature ? (data.keyFifths as number) : 0,
   };
 }
 

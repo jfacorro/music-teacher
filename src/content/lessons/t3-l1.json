@@ -1,0 +1,82 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "sharps",
+      "textVars": {
+        "f": "F#4",
+        "c": "C#5",
+        "g": "G#4",
+        "d": "D#5",
+        "a": "A#4",
+        "e": "E#5",
+        "b": "B#4"
+      },
+      "staff": {
+        "clef": "treble",
+        "notes": [],
+        "keyFifths": 7
+      }
+    },
+    {
+      "type": "question",
+      "text": "nextSharp",
+      "kind": "nextAccidental",
+      "answers": ["C#", "G#", "D#", "A#", "E#"],
+      "show": "staff",
+      "count": 6
+    },
+    {
+      "type": "explain",
+      "text": "flats",
+      "textVars": {
+        "b": "Bb4",
+        "e": "Eb4",
+        "a": "Ab4",
+        "d": "Db4",
+        "g": "Gb4",
+        "c": "Cb4",
+        "f": "Fb4"
+      },
+      "staff": {
+        "clef": "treble",
+        "notes": [],
+        "keyFifths": -7
+      }
+    },
+    {
+      "type": "question",
+      "text": "nextFlat",
+      "kind": "nextAccidental",
+      "answers": ["Eb", "Ab", "Db", "Gb", "Cb"],
+      "show": "staff",
+      "count": 6
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "nextAccidental",
+      "answers": ["C#", "G#", "D#", "Eb", "Ab", "Db"],
+      "count": 6
+    },
+    {
+      "type": "explain",
+      "text": "reading",
+      "textVars": {
+        "d": "D4",
+        "bFlat": "Bb4",
+        "f": "F4",
+        "cSharp": "C#5",
+        "eFlat": "Eb4"
+      }
+    },
+    {
+      "type": "question",
+      "text": "nameTheKey",
+      "kind": "keySignature",
+      "answers": ["F", "Bb", "Eb", "Ab", "G", "D", "A", "E"],
+      "show": "staff",
+      "count": 8
+    }
+  ]
+}

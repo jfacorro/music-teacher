@@ -57,7 +57,7 @@ export function StaffPicture({ clef, notes, names, bar = false, keyFifths }: Sta
         hand: hand(pitch),
       })),
       measures: Array.from(
-        { length: bar ? Math.ceil(notes.length / BAR_BEATS) : notes.length },
+        { length: Math.max(1, bar ? Math.ceil(notes.length / BAR_BEATS) : notes.length) },
         (_, i) => ({ start: i * BAR_BEATS, length: BAR_BEATS }),
       ),
     };

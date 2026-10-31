@@ -89,6 +89,10 @@ export const SKILLS = [
   'scale-degrees',
   'tonic-and-home',
   'minor-pattern',
+  'key-signature-order',
+  'circle-of-fifths',
+  'relative-keys',
+  'transposing',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];

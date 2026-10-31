@@ -1,6 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { formatNote, pitchOf } from './pitch';
-import { keyAlterOf, keyFifthsOf, keyNoteNear, keyStepOf, Mode, scaleNotes } from './keys';
+import {
+  keyAlterOf,
+  keyFifthsOf,
+  keyNames,
+  keyNoteNear,
+  keyStepOf,
+  keyTonic,
+  Mode,
+  parseKey,
+  scaleNotes,
+} from './keys';
 
 describe('a key', () => {
   it('finds its signature', () => {
@@ -10,6 +20,27 @@ describe('a key', () => {
       0, 1, 2, -1, -2, 6, -7,
     ]);
     expect(['A4', 'E4', 'D4', 'G4'].map((n) => minor(n as 'A4'))).toEqual([0, 1, -1, -2]);
+  });
+
+  it('finds its note from a signature, and back', () => {
+    expect(formatNote(keyTonic(-2, Mode.Major))).toBe('Bb4');
+    expect(formatNote(keyTonic(2, Mode.Minor))).toBe('B4');
+    expect(() => keyTonic(8, Mode.Major)).toThrow(RangeError);
+    for (const mode of Object.values(Mode)) {
+      for (const name of keyNames(mode)) {
+        const key = parseKey(name);
+        expect(key.mode).toBe(mode);
+        expect(keyTonic(keyFifthsOf(key.tonic, mode), mode)).toEqual(key.tonic);
+      }
+    }
+  });
+
+  it('is written as lessons write it', () => {
+    expect(formatNote(parseKey('F#m').tonic)).toBe('F#4');
+    expect(parseKey('F#m').mode).toBe(Mode.Minor);
+    expect(parseKey('Bb').mode).toBe(Mode.Major);
+    expect(keyNames(Mode.Major)).toContain('Gb');
+    expect(keyNames(Mode.Minor)).toContain('C#m');
   });
 
   it('has no signature when it would need a double sharp', () => {

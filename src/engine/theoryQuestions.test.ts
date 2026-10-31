@@ -9,6 +9,7 @@ import {
   cardFor,
   Ending,
   type IntervalAnswer,
+  type QuestionAnswer,
   keysFor,
   MAX_CHOICES,
   noteAbove,
@@ -200,6 +201,70 @@ describe('cards about scales', () => {
     expect(Math.min(...midis)).toBeGreaterThanOrEqual(range.low);
     expect(Math.max(...midis)).toBeLessThanOrEqual(range.high);
     expect(card!.targets.at(-1)!.midi).toBe(Math.max(...midis));
+  });
+});
+
+describe('cards about keys', () => {
+  const card = (kind: QuestionKind, answer: QuestionAnswer, root = pitchOf('G4')) =>
+    cardFor({ kind, mode: Mode.Major }, answer, root);
+  const names = (notes: readonly Pitch[]) => notes.map(formatNote);
+
+  it('shows only the signature of the key asked', () => {
+    const asked = card(QuestionKind.KeySignature, 'Eb');
+    expect(asked.shown).toEqual([]);
+    expect(asked.keyFifths).toBe(-3);
+    expect(names(asked.sound[0]!)).toEqual(['Eb4', 'G4', 'Bb4']);
+  });
+
+  it('asks for the next sharp a fifth up, and the next flat a fourth up', () => {
+    const sharp = card(QuestionKind.NextAccidental, 'G#');
+    expect(sharp.keyFifths).toBe(2);
+    expect(formatNote(sharp.root)).toBe('C#4');
+    expect(names(sharp.targets)).toEqual(['G#4']);
+    const flat = card(QuestionKind.NextAccidental, 'Ab');
+    expect(flat.keyFifths).toBe(-2);
+    expect(formatNote(flat.root)).toBe('Eb4');
+    expect(names(flat.targets)).toEqual(['Ab4']);
+  });
+
+  it('can’t ask what comes after nothing', () => {
+    expect(answersOf(QuestionKind.NextAccidental)).not.toContain('F#');
+    expect(answersOf(QuestionKind.NextAccidental)).not.toContain('Bb');
+  });
+
+  it('starts from the neighbor on the circle', () => {
+    const up = card(QuestionKind.CircleUp, 'D');
+    expect(formatNote(up.root)).toBe('G4');
+    expect(up.keyFifths).toBe(1);
+    const down = card(QuestionKind.CircleDown, 'Bb');
+    expect(formatNote(down.root)).toBe('F4');
+    expect(down.keyFifths).toBe(-1);
+    expect(formatNote(card(QuestionKind.CircleUp, 'C').root)).toBe('F4');
+  });
+
+  it('keeps the signature between relative keys', () => {
+    const minor = card(QuestionKind.RelativeMinor, 'Bm');
+    expect(formatNote(minor.root)).toBe('D4');
+    expect(minor.keyFifths).toBe(2);
+    expect(names(minor.targets)).toEqual(['B4']);
+    const major = card(QuestionKind.RelativeMajor, 'Bb');
+    expect(formatNote(major.root)).toBe('G4');
+    expect(major.keyFifths).toBe(-2);
+  });
+
+  it('keeps a note’s degree when it moves to another key', () => {
+    const moved = card(QuestionKind.TransposeNote, ScaleDegree.Third);
+    expect(names(moved.shown)).toEqual(['E4']);
+    expect(names(moved.targets)).toEqual(['B4']);
+  });
+
+  it('keeps a melody’s shape when it moves to another key', () => {
+    const moved = card(QuestionKind.TransposeMelody, Ending.Home, pitchOf('D4'));
+    expect(moved.shown.at(-1)!.step).toBe('C');
+    expect(moved.targets.at(-1)!.step).toBe('D');
+    const shape = (notes: readonly Pitch[]) =>
+      notes.map((note) => note.midi - notes[0]!.midi).map((gap) => Math.sign(gap));
+    expect(shape(moved.targets)).toEqual(shape(moved.shown));
   });
 });
 

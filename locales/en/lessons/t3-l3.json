@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "relative": "Every major key shares its signature with a minor key, its relative minor, whose tonic is degree 6 of the major scale, three half steps below the major tonic. {c} major and {a} minor have no sharps or flats; {g} major and {e} minor have one sharp. On the circle, it’s the inner ring.",
+    "nameIt": "Go down three half steps from the major tonic to name its relative minor.",
+    "build": "Now find its tonic on the keys, from the major tonic given.",
+    "twoKeys": "So one signature means two keys. To tell which, look at where the music comes to rest: the last note, usually the tonic, settles it.",
+    "backUp": "Now the other way: go up three half steps from the minor tonic."
+  }
+}

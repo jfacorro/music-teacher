@@ -1,0 +1,49 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "transposing",
+      "textVars": {
+        "c": "C4",
+        "e": "E4",
+        "g": "G4",
+        "b": "B4"
+      }
+    },
+    {
+      "type": "build",
+      "text": "oneNote",
+      "kind": "transposeNote",
+      "answers": ["degree2", "degree3", "degree4", "degree5", "degree6", "degree7"],
+      "roots": ["G4", "F4", "D4"],
+      "count": 6,
+      "textVars": {
+        "c": "C4"
+      }
+    },
+    {
+      "type": "explain",
+      "text": "melody"
+    },
+    {
+      "type": "build",
+      "text": "aMelody",
+      "kind": "transposeMelody",
+      "answers": ["home"],
+      "roots": ["G4", "F4", "D4"],
+      "count": 3
+    },
+    {
+      "type": "explain",
+      "text": "why"
+    },
+    {
+      "type": "build",
+      "text": "further",
+      "kind": "transposeMelody",
+      "answers": ["home", "away"],
+      "roots": ["A4", "Bb4", "E4"],
+      "count": 3
+    }
+  ]
+}

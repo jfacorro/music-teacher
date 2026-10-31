@@ -2462,6 +2462,41 @@ button.bars__bar:focus-visible {
   margin-inline: auto;
 }
 
+/* The circle of fifths, in lessons. */
+.circle-fifths {
+  max-width: 20rem;
+  margin: 0 auto 1rem;
+}
+
+.circle-fifths svg {
+  display: block;
+  width: 100%;
+}
+
+.circle-fifths circle {
+  fill: var(--surface);
+  stroke: var(--border);
+}
+
+.circle-fifths text {
+  fill: var(--text);
+  font-size: 0.8rem;
+}
+
+.circle-fifths .is-marked circle {
+  fill: var(--accent);
+}
+
+.circle-fifths .is-marked text {
+  fill: var(--accent-text);
+  font-weight: 600;
+}
+
+.circle-fifths text.circle-fifths__minor {
+  fill: var(--muted);
+  font-size: 0.7rem;
+}
+
 .staff-picture {
   max-width: 720px;
   margin-block-end: 1rem;

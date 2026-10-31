@@ -13,8 +13,8 @@ export const Mode = {
 export type Mode = (typeof Mode)[keyof typeof Mode];
 
 /** Sharps and flats in the order key signatures add them. */
-const SHARPS: readonly Step[] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
-const FLATS: readonly Step[] = [...SHARPS].reverse();
+export const SHARPS: readonly Step[] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
+export const FLATS: readonly Step[] = [...SHARPS].reverse();
 
 /** The key note's letter for a key signature (its major key). */
 export function keyStepOf(keyFifths: number): Step {
@@ -32,11 +32,49 @@ export function keyAlterOf(step: Step, keyFifths: number): Alter {
 const MOST_FIFTHS = 7;
 /** How many letters up from a major key's note to its relative minor's. */
 const TO_RELATIVE_MINOR = 5;
+/** The octave a key's note is given in, when it isn't a note yet. */
+const TONIC_OCTAVE = 4;
 
 function keyNote(keyFifths: number, mode: Mode): { step: Step; alter: Alter } {
   const major = STEPS.indexOf(keyStepOf(keyFifths));
   const step = STEPS[(major + (mode === Mode.Minor ? TO_RELATIVE_MINOR : 0)) % STEPS.length]!;
   return { step, alter: keyAlterOf(step, keyFifths) };
+}
+
+/**
+ * The key note of a key signature's major or minor key, around middle C.
+ * @throws RangeError when no signature has that many sharps or flats
+ */
+export function keyTonic(keyFifths: number, mode: Mode): Pitch {
+  if (Math.abs(keyFifths) > MOST_FIFTHS) throw new RangeError(`No signature of ${keyFifths}`);
+  const { step, alter } = keyNote(keyFifths, mode);
+  return makePitch(step, alter, TONIC_OCTAVE);
+}
+
+/** A note's name without its octave, as lessons write keys: "Bb", or "F#m" for its minor key. */
+export type NoteName = `${Step}${'' | '#' | 'b'}`;
+export type KeyName = `${NoteName}${'' | 'm'}`;
+
+const ALTERS: Readonly<Record<string, Alter>> = { '': 0, '#': 1, b: -1 };
+const SIGNS: Readonly<Record<number, string>> = { 0: '', 1: '#', [-1]: 'b' };
+
+/** A key name's key note, around middle C, and mode. */
+export function parseKey(name: KeyName): { tonic: Pitch; mode: Mode } {
+  const minor = name.endsWith('m');
+  const letters = minor ? name.slice(0, -1) : name;
+  const alter = ALTERS[letters.slice(1)]!;
+  return {
+    tonic: makePitch(letters[0] as Step, alter, TONIC_OCTAVE),
+    mode: minor ? Mode.Minor : Mode.Major,
+  };
+}
+
+/** Every key a signature has, widest flats first, as lessons write them. */
+export function keyNames(mode: Mode): KeyName[] {
+  return Array.from({ length: 2 * MOST_FIFTHS + 1 }, (_, i) => {
+    const { step, alter } = keyNote(i - MOST_FIFTHS, mode);
+    return `${step}${SIGNS[alter]}${mode === Mode.Minor ? 'm' : ''}` as KeyName;
+  });
 }
 
 /**
