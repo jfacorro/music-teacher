@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "minor": "La escala menor tiene su propio patrón: tono, semitono, tono, tono, semitono, tono, tono. Desde la misma nota que la escala mayor, sus grados 3, 6 y 7 están un semitono más abajo. {a} menor usa solo teclas blancas, de {a} al {a} siguiente.",
+    "hearScale": "Escucha cada escala, hacia arriba desde su tónica. La tercera nota te lo dice: en menor suena más baja y más oscura.",
+    "build": "Ahora construye escalas menores. Te damos la tónica: busca las demás en orden, siguiendo el patrón menor.",
+    "seventh": "Las melodías en menor suelen subir el grado 7 al volver a la tónica, para que quede a un semitono de ella, como {gSharp} en {a} menor. Esa nota se escribe entonces con una alteración, porque la armadura no la lleva.",
+    "degrees": "Los grados funcionan igual en menor. Lee la nota en el pentagrama y cuenta desde la tónica."
+  }
+}

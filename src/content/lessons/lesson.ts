@@ -15,8 +15,8 @@
  * - sing:     sing a melody (one note at a time), moved into the singer's range: waiting for
  *             each note, along with it, or after listening first (see engine/singing.ts); an
  *             inline score, or a song with words (its melody, the piano playing the rest)
- * - question: theory: two notes, and a choice of answers (see engine/theoryQuestions.ts)
- * - build:    theory: find the note an interval leads to, by playing or singing
+ * - question: theory: notes shown or heard, and a choice of answers (engine/theoryQuestions.ts)
+ * - build:    theory: find the notes something leads to, by playing or singing
  */
 import { parseRhythm, RhythmError, RHYTHM_NOTE } from '../../engine/rhythm';
 import { songParts } from '../../engine/lyrics';
@@ -32,14 +32,17 @@ import { GradedMode, HandFilter } from '../../engine/session';
 import { SingMode } from '../../engine/singing';
 import {
   answersOf,
-  type IntervalSet,
-  noteAbove,
+  cardFor,
+  NOT_BUILT,
+  ONLY_HEARD,
   QuestionKind,
   type QuestionAnswer,
+  type QuestionSet,
   QuestionShow,
 } from '../../engine/theoryQuestions';
 import { describeValues, isValueOf } from '../../lib/values';
 import { ChordQuality } from '../../theory/chords';
+import { Mode } from '../../theory/keys';
 import { InvalidNoteError, parseNote, type Pitch } from '../../theory/pitch';
 import { ScaleQuality, type TextVar } from '../textVars';
 import { ScoreError, parseInlineScore } from '../loaders/inlineScore';
@@ -241,23 +244,23 @@ export interface SingStep extends StepBase {
   pass: { minStars: number };
 }
 
-/** Theory: two notes, shown and played or only played, and a choice of answers. */
+/** Theory: notes shown and played or only played, and a choice of answers. */
 export interface QuestionStep extends StepBase {
   type: typeof StepType.Question;
   /** What's asked, and the notes the questions start from. */
-  questions: IntervalSet;
+  questions: QuestionSet;
   show: QuestionShow;
   /** How many questions. */
   count: number;
   pass: { minStars: number };
 }
 
-/** Theory: find the note an interval leads to, on the keyboard or sung, as the learner chose. */
+/** Theory: find the notes something leads to, on the keyboard or sung, as the learner chose. */
 export interface BuildStep extends StepBase {
   type: typeof StepType.Build;
   /** What's asked, and the notes given. */
-  questions: IntervalSet;
-  /** How many notes. */
+  questions: QuestionSet;
+  /** How many cards. */
   count: number;
   pass: { minStars: number };
 }
@@ -396,29 +399,38 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
       if (!isValueOf(QuestionShow, data.show)) {
         throw new LessonError(at(location, 'show'), `expected ${describeValues(QuestionShow)}`);
       }
+      const questions = questionSet(data, location);
+      if (ONLY_HEARD.includes(questions.kind) && data.show !== QuestionShow.Ear) {
+        throw new LessonError(at(location, 'show'), `"${questions.kind}" is only heard`);
+      }
       return {
         ...base,
         type: StepType.Question,
-        questions: intervalSet(data, location),
+        questions,
         show: data.show,
         count: cardCount(data, location),
         pass: passRule(data, location),
       };
     }
-    case StepType.Build:
+    case StepType.Build: {
+      const questions = questionSet(data, location);
+      if (NOT_BUILT.includes(questions.kind)) {
+        throw new LessonError(at(location, 'kind'), `nothing to find in "${questions.kind}"`);
+      }
       return {
         ...base,
         type: StepType.Build,
-        questions: intervalSet(data, location),
+        questions,
         count: cardCount(data, location),
         pass: passRule(data, location),
       };
+    }
     default:
       throw new LessonError(at(location, 'type'), `expected ${describeValues(StepType)}`);
   }
 }
 
-function intervalSet(data: Record<string, unknown>, location: string): IntervalSet {
+function questionSet(data: Record<string, unknown>, location: string): QuestionSet {
   const { kind } = data;
   if (!isValueOf(QuestionKind, kind)) {
     throw new LessonError(at(location, 'kind'), `expected ${describeValues(QuestionKind)}`);
@@ -436,17 +448,21 @@ function intervalSet(data: Record<string, unknown>, location: string): IntervalS
     return answer as QuestionAnswer;
   });
   const roots = data.roots.map((note, i) => pitch(note, at(location, `roots[${i}]`)));
-  // Every answer has to lead to a note from every root, or a question couldn't be dealt.
+  const mode = data.mode ?? Mode.Major;
+  if (!isValueOf(Mode, mode)) {
+    throw new LessonError(at(location, 'mode'), `expected ${describeValues(Mode)}`);
+  }
+  // Every answer has to work from every root, or a question couldn't be dealt.
   for (const [i, root] of roots.entries()) {
     for (const answer of answers) {
       try {
-        noteAbove(kind, answer, root);
+        cardFor({ kind, mode }, answer, root);
       } catch {
         throw new LessonError(at(location, `roots[${i}]`), `no "${answer}" above this note`);
       }
     }
   }
-  return { kind, answers, roots };
+  return { kind, answers, roots, mode };
 }
 
 async function sing(

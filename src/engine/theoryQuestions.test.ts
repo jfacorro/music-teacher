@@ -1,24 +1,31 @@
 import { describe, expect, it } from 'vitest';
 import { IntervalName } from '../theory/chords';
 import { IntervalNumber } from '../theory/intervals';
-import { formatNote, pitchesOf, pitchOf } from '../theory/pitch';
+import { Mode } from '../theory/keys';
+import { formatNote, type Pitch, pitchesOf, pitchOf } from '../theory/pitch';
 import {
   answersOf,
   buildCards,
-  type IntervalSet,
+  cardFor,
+  Ending,
+  type IntervalAnswer,
   keysFor,
   MAX_CHOICES,
   noteAbove,
+  ScaleDegree,
   QuestionKind,
+  type QuestionSet,
   singCards,
   StepSize,
+  sungNotes,
   theoryQuestions,
 } from './theoryQuestions';
 
-const thirds: IntervalSet = {
+const thirds: QuestionSet = {
   kind: QuestionKind.IntervalName,
   answers: [IntervalName.MinorThird, IntervalName.MajorThird],
   roots: pitchesOf('C4', 'D4', 'F4'),
+  mode: Mode.Major,
 };
 
 describe('noteAbove', () => {
@@ -31,10 +38,16 @@ describe('noteAbove', () => {
     expect(above(QuestionKind.IntervalName, IntervalName.MajorThird)).toBe('F#4');
   });
 
-  it('knows every answer of every kind', () => {
-    for (const kind of Object.values(QuestionKind)) {
+  it('knows every answer of every kind about a distance', () => {
+    const distances = [
+      QuestionKind.StepSize,
+      QuestionKind.IntervalNumber,
+      QuestionKind.IntervalName,
+    ];
+    for (const kind of distances) {
       for (const answer of answersOf(kind)) {
-        expect(noteAbove(kind, answer, pitchOf('C4')).midi).toBeGreaterThan(60);
+        const above = noteAbove(kind, answer as IntervalAnswer, pitchOf('C4'));
+        expect(above.midi).toBeGreaterThan(60);
       }
     }
   });
@@ -47,7 +60,8 @@ describe('theoryQuestions', () => {
     expect(count(IntervalName.MinorThird)).toBe(4);
     expect(count(IntervalName.MajorThird)).toBe(4);
     for (const question of questions) {
-      expect(question.top).toEqual(noteAbove(thirds.kind, question.answer, question.root));
+      const answer = question.answer as IntervalAnswer;
+      expect(question.targets).toEqual([noteAbove(thirds.kind, answer, question.root)]);
     }
   });
 
@@ -76,14 +90,14 @@ describe('singCards', () => {
     const set = { ...thirds, roots: pitchesOf('C6') };
     for (const card of singCards(set, 4, range)) {
       expect(card.root.midi).toBeGreaterThanOrEqual(range.low);
-      expect(card.top.midi).toBeLessThanOrEqual(range.high);
+      expect(card.targets[0]!.midi).toBeLessThanOrEqual(range.high);
       expect(card.root.midi).toBe(60);
     }
   });
 
   it('keeps the spelling when it moves them', () => {
     const set = { ...thirds, answers: [IntervalName.MajorThird], roots: pitchesOf('D6') };
-    expect(formatNote(singCards(set, 1, range)[0]!.top)).toMatch(/^F#\d$/);
+    expect(formatNote(singCards(set, 1, range)[0]!.targets[0]!)).toMatch(/^F#\d$/);
   });
 
   it('doesn’t ask for an octave, which the note given would match', () => {
@@ -94,6 +108,125 @@ describe('singCards', () => {
     for (const card of singCards(set, 8, range)) {
       expect(card.answer).toBe(IntervalName.PerfectFifth);
     }
+  });
+});
+
+describe('cards about scales', () => {
+  const inKey = { mode: Mode.Major };
+  const d = pitchOf('D4');
+  const names = (notes: readonly Pitch[]) => notes.map(formatNote);
+
+  it('asks about the two notes of a real half or whole step in the scale', () => {
+    const set = { ...inKey, kind: QuestionKind.ScaleStep };
+    for (let i = 0; i < 20; i++) {
+      const half = cardFor(set, StepSize.Half, d);
+      expect([3, 7]).toContain(half.degree);
+      expect(half.shown[1]!.midi - half.shown[0]!.midi).toBe(1);
+      const whole = cardFor(set, StepSize.Whole, d);
+      expect([1, 2, 4, 5, 6]).toContain(whole.degree);
+      expect(whole.shown[1]!.midi - whole.shown[0]!.midi).toBe(2);
+    }
+  });
+
+  it('finds a degree in the key, spelled by its signature, after the key is heard', () => {
+    const card = cardFor({ ...inKey, kind: QuestionKind.ScaleDegree }, ScaleDegree.Third, d);
+    expect(names(card.shown)).toEqual(['F#4']);
+    expect(names(card.targets)).toEqual(['F#4']);
+    expect(card.degree).toBe(3);
+    expect(card.keyFifths).toBe(2);
+    expect(names(card.sound[0]!)).toEqual(['D4', 'F#4', 'A4']);
+    expect(names(card.sound[1]!)).toEqual(['F#4']);
+  });
+
+  it('counts degrees in the natural minor too', () => {
+    const set = { kind: QuestionKind.ScaleDegree, mode: Mode.Minor };
+    expect(names(cardFor(set, ScaleDegree.Third, pitchOf('A4')).targets)).toEqual(['C5']);
+    expect(cardFor(set, ScaleDegree.Third, pitchOf('A4')).keyFifths).toBe(0);
+  });
+
+  it('asks for a scale’s notes after the one given, in order', () => {
+    const set = { ...inKey, kind: QuestionKind.ScaleType };
+    expect(names(cardFor(set, Mode.Major, pitchOf('G4')).targets)).toEqual([
+      'A4',
+      'B4',
+      'C5',
+      'D5',
+      'E5',
+      'F#5',
+      'G5',
+    ]);
+    expect(names(cardFor(set, Mode.Minor, pitchOf('A4')).targets)).toEqual([
+      'B4',
+      'C5',
+      'D5',
+      'E5',
+      'F5',
+      'G5',
+      'A5',
+    ]);
+  });
+
+  it('ends a melody on the key note, or away from it', () => {
+    const set = { ...inKey, kind: QuestionKind.HomeNote };
+    const lastNote = (ending: Ending) => cardFor(set, ending, d).sound.at(-1)![0]!.midi % 12;
+    for (let i = 0; i < 30; i++) {
+      expect(lastNote(Ending.Home)).toBe(d.midi % 12);
+      expect(lastNote(Ending.Away)).not.toBe(d.midi % 12);
+    }
+  });
+
+  it('starts every melody from the key’s chord, and never asks to find anything', () => {
+    const card = cardFor({ ...inKey, kind: QuestionKind.HomeNote }, Ending.Home, d);
+    expect(names(card.sound[0]!)).toEqual(['D4', 'F#4', 'A4']);
+    expect(card.targets).toEqual([]);
+  });
+
+  it('won’t make a card in a key no signature has', () => {
+    expect(() =>
+      cardFor({ ...inKey, kind: QuestionKind.ScaleDegree }, ScaleDegree.Third, pitchOf('G#4')),
+    ).toThrow(RangeError);
+  });
+
+  it('moves everything a card shows, plays and asks for into a singer’s range', () => {
+    const range = { low: 48, high: 72, comfortable: 60 };
+    const set = {
+      kind: QuestionKind.ScaleType,
+      answers: [Mode.Major],
+      roots: pitchesOf('G6'),
+      mode: Mode.Major,
+    };
+    const [card] = singCards(set, 1, range);
+    const midis = card!.sound.flat().map((note) => note.midi);
+    expect(Math.min(...midis)).toBeGreaterThanOrEqual(range.low);
+    expect(Math.max(...midis)).toBeLessThanOrEqual(range.high);
+    expect(card!.targets.at(-1)!.midi).toBe(Math.max(...midis));
+  });
+});
+
+describe('sungNotes', () => {
+  it('sings a card’s notes one at a time, each after the one before', () => {
+    const card = cardFor(
+      { kind: QuestionKind.ScaleType, mode: Mode.Major },
+      Mode.Major,
+      pitchOf('C4'),
+    );
+    const notes = sungNotes([card]);
+    expect(notes).toHaveLength(7);
+    expect(formatNote(notes[0]!.given)).toBe('C4');
+    expect(formatNote(notes[0]!.note)).toBe('D4');
+    expect(formatNote(notes[1]!.given)).toBe('D4');
+    expect(notes[6]!.place).toBe(6);
+  });
+
+  it('asks for whole cards only, up to a few notes', () => {
+    const scale = cardFor(
+      { kind: QuestionKind.ScaleType, mode: Mode.Major },
+      Mode.Major,
+      pitchOf('C4'),
+    );
+    expect(sungNotes([scale, scale, scale])).toHaveLength(7);
+    const third = cardFor(thirds, IntervalName.MajorThird, pitchOf('C4'));
+    expect(sungNotes(Array.from({ length: 6 }, () => third))).toHaveLength(6);
   });
 });
 

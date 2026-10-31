@@ -1,5 +1,31 @@
 import { describe, expect, it } from 'vitest';
-import { keyAlterOf, keyNoteNear, keyStepOf } from './keys';
+import { formatNote, pitchOf } from './pitch';
+import { keyAlterOf, keyFifthsOf, keyNoteNear, keyStepOf, Mode, scaleNotes } from './keys';
+
+describe('a key', () => {
+  it('finds its signature', () => {
+    const major = (note: Parameters<typeof pitchOf>[0]) => keyFifthsOf(pitchOf(note), Mode.Major);
+    const minor = (note: Parameters<typeof pitchOf>[0]) => keyFifthsOf(pitchOf(note), Mode.Minor);
+    expect(['C4', 'G4', 'D4', 'F4', 'Bb4', 'F#4', 'Cb4'].map((n) => major(n as 'C4'))).toEqual([
+      0, 1, 2, -1, -2, 6, -7,
+    ]);
+    expect(['A4', 'E4', 'D4', 'G4'].map((n) => minor(n as 'A4'))).toEqual([0, 1, -1, -2]);
+  });
+
+  it('has no signature when it would need a double sharp', () => {
+    expect(() => keyFifthsOf(pitchOf('G#4'), Mode.Major)).toThrow(RangeError);
+    expect(() => keyFifthsOf(pitchOf('Db4'), Mode.Minor)).toThrow(RangeError);
+  });
+
+  it('spells its scale from the signature, up to the next key note', () => {
+    expect(scaleNotes(pitchOf('Eb4'), Mode.Major).map(formatNote)).toEqual([
+      'Eb4', 'F4', 'G4', 'Ab4', 'Bb4', 'C5', 'D5', 'Eb5',
+    ]); // prettier-ignore
+    expect(scaleNotes(pitchOf('G3'), Mode.Minor).map(formatNote)).toEqual([
+      'G3', 'A3', 'Bb3', 'C4', 'D4', 'Eb4', 'F4', 'G4',
+    ]); // prettier-ignore
+  });
+});
 
 describe('key signatures', () => {
   it('give the major key note', () => {

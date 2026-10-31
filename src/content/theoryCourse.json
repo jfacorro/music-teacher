@@ -8,25 +8,73 @@
           "id": "t1-l1",
           "skills": ["half-and-whole-steps"],
           "builds": ["u8-l1", "v6-l1"],
-          "tryIt": { "song": "ode-to-joy" }
+          "tryIt": {
+            "song": "ode-to-joy"
+          }
         },
         {
           "id": "t1-l2",
           "skills": ["interval-numbers"],
           "builds": ["u3-l3", "u3-l4", "v5-l2"],
-          "tryIt": { "ear": "intervals" }
+          "tryIt": {
+            "ear": "intervals"
+          }
         },
         {
           "id": "t1-l3",
           "skills": ["interval-qualities"],
           "builds": ["u6-l2", "v5-l2", "v6-l3"],
-          "tryIt": { "ear": "intervals" }
+          "tryIt": {
+            "ear": "intervals"
+          }
         },
         {
           "id": "t1-l4",
           "skills": ["hearing-intervals"],
           "builds": ["u2-l4", "v5-l3"],
-          "tryIt": { "song": "amazing-grace", "ear": "intervals" }
+          "tryIt": {
+            "song": "amazing-grace",
+            "ear": "intervals"
+          }
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "level": "beginner",
+      "lessons": [
+        {
+          "id": "t2-l1",
+          "skills": ["major-pattern"],
+          "builds": ["u7-l1", "u7-l3", "v6-l1"],
+          "tryIt": {
+            "song": "amazing-grace"
+          }
+        },
+        {
+          "id": "t2-l2",
+          "skills": ["scale-degrees"],
+          "builds": ["v4-l1", "v6-l1"],
+          "tryIt": {
+            "ear": "melodies"
+          }
+        },
+        {
+          "id": "t2-l3",
+          "skills": ["tonic-and-home"],
+          "builds": ["u8-l4"],
+          "tryIt": {
+            "song": "twinkle-twinkle",
+            "ear": "melodies"
+          }
+        },
+        {
+          "id": "t2-l4",
+          "skills": ["minor-pattern"],
+          "builds": ["u8-l4", "v6-l2", "v6-l3"],
+          "tryIt": {
+            "song": "greensleeves"
+          }
         }
       ]
     }

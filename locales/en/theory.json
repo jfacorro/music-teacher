@@ -36,7 +36,18 @@
     "fifth": "Fifth",
     "sixth": "Sixth",
     "seventh": "Seventh",
-    "eighth": "Octave"
+    "eighth": "Octave",
+    "degree1": "1",
+    "degree2": "2",
+    "degree3": "3",
+    "degree4": "4",
+    "degree5": "5",
+    "degree6": "6",
+    "degree7": "7",
+    "major": "Major",
+    "minor": "Minor",
+    "home": "Yes",
+    "away": "No"
   },
   "find": {
     "half": "a half step",

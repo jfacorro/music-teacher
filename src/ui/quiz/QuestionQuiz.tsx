@@ -1,5 +1,5 @@
 /**
- * Theory questions (PLAN.md milestone 7.1): two notes, shown and played or only played, and a
+ * Theory questions (PLAN.md milestones 7.1 and 7.3): notes shown and played or only played, and a
  * choice of answers. A wrong answer can be tried again, but a question counts as right only if
  * the first answer was.
  */
@@ -9,9 +9,9 @@ import { StaffClef } from '../../content/lessons';
 import { quizResult, type QuizResult } from '../../engine/quiz';
 import { Hand } from '../../engine/score';
 import {
-  type IntervalSet,
   keysFor,
   type QuestionAnswer,
+  type QuestionSet,
   QuestionShow,
   theoryQuestions,
 } from '../../engine/theoryQuestions';
@@ -23,7 +23,7 @@ import type { ExpectedKey } from '../keyboard/PianoKeyboard';
 import { StepKeyboard } from '../screens/lesson/steps/StepKeyboard';
 import { StaffPicture } from '../sheet/StaffPicture';
 import { ShortcutKey } from '../shortcuts';
-import { playNotes, stopNotes, useAnswerNames } from './intervalQuiz';
+import { playSound, stopNotes, useAnswerNames, useCardWords } from './intervalQuiz';
 import { QuizResults } from './QuizResults';
 import { QuizTally } from './QuizTally';
 
@@ -31,7 +31,7 @@ import { QuizTally } from './QuizTally';
 const NEXT_QUESTION_MS = 900;
 
 interface QuestionQuizProps {
-  questions: IntervalSet;
+  questions: QuestionSet;
   show: QuestionShow;
   count: number;
   /** Called when the last question is answered. */
@@ -43,6 +43,7 @@ interface QuestionQuizProps {
 export function QuestionQuiz({ questions, show, count, onFinish, actions }: QuestionQuizProps) {
   const { t } = useTranslation('screens');
   const names = useAnswerNames();
+  const words = useCardWords(questions);
   // Dealt once; Try again deals new ones.
   const [cards, setCards] = useState(() => theoryQuestions(questions, count));
   const [index, setIndex] = useState(0);
@@ -56,7 +57,7 @@ export function QuestionQuiz({ questions, show, count, onFinish, actions }: Ques
   const result = quizResult(marks.filter(Boolean).length, cards.length);
 
   useEffect(() => {
-    if (card) void playNotes([card.root.midi, card.top.midi]);
+    if (card) void playSound(card.sound);
   }, [card]);
   useEffect(() => stopNotes, []);
 
@@ -113,14 +114,7 @@ export function QuestionQuiz({ questions, show, count, onFinish, actions }: Ques
   const keys = useMemo(() => keysFor(cards), [cards]);
   const highlight = useMemo(
     () =>
-      new Map<number, ExpectedKey>(
-        card
-          ? [
-              [card.root.midi, { hand: Hand.Right }],
-              [card.top.midi, { hand: Hand.Right }],
-            ]
-          : [],
-      ),
+      new Map<number, ExpectedKey>(card?.shown.map((note) => [note.midi, { hand: Hand.Right }])),
     [card],
   );
 
@@ -141,7 +135,7 @@ export function QuestionQuiz({ questions, show, count, onFinish, actions }: Ques
           shortcut={ShortcutKey.Space}
           className="button"
           disabled={answered}
-          onClick={() => void playNotes([card.root.midi, card.top.midi])}
+          onClick={() => void playSound(card.sound)}
         >
           <span className="button__icon" aria-hidden="true">
             {ICONS.volume}
@@ -149,12 +143,13 @@ export function QuestionQuiz({ questions, show, count, onFinish, actions }: Ques
           {t('earTraining.hearAgain')}
         </ShortcutButton>
       </div>
-      <p className="question__prompt">{t(`lesson.question.prompts.${questions.kind}`)}</p>
+      <p className="question__prompt">{words.question(card)}</p>
       {show === QuestionShow.Staff && (
         <StaffPicture
-          clef={card.root.midi >= MIDDLE_C ? StaffClef.Treble : StaffClef.Bass}
-          notes={[card.root, card.top]}
+          clef={card.shown[0]!.midi >= MIDDLE_C ? StaffClef.Treble : StaffClef.Bass}
+          notes={card.shown}
           names={false}
+          keyFifths={card.keyFifths}
         />
       )}
       {show === QuestionShow.Keyboard && <StepKeyboard range={keys} highlight={highlight} />}

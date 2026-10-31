@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "degrees": "Each note of a scale has a number, its degree, counted up from the key note. The key note is degree 1 in any key: in the {cScale}, {g} is degree 5, and in the {gScale}, {d} is. The numbers move with the key.",
+    "onKeys": "A note of the scale is lit. Count up from the key note to find its degree.",
+    "onStaff": "Now on the staff, with the key’s signature at the start. The key’s chord plays first, then the note.",
+    "names": "Two degrees have names you’ll meet again and again: degree 1 is the tonic, the key note, and degree 5 is the dominant.",
+    "build": "Now find them. The tonic is given: count up the scale to the degree asked for."
+  }
+}

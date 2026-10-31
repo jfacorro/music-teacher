@@ -91,6 +91,10 @@
     "t1": {
       "title": "Intervals",
       "description": "Half and whole steps, naming intervals, and hearing them."
+    },
+    "t2": {
+      "title": "Scales and keys",
+      "description": "The major pattern, scale degrees, why a melody feels at home on the tonic, and the minor scale."
     }
   },
   "lessons": {
@@ -188,7 +192,11 @@
     "t1-l1": "Half and whole steps",
     "t1-l2": "Counting intervals",
     "t1-l3": "Major, minor and perfect",
-    "t1-l4": "Hearing intervals"
+    "t1-l4": "Hearing intervals",
+    "t2-l1": "The major pattern",
+    "t2-l2": "Scale degrees",
+    "t2-l3": "Feeling at home",
+    "t2-l4": "The minor scale"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -235,6 +243,10 @@
     "half-and-whole-steps": "Half and whole steps",
     "interval-numbers": "Counting intervals",
     "interval-qualities": "Major, minor and perfect intervals",
-    "hearing-intervals": "Hearing intervals"
+    "hearing-intervals": "Hearing intervals",
+    "major-pattern": "The major pattern",
+    "scale-degrees": "Scale degrees",
+    "tonic-and-home": "The tonic and feeling at home",
+    "minor-pattern": "The minor scale"
   }
 }

@@ -257,6 +257,15 @@ describe('parseLesson', () => {
     await expect(parse({ roots: ['E##4'], answers: ['majorSecond'] })).rejects.toThrow(
       'no "majorSecond" above',
     );
+    const degree = { kind: 'scaleDegree', answers: ['degree3'] };
+    await expect(parse({ ...degree, roots: ['G#4'] })).rejects.toThrow('no "degree3" above');
+    await expect(parse({ ...degree, mode: 'dorian' })).rejects.toThrow('mode');
+    const melody = { kind: 'homeNote', answers: ['home'] };
+    await expect(parse(melody)).rejects.toThrow('only heard');
+    await expect(parse({ ...melody, show: 'ear' })).resolves.toBeDefined();
+    await expect(parse({ ...melody, show: 'ear', type: 'build' })).rejects.toThrow(
+      'nothing to find',
+    );
   });
 
   it('parses every step type', async () => {

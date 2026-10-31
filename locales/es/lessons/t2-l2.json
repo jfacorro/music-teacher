@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "degrees": "Cada nota de una escala tiene un número, su grado, que se cuenta hacia arriba desde la tónica. La tónica es el grado 1 en cualquier tonalidad: en la {cScale}, {g} es el grado 5, y en la {gScale}, lo es {d}. Los números se mueven con la tonalidad.",
+    "onKeys": "Hay una nota de la escala iluminada. Cuenta desde la tónica para saber qué grado es.",
+    "onStaff": "Ahora en el pentagrama, con la armadura de la tonalidad al principio. Primero suena el acorde de la tonalidad y después la nota.",
+    "names": "Dos grados tienen nombre propio y te los vas a encontrar una y otra vez: el grado 1 es la tónica, y el grado 5, la dominante.",
+    "build": "Ahora búscalos tú. Te damos la tónica: sube por la escala hasta el grado que se pide."
+  }
+}

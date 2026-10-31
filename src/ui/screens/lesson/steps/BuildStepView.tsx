@@ -2,14 +2,14 @@ import { useCallback, useRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { BuildStep } from '../../../../content/lessons';
 import type { StepResult } from '../../../../content/lessons/result';
-import { type IntervalCard, singCards } from '../../../../engine/theoryQuestions';
+import { singCards, type SungNote, sungNotes } from '../../../../engine/theoryQuestions';
 import type { VocalRange } from '../../../../engine/vocalRange';
 import { useNoteNames } from '../../../../i18n/useNoteNames';
 import { sings, useSettings } from '../../../../storage/settings';
 import { ShortcutButton } from '../../../components/ShortcutButton';
 import { useMicWhileShown } from '../../../hooks';
 import { BuildQuiz } from '../../../quiz/BuildQuiz';
-import { useAnswerNames } from '../../../quiz/intervalQuiz';
+import { useCardWords } from '../../../quiz/intervalQuiz';
 import { ShortcutKey } from '../../../shortcuts';
 import { MatchTheNote } from '../../MatchTheNote';
 
@@ -32,13 +32,13 @@ function SingTheNotes({
 }) {
   const { t } = useTranslation('screens');
   const names = useNoteNames();
-  const answers = useAnswerNames();
+  const words = useCardWords(step.questions);
   useMicWhileShown();
-  const cards = useRef<IntervalCard[]>([]);
+  const notes = useRef<SungNote[]>([]);
   const pick = useCallback(
     (range: VocalRange) => {
-      cards.current = singCards(step.questions, step.count, range);
-      return cards.current.map((card) => card.top.midi);
+      notes.current = sungNotes(singCards(step.questions, step.count, range));
+      return notes.current.map(({ note }) => note.midi);
     },
     [step],
   );
@@ -50,12 +50,11 @@ function SingTheNotes({
       title={t('lesson.build.singTitle')}
       intro={t('lesson.build.singIntro')}
       clue={(index) => {
-        const card = cards.current[index]!;
-        const note = names.name(card.root, { octave: false });
+        const { card, place, given } = notes.current[index]!;
         return {
-          play: card.root.midi,
-          prompt: t('lesson.build.singPrompt', { what: answers.phrase(card.answer), note }),
-          again: t('lesson.build.hearRoot', { note }),
+          play: given.midi,
+          prompt: words.sing(card, place),
+          again: t('lesson.build.hearRoot', { note: names.name(given, { octave: false }) }),
         };
       }}
       onFinish={({ stars, accuracy }) => onFinish({ stars, accuracy })}
@@ -64,7 +63,7 @@ function SingTheNotes({
   );
 }
 
-/** Theory's "find this note", by playing or by singing, as the learner chose. */
+/** Theory's "find these notes", by playing or by singing, as the learner chose. */
 export function BuildStepView({ step, text, onResult, onContinue }: BuildStepViewProps) {
   const { t } = useTranslation('screens');
   const singing = useSettings(sings);

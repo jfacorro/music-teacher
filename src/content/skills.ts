@@ -230,6 +230,10 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'interval-numbers',
     'interval-qualities',
     'hearing-intervals',
+    'major-pattern',
+    'scale-degrees',
+    'tonic-and-home',
+    'minor-pattern',
   ],
 };
 

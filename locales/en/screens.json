@@ -666,7 +666,11 @@
       "prompts": {
         "stepSize": "Half step or whole step?",
         "intervalNumber": "What number is this interval?",
-        "intervalName": "What interval is this?"
+        "intervalName": "What interval is this?",
+        "scaleStep": "In {key}, from note {from} to note {to}: half step or whole step?",
+        "scaleDegree": "In {key}, which degree is this?",
+        "scaleType": "Major or minor?",
+        "homeNote": "Does the melody end on the tonic?"
       },
       "choices": "Answers",
       "right": "That’s right!",
@@ -679,7 +683,12 @@
       "singTitle": "Sing it",
       "singIntro": "The app plays a note, and you sing the one asked for and hold it in tune for half a second. Any octave counts, and each one counts if you sing it within six seconds.",
       "sing": "Now sing it.",
-      "hearRoot": "Hear {note} again"
+      "hearRoot": "Hear {note} again",
+      "playDegree": "Find degree {degree} of {key}.",
+      "singDegree": "Sing degree {degree} of {key}.",
+      "playScale": "Play the {key} scale, up from the note given.",
+      "singScale": "Sing the {key} scale: note {place} of {total}.",
+      "found": "{found} of {total} so far."
     }
   },
   "welcome": {

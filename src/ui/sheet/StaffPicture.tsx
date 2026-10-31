@@ -24,6 +24,8 @@ interface StaffPictureProps {
   names: boolean;
   /** All in one bar, so accidentals carry on (see StaffNotes). */
   bar?: boolean;
+  /** The key signature at the start. */
+  keyFifths?: number;
 }
 
 /** Notes in one bar: quarter notes, so up to four fit. */
@@ -31,7 +33,7 @@ const BAR_BEATS = 4;
 /** A bar's width for one note (see StaticStaff). */
 const NOTE_WIDTH = 3;
 
-export function StaffPicture({ clef, notes, names, bar = false }: StaffPictureProps) {
+export function StaffPicture({ clef, notes, names, bar = false, keyFifths }: StaffPictureProps) {
   const { t } = useTranslation('screens');
   const noteNames = useNoteNames();
 
@@ -47,6 +49,7 @@ export function StaffPicture({ clef, notes, names, bar = false }: StaffPicturePr
     const score: Score = {
       tempo: 60,
       timeSignature: [4, 4],
+      ...(keyFifths !== undefined && { keyFifths }),
       notes: notes.map((pitch, i) => ({
         pitch,
         start: bar ? i : i * BAR_BEATS,
@@ -63,7 +66,7 @@ export function StaffPicture({ clef, notes, names, bar = false }: StaffPicturePr
       illustration: true,
       noteLabel: names ? (note) => noteNames.name(note.pitch) : undefined,
     }).xml;
-  }, [clef, notes, names, noteNames, bar]);
+  }, [clef, notes, names, noteNames, bar, keyFifths]);
 
   return (
     <div className="staff-picture">

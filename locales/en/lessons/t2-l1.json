@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "pattern": "A major scale is a pattern of steps: whole, whole, half, whole, whole, whole, half. The white keys from {c} to the next {c} follow it exactly, with the half steps at {e} to {f} and {b} to {c}.",
+    "chooseSteps": "Two neighboring notes of the scale are lit. Is the step between them half or whole?",
+    "otherKeys": "The pattern works from any note. Start on {g} and follow it, and the seventh note has to be {fSharp}, not {f}, to keep that last half step. That’s why the {gScale} has a sharp.",
+    "build": "Now build scales yourself. The first note is given: find the rest in order, following the pattern.",
+    "ear": "Now with your ears: the two notes play one after the other."
+  }
+}

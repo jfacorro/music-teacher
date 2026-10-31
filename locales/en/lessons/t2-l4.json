@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "minor": "The minor scale has its own pattern: whole, half, whole, whole, half, whole, whole. From the same note as the major scale, its degrees 3, 6 and 7 are a half step lower. {a} minor uses only white keys, from {a} to the next {a}.",
+    "hearScale": "Listen to each scale, up from its tonic. The third note tells you: lower and darker in minor.",
+    "build": "Now build minor scales. The tonic is given: find the rest in order, following the minor pattern.",
+    "seventh": "Minor melodies often raise degree 7 on the way home, so it sits a half step below the tonic, like {gSharp} in {a} minor. It’s then written with an accidental, because the key signature doesn’t have it.",
+    "degrees": "Degrees work the same way in minor. Read the note on the staff and count up from the tonic."
+  }
+}

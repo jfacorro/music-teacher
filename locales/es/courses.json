@@ -91,6 +91,10 @@
     "t1": {
       "title": "Intervalos",
       "description": "Semitonos y tonos, cómo se nombran los intervalos y cómo reconocerlos de oído."
+    },
+    "t2": {
+      "title": "Escalas y tonalidades",
+      "description": "El patrón de la escala mayor, los grados, por qué una melodía reposa en la tónica, y la escala menor."
     }
   },
   "lessons": {
@@ -188,7 +192,11 @@
     "t1-l1": "Semitonos y tonos",
     "t1-l2": "Contar intervalos",
     "t1-l3": "Mayores, menores y justos",
-    "t1-l4": "Intervalos de oído"
+    "t1-l4": "Intervalos de oído",
+    "t2-l1": "El patrón de la escala mayor",
+    "t2-l2": "Los grados de la escala",
+    "t2-l3": "Sentirse en casa",
+    "t2-l4": "La escala menor"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -235,6 +243,10 @@
     "half-and-whole-steps": "Semitonos y tonos",
     "interval-numbers": "Contar intervalos",
     "interval-qualities": "Intervalos mayores, menores y justos",
-    "hearing-intervals": "Intervalos de oído"
+    "hearing-intervals": "Intervalos de oído",
+    "major-pattern": "El patrón de la escala mayor",
+    "scale-degrees": "Los grados de la escala",
+    "tonic-and-home": "La tónica y la sensación de reposo",
+    "minor-pattern": "La escala menor"
   }
 }

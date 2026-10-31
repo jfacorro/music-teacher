@@ -85,6 +85,10 @@ export const SKILLS = [
   'interval-numbers',
   'interval-qualities',
   'hearing-intervals',
+  'major-pattern',
+  'scale-degrees',
+  'tonic-and-home',
+  'minor-pattern',
 ] as const;
 
 export type Skill = (typeof SKILLS)[number];
