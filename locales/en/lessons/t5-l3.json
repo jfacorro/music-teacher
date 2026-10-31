@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "cadences": "A cadence is the way a phrase ends: the punctuation of music. An authentic cadence goes from V to I and sounds finished, like a period. A half cadence stops on V and sounds unfinished, like a comma.",
+    "twoEndings": "Every phrase starts the same way. Listen to how it ends.",
+    "plagal": "A plagal cadence goes from IV to I. It’s gentler than V to I: it’s the “Amen” at the end of many hymns.",
+    "threeEndings": "All three now. Listen to the last two chords.",
+    "build": "Now play the chords behind those endings, in different keys."
+  }
+}

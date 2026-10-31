@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "dominant": "V is the dominant chord, and it wants to go home to I. Its third is degree 7, a half step below the tonic: in {c} major, {gMajor} has {b}, right under {cHigh}.",
+    "seventh": "Add a seventh and the pull gets stronger. V7 adds degree 4, which wants to fall a half step to degree 3. So {b} rises to {c} while {f} falls to {e}: two notes pulling in opposite directions. That’s why the dominant seventh sounds so restless.",
+    "whichChord": "The dominant is one step clockwise from the key. Which seventh chord leads home to the key marked?",
+    "build": "Now play it: all four notes of the dominant seventh, built on degree 5. The tonic is marked.",
+    "hear": "Listen after the key’s chord: is this one at rest (I), pulling (V), or pulling harder (V7)?"
+  }
+}

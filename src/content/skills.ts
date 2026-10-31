@@ -241,6 +241,9 @@ export const SKILL_AREAS: Readonly<Record<SkillArea, readonly Skill[]>> = {
     'triad-qualities',
     'chord-inversions',
     'seventh-chords',
+    'roman-numerals',
+    'dominant-pull',
+    'cadences',
   ],
 };
 

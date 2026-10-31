@@ -1,0 +1,50 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "numerals",
+      "textVars": {
+        "c": "C4",
+        "g": "G4",
+        "gMajor": {
+          "chord": "G4",
+          "quality": "major"
+        },
+        "dMajor": {
+          "chord": "D4",
+          "quality": "major"
+        }
+      }
+    },
+    {
+      "type": "question",
+      "text": "chooseChord",
+      "kind": "romanNumeral",
+      "answers": ["I", "IV", "V"],
+      "roots": ["C4", "G4", "F4"],
+      "show": "keyboard",
+      "count": 6
+    },
+    {
+      "type": "question",
+      "text": "onStaff",
+      "kind": "romanNumeral",
+      "answers": ["I", "ii", "iii", "IV", "V", "vi"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "show": "staff",
+      "count": 8
+    },
+    {
+      "type": "explain",
+      "text": "shape"
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "romanNumeral",
+      "answers": ["I", "IV", "V", "vi"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "count": 5
+    }
+  ]
+}

@@ -9,11 +9,14 @@ import {
   cardFor,
   ChordInversion,
   Ending,
+  Cadence,
   type IntervalAnswer,
+  Numeral,
   type QuestionAnswer,
   keysFor,
   MAX_CHOICES,
   noteAbove,
+  notesLeft,
   ScaleDegree,
   QuestionKind,
   type QuestionSet,
@@ -318,6 +321,99 @@ describe('cards about chords', () => {
     const notes = sungNotes([card]);
     expect(notes.map(({ note }) => formatNote(note))).toEqual(['C4', 'E4', 'G4']);
     expect(formatNote(notes[0]!.given)).toBe('C4');
+  });
+});
+
+describe('cards about harmony', () => {
+  const inKey = { mode: Mode.Major };
+  const names = (notes: readonly Pitch[]) => notes.map(formatNote);
+  const numeral = (answer: Numeral, root = pitchOf('C4')) =>
+    cardFor({ ...inKey, kind: QuestionKind.RomanNumeral }, answer, root);
+
+  it('builds each numeral from the notes of the scale', () => {
+    expect(names(numeral(Numeral.One).shown)).toEqual(['C4', 'E4', 'G4']);
+    expect(names(numeral(Numeral.Two).shown)).toEqual(['D4', 'F4', 'A4']);
+    expect(names(numeral(Numeral.Six).shown)).toEqual(['A4', 'C5', 'E5']);
+    expect(names(numeral(Numeral.Seven).shown)).toEqual(['B4', 'D5', 'F5']);
+    expect(names(numeral(Numeral.FiveSeven).shown)).toEqual(['G4', 'B4', 'D5', 'F5']);
+    expect(names(numeral(Numeral.Four, pitchOf('D4')).shown)).toEqual(['G4', 'B4', 'D5']);
+    expect(names(numeral(Numeral.Five, pitchOf('D4')).shown)).toEqual(['A4', 'C#5', 'E5']);
+  });
+
+  it('makes each numeral the chord its case says', () => {
+    const qualities = [Numeral.One, Numeral.Two, Numeral.Three, Numeral.Four, Numeral.Five, Numeral.Six, Numeral.Seven]; // prettier-ignore
+    for (const answer of qualities) {
+      const [root, third, fifth] = numeral(answer).shown.map((note) => note.midi);
+      const size = [third! - root!, fifth! - root!].join();
+      const expected =
+        answer === Numeral.Seven ? '3,6' : answer === answer.toUpperCase() ? '4,7' : '3,7';
+      expect(size).toBe(expected);
+    }
+  });
+
+  it('plays the key, then the chord, and keeps the tonic to count from', () => {
+    const card = numeral(Numeral.Four, pitchOf('G4'));
+    expect(names(card.sound[0]!)).toEqual(['G4', 'B4', 'D5']);
+    expect(names(card.sound[1]!)).toEqual(['C5', 'E5', 'G5']);
+    expect(formatNote(card.given!)).toBe('G4');
+    expect(card.ordered).toBe(false);
+    expect(card.keyFifths).toBe(1);
+  });
+
+  it('finds the dominant seventh of a key, a fifth above', () => {
+    const card = cardFor({ ...inKey, kind: QuestionKind.DominantOf }, 'D', pitchOf('C4'));
+    expect(formatNote(card.root)).toBe('G4');
+    expect(names(card.targets)).toEqual(['D4', 'F#4', 'A4', 'C5']);
+    expect(card.shown).toEqual([]);
+  });
+
+  it('ends each cadence as it says, after the same start', () => {
+    const set = { ...inKey, kind: QuestionKind.Cadence };
+    const bass = (ending: Cadence) =>
+      cardFor(set, ending, pitchOf('C4')).sound.map((chord) => formatNote(chord[0]!));
+    expect(bass(Cadence.Authentic)).toEqual(['C3', 'A3', 'G3', 'C3']);
+    expect(bass(Cadence.Half)).toEqual(['C3', 'A3', 'F3', 'G3']);
+    expect(bass(Cadence.Plagal)).toEqual(['C3', 'A3', 'F3', 'C3']);
+  });
+
+  it('keeps a cadence’s upper notes close together above the tonic', () => {
+    const card = cardFor(
+      { ...inKey, kind: QuestionKind.Cadence },
+      Cadence.Authentic,
+      pitchOf('C4'),
+    );
+    expect(names(card.sound[2]!)).toEqual(['G3', 'D4', 'G4', 'B4']);
+    for (const chord of card.sound) {
+      const upper = chord.slice(1).map((note) => note.midi);
+      expect(Math.min(...upper)).toBeGreaterThanOrEqual(60);
+      expect(Math.max(...upper)).toBeLessThan(72);
+    }
+  });
+});
+
+describe('notesLeft', () => {
+  const names = (notes: readonly Pitch[]) => notes.map(formatNote);
+
+  it('asks again for a note a melody repeats', () => {
+    const melody = cardFor(
+      { kind: QuestionKind.TransposeMelody, mode: Mode.Major },
+      Ending.Away,
+      pitchOf('C4'),
+      () => 0,
+    );
+    expect(names(melody.targets)).toEqual(['C4', 'D4', 'E4', 'D4']);
+    const [, second, third] = melody.targets;
+    expect(names(notesLeft(melody, [melody.targets[0]!, second!, third!]))).toEqual(['D4']);
+    expect(notesLeft(melody, melody.targets)).toEqual([]);
+  });
+
+  it('takes a chord’s notes in any order', () => {
+    const chord = cardFor(
+      { kind: QuestionKind.ChordQuality, mode: Mode.Major },
+      ChordQuality.Major,
+      pitchOf('C4'),
+    );
+    expect(names(notesLeft(chord, [chord.targets[1]!]))).toEqual(['C4', 'G4']);
   });
 });
 

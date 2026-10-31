@@ -5,6 +5,7 @@ import {
   ANSWERS_ARE_ROOTS,
   type ChordInversion,
   type IntervalAnswer,
+  type Numeral,
   QuestionKind,
   type QuestionAnswer,
   type QuestionSet,
@@ -89,6 +90,7 @@ export function useCardWords({ kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>)
       key: keyName(card.root, modeOf(kind, mode, card)),
       chord: chordName(card),
       inversion: kind === QuestionKind.ChordInversion ? tt(`find.${inversionOf(card)}`) : '',
+      numeral: kind === QuestionKind.RomanNumeral ? tt(`answers.${card.answer as Numeral}`) : '',
       note,
       degree: card.degree,
       place: place + 1,
@@ -102,6 +104,9 @@ export function useCardWords({ kind, mode }: Pick<QuestionSet, 'kind' | 'mode'>)
     /** An answer's name on a button. */
     label: (answer: QuestionAnswer) => {
       if (kind === QuestionKind.NextAccidental) return name(parseKey(answer as KeyName).tonic);
+      if (kind === QuestionKind.DominantOf) {
+        return tt('chords.dominant7', { root: name(parseKey(answer as KeyName).tonic) });
+      }
       if (ANSWERS_ARE_ROOTS.includes(kind)) {
         const { tonic, mode: keyMode } = parseKey(answer as KeyName);
         return keyName(tonic, keyMode);
@@ -136,6 +141,7 @@ type Found =
       | typeof QuestionKind.ScaleStep
       | typeof QuestionKind.HomeNote
       | typeof QuestionKind.KeySignature
+      | typeof QuestionKind.Cadence
     >;
 /** The kinds that are asked as questions. */
 type Asked =

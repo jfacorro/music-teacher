@@ -54,6 +54,12 @@ export const QuestionKind = {
   ChordQuality: 'chordQuality',
   /** Which note of a chord is at the bottom. */
   ChordInversion: 'chordInversion',
+  /** A chord of a key, by the degree it's built on. */
+  RomanNumeral: 'romanNumeral',
+  /** The dominant seventh that leads to a key. */
+  DominantOf: 'dominantOf',
+  /** How a phrase ends. */
+  Cadence: 'cadence',
 } as const;
 export type QuestionKind = (typeof QuestionKind)[keyof typeof QuestionKind];
 
@@ -103,11 +109,57 @@ const ASKED_CHORDS = [
 ] as const;
 type AskedChord = (typeof ASKED_CHORDS)[number];
 
+export const Numeral = {
+  One: 'I',
+  Two: 'ii',
+  Three: 'iii',
+  Four: 'IV',
+  Five: 'V',
+  Six: 'vi',
+  Seven: 'viio',
+  FiveSeven: 'V7',
+} as const;
+export type Numeral = (typeof Numeral)[keyof typeof Numeral];
+
+/** Each numeral's place in the scale, from 0. */
+const NUMERAL_PLACES: Readonly<Record<Numeral, number>> = {
+  [Numeral.One]: 0,
+  [Numeral.Two]: 1,
+  [Numeral.Three]: 2,
+  [Numeral.Four]: 3,
+  [Numeral.Five]: 4,
+  [Numeral.Six]: 5,
+  [Numeral.Seven]: 6,
+  [Numeral.FiveSeven]: 4,
+};
+
+export const Cadence = {
+  Authentic: 'authentic',
+  Half: 'half',
+  Plagal: 'plagal',
+} as const;
+export type Cadence = (typeof Cadence)[keyof typeof Cadence];
+
+/** The places in the scale of a phrase's four chords: the same start, each with its own ending. */
+const PHRASES: Readonly<Record<Cadence, readonly number[]>> = {
+  [Cadence.Authentic]: [0, 5, 4, 0],
+  [Cadence.Half]: [0, 5, 3, 4],
+  [Cadence.Plagal]: [0, 5, 3, 0],
+};
+
 /** The answers about the distance between two notes, which read "Find a third above D". */
 export type IntervalAnswer = StepSize | IntervalNumber | IntervalName;
 
 export type QuestionAnswer =
-  IntervalAnswer | ScaleDegree | Mode | Ending | KeyName | AskedChord | ChordInversion;
+  | IntervalAnswer
+  | ScaleDegree
+  | Mode
+  | Ending
+  | KeyName
+  | AskedChord
+  | ChordInversion
+  | Numeral
+  | Cadence;
 
 /** How a `question` step shows its notes (they're always played too). */
 export const QuestionShow = {
@@ -143,6 +195,9 @@ const ANSWERS: Readonly<Record<QuestionKind, readonly QuestionAnswer[]>> = {
   [QuestionKind.TransposeMelody]: Object.values(Ending),
   [QuestionKind.ChordQuality]: ASKED_CHORDS,
   [QuestionKind.ChordInversion]: INVERSIONS,
+  [QuestionKind.RomanNumeral]: Object.values(Numeral),
+  [QuestionKind.DominantOf]: MAJOR_KEYS,
+  [QuestionKind.Cadence]: Object.values(Cadence),
 };
 
 export const answersOf = (kind: QuestionKind): readonly QuestionAnswer[] => ANSWERS[kind];
@@ -152,9 +207,10 @@ export const NOT_BUILT: readonly QuestionKind[] = [
   QuestionKind.ScaleStep,
   QuestionKind.HomeNote,
   QuestionKind.KeySignature,
+  QuestionKind.Cadence,
 ];
 /** The kinds with nothing to show: they're only heard. */
-export const ONLY_HEARD: readonly QuestionKind[] = [QuestionKind.HomeNote];
+export const ONLY_HEARD: readonly QuestionKind[] = [QuestionKind.HomeNote, QuestionKind.Cadence];
 /** The kinds a `question` step can't ask: the answer is notes to find. */
 export const NOT_ASKED: readonly QuestionKind[] = [
   QuestionKind.TransposeNote,
@@ -168,6 +224,7 @@ export const ANSWERS_ARE_ROOTS: readonly QuestionKind[] = [
   QuestionKind.CircleDown,
   QuestionKind.RelativeMinor,
   QuestionKind.RelativeMajor,
+  QuestionKind.DominantOf,
 ];
 
 /** What a step can ask: the answers, and the notes or key notes its questions start from. */
@@ -268,6 +325,22 @@ const MELODIES: Readonly<Record<Ending, readonly (readonly number[])[]>> = {
 
 /** Transposing starts from here. */
 export const TRANSPOSE_FROM = makePitch('C', 0, 4);
+
+/** A chord stacked in thirds on a place in the scale, with the scale's own notes. */
+const chordOfScale = (scale: readonly Pitch[], place: number, size: number): Pitch[] =>
+  Array.from({ length: size }, (_, i) => {
+    const note = place + 2 * i;
+    return moved(scale[note % SCALE_NOTES]!, Math.floor(note / SCALE_NOTES));
+  });
+
+/** A triad with its root in the bass, and its notes close together above the key note. */
+function phraseChord(scale: readonly Pitch[], place: number): Pitch[] {
+  const tonic = scale[0]!;
+  const upper = chordOfScale(scale, place, 3)
+    .map((note) => moved(note, -Math.floor((note.midi - tonic.midi) / 12)))
+    .sort((a, b) => a.midi - b.midi);
+  return [moved(scale[place]!, -1), ...upper];
+}
 
 /** A chord with its lowest notes moved up an octave. */
 const inverted = (notes: readonly Pitch[], inversion: number): Pitch[] => [
@@ -452,6 +525,50 @@ function written(
         degree: 0,
       };
     }
+    case QuestionKind.RomanNumeral: {
+      const scale = scaleNotes(root, Mode.Major);
+      const place = NUMERAL_PLACES[answer as Numeral];
+      const notes = chordOfScale(scale, place, answer === Numeral.FiveSeven ? 4 : 3);
+      return {
+        answer,
+        root,
+        shown: notes,
+        sound: [tonicChord(scale), notes],
+        keyFifths: keyFifthsOf(root, Mode.Major),
+        targets: notes,
+        ordered: false,
+        together: true,
+        degree: place + 1,
+      };
+    }
+    case QuestionKind.DominantOf: {
+      const { tonic: dominant } = parseKey(answer as KeyName);
+      const fifths = keyFifthsOf(dominant, Mode.Major) - 1;
+      const key = keyTonic(fifths, Mode.Major);
+      const notes = chordNotes(dominant, ChordQuality.Dominant7);
+      return {
+        answer,
+        root: key,
+        shown: [],
+        sound: [notes, tonicChord(scaleNotes(key, Mode.Major))],
+        keyFifths: fifths,
+        targets: notes,
+        ordered: false,
+        degree: 0,
+      };
+    }
+    case QuestionKind.Cadence: {
+      const scale = scaleNotes(root, Mode.Major);
+      return {
+        answer,
+        root,
+        shown: [],
+        sound: PHRASES[answer as Cadence].map((place) => phraseChord(scale, place)),
+        keyFifths: keyFifthsOf(root, Mode.Major),
+        targets: [],
+        degree: 0,
+      };
+    }
     case QuestionKind.TransposeNote: {
       const place = DEGREES.indexOf(answer as ScaleDegree);
       return {
@@ -619,6 +736,16 @@ export function sungNotes(cards: readonly TheoryCard[]): SungNote[] {
     });
   }
   return notes;
+}
+
+/**
+ * The notes that can come next, after `found`: the next one, or any left when they have no order.
+ * In order they're counted, because a melody can ask for the same note twice.
+ */
+export function notesLeft(card: TheoryCard, found: readonly Pitch[]): readonly Pitch[] {
+  return card.ordered
+    ? card.targets.slice(found.length, found.length + 1)
+    : card.targets.filter((note) => !found.includes(note));
 }
 
 /** The keys that show all of `cards`, from a C to a C, so the keyboard stays put between them. */

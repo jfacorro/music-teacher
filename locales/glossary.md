@@ -201,6 +201,9 @@ system setting (`src/i18n/naming.ts`).
 | Third, fifth of a chord                       | the third, the fifth                                 | la tercera, la quinta                                   |
 | Seventh chord                                 | seventh chord                                        | acorde de séptima                                       |
 | Dominant seventh                              | dominant seventh                                     | séptima de dominante                                    |
+| Roman numerals                                | Roman numerals                                       | números romanos                                         |
+| The dominant's pull                           | pull                                                 | atracción                                               |
+| Cadence: authentic / half / plagal            | authentic / half / plagal cadence                    | cadencia auténtica / semicadencia / cadencia plagal     |
 | Sight-singing (section and skill)             | sight-singing                                        | lectura cantada (a primera vista)                       |
 | Reading melodies (skill)                      | reading melodies                                     | leer melodías                                           |
 | Words of a song (lyrics)                      | the words                                            | la letra                                                |

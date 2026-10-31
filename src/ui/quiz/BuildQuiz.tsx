@@ -12,6 +12,7 @@ import { KeyMark } from '../../engine/session';
 import {
   buildCards,
   keysFor,
+  notesLeft,
   type QuestionSet,
   type TheoryCard,
 } from '../../engine/theoryQuestions';
@@ -50,12 +51,6 @@ function matching(
   if (card.targets.length === 1 && played === card.given?.midi) return undefined;
   return notes.find((note) => pitchClass(note.midi) === pitchClass(played));
 }
-
-/** The notes still to find, of those not in `found`: the next one, or any if there's no order. */
-const wanted = (card: TheoryCard, found: readonly Pitch[]): readonly Pitch[] => {
-  const left = card.targets.filter((note) => !found.includes(note));
-  return card.ordered ? left.slice(0, 1) : left;
-};
 
 interface BuildQuizProps {
   questions: QuestionSet;
@@ -99,7 +94,7 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
       subscribeNotes((event) => {
         const { card: current, answered: done, misses: missed, found: got } = latest.current;
         if (event.type !== NoteEventType.On || !current || done) return;
-        const note = matching(current, wanted(current, got), event.pitch, event.source);
+        const note = matching(current, notesLeft(current, got), event.pitch, event.source);
         if (note) {
           const now = [...got, note];
           const complete = now.length === current.targets.length;
@@ -175,7 +170,7 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
     () =>
       new Set<number>(
         card
-          ? [...found, ...(showNext ? wanted(card, found).slice(0, 1) : [])].map(
+          ? [...found, ...(showNext ? notesLeft(card, found).slice(0, 1) : [])].map(
               (note) => note.midi,
             )
           : [],
@@ -191,7 +186,7 @@ export function BuildQuiz({ questions, count, onFinish, actions }: BuildQuizProp
               .filter((note) => note.pitch !== card.given?.midi)
               .map((note) => [
                 note.pitch,
-                matching(card, [...found, ...wanted(card, found)], note.pitch, note.source)
+                matching(card, [...found, ...notesLeft(card, found)], note.pitch, note.source)
                   ? KeyMark.Correct
                   : KeyMark.Wrong,
               ])

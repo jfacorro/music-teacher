@@ -949,7 +949,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 | 2 | **Scales and keys** — the major pattern, the tonic, scale degrees, why a melody feels at home, minor | Units 7 and 8, Voice Units 4 and 6 |
 | 3 | **Key signatures** — the order of sharps and flats, the circle of fifths, relative minors, transposing | Units 7 and 12 |
 | 4 | **Chords** — triads and their qualities, inversions, seventh chords | Unit 6 |
-| 5 | **Harmony** — I, IV and V, Roman numerals, the dominant's pull, cadences | Unit 6 |
+| 5 | **Harmony** — I, IV and V, Roman numerals, the dominant's pull, cadences | Units 6 and 8 |
 | 6 | **Meter** — time signatures, strong and weak beats, simple and compound time, syncopation | Units 2 and 13 |
 | 7 | **Form** — phrases, repeats, sections, verse and chorus | Unit 13, Voice Unit 8 |
 | 8 | **Reading a song** — the key, chords, cadences and form of songs you know | Song practice (7.4) |
@@ -980,7 +980,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 - `recap` lists the lessons that teach that explanation, rather than folding it for any lesson built on: Sharps and flats doesn't teach whole steps. Only Half and whole steps' two explanations are marked so far; the rest of Unit 1 is new. Folded, an explanation hides its keyboard too (`ExplainStepView`).
 - Back goes to the lesson's finished screen, not its first step, and Enter there still goes on to the next lesson (`lessonVisit.ts`, what's sent with the address). Coming back doesn't count as another attempt. Back to Today comes with 7.5, when Theory joins the other courses' Today plans.
 
-**7.3 Theory Units 2–5**
+**7.3 Theory Units 2–5** — built (the check with your piano and voice is still to do)
 - The units above, in English and Spanish, with the `question` kinds each needs: scale degrees, key signatures, the circle of fifths, chord qualities, inversions, Roman numerals and cadences.
 - `build` steps can ask for the same shape in a key chosen at random, so a review isn't the same as the first time.
 - One PR per unit. Unit 2, Scales and keys — built: The major pattern, Scale degrees, Feeling at home, The minor scale. New skills: the major pattern, scale degrees, the tonic and feeling at home, the minor scale.
@@ -989,8 +989,9 @@ Eight units of about three lessons each, in the same levels as the other courses
 - Random keys come from `roots`, the key notes a step lists: each card picks one, and Try again deals new ones.
 - Unit 3, Key signatures — built: The order of sharps and flats, The circle of fifths, Relative minors, Transposing. New skills of the same names.
 - Built as: kinds `keySignature`, `nextAccidental`, `circleUp`, `circleDown`, `relativeMinor`, `relativeMajor`, `transposeNote` and `transposeMelody`. Their answers name keys or notes as lessons write them ("Bb", "F#m"), and for those about keys the answer is all a card needs, so a step lists no `roots`. `ui/sheet/CircleOfFifths.tsx` is the picture, in explanations (`circle`: `major`, or `both` with the minors) and in questions (`show: circle`); a staff picture can be only a key signature. Transposing starts from C major (`TRANSPOSE_FROM`), and is only found, never chosen from a list.
-- In a melody the note given can be one of the notes to play, so it's no longer ignored when there are several notes to find; trying it when it isn't next still isn't a miss.
+- In a melody the note given can be one of the notes to play, so it's no longer ignored when there are several notes to find; trying it when it isn't next still isn't a miss. Notes in order are counted rather than matched (`notesLeft`), because a melody can ask for the same note twice.
 - Unit 4, Chords — built: Triads and their qualities, Inversions, Seventh chords. New skills of the same names. Kinds `chordQuality` and `chordInversion`: `theory/intervals.ts` spells a chord in thirds (`chordNotes`: C diminished has G♭, not F♯). A card now says whether its notes are `ordered` and whether it has a note `given`: a chord has neither, so its notes can come in any order, together or one by one, and nothing is marked. An inversion is played from the lowest note up, because any octave counts and only the order shows it. On the staff a chord is written `together`, and heard one note at a time, then together. Sevenths stop at the dominant, major and minor ones, which is what 7.4's `V7` needs.
+- Unit 5, Harmony — built: Roman numerals, The dominant's pull, Cadences. New skills of the same names. Kinds `romanNumeral` (`vii°` is written `viio`, and `V7` is one of the answers), `dominantOf` and `cadence`, which is only heard: four chords that start alike and end V–I, on V, or IV–I, with the bass on the root and the other notes close together. A chord asked by its numeral keeps the tonic as the note given, played and marked, so the key is there to count from. Minor keys' numerals aren't covered.
 - Theory units after the first have `unlock`, as in the piano course: without it the first lesson of each was open from the start, as in the voice course, though Theory's lessons go in order.
 - The degree after hearing the key: every degree question plays the key's chord first, or a degree can't be heard. `homeNote` is only heard, with five melodies ending on the tonic and five ending elsewhere, written as places in the scale, so they work in any key.
 
@@ -1012,6 +1013,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 - [ ] Today can offer a theory item alongside Piano or Voice (7.5).
 - [ ] Verified with your piano and voice.
   - [ ] TODO (user): go through Theory Unit 1 playing, then singing: are the questions clear, are answers graded fairly either way, and is six seconds enough to work out a note before singing it?
+  - [ ] TODO (user): go through Theory Units 2–5 playing, then singing: is finding a chord fair on your keyboard and with the microphone, are three cadences easy enough to tell apart, and is a sung scale or chord too long?
   - [ ] TODO (user): read the Spanish of the theory units: do the terms sound the way a teacher would say them?
 
 ---

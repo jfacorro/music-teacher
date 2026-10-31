@@ -1,0 +1,38 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "cadences"
+    },
+    {
+      "type": "question",
+      "text": "twoEndings",
+      "kind": "cadence",
+      "answers": ["authentic", "half"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "show": "ear",
+      "count": 6
+    },
+    {
+      "type": "explain",
+      "text": "plagal"
+    },
+    {
+      "type": "question",
+      "text": "threeEndings",
+      "kind": "cadence",
+      "answers": ["authentic", "half", "plagal"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "show": "ear",
+      "count": 8
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "romanNumeral",
+      "answers": ["I", "IV", "V"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "count": 4
+    }
+  ]
+}

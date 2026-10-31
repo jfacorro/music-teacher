@@ -103,6 +103,10 @@
     "t4": {
       "title": "Chords",
       "description": "Triads and their qualities, inversions, and seventh chords."
+    },
+    "t5": {
+      "title": "Harmony",
+      "description": "Roman numerals, the dominant’s pull, and cadences."
     }
   },
   "lessons": {
@@ -211,7 +215,10 @@
     "t3-l4": "Transposing",
     "t4-l1": "Triads and their qualities",
     "t4-l2": "Inversions",
-    "t4-l3": "Seventh chords"
+    "t4-l3": "Seventh chords",
+    "t5-l1": "Roman numerals",
+    "t5-l2": "The dominant’s pull",
+    "t5-l3": "Cadences"
   },
   "skills": {
     "keyboard": "Finding the keys",
@@ -269,6 +276,9 @@
     "transposing": "Transposing",
     "triad-qualities": "Triads and their qualities",
     "chord-inversions": "Chord inversions",
-    "seventh-chords": "Seventh chords"
+    "seventh-chords": "Seventh chords",
+    "roman-numerals": "Roman numerals",
+    "dominant-pull": "The dominant’s pull",
+    "cadences": "Cadences"
   }
 }
