@@ -19,6 +19,7 @@ import { VolumeButton } from '../../components/VolumeControls';
 import { useMicWhileShown } from '../../hooks';
 import { LoadStatus } from '../../loadStatus';
 import { useTopBarDetail } from '../../topBar';
+import { viewAtStart } from '../../viewChoice';
 import { NotationSelect, ViewToggle } from '../practice/ViewToggle';
 import { KeyNoteButton, MovableDoNote } from './KeyNoteButton';
 import { LyricsSelect, SongWords } from './lyrics';
@@ -123,7 +124,9 @@ function SongPractice({ songId, parts, range, heading }: SongPracticeProps) {
   const lyrics = useLyricsLanguage(melody);
   const { system } = useNoteNames();
   const [mode, setMode] = useState<SongMode>(SingMode.Along);
-  const [view, setView] = useState<ScoreView>(ScoreView.Falling);
+  const [view, setView] = useState(() =>
+    viewAtStart(useSettings.getState().exerciseView, ScoreView.Falling),
+  );
   const [notation, setNotation] = useState<SheetNotation>(() => startNotation(system, null));
   const [guide, setGuide] = useState(true);
   const [accompanied, setAccompanied] = useState(true);

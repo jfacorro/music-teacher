@@ -10,6 +10,7 @@ import { moveAccompaniment } from '../../../../engine/lyrics';
 import { fitToRange } from '../../../../engine/transpose';
 import { useSettings } from '../../../../storage/settings';
 import { useMicWhileShown } from '../../../hooks';
+import { viewAtStart } from '../../../viewChoice';
 import { NotationSelect, ViewToggle } from '../../practice/ViewToggle';
 import { KeyNoteButton, MovableDoNote } from '../../singing/KeyNoteButton';
 import { LyricsSelect } from '../../singing/lyrics';
@@ -39,7 +40,9 @@ export function SingStepView({ step, text, onResult, onContinue }: SingStepViewP
   );
   const lyrics = useLyricsLanguage(step.score);
   const [accompanied, setAccompanied] = useState(true);
-  const [view, setView] = useState(step.view);
+  const [view, setView] = useState(() =>
+    viewAtStart(useSettings.getState().exerciseView, step.view),
+  );
   const { system } = useNoteNames();
   const [notation, setNotation] = useState(() => startNotation(system, step.notation));
   const [guide, setGuide] = useState(step.guide);

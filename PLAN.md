@@ -431,7 +431,7 @@ Note names differ by language, so the naming system is its **own setting**, defa
 4. **Song practice** (`/songs`) — the built-in songs and My songs (imported), with their best stars; each opens the practice screen.
 4. **Free play** — shows notes played (names on keys and staff), identifies chords; note-naming quiz.
 5. **Progress** — the home screen (`/`, also opened from the app's name in the header): streak, practice time per day, lessons completed, skill mastery; a big “Let’s Go!” button leads to the learning path.
-6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, metronome and piano volume (also from the 🔊 button on the practice screen; by default the click sits under the music), theme.
+6. **Settings** — **language**, **note-naming system** (English / German / solfège), input source (MIDI / Mic / Auto), MIDI device picker, mic picker + level meter + calibration, latency offset, note labels on/off, the view exercises start in, metronome and piano volume (also from the 🔊 button on the practice screen; by default the click sits under the music), theme.
 7. **First launch** — pick language and note-naming system, then connect an input.
 8. **My songs** — import a MIDI or MusicXML file (file picker or drop), set it up (title, which hand plays each track, transposition, tempo), practice it like any song; its settings screen changes or deletes it.
 
@@ -1036,6 +1036,9 @@ Eight units of about three lessons each, in the same levels as the other courses
 
 **Metronome in exercises** — ✔ done (verified 2026-10-18 in the browser)
 - Settings → Sound and timing → **Metronome in exercises**: Automatic (as before: on when playing along, and when a lesson asks for it), Always on, or Always off. It sets how every exercise starts (lesson exercises and rhythm steps, song practice, sight-reading drills, and switching modes there); the checkbox on each still switches it for the moment. Stored as `exerciseMetronome` (`ui/metronomeChoice.ts`).
+
+**Exercises show** — built
+- Settings → Appearance → **Exercises show**: Automatic (as before: a lesson's own view, falling notes for a song), Falling notes, or Sheet music. It sets how every exercise starts (lesson exercises, rhythm steps and sung melodies, song practice, songs to sing), overriding what a lesson chose; singing, falling notes are the notes in a lane. The toggle on each still switches it for the moment. Sight-reading stays on sheet music, with no toggle. Stored as `exerciseView` (`ui/viewChoice.ts`).
 
 **Vocal range** — ✔ done (verified 2026-10-19 with your voice and microphone)
 - The first piece of singing (IDEAS.md › Singing), on its own: Settings → **Your vocal range**. Three steps with the microphone: a comfortable note (moves on by itself once held), then sliding down and up, each ended with a button (“That’s my lowest”, “That’s my highest”). A note counts when it’s held for half a second (gaps up to 150 ms allowed), from the microphone’s existing pitch readings; no new voice detection yet.

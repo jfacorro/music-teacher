@@ -347,6 +347,17 @@
         "light": "Claro, sea cual sea la configuración de tu computadora.",
         "dark": "Oscuro, sea cual sea la configuración de tu computadora."
       },
+      "exerciseView": "Los ejercicios muestran",
+      "exerciseViews": {
+        "auto": "Automático",
+        "falling": "Notas que caen",
+        "sheet": "Partitura"
+      },
+      "exerciseViewHints": {
+        "auto": "Las canciones empiezan con notas que caen, y las lecciones pasan a la partitura a medida que aprendes a leer.",
+        "falling": "Todos los ejercicios empiezan con notas que caen; al cantar, con notas en un carril.",
+        "sheet": "Todos los ejercicios empiezan con la partitura."
+      },
       "keyHeight": "Altura de las teclas",
       "keyHeights": {
         "short": "Bajas",

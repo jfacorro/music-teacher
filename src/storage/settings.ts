@@ -7,6 +7,7 @@ import { InputMode } from '../input/types';
 import type { VocalRange } from '../engine/vocalRange';
 import { KeyHeight, KeysShown, Theme } from '../ui/appearance';
 import { MetronomeChoice } from '../ui/metronomeChoice';
+import { ViewChoice } from '../ui/viewChoice';
 import { db } from './db';
 
 export interface Settings {
@@ -23,6 +24,8 @@ export interface Settings {
   showOctave: boolean;
   /** Sheet music level to start with when a lesson doesn't set one. */
   sheetNotation: SheetNotation;
+  /** How exercises show the music at the start: as each one usually does, or always the same. */
+  exerciseView: ViewChoice;
   devKeyboard: boolean;
   /** Piano sound for the computer and on-screen keyboards. */
   keySound: boolean;
@@ -83,6 +86,7 @@ export const DEFAULT_SETTINGS: Settings = {
   namingSystem: null,
   showOctave: false,
   sheetNotation: SheetNotation.Names,
+  exerciseView: ViewChoice.Auto,
   devKeyboard: true,
   keySound: true,
   soundTimingMs: 0,
