@@ -2,8 +2,8 @@
   "steps": {
     "home": "Toda tonalidad tiene un hogar: su tónica. Si una melodía se detiene ahí, suena terminada; si se detiene en otra nota, parece que falta algo. “Estrellita, ¿dónde estás?” está en {c} mayor, y su última nota es {c}.",
     "listen": "Suena el acorde de la tonalidad y luego una melodía corta. Escucha bien su última nota.",
-    "pull": "Algunos grados tiran más que otros. El grado 7 está a un semitono de la tónica y quiere subir hasta ella. El grado 2 tiende a bajar hacia ella. El grado 5 es más estable: puede esperar.",
-    "hearDegree": "Escucha el acorde de la tonalidad y después una nota. ¿Qué grado es? Fíjate cuánto tira hacia la tónica.",
+    "pull": "Algunos grados buscan la tónica con más fuerza que otros. El grado 7 está a un semitono de ella y quiere subir. El grado 2 tiende a bajar hacia ella. El grado 5 es más estable: puede esperar.",
+    "hearDegree": "Escucha el acorde de la tonalidad y después una nota. ¿Qué grado es? Fíjate con cuánta fuerza busca la tónica.",
     "build": "Ahora busca tú esos grados, empezando por la tónica."
   }
 }

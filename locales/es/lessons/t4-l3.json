@@ -1,6 +1,6 @@
 {
   "steps": {
-    "sevenths": "Si apilas una tercera más sobre una tríada, tienes un acorde de séptima, con cuatro notas. Estos tres son los más comunes: {g7}, una tríada mayor con séptima menor, llamado séptima de dominante; {cMaj7}, una tríada mayor con séptima mayor; y {dMin7}, una tríada menor con séptima menor.",
+    "sevenths": "Si apilas una tercera más sobre una tríada, tienes un acorde de séptima, con cuatro notas. Estos tres son los más comunes: {g7}, una tríada mayor con séptima menor, que se llama séptima de dominante; {cMaj7}, una tríada mayor con séptima mayor; y {dMin7}, una tríada menor con séptima menor.",
     "onKeys": "Di qué acorde es: primero la tríada y después la séptima que lleva encima.",
     "build": "Ahora tócalos: las cuatro notas, en cualquier orden.",
     "restless": "Cada uno tiene su color: la séptima mayor es suave y soñadora, la séptima menor es cálida, y la séptima de dominante, como {g7}, es inquieta. Quiere seguir adelante. La próxima unidad muestra por qué.",
