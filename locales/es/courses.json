@@ -103,6 +103,10 @@
     "t4": {
       "title": "Acordes",
       "description": "Las tríadas y sus tipos, las inversiones y los acordes de séptima."
+    },
+    "t5": {
+      "title": "Armonía",
+      "description": "Los números romanos, la atracción de la dominante y las cadencias."
     }
   },
   "lessons": {
@@ -211,7 +215,10 @@
     "t3-l4": "Transportar",
     "t4-l1": "Las tríadas y sus tipos",
     "t4-l2": "Las inversiones",
-    "t4-l3": "Los acordes de séptima"
+    "t4-l3": "Los acordes de séptima",
+    "t5-l1": "Los números romanos",
+    "t5-l2": "La atracción de la dominante",
+    "t5-l3": "Las cadencias"
   },
   "skills": {
     "keyboard": "Encontrar las teclas",
@@ -269,6 +276,9 @@
     "transposing": "Transportar",
     "triad-qualities": "Las tríadas y sus tipos",
     "chord-inversions": "Las inversiones de los acordes",
-    "seventh-chords": "Los acordes de séptima"
+    "seventh-chords": "Los acordes de séptima",
+    "roman-numerals": "Los números romanos",
+    "dominant-pull": "La atracción de la dominante",
+    "cadences": "Las cadencias"
   }
 }

@@ -1,0 +1,81 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "dominant",
+      "textVars": {
+        "c": "C4",
+        "cHigh": "C5",
+        "gMajor": {
+          "chord": "G4",
+          "quality": "major"
+        },
+        "b": "B4"
+      },
+      "keys": [
+        {
+          "note": "G4"
+        },
+        {
+          "note": "B4"
+        },
+        {
+          "note": "D5"
+        },
+        {
+          "note": "C5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "explain",
+      "text": "seventh",
+      "textVars": {
+        "b": "B4",
+        "c": "C5",
+        "f": "F5",
+        "e": "E5"
+      },
+      "keys": [
+        {
+          "note": "G4"
+        },
+        {
+          "note": "B4"
+        },
+        {
+          "note": "D5"
+        },
+        {
+          "note": "F5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "question",
+      "text": "whichChord",
+      "kind": "dominantOf",
+      "answers": ["G", "D", "A", "C", "F"],
+      "show": "circle",
+      "count": 6
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "dominantOf",
+      "answers": ["G", "D", "A", "C"],
+      "count": 4
+    },
+    {
+      "type": "question",
+      "text": "hear",
+      "kind": "romanNumeral",
+      "answers": ["I", "V", "V7"],
+      "roots": ["C4", "G4", "F4"],
+      "show": "ear",
+      "count": 6
+    }
+  ]
+}

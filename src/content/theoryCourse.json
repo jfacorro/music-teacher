@@ -149,6 +149,40 @@
           }
         }
       ]
+    },
+    {
+      "id": "t5",
+      "level": "elementary",
+      "unlock": {
+        "previousUnitMinStars": 1
+      },
+      "lessons": [
+        {
+          "id": "t5-l1",
+          "skills": ["roman-numerals"],
+          "builds": ["u6-l4"],
+          "tryIt": {
+            "song": "jingle-bells"
+          }
+        },
+        {
+          "id": "t5-l2",
+          "skills": ["dominant-pull"],
+          "builds": ["u6-l4", "u8-l4"],
+          "tryIt": {
+            "ear": "chords"
+          }
+        },
+        {
+          "id": "t5-l3",
+          "skills": ["cadences"],
+          "builds": ["u6-l4"],
+          "tryIt": {
+            "song": "jingle-bells",
+            "ear": "chords"
+          }
+        }
+      ]
     }
   ]
 }

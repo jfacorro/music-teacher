@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "dominant": "V es el acorde de dominante, y quiere volver a casa, a I. Su tercera es el grado 7, a un semitono de la tónica: en {c} mayor, {gMajor} tiene {b}, justo debajo de {cHigh}.",
+    "seventh": "Si le agregas una séptima, la atracción es más fuerte. V7 agrega el grado 4, que quiere bajar un semitono hasta el grado 3. Así, {b} sube a {c} mientras {f} baja a {e}: dos notas que tiran en direcciones opuestas. Por eso la séptima de dominante suena tan inquieta.",
+    "whichChord": "La dominante está un paso en sentido horario desde la tonalidad. ¿Qué acorde de séptima lleva de vuelta a la tonalidad marcada?",
+    "build": "Ahora tócalo: las cuatro notas de la séptima de dominante, construida sobre el grado 5. La tónica está marcada.",
+    "hear": "Escucha después del acorde de la tonalidad: ¿este reposa (I), tira (V) o tira con más fuerza (V7)?"
+  }
+}

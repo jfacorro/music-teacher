@@ -28,7 +28,7 @@
     "octave": "Octave"
   },
   "answers": {
-    "half": "Half step",
+    "half": "Half (ends on V)",
     "whole": "Whole step",
     "second": "Second",
     "third": "Third",
@@ -55,7 +55,17 @@
     "minor7": "Minor seventh",
     "rootPosition": "Root position",
     "firstInversion": "First inversion",
-    "secondInversion": "Second inversion"
+    "secondInversion": "Second inversion",
+    "I": "I",
+    "ii": "ii",
+    "iii": "iii",
+    "IV": "IV",
+    "V": "V",
+    "vi": "vi",
+    "viio": "vii°",
+    "V7": "V7",
+    "authentic": "Authentic (V–I)",
+    "plagal": "Plagal (IV–I)"
   },
   "find": {
     "half": "a half step",

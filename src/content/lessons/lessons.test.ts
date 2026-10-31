@@ -271,6 +271,9 @@ describe('parseLesson', () => {
     ).rejects.toThrow('isn’t a question');
     await expect(parse({ kind: 'keySignature', answers: ['H'] })).rejects.toThrow('not an answer');
     await expect(parse({ kind: 'keySignature', answers: ['Bb'] })).resolves.toBeDefined();
+    const cadence = { kind: 'cadence', answers: ['half'] };
+    await expect(parse(cadence)).rejects.toThrow('only heard');
+    await expect(parse({ ...cadence, show: 'ear' })).resolves.toBeDefined();
     await expect(parse({ type: 'explain', circle: 'square' })).rejects.toThrow('circle');
   });
 

@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "numerals": "Build a triad on each degree of a scale and you have the chords of the key. Roman numerals name them by degree, in capitals when they’re major and small letters when they’re minor: I, ii, iii, IV, V, vi and vii°, which is diminished. In {c} major, V is {gMajor}. In {g} major, V is {dMajor}: the numeral stays and the notes change.",
+    "chooseChord": "The key’s chord plays, then the chord asked about. Count up from the tonic to its root.",
+    "onStaff": "Now on the staff, with more chords of the key. The lowest note is the root.",
+    "shape": "Three chords are major (I, IV and V), three are minor (ii, iii and vi) and one is diminished (vii°). The same pattern holds in every major key, so a chord progression can move to any key with its numerals unchanged.",
+    "build": "Now play them. The tonic is marked: count up to the root, and stack thirds on it with the notes of the scale."
+  }
+}

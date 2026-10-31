@@ -679,7 +679,10 @@
         "relativeMinor": "What’s the relative minor of {key}?",
         "relativeMajor": "What’s the relative major of {key}?",
         "chordQuality": "What kind of chord is this?",
-        "chordInversion": "Which inversion is this?"
+        "chordInversion": "Which inversion is this?",
+        "romanNumeral": "In {key}, which chord is this?",
+        "dominantOf": "Which seventh chord leads home to {key}?",
+        "cadence": "How does this phrase end?"
       },
       "choices": "Answers",
       "right": "That’s right!",
@@ -706,7 +709,9 @@
         "transposeNote": "In {from} this is {notes}. Find it in {key}.",
         "transposeMelody": "In {from} this is {notes}. Play it in {key}.",
         "chordQuality": "Play the {chord} chord.",
-        "chordInversion": "Play {chord} in {inversion}, from the lowest note up."
+        "chordInversion": "Play {chord} in {inversion}, from the lowest note up.",
+        "romanNumeral": "Play the {numeral} chord in {key}.",
+        "dominantOf": "Play the dominant seventh of {key}."
       },
       "singing": {
         "scaleDegree": "Sing degree {degree} of {key}.",
@@ -720,7 +725,9 @@
         "transposeNote": "In {from} this is {notes}. Sing it in {key}.",
         "transposeMelody": "In {from} this is {notes}. Sing it in {key}: note {place} of {total}.",
         "chordQuality": "Sing the notes of {chord}: note {place} of {total}.",
-        "chordInversion": "Sing {chord} in {inversion}: note {place} of {total}."
+        "chordInversion": "Sing {chord} in {inversion}: note {place} of {total}.",
+        "romanNumeral": "Sing the {numeral} chord in {key}: note {place} of {total}.",
+        "dominantOf": "Sing the dominant seventh of {key}: note {place} of {total}."
       },
       "anyOrder": "Any octave and any order. Keys you’ve found stay lit."
     },

@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "numerals": "Si construyes una tríada sobre cada grado de una escala, tienes los acordes de la tonalidad. Los números romanos los nombran por su grado, en mayúsculas si son mayores y en minúsculas si son menores: I, ii, iii, IV, V, vi y vii°, que es disminuido. En {c} mayor, V es {gMajor}. En {g} mayor, V es {dMajor}: el número se mantiene y las notas cambian.",
+    "chooseChord": "Suena el acorde de la tonalidad y después el acorde que se pregunta. Cuenta desde la tónica hasta su fundamental.",
+    "onStaff": "Ahora en el pentagrama, con más acordes de la tonalidad. La nota más grave es la fundamental.",
+    "shape": "Tres acordes son mayores (I, IV y V), tres son menores (ii, iii y vi) y uno es disminuido (vii°). El mismo patrón se repite en todas las tonalidades mayores, así que una progresión de acordes puede ir a cualquier tonalidad con los mismos números.",
+    "build": "Ahora tócalos. La tónica está marcada: cuenta hasta la fundamental y apila terceras con las notas de la escala."
+  }
+}

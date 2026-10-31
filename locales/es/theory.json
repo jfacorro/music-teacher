@@ -28,7 +28,7 @@
     "octave": "Octava"
   },
   "answers": {
-    "half": "Semitono",
+    "half": "Semicadencia (termina en V)",
     "whole": "Tono",
     "second": "Segunda",
     "third": "Tercera",
@@ -55,7 +55,17 @@
     "minor7": "Séptima menor",
     "rootPosition": "Estado fundamental",
     "firstInversion": "Primera inversión",
-    "secondInversion": "Segunda inversión"
+    "secondInversion": "Segunda inversión",
+    "I": "I",
+    "ii": "ii",
+    "iii": "iii",
+    "IV": "IV",
+    "V": "V",
+    "vi": "vi",
+    "viio": "vii°",
+    "V7": "V7",
+    "authentic": "Auténtica (V–I)",
+    "plagal": "Plagal (IV–I)"
   },
   "find": {
     "half": "un semitono",

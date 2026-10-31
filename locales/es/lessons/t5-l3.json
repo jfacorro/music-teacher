@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "cadences": "Una cadencia es la manera en que termina una frase: la puntuación de la música. La cadencia auténtica va de V a I y suena terminada, como un punto. La semicadencia se detiene en V y suena inconclusa, como una coma.",
+    "twoEndings": "Todas las frases empiezan igual. Escucha cómo terminan.",
+    "plagal": "La cadencia plagal va de IV a I. Es más suave que V a I: es el “amén” del final de muchos himnos.",
+    "threeEndings": "Ahora las tres. Escucha los dos últimos acordes.",
+    "build": "Ahora toca los acordes de esos finales, en distintas tonalidades."
+  }
+}
