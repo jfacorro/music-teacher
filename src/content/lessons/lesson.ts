@@ -102,6 +102,8 @@ export interface ExplainStep extends StepBase {
   staff: StaffNotes | null;
   /** A few bars of music shown above the keyboard, e.g. to show a mark (an inline score). */
   music: Score | null;
+  /** The lessons that teach this too: it folds to one line once one of them is done. */
+  recap: string[];
 }
 
 export interface FindStep extends StepBase {
@@ -329,6 +331,7 @@ async function parseStep(input: unknown, location: string): Promise<LessonStep> 
         range: range(data.range, at(location, 'range')),
         staff: data.staff === undefined ? null : staffNotes(data.staff, at(location, 'staff')),
         music: data.music === undefined ? null : inlineScore(data.music, at(location, 'music')),
+        recap: lessonIds(data.recap, at(location, 'recap')),
       };
     case StepType.Find: {
       if (!Array.isArray(data.notes) || data.notes.length === 0) {
@@ -674,6 +677,14 @@ function passDynamics(data: Record<string, unknown>, score: Score, location: str
     throw new LessonError(at(location, 'pass › dynamics'), 'the score has no dynamics');
   }
   return pass.dynamics;
+}
+
+function lessonIds(input: unknown, location: string): string[] {
+  if (input === undefined) return [];
+  if (!Array.isArray(input) || input.some((id) => typeof id !== 'string')) {
+    throw new LessonError(location, 'expected an array of lesson ids');
+  }
+  return input as string[];
 }
 
 /**

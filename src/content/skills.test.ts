@@ -8,9 +8,21 @@ const unit: Unit = {
   textVars: {},
   unlock: null,
   lessons: [
-    { id: 'a', titleVars: {}, skills: ['keyboard'] },
-    { id: 'b', titleVars: {}, skills: ['keyboard', 'rh-position'] },
-    { id: 'c', titleVars: {}, skills: ['rh-position'] },
+    { id: 'a', titleVars: {}, builds: [], tryIt: { song: null, ear: null }, skills: ['keyboard'] },
+    {
+      id: 'b',
+      titleVars: {},
+      builds: [],
+      tryIt: { song: null, ear: null },
+      skills: ['keyboard', 'rh-position'],
+    },
+    {
+      id: 'c',
+      titleVars: {},
+      builds: [],
+      tryIt: { song: null, ear: null },
+      skills: ['rh-position'],
+    },
   ],
 };
 
@@ -69,12 +81,42 @@ describe('skillPlan', () => {
       ...unit,
       id: 'u1',
       lessons: [
-        { id: 'a', titleVars: {}, skills: ['treble-clef'] },
-        { id: 'b', titleVars: {}, skills: ['treble-clef'] },
-        { id: 'c', titleVars: {}, skills: ['treble-clef'] },
+        {
+          id: 'a',
+          titleVars: {},
+          builds: [],
+          tryIt: { song: null, ear: null },
+          skills: ['treble-clef'],
+        },
+        {
+          id: 'b',
+          titleVars: {},
+          builds: [],
+          tryIt: { song: null, ear: null },
+          skills: ['treble-clef'],
+        },
+        {
+          id: 'c',
+          titleVars: {},
+          builds: [],
+          tryIt: { song: null, ear: null },
+          skills: ['treble-clef'],
+        },
       ],
     },
-    { ...unit, id: 'u2', lessons: [{ id: 'd', titleVars: {}, skills: ['treble-clef'] }] },
+    {
+      ...unit,
+      id: 'u2',
+      lessons: [
+        {
+          id: 'd',
+          titleVars: {},
+          builds: [],
+          tryIt: { song: null, ear: null },
+          skills: ['treble-clef'],
+        },
+      ],
+    },
   ];
   const planOf = (best: Record<string, number>, locked: readonly string[] = []) => {
     const accuracyOf = (id: string) => best[id] ?? null;

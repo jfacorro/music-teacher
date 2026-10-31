@@ -97,10 +97,19 @@ export const EXERCISE_SKILLS: readonly Skill[] = [
   'sight-singing',
 ];
 
+/** What a theory lesson suggests trying, in the course you practice in (ids checked by a test). */
+export interface TryIt {
+  song: string | null;
+  ear: string | null;
+}
+
 export interface CourseLesson {
   id: string;
   titleVars: Record<string, Pitch>;
   skills: Skill[];
+  /** Theory: the piano and voice lessons it builds on (`content/courseLinks.ts`). */
+  builds: string[];
+  tryIt: TryIt;
 }
 
 function skills(lessonId: string, input: readonly string[] | undefined): Skill[] {
@@ -150,7 +159,13 @@ interface UnitData {
   level?: unknown;
   textVars?: Record<string, string>;
   unlock?: Unit['unlock'];
-  lessons: { id: string; titleVars?: Record<string, string>; skills?: string[] }[];
+  lessons: {
+    id: string;
+    titleVars?: Record<string, string>;
+    skills?: string[];
+    builds?: string[];
+    tryIt?: { song?: string; ear?: string };
+  }[];
 }
 
 const parseUnits = (units: readonly UnitData[]): Unit[] =>
@@ -163,6 +178,8 @@ const parseUnits = (units: readonly UnitData[]): Unit[] =>
       id: lesson.id,
       titleVars: vars(lesson.titleVars),
       skills: skills(lesson.id, lesson.skills),
+      builds: lesson.builds ?? [],
+      tryIt: { song: lesson.tryIt?.song ?? null, ear: lesson.tryIt?.ear ?? null },
     })),
   }));
 

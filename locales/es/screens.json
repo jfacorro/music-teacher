@@ -596,6 +596,21 @@
     "passRule": "{stars, plural, one {Consigue # estrella para aprobar} other {Consigue # estrellas para aprobar}}",
     "complete": "¡Lección completada!",
     "notComplete": "Lección sin completar",
+    "backTo": "Volver a {lesson}",
+    "why": "¿Por qué funciona así?",
+    "whyLink": "{lesson} · Teoría",
+    "tryIt": {
+      "title": "Ponlo en práctica",
+      "pianoLesson": "Lección de piano",
+      "voiceLesson": "Lección de voz",
+      "song": "Canción",
+      "ear": "Entrenamiento auditivo"
+    },
+    "recap": {
+      "met": "Ya viste esto en {course}, unidad {number}: {lesson}",
+      "open": "Volver a leerlo",
+      "close": "Ocultar"
+    },
     "noStars": "Completa todos los pasos sin saltarte ninguno para conseguir estrellas.",
     "restart": "Empezar la lección de nuevo",
     "next": "Siguiente lección",

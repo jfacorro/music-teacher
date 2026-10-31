@@ -7,7 +7,13 @@ const unit = (id: string, lessons: string[], minStars?: number): Unit => ({
   level: CourseLevel.Beginner,
   textVars: {},
   unlock: minStars === undefined ? null : { previousUnitMinStars: minStars },
-  lessons: lessons.map((lessonId) => ({ id: lessonId, titleVars: {}, skills: [] })),
+  lessons: lessons.map((lessonId) => ({
+    id: lessonId,
+    titleVars: {},
+    builds: [],
+    tryIt: { song: null, ear: null },
+    skills: [],
+  })),
 });
 
 const units = [unit('u1', ['a', 'b', 'c']), unit('u2', ['d', 'e'], 2)];
