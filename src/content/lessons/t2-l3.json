@@ -1,0 +1,41 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "home",
+      "textVars": {
+        "c": "C4"
+      }
+    },
+    {
+      "type": "question",
+      "text": "listen",
+      "kind": "homeNote",
+      "answers": ["home", "away"],
+      "roots": ["C4", "G4", "F4"],
+      "show": "ear",
+      "count": 8
+    },
+    {
+      "type": "explain",
+      "text": "pull"
+    },
+    {
+      "type": "question",
+      "text": "hearDegree",
+      "kind": "scaleDegree",
+      "answers": ["degree1", "degree2", "degree5", "degree7"],
+      "roots": ["C4", "G4", "F4"],
+      "show": "ear",
+      "count": 8
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "scaleDegree",
+      "answers": ["degree2", "degree5", "degree7"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "count": 6
+    }
+  ]
+}

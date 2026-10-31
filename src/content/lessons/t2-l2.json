@@ -1,0 +1,50 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "degrees",
+      "textVars": {
+        "g": "G4",
+        "d": "D5",
+        "cScale": {
+          "scale": "C4",
+          "quality": "major"
+        },
+        "gScale": {
+          "scale": "G4",
+          "quality": "major"
+        }
+      }
+    },
+    {
+      "type": "question",
+      "text": "onKeys",
+      "kind": "scaleDegree",
+      "answers": ["degree1", "degree2", "degree3", "degree4", "degree5", "degree6", "degree7"],
+      "roots": ["C4", "G4", "F4"],
+      "show": "keyboard",
+      "count": 8
+    },
+    {
+      "type": "question",
+      "text": "onStaff",
+      "kind": "scaleDegree",
+      "answers": ["degree1", "degree2", "degree3", "degree4", "degree5", "degree6", "degree7"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "show": "staff",
+      "count": 7
+    },
+    {
+      "type": "explain",
+      "text": "names"
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "scaleDegree",
+      "answers": ["degree2", "degree3", "degree4", "degree5", "degree6", "degree7"],
+      "roots": ["C4", "G4", "F4", "D4"],
+      "count": 6
+    }
+  ]
+}

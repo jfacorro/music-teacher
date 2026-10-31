@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "pattern": "Una escala mayor es un patrón de pasos: tono, tono, semitono, tono, tono, tono, semitono. Las teclas blancas de {c} al {c} siguiente lo siguen al pie de la letra, con los semitonos entre {e} y {f} y entre {b} y {c}.",
+    "chooseSteps": "Hay dos notas vecinas de la escala iluminadas. ¿El paso entre ellas es de un semitono o de un tono?",
+    "otherKeys": "El patrón funciona desde cualquier nota. Si empiezas en {g} y lo sigues, la séptima nota tiene que ser {fSharp}, no {f}, para conservar ese último semitono. Por eso la {gScale} lleva un sostenido.",
+    "build": "Ahora construye tú las escalas. Te damos la primera nota: busca las demás en orden, siguiendo el patrón.",
+    "ear": "Ahora de oído: las dos notas suenan una detrás de la otra."
+  }
+}

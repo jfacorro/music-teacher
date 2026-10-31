@@ -1,0 +1,84 @@
+{
+  "steps": [
+    {
+      "type": "explain",
+      "text": "minor",
+      "recap": ["v6-l2"],
+      "textVars": {
+        "a": "A4"
+      },
+      "keys": [
+        {
+          "note": "A4"
+        },
+        {
+          "note": "B4"
+        },
+        {
+          "note": "C5"
+        },
+        {
+          "note": "D5"
+        },
+        {
+          "note": "E5"
+        },
+        {
+          "note": "F5"
+        },
+        {
+          "note": "G5"
+        },
+        {
+          "note": "A5"
+        }
+      ],
+      "range": ["C4", "C6"]
+    },
+    {
+      "type": "question",
+      "text": "hearScale",
+      "kind": "scaleType",
+      "answers": ["major", "minor"],
+      "roots": ["C4", "D4", "E4", "G4", "A4"],
+      "show": "ear",
+      "count": 6
+    },
+    {
+      "type": "build",
+      "text": "build",
+      "kind": "scaleType",
+      "answers": ["minor"],
+      "roots": ["A4", "E4", "D4", "C4"],
+      "count": 3
+    },
+    {
+      "type": "explain",
+      "text": "seventh",
+      "recap": ["u8-l4"],
+      "textVars": {
+        "a": "A4",
+        "gSharp": "G#5"
+      },
+      "keys": [
+        {
+          "note": "G#4"
+        },
+        {
+          "note": "A4"
+        }
+      ],
+      "range": ["C4", "C5"]
+    },
+    {
+      "type": "question",
+      "text": "degrees",
+      "kind": "scaleDegree",
+      "mode": "minor",
+      "answers": ["degree1", "degree2", "degree3", "degree4", "degree5", "degree6", "degree7"],
+      "roots": ["A4", "E4", "D4"],
+      "show": "staff",
+      "count": 7
+    }
+  ]
+}

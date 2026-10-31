@@ -12,7 +12,7 @@ interface QuestionStepViewProps {
   onContinue: () => void;
 }
 
-/** Theory questions: two notes, and a choice of answers. */
+/** Theory questions: notes shown or heard, and a choice of answers. */
 export function QuestionStepView({ step, text, onResult, onContinue }: QuestionStepViewProps) {
   const { t } = useTranslation('screens');
   const passes = (stars: number) => stars >= step.pass.minStars;

@@ -36,7 +36,18 @@
     "fifth": "Quinta",
     "sixth": "Sexta",
     "seventh": "Séptima",
-    "eighth": "Octava"
+    "eighth": "Octava",
+    "degree1": "1",
+    "degree2": "2",
+    "degree3": "3",
+    "degree4": "4",
+    "degree5": "5",
+    "degree6": "6",
+    "degree7": "7",
+    "major": "Mayor",
+    "minor": "Menor",
+    "home": "Sí",
+    "away": "No"
   },
   "find": {
     "half": "un semitono",

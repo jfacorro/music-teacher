@@ -666,7 +666,11 @@
       "prompts": {
         "stepSize": "¿Semitono o tono?",
         "intervalNumber": "¿Qué número tiene este intervalo?",
-        "intervalName": "¿Qué intervalo es?"
+        "intervalName": "¿Qué intervalo es?",
+        "scaleStep": "En {key}, de la nota {from} a la {to}: ¿semitono o tono?",
+        "scaleDegree": "En {key}, ¿qué grado es este?",
+        "scaleType": "¿Mayor o menor?",
+        "homeNote": "¿La melodía termina en la tónica?"
       },
       "choices": "Respuestas",
       "right": "¡Correcto!",
@@ -679,7 +683,12 @@
       "singTitle": "A cantar",
       "singIntro": "La aplicación toca una nota, y tú cantas la que se pide y la mantienes afinada medio segundo. Vale cualquier octava, y cada una cuenta si la cantas en menos de seis segundos.",
       "sing": "Ahora cántala.",
-      "hearRoot": "Escuchar {note} otra vez"
+      "hearRoot": "Escuchar {note} otra vez",
+      "playDegree": "Busca el grado {degree} de {key}.",
+      "singDegree": "Canta el grado {degree} de {key}.",
+      "playScale": "Toca la escala de {key} hacia arriba, desde la nota que te damos.",
+      "singScale": "Canta la escala de {key}: nota {place} de {total}.",
+      "found": "Llevas {found} de {total}."
     }
   },
   "welcome": {

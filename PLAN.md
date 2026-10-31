@@ -946,7 +946,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 | Unit | Topic | Builds on |
 |---|---|---|
 | 1 | **Intervals** — half and whole steps, naming intervals by number and quality, hearing them | Units 2, 3, 6 and 8, Voice Units 5–6 |
-| 2 | **Scales and keys** — the major pattern, the tonic, scale degrees, why a melody feels at home, minor | Unit 7, Voice Units 4 and 6 |
+| 2 | **Scales and keys** — the major pattern, the tonic, scale degrees, why a melody feels at home, minor | Units 7 and 8, Voice Units 4 and 6 |
 | 3 | **Key signatures** — the order of sharps and flats, the circle of fifths, relative minors, transposing | Units 8 and 12 |
 | 4 | **Chords** — triads and their qualities, inversions, seventh chords | Unit 6 |
 | 5 | **Harmony** — I, IV and V, Roman numerals, the dominant's pull, cadences | Unit 6 |
@@ -983,6 +983,11 @@ Eight units of about three lessons each, in the same levels as the other courses
 **7.3 Theory Units 2–5**
 - The units above, in English and Spanish, with the `question` kinds each needs: scale degrees, key signatures, the circle of fifths, chord qualities, inversions, Roman numerals and cadences.
 - `build` steps can ask for the same shape in a key chosen at random, so a review isn't the same as the first time.
+- One PR per unit. Unit 2, Scales and keys — built: The major pattern, Scale degrees, Feeling at home, The minor scale. New skills: the major pattern, scale degrees, the tonic and feeling at home, the minor scale.
+- Built as: a theory card is no longer two notes. `engine/theoryQuestions.ts` deals `TheoryCard`s: what's shown (`shown`), heard (`sound`, groups of notes in turn), written with (`keyFifths`) and to find (`targets`, in order), from `cardFor`, one case per kind; the parser deals one card of every answer and root to reject what can't be spelled. New kinds: `scaleStep`, `scaleDegree`, `scaleType`, `homeNote`; `mode` on a step says which scale it's about. `theory/keys.ts` gives a key's signature and its scale, spelled from the signature, so a degree never needs naming by hand.
+- A `build` can ask for several notes: a scale's, in order, up from the one given. Finding them on the keys, one wrong key marks the whole card as missed, and a note found earlier played again doesn't count against you. Sung, they come one at a time, each after the one before (`sungNotes`), so a scale of seven notes counts as seven, and a sung step stops at nine notes: one scale instead of three.
+- Random keys come from `roots`, the key notes a step lists: each card picks one, and Try again deals new ones.
+- The degree after hearing the key: every degree question plays the key's chord first, or a degree can't be heard. `homeNote` is only heard, with five melodies ending on the tonic and five ending elsewhere, written as places in the scale, so they work in any key.
 
 **7.4 Theory in your songs**
 - A song's analysis as data, in its file: the key, a chord for each bar or beat as a degree (`V7`, its name worked out from the key), cadences and sections. Written by hand, not computed: `identifyChord` can't be trusted with melodies, broken chords and passing notes, and a lesson mustn't teach a wrong answer. A test checks each chord against the notes in its bar.

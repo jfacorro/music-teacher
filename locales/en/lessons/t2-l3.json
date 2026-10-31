@@ -1,0 +1,9 @@
+{
+  "steps": {
+    "home": "Every key has a home: its tonic. Stop a melody there and it feels finished; stop anywhere else and it feels like there’s more to come. “Twinkle, Twinkle, Little Star” is in {c} major, and its last note is {c}.",
+    "listen": "The key’s chord plays, then a short melody. Listen to its last note.",
+    "pull": "Some degrees pull harder than others. Degree 7 sits a half step below the tonic and wants to rise to it. Degree 2 tends to step down to it. Degree 5 is steadier: it can wait.",
+    "hearDegree": "Hear the key’s chord, then one note. Which degree is it? Notice how much it pulls toward the tonic.",
+    "build": "Now find those degrees yourself, starting from the tonic."
+  }
+}
