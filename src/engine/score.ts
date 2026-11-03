@@ -3,6 +3,7 @@
  * a quarter note whatever the time signature (as in MusicXML), and `tempo` is quarter notes
  * per minute.
  */
+import type { SongAnalysis } from './harmony';
 import type { Pitch } from '../theory/pitch';
 import type { ScoreDynamics } from './dynamics';
 import type { Marking } from './markings';
@@ -170,6 +171,8 @@ export interface Score {
   form?: Form;
   /** A song's words: their syllables are on the notes (`ScoreNote.lyrics`). */
   lyrics?: ScoreLyrics;
+  /** A song's chords, cadences and sections, as written in its file (engine/harmony.ts). */
+  analysis?: SongAnalysis;
 }
 
 /** The score marks where to use the sustain pedal. */

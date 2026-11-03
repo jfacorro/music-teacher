@@ -122,5 +122,11 @@
   },
   "scales": {
     "major": "{root} major scale"
+  },
+  "symbols": {
+    "major": "{root}",
+    "minor": "{root}m",
+    "diminished": "{root}°",
+    "dominant7": "{root}7"
   }
 }

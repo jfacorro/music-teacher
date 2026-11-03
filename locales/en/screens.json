@@ -497,7 +497,8 @@
         "L": "Practice the left hand only"
       },
       "autoplay": "Play it for me: the app plays the music, so you can watch and listen",
-      "lane": "Notes in a lane: sing each one as it reaches the line"
+      "lane": "Notes in a lane: sing each one as it reaches the line",
+      "harmony": "Show the chords, sections and cadences with the music"
     },
     "micChords": "With the microphone, any note of a chord counts for the whole chord. Connect a MIDI keyboard to check every note.",
     "tempoInfo": "{bpm} BPM",
@@ -590,7 +591,13 @@
     },
     "lateSound": "Most notes came in late, by about {ms} ms. If you were playing with the clicks, they may be reaching you late: Bluetooth headphones and speakers delay sound, and the browser can’t tell.",
     "unmeasuredOutput": "Sound goes to {output}, and the clicks’ timing hasn’t been measured for it. If it’s Bluetooth, the clicks will come late, and so will notes played with them.",
-    "measureTiming": "Measure the timing"
+    "measureTiming": "Measure the timing",
+    "harmony": "Harmony",
+    "cadences": {
+      "authentic": "Authentic cadence",
+      "half": "Half cadence",
+      "plagal": "Plagal cadence"
+    }
   },
   "lesson": {
     "topBar": "Unit {number} · {lesson}",

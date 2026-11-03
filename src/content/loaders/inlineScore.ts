@@ -22,6 +22,12 @@
  * engine/lyrics.ts:
  *   "lyrics": { "en": "Twin-kle, twin-kle, | lit-tle star, / …", "es": "…" }, "lyricsHand": "L"
  *
+ * A song's harmony (PLAN.md milestone 7.4, engine/harmony.ts), written by hand: its key, a chord
+ * for each bar by its numeral, or one per beat with "-" holding the chord before ("V - I -"), or
+ * "" for none; where phrases end; and its sections. Bars are counted from 1.
+ *   "analysis": { "key": "C", "chords": ["I", "V", …, "V - I -"],
+ *     "cadences": [{ "bar": 4, "kind": "half" }], "sections": [{ "bar": 1, "name": "A" }] }
+ *
  * A score with repeats comes back as played (see engine/form.ts › unroll), keeping how it's
  * written.
  *
@@ -32,6 +38,7 @@ import {
   Articulation,
   type Finger,
   Hand,
+  type Measure,
   type PedalMark,
   type Repeat,
   type Ritardando,
@@ -41,7 +48,10 @@ import {
   type Slur,
   wholeMeasures,
 } from '../../engine/score';
+import type { SongAnalysis, SongCadence, SongChord, SongSection } from '../../engine/harmony';
 import { LyricsError, lyricLines, parseLyrics } from '../../engine/lyrics';
+import { Cadence, Numeral } from '../../engine/theoryQuestions';
+import { type KeyName, keyFifthsOf, Mode, parseKey } from '../../theory/keys';
 import { unroll } from '../../engine/form';
 import { isMarking, isDynamic, type Marking } from '../../engine/markings';
 import { type Hairpin, HairpinKind, type ScoreDynamics } from '../../engine/dynamics';
@@ -90,6 +100,11 @@ export function parseInlineScore(input: unknown, location: string): Score {
   if (lyrics && repeats.length > 0) {
     throw new ScoreError(at(location, 'lyrics'), 'a song with words has no repeats');
   }
+  const keyFifths = (data.keyFifths as number | undefined) ?? 0;
+  const analysis = parseAnalysis(data.analysis, at(location, 'analysis'), measures, keyFifths);
+  if (analysis && repeats.length > 0) {
+    throw new ScoreError(at(location, 'analysis'), 'a song with repeats has no analysis yet');
+  }
   return unroll({
     tempo,
     timeSignature,
@@ -103,7 +118,105 @@ export function parseInlineScore(input: unknown, location: string): Score {
     ...(repeats.length > 0 && { repeats }),
     ...(ritardandos.length > 0 && { ritardandos }),
     ...(lyrics && { lyrics }),
+    ...(analysis && { analysis }),
   });
+}
+
+/** Lessons write a key as its note, with "m" for minor: "Bb", "F#m". */
+const KEY_PATTERN = /^[A-G][#b]?m?$/;
+/** Holds the chord before for another beat. */
+const HOLD = '-';
+/** The most letters a section's name takes ("A′"). */
+const SECTION_NAME_MOST = 3;
+
+function parseAnalysis(
+  input: unknown,
+  location: string,
+  measures: readonly Measure[],
+  keyFifths: number,
+): SongAnalysis | null {
+  if (input === undefined) return null;
+  const data = expectObject(input, location);
+  if (typeof data.key !== 'string' || !KEY_PATTERN.test(data.key)) {
+    throw new ScoreError(at(location, 'key'), 'expected a key such as "C" or "Bb"');
+  }
+  const key = parseKey(data.key as KeyName);
+  if (key.mode !== Mode.Major) {
+    throw new ScoreError(at(location, 'key'), 'only major keys are analyzed for now');
+  }
+  let fifths: number | null = null;
+  try {
+    fifths = keyFifthsOf(key.tonic, key.mode);
+  } catch {
+    // No signature has it: reported below.
+  }
+  if (fifths !== keyFifths) {
+    throw new ScoreError(at(location, 'key'), `"${data.key}" isn’t the key of the signature`);
+  }
+
+  if (!Array.isArray(data.chords) || data.chords.length !== measures.length) {
+    throw new ScoreError(
+      at(location, 'chords'),
+      `expected one string for each of the ${measures.length} bars`,
+    );
+  }
+  const chords: SongChord[] = [];
+  data.chords.forEach((bar: unknown, i) => {
+    const here = at(location, `chords[${i}]`);
+    if (typeof bar !== 'string') throw new ScoreError(here, 'expected a string');
+    const measure = measures[i]!;
+    const tokens = bar.split(/\s+/).filter(Boolean);
+    if (tokens.length > 1 && tokens.length !== measure.length) {
+      throw new ScoreError(
+        here,
+        `expected one chord, or one for each of its ${measure.length} beats`,
+      );
+    }
+    tokens.forEach((token, beat) => {
+      if (token === HOLD) return;
+      if (!isValueOf(Numeral, token)) {
+        throw new ScoreError(here, `"${token}" isn’t a numeral (${describeValues(Numeral)})`);
+      }
+      if (chords.at(-1)?.numeral === token) return;
+      chords.push({ start: measure.start + beat, numeral: token });
+    });
+  });
+
+  const bar = (input: unknown, where: string): number => {
+    const n = expectNumber(input, where, { min: 1 });
+    if (!Number.isInteger(n) || n > measures.length) {
+      throw new ScoreError(where, `expected a bar from 1 to ${measures.length}`);
+    }
+    return n - 1;
+  };
+  const cadences = expectArray(data.cadences, at(location, 'cadences')).map(
+    (item, i): SongCadence => {
+      const here = at(location, `cadences[${i}]`);
+      const cadence = expectObject(item, here);
+      if (!isValueOf(Cadence, cadence.kind)) {
+        throw new ScoreError(at(here, 'kind'), `expected ${describeValues(Cadence)}`);
+      }
+      return { measure: bar(cadence.bar, at(here, 'bar')), kind: cadence.kind };
+    },
+  );
+  const sections = expectArray(data.sections, at(location, 'sections')).map(
+    (item, i): SongSection => {
+      const here = at(location, `sections[${i}]`);
+      const section = expectObject(item, here);
+      const { name } = section;
+      if (typeof name !== 'string' || name.length === 0 || name.length > SECTION_NAME_MOST) {
+        throw new ScoreError(at(here, 'name'), 'expected a short name such as "A"');
+      }
+      return { measure: bar(section.bar, at(here, 'bar')), name };
+    },
+  );
+  if (sections[0]?.measure !== 0) {
+    throw new ScoreError(at(location, 'sections'), 'expected a section starting at bar 1');
+  }
+  if (sections.some((section, i) => i > 0 && section.measure <= sections[i - 1]!.measure)) {
+    throw new ScoreError(at(location, 'sections'), 'expected sections in order');
+  }
+  return { chords, cadences, sections };
 }
 
 /** The song's words, put on the notes that sing them; null when it has none. */
@@ -368,6 +481,11 @@ function parseTimeSignature(input: unknown, location: string): [number, number] 
     throw new ScoreError(location, 'expected [beats, noteValue] such as [4, 4] or [6, 8]');
   }
   return [input[0], input[1]];
+}
+
+function expectArray(input: unknown, location: string): unknown[] {
+  if (!Array.isArray(input)) throw new ScoreError(location, 'expected an array');
+  return input;
 }
 
 function expectObject(input: unknown, location: string): Record<string, unknown> {

@@ -6,6 +6,9 @@
  * Music with repeats is drawn as written, while the transport plays it unrolled: the cursor goes
  * back to the repeat's start when the music does, each note shows how it went the last time it
  * was played, and bars are chosen and shaded as written (engine/form.ts).
+ *
+ * A song's harmony (milestone 7.4) goes in a row above the music, each chord where its beat is
+ * drawn, with the sections' letters, and the cadences in a row below.
  */
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +26,7 @@ import { readCssColors, useColorScheme } from '../canvas';
 import { useAnimationFrame } from '../hooks';
 import { NoteStyle } from '../keyboard/styles';
 import { LoadStatus } from '../loadStatus';
+import type { SheetHarmony } from './harmony';
 
 interface SheetMusicProps {
   score: Score;
@@ -41,12 +45,26 @@ interface SheetMusicProps {
   rhythm?: boolean;
   /** The language of the words to write under the notes that have them (none by default). */
   lyrics?: string;
+  /** A song's chords, sections and cadences, to show with the music. */
+  harmony?: SheetHarmony | null;
 }
 
 /** Where a bar is drawn: px from the left of the sheet. */
 interface BarBox {
   left: number;
   right: number;
+}
+
+/** Where the notes on a beat are drawn: px from the left of the sheet. */
+interface BeatLeft {
+  beat: number;
+  x: number;
+}
+
+/** Where the bars and the beats are drawn, once the music is. */
+interface Layout {
+  bars: BarBox[];
+  beats: BeatLeft[];
 }
 
 const COLORS = {
@@ -84,13 +102,14 @@ export function SheetMusic({
   onSelectBars,
   rhythm = false,
   lyrics,
+  harmony = null,
 }: SheetMusicProps) {
   const { t } = useTranslation('screens');
   const scrollerRef = useRef<HTMLDivElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const rendered = useRef<Rendered | null>(null);
   const [status, setStatus] = useState<LoadStatus>(LoadStatus.Loading);
-  const [bars, setBars] = useState<BarBox[]>([]);
+  const [{ bars, beats }, setLayout] = useState<Layout>({ bars: [], beats: [] });
   const scheme = useColorScheme();
   const names = useNoteNames();
   const solfa = useSolfa();
@@ -160,7 +179,7 @@ export function SheetMusic({
       osmd.render();
       osmd.cursor.show();
       rendered.current = { osmd, graphics: indexGraphics(osmd, notes), applied: new Map(), colors };
-      setBars(barBoxes(osmd));
+      setLayout({ bars: barBoxes(osmd), beats: beatLefts(osmd) });
       setStatus(LoadStatus.Ready);
     })().catch((error: unknown) => {
       console.error('Could not render the sheet music', error);
@@ -277,6 +296,7 @@ export function SheetMusic({
   const shaded = selection ?? loopWritten ?? null;
   const from = shaded && bars[shaded.first];
   const to = shaded && bars[shaded.last];
+  const laidOut = harmony && status === LoadStatus.Ready && bars.length > 0;
 
   return (
     <div
@@ -292,6 +312,33 @@ export function SheetMusic({
           style={{ left: from.left, width: to.right - from.left }}
         />
       )}
+      {laidOut &&
+        harmony.sections.map(({ measure }) => (
+          <div
+            key={measure}
+            className="sheet-music__section-line"
+            style={{ left: bars[measure]?.left }}
+          />
+        ))}
+      {laidOut && (
+        <div className="sheet-music__harmony">
+          {harmony.sections.map(({ measure, name }) => (
+            <span
+              key={measure}
+              className="sheet-music__section"
+              style={{ left: bars[measure]?.left }}
+            >
+              {name}
+            </span>
+          ))}
+          {harmony.chords.map(({ beat, numeral, name }) => (
+            <span key={beat} className="sheet-music__chord" style={{ left: xOfBeat(beats, beat) }}>
+              <span className="sheet-music__numeral">{numeral}</span>
+              <span className="sheet-music__chord-name">{name}</span>
+            </span>
+          ))}
+        </div>
+      )}
       {status === LoadStatus.Loading && (
         <p className="muted sheet-music__status">{t('practice.sheetLoading')}</p>
       )}
@@ -299,8 +346,52 @@ export function SheetMusic({
         <p className="notice notice--problem sheet-music__status">{t('practice.sheetError')}</p>
       )}
       <div ref={hostRef} className="sheet-music__host" />
+      {laidOut && harmony.cadences.length > 0 && (
+        <div className="sheet-music__cadences">
+          {harmony.cadences.map(({ measure, label }) => {
+            const bar = bars[measure];
+            return (
+              bar && (
+                <span
+                  key={measure}
+                  className="sheet-music__cadence"
+                  style={{ left: (bar.left + bar.right) / 2 }}
+                >
+                  {label}
+                </span>
+              )
+            );
+          })}
+        </div>
+      )}
     </div>
   );
+}
+
+/** Where each beat with notes is drawn, from OSMD's layout, in order. */
+function beatLefts(osmd: OpenSheetMusicDisplay): BeatLeft[] {
+  const px = 10 * osmd.zoom;
+  const lefts = new Map<number, number>();
+  for (const measures of osmd.GraphicSheet.MeasureList) {
+    for (const measure of measures) {
+      for (const entry of measure?.staffEntries ?? []) {
+        const beat = Math.round(entry.getAbsoluteTimestamp().RealValue * 4 * DIVISIONS) / DIVISIONS;
+        const x = entry.PositionAndShape.AbsolutePosition.x * px;
+        lefts.set(beat, Math.min(x, lefts.get(beat) ?? Infinity));
+      }
+    }
+  }
+  return [...lefts].map(([beat, x]) => ({ beat, x })).sort((a, b) => a.beat - b.beat);
+}
+
+/** Where `beat` is drawn: on its notes, or between the notes around it when it has none. */
+function xOfBeat(beats: readonly BeatLeft[], beat: number): number {
+  const after = beats.findIndex((b) => b.beat >= beat - 1e-6);
+  if (after < 0) return beats.at(-1)?.x ?? 0;
+  const next = beats[after]!;
+  const before = beats[after - 1];
+  if (Math.abs(next.beat - beat) < 1e-6 || !before) return next.x;
+  return before.x + ((beat - before.beat) / (next.beat - before.beat)) * (next.x - before.x);
 }
 
 /** Where each bar is drawn, from OSMD's layout (10 px per unit at 100% zoom). */

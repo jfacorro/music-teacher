@@ -175,5 +175,11 @@
       "hand": "L",
       "finger": 1
     }
-  ]
+  ],
+  "analysis": {
+    "key": "C",
+    "chords": ["I", "I", "I", "I", "I", "I", "I", "V"],
+    "cadences": [{ "bar": 8, "kind": "half" }],
+    "sections": [{ "bar": 1, "name": "A" }]
+  }
 }

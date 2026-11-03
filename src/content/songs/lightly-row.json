@@ -418,5 +418,19 @@
       "finger": 5
     }
   ],
-  "markings": ["moderato", "mf"]
+  "markings": ["moderato", "mf"],
+  "analysis": {
+    "key": "C",
+    "chords": ["I", "V7", "I", "I", "I", "V7", "I", "I", "V", "V7", "I", "I", "I", "V7", "I", "I"],
+    "cadences": [
+      { "bar": 8, "kind": "authentic" },
+      { "bar": 16, "kind": "authentic" }
+    ],
+    "sections": [
+      { "bar": 1, "name": "A" },
+      { "bar": 5, "name": "A′" },
+      { "bar": 9, "name": "B" },
+      { "bar": 13, "name": "A′" }
+    ]
+  }
 }

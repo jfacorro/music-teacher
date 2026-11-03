@@ -52,6 +52,7 @@ import { useSettings } from '../../../storage/settings';
 import { PianoKeyboard, type ExpectedKey } from '../../keyboard/PianoKeyboard';
 import { TapPad } from '../../keyboard/TapPad';
 import { ScoreView, type SheetNotation } from '../../../content/lessons';
+import { useSheetHarmony } from '../../sheet/harmony';
 import { SheetMusic } from '../../sheet/SheetMusic';
 import { FeedbackBadge } from './FeedbackBadge';
 import { CompareChart } from './CompareChart';
@@ -115,6 +116,8 @@ interface PracticeRunProps {
   onListeningChange?: (listening: boolean) => void;
   /** Back and forward a bar (songs): a run that moves isn't scored. */
   barSteps?: boolean;
+  /** Show a song's chords, sections and cadences with the sheet music. */
+  harmony?: boolean;
 }
 
 /** One practice run: session, transport, input, metronome and the stage. */
@@ -139,8 +142,10 @@ export function PracticeRun({
   onListeningChange,
   sightReading = false,
   barSteps = false,
+  harmony = false,
 }: PracticeRunProps) {
   const { t, i18n } = useTranslation('screens');
+  const sheetHarmony = useSheetHarmony(score, harmony);
   const names = useNoteNames();
 
   const [transport] = useState(() => {
@@ -631,6 +636,7 @@ export function PracticeRun({
               rhythm={rhythm}
               // An imported song's words, if it has them (the built-in songs' are sung).
               lyrics={LYRICS_AS_WRITTEN}
+              harmony={sheetHarmony}
             />
           ) : (
             <FallingNotes

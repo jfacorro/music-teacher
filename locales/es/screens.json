@@ -497,7 +497,8 @@
         "L": "Practicar solo la mano izquierda"
       },
       "autoplay": "Tócala por mí: la aplicación toca la música para que mires y escuches",
-      "lane": "Notas en un carril: canta cada una cuando llega a la línea"
+      "lane": "Notas en un carril: canta cada una cuando llega a la línea",
+      "harmony": "Muestra los acordes, las secciones y las cadencias con la música"
     },
     "micChords": "Con el micrófono, cualquier nota de un acorde cuenta como el acorde entero. Conecta un teclado MIDI para comprobar cada nota.",
     "tempoInfo": "{bpm} BPM",
@@ -590,7 +591,13 @@
     },
     "lateSound": "La mayoría de las notas llegaron tarde, unos {ms} ms. Si tocabas con los clics, puede que te lleguen tarde: los auriculares y altavoces Bluetooth retrasan el sonido, y el navegador no lo sabe.",
     "unmeasuredOutput": "El sonido sale por {output}, y la sincronización de los clics no se midió para esa salida. Si es Bluetooth, los clics sonarán tarde, y también las notas que toques con ellos.",
-    "measureTiming": "Medir la sincronización"
+    "measureTiming": "Medir la sincronización",
+    "harmony": "Armonía",
+    "cadences": {
+      "authentic": "Cadencia auténtica",
+      "half": "Semicadencia",
+      "plagal": "Cadencia plagal"
+    }
   },
   "lesson": {
     "topBar": "Unidad {number} · {lesson}",
