@@ -995,10 +995,14 @@ Eight units of about three lessons each, in the same levels as the other courses
 - Theory units after the first have `unlock`, as in the piano course: without it the first lesson of each was open from the start, as in the voice course, though Theory's lessons go in order.
 - The degree after hearing the key: every degree question plays the key's chord first, or a degree can't be heard. `homeNote` is only heard, with five melodies ending on the tonic and five ending elsewhere, written as places in the scale, so they work in any key.
 
-**7.4 Theory in your songs**
+**7.4 Theory in your songs** — built
 - A song's analysis as data, in its file: the key, a chord for each bar or beat as a degree (`V7`, its name worked out from the key), cadences and sections. Written by hand, not computed: `identifyChord` can't be trusted with melodies, broken chords and passing notes, and a lesson mustn't teach a wrong answer. A test checks each chord against the notes in its bar.
 - A handful to start with (about six built-in songs used in lessons). Imported songs aren't part of this phase.
 - On the sheet music, a **Harmony** toggle shows them above the bars, placed like the loop's shading. Moved to a singer's range, the degrees stay and the chord names move with the key.
+- Built as: `analysis` in a song's file (`content/loaders/inlineScore.ts`): its key, one string a bar ("V", or one numeral a beat with `-` holding, "V - I -", or "" for none), cadences and sections, bars counted from 1; the parser checks the key against the signature, the beats and the bars, and keeps only chord changes. Only major keys, and no songs with repeats, for now. `engine/harmony.ts` names a numeral's chord in a key (`chordIn`, from `numeralChord` in `engine/theoryQuestions.ts`), so a moved song's names follow its key signature.
+- The seven: Ode to Joy, Au clair de la lune, When the Saints Go Marching In, Jingle Bells, Lightly Row, Amazing Grace and Brahms' Lullaby, all used in lessons, and all but Brahms sung. Each has a left-hand part, which the chords follow: Jingle Bells plays them in full (I, IV, V), the others play bass notes the melody fills in. Twinkle has no left hand, so its chords would have come from memory; Greensleeves is minor.
+- `content/songAnalysis.test.ts` checks each chord against the song: every left-hand note sounding where it starts is one of its notes, and so is at least half of the melody while it lasts, so a passing note doesn't fail it. Brahms' bars 4 and 5 pass at exactly half: the melody leans on a note outside the chord before settling (B over F, A over C). Each cadence ends as it says: an authentic one on I after V or V7, a half one on V, a plagal one on I after IV. Where the bass isn't the root, as in Amazing Grace's last line (I over D, then V), the numeral is the root position's.
+- The **Harmony** checkbox is next to Notation, in Piano and Voice song practice, when the music is shown as sheet music and the song has an analysis; it starts off. Above the music: each section's letter where it starts, with a dashed line, and each chord's numeral and short name (C, Dm, G7, B°; in Spanish Do, Rem, Sol7) where its beat is drawn, from OSMD's layout. Below: the cadences, under the bars that end the phrases.
 
 **7.5 Theory Units 6–8, and Today**
 - The remaining units, in English and Spanish. Unit 8's lessons open songs with the analysis on, and ask about them.
@@ -1009,7 +1013,7 @@ Eight units of about three lessons each, in the same levels as the other courses
 - [x] Theory lessons can be answered by playing or singing, from one set of steps (7.1).
 - [x] Theory and the other courses link both ways, and what you've played shortens what's explained (7.2).
 - [ ] A theory course from intervals to reading a song (Theory Units 1–8), in English and Spanish (7.1, 7.3, 7.5).
-- [ ] Songs can show their chords, cadences and sections on the sheet music (7.4).
+- [x] Songs can show their chords, cadences and sections on the sheet music (7.4).
 - [ ] Today can offer a theory item alongside Piano or Voice (7.5).
 - [ ] Verified with your piano and voice.
   - [ ] TODO (user): go through Theory Unit 1 playing, then singing: are the questions clear, are answers graded fairly either way, and is six seconds enough to work out a note before singing it?

@@ -359,5 +359,35 @@
       "to": 48,
       "kind": "diminuendo"
     }
-  ]
+  ],
+  "analysis": {
+    "key": "G",
+    "chords": [
+      "",
+      "I",
+      "I",
+      "IV",
+      "I",
+      "I",
+      "vi",
+      "V",
+      "V",
+      "I",
+      "I",
+      "IV",
+      "I",
+      "vi",
+      "I - V",
+      "I",
+      "I"
+    ],
+    "cadences": [
+      { "bar": 9, "kind": "half" },
+      { "bar": 17, "kind": "authentic" }
+    ],
+    "sections": [
+      { "bar": 1, "name": "A" },
+      { "bar": 10, "name": "A′" }
+    ]
+  }
 }

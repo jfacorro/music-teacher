@@ -700,5 +700,17 @@
       "hand": "L",
       "finger": 1
     }
-  ]
+  ],
+  "analysis": {
+    "key": "C",
+    "chords": ["I", "I", "I", "I", "IV", "I", "V", "V", "I", "I", "I", "I", "IV", "I", "V", "I"],
+    "cadences": [
+      { "bar": 8, "kind": "half" },
+      { "bar": 16, "kind": "authentic" }
+    ],
+    "sections": [
+      { "bar": 1, "name": "A" },
+      { "bar": 9, "name": "A′" }
+    ]
+  }
 }

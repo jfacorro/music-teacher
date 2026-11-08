@@ -2297,6 +2297,69 @@ button.bars__bar:focus-visible {
   pointer-events: none;
 }
 
+/* A song's harmony: chords and sections above the music, cadences below. */
+.sheet-music__harmony,
+.sheet-music__cadences {
+  position: relative;
+  pointer-events: none;
+}
+
+.sheet-music__harmony {
+  height: 3.6rem;
+}
+
+.sheet-music__cadences {
+  height: 2rem;
+}
+
+.sheet-music__section {
+  position: absolute;
+  inset-block-start: 0.3rem;
+  padding: 0 0.4rem;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.sheet-music__section-line {
+  position: absolute;
+  inset-block: 0;
+  border-inline-start: 1px dashed color-mix(in srgb, var(--accent) 60%, transparent);
+  pointer-events: none;
+}
+
+.sheet-music__chord {
+  position: absolute;
+  inset-block-start: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.sheet-music__numeral {
+  font-weight: 600;
+}
+
+.sheet-music__chord-name {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.sheet-music__cadence {
+  position: absolute;
+  inset-block-start: 0.15rem;
+  translate: -50% 0;
+  padding: 0.05rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
 /* Bars can be dragged across to repeat them. */
 .sheet-music.is-selectable,
 .falling-notes.is-selectable {

@@ -40,6 +40,7 @@ import { useAnimationFrame } from '../../hooks';
 import { ICONS } from '../../icons';
 import { NoteStyle } from '../../keyboard/styles';
 import { SheetMusic } from '../../sheet/SheetMusic';
+import { useSheetHarmony } from '../../sheet/harmony';
 import { Needle } from '../TunerParts';
 import { SingCompare } from './SingCompare';
 import { SingLane } from './SingLane';
@@ -82,6 +83,8 @@ interface SingRunProps {
   accompaniment?: readonly ScoreNote[];
   /** Whether the accompaniment plays. */
   accompanied?: boolean;
+  /** Show the song's chords, sections and cadences with the sheet music. */
+  harmony?: boolean;
   onFinish?: (summary: SingSummary, durationMs: number) => void;
   /** Extra buttons on the results (e.g. Continue in a lesson). */
   resultsActions?: (summary: SingSummary) => ReactNode;
@@ -99,10 +102,12 @@ export function SingRun({
   lyrics,
   accompaniment,
   accompanied = false,
+  harmony = false,
   onFinish,
   resultsActions,
 }: SingRunProps) {
   const { t } = useTranslation('screens');
+  const sheetHarmony = useSheetHarmony(score, harmony);
   const names = useNoteNames();
   const headphones = useSettings((s) => s.headphones);
   const [transport] = useState(() => new Transport(score.tempo));
@@ -501,6 +506,7 @@ export function SingRun({
               notation={notation}
               hands={score.notes[0]?.hand === Hand.Left ? HandFilter.Left : HandFilter.Right}
               {...(lyrics && { lyrics })}
+              harmony={sheetHarmony}
             />
           ) : (
             <SingLane

@@ -131,6 +131,8 @@ function SongPractice({ songId, parts, range, heading }: SongPracticeProps) {
   const [guide, setGuide] = useState(true);
   const [accompanied, setAccompanied] = useState(true);
   const [metronome, setMetronome] = useState(false);
+  /** The song's chords, sections and cadences, with the sheet music. */
+  const [harmony, setHarmony] = useState(false);
 
   return (
     <section className="screen practice">
@@ -157,6 +159,16 @@ function SongPractice({ songId, parts, range, heading }: SongPracticeProps) {
             onChange={setNotation}
             options={singNotations(system)}
           />
+        )}
+        {view === ScoreView.Sheet && melody.analysis && (
+          <label className="checkbox" title={t('practice.tips.harmony')}>
+            <input
+              type="checkbox"
+              checked={harmony}
+              onChange={(e) => setHarmony(e.target.checked)}
+            />
+            {t('practice.harmony')}
+          </label>
         )}
         <LyricsSelect score={melody} />
         <label className="checkbox" title={t(`sing.guideTip.${mode}`)}>
@@ -204,6 +216,7 @@ function SongPractice({ songId, parts, range, heading }: SongPracticeProps) {
         {...(lyrics && { lyrics })}
         accompaniment={piano}
         accompanied={accompanied && piano.length > 0}
+        harmony={harmony && view === ScoreView.Sheet}
         onFinish={(summary, durationMs) =>
           void recordResult(ResultKind.VoiceSong, songId, {
             stars: summary.stars,

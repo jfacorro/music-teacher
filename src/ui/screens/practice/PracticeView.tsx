@@ -60,6 +60,8 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
     viewAtStart(useSettings.getState().exerciseView, ScoreView.Falling),
   );
   const [notation, setNotation] = useState(() => useSettings.getState().sheetNotation);
+  /** A song's chords, sections and cadences, with the sheet music. */
+  const [harmony, setHarmony] = useState(false);
   const [speed, setSpeed] = useState(SPEED_MAX);
   const [params] = useSearchParams();
   const [asked] = useState(() => parseBars(params.get('bars'), score.measures.length));
@@ -132,6 +134,16 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
       <div className="practice__options">
         <ViewToggle view={view} onChange={setView} />
         {view === ScoreView.Sheet && <NotationSelect notation={notation} onChange={setNotation} />}
+        {view === ScoreView.Sheet && score.analysis && (
+          <label className="checkbox" title={t('practice.tips.harmony')}>
+            <input
+              type="checkbox"
+              checked={harmony}
+              onChange={(e) => setHarmony(e.target.checked)}
+            />
+            {t('practice.harmony')}
+          </label>
+        )}
         <div
           className={listening ? 'segmented is-set-aside' : 'segmented'}
           role="radiogroup"
@@ -231,6 +243,7 @@ export function PracticeView({ title, composer, score, result, actions }: Practi
         recordingKey={key}
         onListeningChange={setListening}
         barSteps
+        harmony={harmony && view === ScoreView.Sheet}
         loopGoal={weakGoal}
         onLoopPass={() => {
           if (onWeakSpot) setWeakPasses((passes) => passes + 1);

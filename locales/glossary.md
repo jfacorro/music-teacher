@@ -204,6 +204,8 @@ system setting (`src/i18n/naming.ts`).
 | Roman numerals                                | Roman numerals                                       | números romanos                                         |
 | The dominant's pull                           | pull                                                 | atracción                                               |
 | Cadence: authentic / half / plagal            | authentic / half / plagal cadence                    | cadencia auténtica / semicadencia / cadencia plagal     |
+| Harmony (shown over a song)                   | harmony                                              | armonía                                                 |
+| Chord name (as on a lead sheet: "Dm", "G7")   | chord name                                           | nombre del acorde (cifrado americano)                   |
 | Sight-singing (section and skill)             | sight-singing                                        | lectura cantada (a primera vista)                       |
 | Reading melodies (skill)                      | reading melodies                                     | leer melodías                                           |
 | Words of a song (lyrics)                      | the words                                            | la letra                                                |

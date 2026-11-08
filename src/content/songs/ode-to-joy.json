@@ -302,5 +302,17 @@
       "to": 28,
       "kind": "crescendo"
     }
-  ]
+  ],
+  "analysis": {
+    "key": "C",
+    "chords": ["I", "V", "I", "V", "I", "V", "I", "V - I -"],
+    "cadences": [
+      { "bar": 4, "kind": "half" },
+      { "bar": 8, "kind": "authentic" }
+    ],
+    "sections": [
+      { "bar": 1, "name": "A" },
+      { "bar": 5, "name": "A′" }
+    ]
+  }
 }

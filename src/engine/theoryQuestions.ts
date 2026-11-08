@@ -333,6 +333,12 @@ const chordOfScale = (scale: readonly Pitch[], place: number, size: number): Pit
     return moved(scale[note % SCALE_NOTES]!, Math.floor(note / SCALE_NOTES));
   });
 
+/** The notes of the chord a numeral names in the major key on `tonic`, root first. */
+export function numeralChord(tonic: Pitch, numeral: Numeral): Pitch[] {
+  const scale = scaleNotes(tonic, Mode.Major);
+  return chordOfScale(scale, NUMERAL_PLACES[numeral], numeral === Numeral.FiveSeven ? 4 : 3);
+}
+
 /** A triad with its root in the bass, and its notes close together above the key note. */
 function phraseChord(scale: readonly Pitch[], place: number): Pitch[] {
   const tonic = scale[0]!;
@@ -528,7 +534,7 @@ function written(
     case QuestionKind.RomanNumeral: {
       const scale = scaleNotes(root, Mode.Major);
       const place = NUMERAL_PLACES[answer as Numeral];
-      const notes = chordOfScale(scale, place, answer === Numeral.FiveSeven ? 4 : 3);
+      const notes = numeralChord(root, answer as Numeral);
       return {
         answer,
         root,
