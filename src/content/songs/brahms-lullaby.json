@@ -495,5 +495,35 @@
       "to": 51,
       "kind": "diminuendo"
     }
-  ]
+  ],
+  "analysis": {
+    "key": "C",
+    "chords": [
+      "",
+      "I",
+      "I",
+      "IV",
+      "I",
+      "V7",
+      "V7",
+      "V7",
+      "I",
+      "IV",
+      "I",
+      "IV",
+      "I",
+      "IV",
+      "I",
+      "V7",
+      "I"
+    ],
+    "cadences": [
+      { "bar": 9, "kind": "authentic" },
+      { "bar": 17, "kind": "authentic" }
+    ],
+    "sections": [
+      { "bar": 1, "name": "A" },
+      { "bar": 10, "name": "B" }
+    ]
+  }
 }

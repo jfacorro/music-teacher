@@ -11,7 +11,7 @@ import { formatNote, pitchClass } from '../theory/pitch';
 import { parseInlineScore } from './loaders/inlineScore';
 import { loadSong, type SongId } from './songs';
 
-/** The songs whose harmony is written: lessons use them, and they're sung too. */
+/** The songs whose harmony is written: lessons use them, and all but Brahms' Lullaby are sung too. */
 const ANALYZED: readonly SongId[] = [
   'ode-to-joy',
   'au-clair-de-la-lune',
@@ -19,6 +19,7 @@ const ANALYZED: readonly SongId[] = [
   'jingle-bells',
   'lightly-row',
   'amazing-grace',
+  'brahms-lullaby',
 ];
 
 const sounding = (note: ScoreNote, beat: number) =>
