@@ -26,6 +26,13 @@ Press keys on the piano: they appear under **Live test** with their names.
 If the keyboard isn't listed, check the USB cable and that the piano is on. On Windows,
 only one app can use a MIDI device at a time, so close any other music software.
 
+### On the web
+
+After every merge into `main`, CI also publishes the web app on GitHub Pages:
+<https://jfacorro.github.io/music-teacher/>. It's the same app as `npm run dev`, and keeps its
+data in that browser, separately from the desktop app (the export and import below move it).
+MIDI keyboards need Chrome or Edge.
+
 ### As a desktop app
 
 ```bash
@@ -66,7 +73,7 @@ both on, and MIDI tells you how accurately the microphone hears each key. Saved 
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs `npm run check` on every pull request and merge. After a merge into `main`, a Windows job builds the installer (version `0.1.<run number>`) and replaces the **Latest build** release with it.
+`.github/workflows/ci.yml` runs `npm run check` on every pull request and merge. After a merge into `main`, a Windows job builds the installer (version `0.1.<run number>`) and replaces the **Latest build** release with it, and a Linux job publishes the web app on GitHub Pages (built for `/music-teacher/`, with `404.html` a copy of `index.html` so the app's own addresses load it).
 
 ## Project structure
 

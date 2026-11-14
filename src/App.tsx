@@ -17,28 +17,33 @@ import { SongsScreen } from './ui/screens/SongsScreen';
 import { TunerScreen } from './ui/screens/TunerScreen';
 import { VoiceSongScreen } from './ui/screens/singing/VoiceSongScreen';
 
-const router = createBrowserRouter([
-  {
-    element: <AppLayout />,
-    children: [
-      { index: true, element: <ProgressScreen /> },
-      { path: 'learn', element: <HomeScreen /> },
-      { path: 'songs', element: <SongsScreen /> },
-      { path: 'sight-reading', element: <SightReadingScreen /> },
-      { path: 'sight-singing', element: <SightSingingScreen /> },
-      { path: 'ear-training', element: <EarTrainingScreen /> },
-      { path: 'free-play', element: <FreePlayScreen /> },
-      { path: 'tuner', element: <TunerScreen /> },
-      { path: 'practice/:songId', element: <PracticeScreen /> },
-      { path: 'practice/my/:songId', element: <MySongPracticeScreen /> },
-      { path: 'sing/:songId', element: <VoiceSongScreen /> },
-      { path: 'my-songs/import', element: <ImportSongScreen /> },
-      { path: 'my-songs/:songId', element: <MySongScreen /> },
-      { path: 'lesson/:lessonId', element: <LessonScreen /> },
-      { path: 'settings', element: <SettingsScreen /> },
-    ],
-  },
-]);
+// On GitHub Pages the app lives under the repository's name (`/music-teacher/`, the build's base);
+// everywhere else at the root.
+const router = createBrowserRouter(
+  [
+    {
+      element: <AppLayout />,
+      children: [
+        { index: true, element: <ProgressScreen /> },
+        { path: 'learn', element: <HomeScreen /> },
+        { path: 'songs', element: <SongsScreen /> },
+        { path: 'sight-reading', element: <SightReadingScreen /> },
+        { path: 'sight-singing', element: <SightSingingScreen /> },
+        { path: 'ear-training', element: <EarTrainingScreen /> },
+        { path: 'free-play', element: <FreePlayScreen /> },
+        { path: 'tuner', element: <TunerScreen /> },
+        { path: 'practice/:songId', element: <PracticeScreen /> },
+        { path: 'practice/my/:songId', element: <MySongPracticeScreen /> },
+        { path: 'sing/:songId', element: <VoiceSongScreen /> },
+        { path: 'my-songs/import', element: <ImportSongScreen /> },
+        { path: 'my-songs/:songId', element: <MySongScreen /> },
+        { path: 'lesson/:lessonId', element: <LessonScreen /> },
+        { path: 'settings', element: <SettingsScreen /> },
+      ],
+    },
+  ],
+  { basename: import.meta.env.BASE_URL },
+);
 
 export function App() {
   return <RouterProvider router={router} />;
