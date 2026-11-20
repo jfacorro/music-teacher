@@ -29,7 +29,7 @@ only one app can use a MIDI device at a time, so close any other music software.
 ### On the web
 
 After every merge into `main`, CI also publishes the web app on GitHub Pages:
-<https://jfacorro.github.io/music-teacher/>. It's the same app as `npm run dev`, and keeps its
+<https://juan.facorro.com/music-teacher/>. It's the same app as `npm run dev`, and keeps its
 data in that browser, separately from the desktop app (the export and import below move it).
 MIDI keyboards need Chrome or Edge.
 

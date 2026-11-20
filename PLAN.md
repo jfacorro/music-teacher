@@ -649,7 +649,7 @@ Units are grouped in four levels: **Beginner** (Units 1–4), **Elementary** (5�
 - Windows installer via electron-builder (`npm run desktop:dist` → `release/Music-Teacher-Setup-<version>.exe`, unsigned); `npm run desktop` opens the app from a fresh build. The web version is unchanged (`npm run dev`).
 - The browser and the app keep separate data: **Settings → Your data** exports everything (settings, results, practice history, imported songs) to a file and imports it back, replacing what's there (`storage/backup.ts`).
 - CI (`.github/workflows/ci.yml`): every pull request and merge runs `npm run check` on Linux; after a merge into `main`, a Windows job builds the installer (version `0.1.<run number>`) and publishes it as the **Latest build** release (`latest-build` tag, `Music-Teacher-Setup.exe`), replacing the previous one.
-- The web version is published on GitHub Pages after every merge into `main` (`https://jfacorro.github.io/music-teacher/`): built for the repository's path, with the router's `basename` from the build's base and `404.html` a copy of `index.html`, so an address such as `/music-teacher/lesson/u1-l1` opens the app there. The desktop app and `npm run dev` stay at the root.
+- The web version is published on GitHub Pages after every merge into `main` (`https://juan.facorro.com/music-teacher/`): built for the repository's path, with the router's `basename` from the build's base and `404.html` a copy of `index.html`, so an address such as `/music-teacher/lesson/u1-l1` opens the app there. The desktop app and `npm run dev` stay at the root.
 - `MUSIC_TEACHER_SMOKE=1 npx electron .` opens the app hidden and reports what works (secure page, MIDI inputs, microphone permission, storage), then quits.
 
 #### Phase 3 done when
